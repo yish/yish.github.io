@@ -1,14 +1,32 @@
 {
-    "words": [
+  "sets": [
+    {
+      "words": [
         "Apple", "Banana", "Cherry", "Date",
         "Red", "Blue", "Green", "Yellow",
         "Dog", "Cat", "Hamster", "Rabbit",
         "Car", "Bike", "Bus", "Train"
-    ],
-    "groups": [
+      ],
+      "groups": [
         ["Apple", "Banana", "Cherry", "Date"],
         ["Red", "Blue", "Green", "Yellow"],
         ["Dog", "Cat", "Hamster", "Rabbit"],
         ["Car", "Bike", "Bus", "Train"]
-    ]
+      ]
+    },
+    {
+      "words": [
+        "Pizza", "Burger", "Sushi", "Taco",
+        "Italy", "USA", "Japan", "Mexico",
+        "Euro", "Dollar", "Yen", "Peso",
+        "Rome", "New York", "Tokyo", "Mexico City"
+      ],
+      "groups": [
+        ["Pizza", "Burger", "Sushi", "Taco"],
+        ["Italy", "USA", "Japan", "Mexico"],
+        ["Euro", "Dollar", "Yen", "Peso"],
+        ["Rome", "New York", "Tokyo", "Mexico City"]
+      ]
+    }
+  ]
 }
