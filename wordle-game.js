@@ -2,9 +2,16 @@ let targetWord = '';
 let guesses = [];
 let currentGuess = '';
 let gameOver = false;
+let currentLanguage = 'en';
 
-function loadDictionary() {
-    fetch('wordle-dictionary.json')
+const keyboards = {
+    en: 'QWERTYUIOPASDFGHJKLZXCVBNM',
+    he: 'קראטוןםפשדגכעיחלךףזסבהנמצתץ',
+    ar: 'ضصثقفغعهخحجدشسيبلاتنمكطئءؤرلاىةوزظ'
+};
+
+function loadDictionary(lang) {
+    fetch(`wordle-dictionary-${lang}.json`)
         .then(response => response.json())
         .then(data => {
             const words = data.words;
@@ -22,6 +29,7 @@ function initializeGame() {
 
 function createGrid() {
     const grid = document.getElementById('grid');
+    grid.innerHTML = '';
     for (let i = 0; i < 30; i++) {
         const cell = document.createElement('div');
         cell.className = 'grid-cell';
@@ -31,7 +39,8 @@ function createGrid() {
 
 function createKeyboard() {
     const keyboard = document.getElementById('keyboard');
-    const keys = 'QWERTYUIOPASDFGHJKLZXCVBNM';
+    keyboard.innerHTML = '';
+    const keys = keyboards[currentLanguage];
     keys.split('').forEach(key => {
         const button = document.createElement('div');
         button.className = 'keyboard-key';
@@ -97,7 +106,7 @@ function checkGuess() {
     
     for (let i = 0; i < 5; i++) {
         const cell = cells[startIndex + i];
-        const keyboardKey = document.querySelector(`.keyboard-key:nth-child(${guessArray[i].charCodeAt(0) - 64})`);
+        const keyboardKey = document.querySelector(`.keyboard-key:nth-child(${keyboards[currentLanguage].indexOf(guessArray[i]) + 1})`);
         
         if (guessArray[i] === targetArray[i]) {
             cell.classList.add('correct');
@@ -122,14 +131,36 @@ function endGame() {
     }
 }
 
+function setLanguage(lang) {
+    currentLanguage = lang;
+    document.body.className = lang === 'en' ? '' : 'rtl';
+    resetGame();
+    loadDictionary(lang);
+}
+
+function resetGame() {
+    targetWord = '';
+    guesses = [];
+    currentGuess = '';
+    gameOver = false;
+    document.getElementById('message').textContent = '';
+    document.getElementById('grid').innerHTML = '';
+    document.getElementById('keyboard').innerHTML = '';
+}
+
+document.getElementById('en-btn').addEventListener('click', () => setLanguage('en'));
+document.getElementById('he-btn').addEventListener('click', () => setLanguage('he'));
+document.getElementById('ar-btn').addEventListener('click', () => setLanguage('ar'));
+
 document.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
         handleEnter();
     } else if (event.key === 'Backspace') {
         handleBackspace();
-    } else if (/^[A-Za-z]$/.test(event.key)) {
+    } else if (keyboards[currentLanguage].includes(event.key.toUpperCase())) {
         handleKeyPress(event.key.toUpperCase());
     }
 });
 
-loadDictionary();
+// Start with English
+setLanguage('en');
