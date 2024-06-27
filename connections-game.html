@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connections Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #333;
+        }
+        #game-container {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .word {
+            background-color: #fff;
+            border: 2px solid #ccc;
+            padding: 10px;
+            cursor: pointer;
+            user-select: none;
+            text-align: center;
+        }
+        .word.selected {
+            background-color: #e0e0e0;
+        }
+        .word.correct {
+            background-color: #a0ffa0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Connections Game</h1>
+    
+    <p>Welcome to the Connections Game! This game challenges you to find groups of related words.</p>
+    
+    <h2>How to Play:</h2>
+    <ol>
+        <li>You'll see a 4x4 grid of words.</li>
+        <li>Your goal is to find four groups of four related words.</li>
+        <li>Click on four words that you think belong together.</li>
+        <li>Press the "Submit Selection" button to check your guess.</li>
+        <li>If correct, the words will turn green and can't be selected again.</li>
+        <li>If incorrect, try a different combination.</li>
+        <li>Continue until you've found all four groups!</li>
+    </ol>
+
+    <div id="game-container">
+        <div class="grid" id="grid"></div>
+        <button id="submit">Submit Selection</button>
+        <p id="message"></p>
+    </div>
+
+    <script src="connections-game.js"></script>
+</body>
+</html>

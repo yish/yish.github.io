@@ -1,0 +1,14 @@
+{
+    "words": [
+        "Apple", "Banana", "Cherry", "Date",
+        "Red", "Blue", "Green", "Yellow",
+        "Dog", "Cat", "Hamster", "Rabbit",
+        "Car", "Bike", "Bus", "Train"
+    ],
+    "groups": [
+        ["Apple", "Banana", "Cherry", "Date"],
+        ["Red", "Blue", "Green", "Yellow"],
+        ["Dog", "Cat", "Hamster", "Rabbit"],
+        ["Car", "Bike", "Bus", "Train"]
+    ]
+}
