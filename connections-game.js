@@ -1,7 +1,8 @@
 let words = [];
 let groups = [];
 let selectedWords = [];
-let solvedGroups = 0;
+let solvedGroups = [];
+const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#66AB8C']; // Different colors for each solved group
 
 function loadGameData() {
     fetch('game-resources.json')
@@ -41,7 +42,7 @@ function createGrid() {
 }
 
 function toggleWord(div) {
-    if (div.classList.contains('correct')) return;
+    if (solvedGroups.flat().includes(div.textContent)) return;
     
     div.classList.toggle('selected');
     const word = div.textContent;
@@ -61,9 +62,10 @@ function checkSelection() {
 
     for (const group of groups) {
         if (group.every(word => selectedWords.includes(word))) {
+            solvedGroups.push(group);
             markCorrect(group);
-            solvedGroups++;
-            if (solvedGroups === 4) {
+            updateGrid();
+            if (solvedGroups.length === 4) {
                 setMessage("Congratulations! You've solved all groups!");
                 document.getElementById('submit').textContent = 'Play Again';
                 document.getElementById('submit').removeEventListener('click', checkSelection);
@@ -85,13 +87,33 @@ function checkSelection() {
 }
 
 function markCorrect(group) {
+    const solvedGroupsDiv = document.getElementById('solved-groups');
+    const groupDiv = document.createElement('div');
+    groupDiv.className = 'solved-group';
+    groupDiv.style.backgroundColor = colors[solvedGroups.length - 1];
+    
     group.forEach(word => {
-        const div = Array.from(document.querySelectorAll('.word'))
-            .find(el => el.textContent === word);
-        div.classList.remove('selected');
-        div.classList.add('correct');
+        const wordDiv = document.createElement('div');
+        wordDiv.className = 'solved-word';
+        wordDiv.textContent = word;
+        groupDiv.appendChild(wordDiv);
     });
+    
+    solvedGroupsDiv.appendChild(groupDiv);
     selectedWords = [];
+}
+
+function updateGrid() {
+    const grid = document.getElementById('grid');
+    const remainingWords = words.filter(word => !solvedGroups.flat().includes(word));
+    grid.innerHTML = '';
+    remainingWords.forEach(word => {
+        const div = document.createElement('div');
+        div.className = 'word';
+        div.textContent = word;
+        div.addEventListener('click', () => toggleWord(div));
+        grid.appendChild(div);
+    });
 }
 
 function setMessage(msg) {
@@ -102,11 +124,12 @@ function resetGame() {
     words = [];
     groups = [];
     selectedWords = [];
-    solvedGroups = 0;
+    solvedGroups = [];
     setMessage('');
     document.getElementById('submit').textContent = 'Submit Selection';
     document.getElementById('submit').removeEventListener('click', resetGame);
     document.getElementById('submit').addEventListener('click', checkSelection);
+    document.getElementById('solved-groups').innerHTML = '';
     loadGameData();
 }
 
