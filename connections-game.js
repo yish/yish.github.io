@@ -1,7 +1,5 @@
-// This will be populated from the resource file
 let words = [];
 let groups = [];
-
 let selectedWords = [];
 let solvedGroups = 0;
 
@@ -9,11 +7,17 @@ function loadGameData() {
     fetch('game-resources.json')
         .then(response => response.json())
         .then(data => {
-            words = data.words;
-            groups = data.groups;
+            const randomSet = selectRandomSet(data.sets);
+            words = randomSet.words;
+            groups = randomSet.groups;
             createGrid();
         })
         .catch(error => console.error('Error loading game data:', error));
+}
+
+function selectRandomSet(sets) {
+    const randomIndex = Math.floor(Math.random() * sets.length);
+    return sets[randomIndex];
 }
 
 function shuffleArray(array) {
@@ -25,6 +29,7 @@ function shuffleArray(array) {
 
 function createGrid() {
     const grid = document.getElementById('grid');
+    grid.innerHTML = ''; // Clear existing grid
     shuffleArray(words);
     words.forEach(word => {
         const div = document.createElement('div');
@@ -60,6 +65,9 @@ function checkSelection() {
             solvedGroups++;
             if (solvedGroups === 4) {
                 setMessage("Congratulations! You've solved all groups!");
+                document.getElementById('submit').textContent = 'Play Again';
+                document.getElementById('submit').removeEventListener('click', checkSelection);
+                document.getElementById('submit').addEventListener('click', resetGame);
             } else {
                 setMessage("Correct! Keep going!");
             }
@@ -88,6 +96,18 @@ function markCorrect(group) {
 
 function setMessage(msg) {
     document.getElementById('message').textContent = msg;
+}
+
+function resetGame() {
+    words = [];
+    groups = [];
+    selectedWords = [];
+    solvedGroups = 0;
+    setMessage('');
+    document.getElementById('submit').textContent = 'Submit Selection';
+    document.getElementById('submit').removeEventListener('click', resetGame);
+    document.getElementById('submit').addEventListener('click', checkSelection);
+    loadGameData();
 }
 
 document.getElementById('submit').addEventListener('click', checkSelection);
