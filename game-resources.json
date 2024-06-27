@@ -19,7 +19,7 @@
     {
       "groups": [
         ["Claude", "ChatGPT", "Gemini", "Pi"],
-        ["Sora", "DreamMachine", "Gen2", "Pike"].
+        ["Sora", "DreamMachine", "Gen2", "Pike"],
         ["Suno", "Udio", "MusicLM", "11labs"],
         ["Perplexity","Elicit","SciSpace","Iris"]
       ]
