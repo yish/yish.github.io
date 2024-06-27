@@ -24,7 +24,6 @@ function loadDictionary(lang) {
         .catch(error => console.error('Error loading dictionary:', error));
 }
 
-
 function initializeGame() {
     createGrid();
     createKeyboard();
@@ -68,6 +67,7 @@ function handleKeyPress(key) {
     currentGuess += key;
     updateGrid();
 }
+
 
 function handleEnter() {
     if (gameOver || currentGuess.length > 5) return;
@@ -123,7 +123,6 @@ function updateGrid() {
         }
     }
 }
-
 function handleBackspace() {
     if (gameOver || currentGuess.length === 0) return;
     currentGuess = currentGuess.slice(0, -1);
