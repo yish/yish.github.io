@@ -8,8 +8,8 @@ function loadGameData() {
         .then(response => response.json())
         .then(data => {
             const randomSet = selectRandomSet(data.sets);
-            words = randomSet.words;
             groups = randomSet.groups;
+            words = groups.flat();
             createGrid();
         })
         .catch(error => console.error('Error loading game data:', error));
