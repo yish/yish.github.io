@@ -2,19 +2,28 @@ let words = [];
 let groups = [];
 let selectedWords = [];
 let solvedGroups = [];
-const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#66AB8C']; // Different colors for each solved group
+let allSets = []; // Store all sets here
+const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#66AB8C'];
 
 function loadGameData() {
+    console.log("Loading game data...");
     fetch('game-resources.json')
         .then(response => response.json())
         .then(data => {
-            const randomSet = selectRandomSet(data.sets);
-            groups = randomSet.groups;
-            words = groups.flat();
-            shuffleArray(words);
-            createGrid();
+            console.log("Game data loaded:", data);
+            allSets = data.sets; // Store all sets
+            startNewGame();
         })
         .catch(error => console.error('Error loading game data:', error));
+}
+
+function startNewGame() {
+    const randomSet = selectRandomSet(allSets);
+    groups = randomSet.groups;
+    words = groups.flat();
+    shuffleArray(words);
+    createGrid();
+    resetGameState();
 }
 
 function selectRandomSet(sets) {
@@ -30,6 +39,7 @@ function shuffleArray(array) {
 }
 
 function createGrid() {
+    console.log("Creating grid with words:", words);
     const grid = document.getElementById('grid');
     grid.innerHTML = ''; // Clear existing grid
     words.forEach(word => {
@@ -39,6 +49,7 @@ function createGrid() {
         div.addEventListener('click', () => toggleWord(div));
         grid.appendChild(div);
     });
+    console.log("Grid created. Number of word elements:", grid.children.length);
 }
 
 function toggleWord(div) {
@@ -69,7 +80,7 @@ function checkSelection() {
                 setMessage("Congratulations! You've solved all groups!");
                 document.getElementById('submit').textContent = 'Play Again';
                 document.getElementById('submit').removeEventListener('click', checkSelection);
-                document.getElementById('submit').addEventListener('click', resetGame);
+                document.getElementById('submit').addEventListener('click', startNewGame);
             } else {
                 setMessage("Correct! Keep going!");
             }
@@ -90,12 +101,12 @@ function markCorrect(group) {
     const solvedGroupsDiv = document.getElementById('solved-groups');
     const groupDiv = document.createElement('div');
     groupDiv.className = 'solved-group';
-    groupDiv.style.backgroundColor = colors[solvedGroups.length - 1];
     
     group.forEach(word => {
         const wordDiv = document.createElement('div');
         wordDiv.className = 'solved-word';
         wordDiv.textContent = word;
+        wordDiv.style.backgroundColor = colors[solvedGroups.length - 1];
         groupDiv.appendChild(wordDiv);
     });
     
@@ -104,6 +115,7 @@ function markCorrect(group) {
 }
 
 function updateGrid() {
+    console.log("Updating grid...");
     const grid = document.getElementById('grid');
     const remainingWords = words.filter(word => !solvedGroups.flat().includes(word));
     grid.innerHTML = '';
@@ -114,26 +126,27 @@ function updateGrid() {
         div.addEventListener('click', () => toggleWord(div));
         grid.appendChild(div);
     });
+    console.log("Grid updated. Number of remaining words:", remainingWords.length);
 }
 
 function setMessage(msg) {
     document.getElementById('message').textContent = msg;
 }
 
-function resetGame() {
-    words = [];
-    groups = [];
+function resetGameState() {
     selectedWords = [];
     solvedGroups = [];
     setMessage('');
     document.getElementById('submit').textContent = 'Submit Selection';
-    document.getElementById('submit').removeEventListener('click', resetGame);
+    document.getElementById('submit').removeEventListener('click', startNewGame);
     document.getElementById('submit').addEventListener('click', checkSelection);
     document.getElementById('solved-groups').innerHTML = '';
-    loadGameData();
 }
 
 document.getElementById('submit').addEventListener('click', checkSelection);
 
 // Load game data when the script runs
-loadGameData();
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.log("DOM fully loaded and parsed");
+    loadGameData();
+});
