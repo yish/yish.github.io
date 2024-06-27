@@ -11,6 +11,7 @@ function loadGameData() {
             const randomSet = selectRandomSet(data.sets);
             groups = randomSet.groups;
             words = groups.flat();
+            shuffleArray(words);
             createGrid();
         })
         .catch(error => console.error('Error loading game data:', error));
@@ -31,7 +32,6 @@ function shuffleArray(array) {
 function createGrid() {
     const grid = document.getElementById('grid');
     grid.innerHTML = ''; // Clear existing grid
-    shuffleArray(words);
     words.forEach(word => {
         const div = document.createElement('div');
         div.className = 'word';
