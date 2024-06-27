@@ -12,6 +12,17 @@ body {
     text-align: center;
 }
 
+#language-selector {
+    margin-bottom: 20px;
+}
+
+#language-selector button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
 #grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -57,4 +68,13 @@ body {
 .absent {
     background-color: #787c7e;
     color: white;
+}
+
+/* RTL support */
+.rtl {
+    direction: rtl;
+}
+
+.rtl #keyboard {
+    direction: ltr; /* Keep keyboard left-to-right */
 }
