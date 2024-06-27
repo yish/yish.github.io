@@ -16,11 +16,14 @@ function loadDictionary(lang) {
         .then(data => {
             const words = data.words;
             targetWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
+            // Pad the word with spaces if it's shorter than 5 characters
+            targetWord = targetWord.padEnd(5, ' ');
             console.log("Target word:", targetWord);
             initializeGame();
         })
         .catch(error => console.error('Error loading dictionary:', error));
 }
+
 
 function initializeGame() {
     createGrid();
@@ -67,9 +70,11 @@ function handleKeyPress(key) {
 }
 
 function handleEnter() {
-    if (gameOver || currentGuess.length !== 5) return;
-    checkGuess();
-    guesses.push(currentGuess);
+    if (gameOver || currentGuess.length > 5) return;
+    // Pad the current guess with spaces if it's shorter than 5 characters
+    const paddedGuess = currentGuess.padEnd(5, ' ');
+    checkGuess(paddedGuess);
+    guesses.push(paddedGuess);
     currentGuess = '';
     updateGrid();
     if (guesses.length === 6 || guesses[guesses.length - 1] === targetWord) {
@@ -77,10 +82,31 @@ function handleEnter() {
     }
 }
 
-function handleBackspace() {
-    if (gameOver || currentGuess.length === 0) return;
-    currentGuess = currentGuess.slice(0, -1);
-    updateGrid();
+function checkGuess(paddedGuess) {
+    const cells = document.getElementsByClassName('grid-cell');
+    const startIndex = guesses.length * 5;
+    const guessArray = paddedGuess.split('');
+    const targetArray = targetWord.split('');
+    
+    for (let i = 0; i < 5; i++) {
+        const cell = cells[startIndex + i];
+        if (guessArray[i] !== ' ') {
+            const keyboardKey = document.querySelector(`.keyboard-key:nth-child(${keyboards[currentLanguage].indexOf(guessArray[i]) + 1})`);
+            
+            if (guessArray[i] === targetArray[i]) {
+                cell.classList.add('correct');
+                keyboardKey.classList.add('correct');
+            } else if (targetArray.includes(guessArray[i])) {
+                cell.classList.add('present');
+                keyboardKey.classList.add('present');
+            } else {
+                cell.classList.add('absent');
+                keyboardKey.classList.add('absent');
+            }
+        } else {
+            cell.classList.add('empty');
+        }
+    }
 }
 
 function updateGrid() {
@@ -89,7 +115,7 @@ function updateGrid() {
         const row = Math.floor(i / 5);
         const col = i % 5;
         if (row < guesses.length) {
-            cells[i].textContent = guesses[row][col];
+            cells[i].textContent = guesses[row][col] === ' ' ? '' : guesses[row][col];
         } else if (row === guesses.length) {
             cells[i].textContent = currentGuess[col] || '';
         } else {
@@ -98,27 +124,10 @@ function updateGrid() {
     }
 }
 
-function checkGuess() {
-    const cells = document.getElementsByClassName('grid-cell');
-    const startIndex = guesses.length * 5;
-    const guessArray = currentGuess.split('');
-    const targetArray = targetWord.split('');
-    
-    for (let i = 0; i < 5; i++) {
-        const cell = cells[startIndex + i];
-        const keyboardKey = document.querySelector(`.keyboard-key:nth-child(${keyboards[currentLanguage].indexOf(guessArray[i]) + 1})`);
-        
-        if (guessArray[i] === targetArray[i]) {
-            cell.classList.add('correct');
-            keyboardKey.classList.add('correct');
-        } else if (targetArray.includes(guessArray[i])) {
-            cell.classList.add('present');
-            keyboardKey.classList.add('present');
-        } else {
-            cell.classList.add('absent');
-            keyboardKey.classList.add('absent');
-        }
-    }
+function handleBackspace() {
+    if (gameOver || currentGuess.length === 0) return;
+    currentGuess = currentGuess.slice(0, -1);
+    updateGrid();
 }
 
 function endGame() {
