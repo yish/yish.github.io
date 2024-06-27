@@ -15,7 +15,7 @@
         ["Euro", "Dollar", "Yen", "Peso"],
         ["Rome", "New York", "Tokyo", "Mexico City"]
       ]
-    }
+    },
     {
       "groups": [
         ["Claude", "ChatGPT", "Gemini", "Pi"],
