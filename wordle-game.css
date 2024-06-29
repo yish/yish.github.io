@@ -78,3 +78,13 @@ body {
 .rtl #keyboard {
     direction: ltr; /* Keep keyboard left-to-right */
 }
+#conversation-transcript {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+}
+
+.conversation p {
+    margin-bottom: 15px;
+}
