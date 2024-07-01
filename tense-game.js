@@ -16,7 +16,7 @@ const choice2Btn = document.getElementById('choice2');
 const playAgainBtn = document.getElementById('play-again');
 
 function loadSentences() {
-    fetch('sentences.json')
+    fetch('tense-game.json')
         .then(response => response.json())
         .then(data => {
             sentences = data;
