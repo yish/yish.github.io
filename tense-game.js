@@ -117,12 +117,14 @@ function loadTranscript() {
         });
 }
 
+
 function renderTranscript(transcript) {
     const transcriptEl = document.getElementById('transcript');
     transcriptEl.innerHTML = ''; // Clear any loading message
     transcript.forEach(entry => {
         const messageEl = document.createElement('div');
         messageEl.className = entry.role;
+        messageEl.style.whiteSpace = 'pre-wrap'; // Preserve line breaks
         messageEl.textContent = entry.content;
         transcriptEl.appendChild(messageEl);
     });
