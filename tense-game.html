@@ -9,14 +9,19 @@
 <body>
     <div id="game-container">
         <h1>Correct vs. Incorrect Tense Usage</h1>
-        <div id="sentence1" class="sentence"></div>
-        <div id="sentence2" class="sentence"></div>
-        <button id="choice1">Sentence 1</button>
-        <button id="choice2">Sentence 2</button>
-        <div id="timer">Time: 15s</div>
-        <div id="score">Score: 0</div>
-        <div id="explanation"></div>
-        <div id="round-info">Round: 1 / 5</div>
+        <div id="start-screen">
+            <button id="start-game">Start Game</button>
+        </div>
+        <div id="game-screen" style="display: none;">
+            <div id="sentence1" class="sentence"></div>
+            <div id="sentence2" class="sentence"></div>
+            <button id="choice1">Sentence 1</button>
+            <button id="choice2">Sentence 2</button>
+            <div id="timer">Time: 15s</div>
+            <div id="score">Score: 0</div>
+            <div id="explanation"></div>
+            <div id="round-info">Round: 1 / 5</div>
+        </div>
         <button id="play-again" style="display: none;">Play Again</button>
     </div>
     <script src="tense-game.js"></script>
