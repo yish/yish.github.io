@@ -106,7 +106,7 @@ startGameBtn.addEventListener('click', startGame);
 loadSentences();
 
 function loadTranscript() {
-    fetch('transcript.json')
+    fetch('tense-game-transcript.json')
         .then(response => response.json())
         .then(data => {
             renderTranscript(data);
