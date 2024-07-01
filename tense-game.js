@@ -5,6 +5,8 @@ let timer;
 let currentRound = 1;
 const totalRounds = 5;
 
+const startScreen = document.getElementById('start-screen');
+const gameScreen = document.getElementById('game-screen');
 const sentence1El = document.getElementById('sentence1');
 const sentence2El = document.getElementById('sentence2');
 const timerEl = document.getElementById('timer');
@@ -14,13 +16,15 @@ const roundInfoEl = document.getElementById('round-info');
 const choice1Btn = document.getElementById('choice1');
 const choice2Btn = document.getElementById('choice2');
 const playAgainBtn = document.getElementById('play-again');
+const startGameBtn = document.getElementById('start-game');
 
 function loadSentences() {
     fetch('tense-game.json')
         .then(response => response.json())
         .then(data => {
             sentences = data;
-            startGame();
+            startScreen.style.display = 'block';
+            gameScreen.style.display = 'none';
         })
         .catch(error => console.error('Error loading sentences:', error));
 }
@@ -31,6 +35,8 @@ function startGame() {
     currentRound = 1;
     scoreEl.textContent = `Score: ${score}`;
     roundInfoEl.textContent = `Round: ${currentRound} / ${totalRounds}`;
+    startScreen.style.display = 'none';
+    gameScreen.style.display = 'block';
     playAgainBtn.style.display = 'none';
     displaySentences();
 }
@@ -41,6 +47,8 @@ function displaySentences() {
     const isFirstCorrect = Math.random() < 0.5;
     sentence1El.textContent = isFirstCorrect ? sentence.correct : sentence.incorrect;
     sentence2El.textContent = isFirstCorrect ? sentence.incorrect : sentence.correct;
+    explanationEl.className = '';
+    explanationEl.textContent = '';
     startTimer();
 }
 
@@ -65,9 +73,11 @@ function checkAnswer(choice) {
     
     if (isCorrect) {
         score += 5;
+        explanationEl.className = 'correct-feedback';
         explanationEl.textContent = "Correct! " + sentence.explanation;
     } else {
         score = Math.max(0, score - 3);
+        explanationEl.className = 'incorrect-feedback';
         explanationEl.textContent = "Incorrect. " + sentence.explanation;
     }
     scoreEl.textContent = `Score: ${score}`;
@@ -84,13 +94,13 @@ function checkAnswer(choice) {
 function endGame() {
     sentence1El.textContent = "Game Over!";
     sentence2El.textContent = `Final Score: ${score}`;
-    choice1Btn.style.display = 'none';
-    choice2Btn.style.display = 'none';
+    gameScreen.style.display = 'none';
     playAgainBtn.style.display = 'block';
 }
 
 choice1Btn.addEventListener('click', () => checkAnswer('choice1'));
 choice2Btn.addEventListener('click', () => checkAnswer('choice2'));
 playAgainBtn.addEventListener('click', startGame);
+startGameBtn.addEventListener('click', startGame);
 
 loadSentences();
