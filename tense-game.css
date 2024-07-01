@@ -1,11 +1,11 @@
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
+    padding: 20px;
     background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #game-container {
@@ -16,6 +16,17 @@ body {
     text-align: center;
     max-width: 600px;
     width: 100%;
+    margin-bottom: 40px;
+}
+
+#transcript-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: 800px;
+    width: 100%;
+    margin-top: 40px;
 }
 
 button {
@@ -71,4 +82,23 @@ button:hover {
     background-color: #f2dede;
     border: 1px solid #ebccd1;
     color: #a94442;
+}
+
+#transcript {
+    text-align: left;
+    line-height: 1.6;
+}
+
+.human, .assistant {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.human {
+    background-color: #e6f3ff;
+}
+
+.assistant {
+    background-color: #f0f0f0;
 }
