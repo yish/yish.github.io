@@ -104,3 +104,28 @@ playAgainBtn.addEventListener('click', startGame);
 startGameBtn.addEventListener('click', startGame);
 
 loadSentences();
+
+function loadTranscript() {
+    fetch('transcript.json')
+        .then(response => response.json())
+        .then(data => {
+            renderTranscript(data);
+        })
+        .catch(error => {
+            console.error('Error loading transcript:', error);
+            document.getElementById('transcript').textContent = 'Error loading transcript.';
+        });
+}
+
+function renderTranscript(transcript) {
+    const transcriptEl = document.getElementById('transcript');
+    transcriptEl.innerHTML = ''; // Clear any loading message
+    transcript.forEach(entry => {
+        const messageEl = document.createElement('div');
+        messageEl.className = entry.role;
+        messageEl.textContent = entry.content;
+        transcriptEl.appendChild(messageEl);
+    });
+}
+
+loadTranscript();
