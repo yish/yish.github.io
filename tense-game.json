@@ -1,0 +1,52 @@
+[
+    {
+        "correct": "I want to go home.",
+        "incorrect": "I am wanting to go home.",
+        "explanation": "'Want' is a stative verb, which typically doesn't use the progressive form. Use the simple present tense instead."
+    },
+    {
+        "correct": "She has lived in Tel Aviv for five years.",
+        "incorrect": "She is living in Tel Aviv for five years.",
+        "explanation": "Use present perfect for an action that started in the past and continues to the present, especially with time expressions like 'for five years'."
+    },
+    {
+        "correct": "They are studying for their exam.",
+        "incorrect": "They have studied for their exam.",
+        "explanation": "Use present progressive for an ongoing action happening right now. Present perfect would imply they've finished studying."
+    },
+    {
+        "correct": "He has been to Jerusalem three times.",
+        "incorrect": "He is being to Jerusalem three times.",
+        "explanation": "Use present perfect for past experiences. 'Being to' is not grammatically correct."
+    },
+    {
+        "correct": "I've known her since we were kids.",
+        "incorrect": "I'm knowing her since we were kids.",
+        "explanation": "'Know' is a stative verb. Use present perfect for a state that began in the past and continues to the present."
+    },
+    {
+        "correct": "The sun rises in the east.",
+        "incorrect": "The sun is rising in the east.",
+        "explanation": "Use simple present for general truths or habitual actions. The progressive would imply it's happening right now."
+    },
+    {
+        "correct": "She is always complaining about the weather.",
+        "incorrect": "She always complains about the weather.",
+        "explanation": "While both can be correct, the progressive form with 'always' emphasizes the speaker's annoyance or that the action is excessive."
+    },
+    {
+        "correct": "I have finished my homework.",
+        "incorrect": "I am finishing my homework.",
+        "explanation": "Use present perfect for a completed action with present relevance. The progressive would mean the action is still ongoing."
+    },
+    {
+        "correct": "They are having dinner right now.",
+        "incorrect": "They have dinner right now.",
+        "explanation": "Use present progressive for an action happening at this moment. Simple present would imply a habitual action."
+    },
+    {
+        "correct": "He understands the concept now.",
+        "incorrect": "He is understanding the concept now.",
+        "explanation": "'Understand' is usually used as a stative verb. The simple present is typically used, not the progressive form."
+    }
+]
