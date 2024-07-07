@@ -61,3 +61,10 @@ button {
     font-size: 16px;
     cursor: pointer;
 }
+
+.game-intro {
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
