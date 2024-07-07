@@ -1,7 +1,7 @@
 let bloomCategories, situations, currentSituation;
 
 // Load JSON data
-fetch('data.json')
+fetch('bloom-game.json')
     .then(response => response.json())
     .then(data => {
         bloomCategories = data.bloomCategories;
