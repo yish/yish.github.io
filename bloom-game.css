@@ -72,3 +72,10 @@ button:hover {
 .chat strong {
     color: #4CAF50;
 }
+
+.game-intro {
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
