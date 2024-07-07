@@ -12,8 +12,9 @@ body {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
 }
-h1 {
+h1, h2, h3 {
     color: #333;
     text-align: center;
 }
@@ -50,4 +51,24 @@ button:hover {
 .incorrect {
     background-color: #f8d7da;
     color: #721c24;
+}
+.conversation {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.chat {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 20px;
+}
+.chat p {
+    margin-bottom: 10px;
+}
+.chat strong {
+    color: #4CAF50;
 }
