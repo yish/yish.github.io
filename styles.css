@@ -1,0 +1,96 @@
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+h2, h3 {
+    color: #34495e;
+}
+
+.intro {
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.games-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.games-list li {
+    margin-bottom: 10px;
+}
+
+.games-list a {
+    text-decoration: none;
+    color: #3498db;
+    transition: color 0.3s ease;
+}
+
+.games-list a:hover {
+    color: #2980b9;
+}
+
+footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #bdc3c7;
+    text-align: center;
+}
+
+.links {
+    margin-top: 10px;
+}
+
+.links a {
+    display: inline-block;
+    margin: 0 10px;
+    text-decoration: none;
+    color: #3498db;
+    transition: color 0.3s ease;
+}
+
+.links a:hover {
+    color: #2980b9;
+}
+
+/* חלק חדש: עיצוב השיחה */
+.conversation-divider {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    border: none;
+    border-top: 1px solid #bdc3c7;
+}
+
+.conversation {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.conversation h2 {
+    text-align: center;
+    margin-
