@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משחק 20 שאלות</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <h1>משחק 20 שאלות</h1>
+        <div id="start-screen">
+            <button id="predefined-questions">התחל עם שאלות מוכנות</button>
+            <button id="custom-questions">הכנס שאלות משלך</button>
+        </div>
+        <div id="custom-questions-form" style="display: none;">
+            <textarea id="questions-input" rows="10" placeholder="הכנס שאלות ותשובות, כל אחת בשורה נפרדת, מופרדות בפסיק. לדוגמה: מהי בירת צרפת?,פריז"></textarea>
+            <button id="submit-custom-questions">התחל משחק</button>
+        </div>
+        <div id="game-screen" style="display: none;">
+            <div id="question-card">
+                <div id="question"></div>
+                <div id="answer" style="display: none;"></div>
+            </div>
+            <div id="score-buttons" style="display: none;">
+                <button id="correct">נכון</button>
+                <button id="half-correct">חצי נכון</button>
+                <button id="incorrect">לא נכון</button>
+            </div>
+            <div id="score">ניקוד: <span id="score-value">0</span></div>
+        </div>
+        <div id="end-screen" style="display: none;">
+            <h2>סיימת את המשחק!</h2>
+            <p>הניקוד הסופי שלך: <span id="final-score"></span> מתוך 20</p>
+            <p id="encouragement"></p>
+            <button id="play-again">שחק שוב</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
