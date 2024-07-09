@@ -1,6 +1,7 @@
 let questions = [];
 let currentQuestion = 0;
 let score = 0;
+let conversation = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('predefined-questions').addEventListener('click', startGameWithPredefinedQuestions);
@@ -11,7 +12,23 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('half-correct').addEventListener('click', () => updateScore(0.5));
     document.getElementById('incorrect').addEventListener('click', () => updateScore(0));
     document.getElementById('play-again').addEventListener('click', resetGame);
+    
+    // הוספת מאזין אירועים לכפתור החדש
+    document.getElementById('show-conversation').addEventListener('click', showConversation);
+
+    // טעינת השיחה מקובץ ה-JSON
+    loadConversation();
 });
+
+// פונקציה לטעינת השיחה מקובץ ה-JSON
+function loadConversation() {
+    fetch('twenty-questions-conversation.json')
+        .then(response => response.json())
+        .then(data => {
+            conversation = data.conversation;
+        })
+        .catch(error => console.error('Error loading conversation:', error));
+}
 
 function startGameWithPredefinedQuestions() {
     fetch('twenty-questions.json')
@@ -145,3 +162,23 @@ function resetGame() {
         console.error('חלק מהאלמנטים הנדרשים לאיפוס המשחק חסרים ב-DOM');
     }
 }
+
+// פונקציה מעודכנת להצגת השיחה
+function showConversation() {
+    const conversationElement = document.getElementById('conversation');
+    if (conversationElement) {
+        if (conversationElement.style.display === 'none') {
+            let conversationHTML = '<h3>השיחה שהובילה ליצירת המשחק:</h3>';
+            conversation.forEach(message => {
+                conversationHTML += `<p><strong>${message.role}:</strong> ${message.content}</p>`;
+            });
+            conversationElement.innerHTML = conversationHTML;
+            conversationElement.style.display = 'block';
+        } else {
+            conversationElement.style.display = 'none';
+        }
+    } else {
+        console.error('אלמנט השיחה חסר ב-DOM');
+    }
+}
+
