@@ -44,19 +44,12 @@ function startGame() {
 }
 
 function showQuestion() {
-    const gameScreen = document.getElementById('game-screen');
     const questionCard = document.getElementById('question-card');
-    const scoreButtons = document.getElementById('score-buttons');
     const answerElement = document.getElementById('answer');
-
-    if (!gameScreen || !questionCard || !scoreButtons || !answerElement) {
-        console.error('חלק מהאלמנטים הנדרשים חסרים ב-DOM');
-        return;
-    }
+    const scoreButtons = document.getElementById('score-buttons');
 
     if (currentQuestion < questions.length) {
-        questionCard.innerHTML = `<div id="question">${questions[currentQuestion].question}</div>`;
-        answerElement.style.display = 'none';
+        questionCard.innerHTML = `<div id="question">${questions[currentQuestion].question}</div><div id="answer" style="display:none;"></div>`;
         scoreButtons.style.display = 'none';
     } else {
         endGame();
@@ -64,17 +57,17 @@ function showQuestion() {
 }
 
 function flipCard() {
-    const answer = document.getElementById('answer');
+    const answerElement = document.getElementById('answer');
     const scoreButtons = document.getElementById('score-buttons');
     
-    if (!answer || !scoreButtons) {
+    if (!answerElement || !scoreButtons) {
         console.error('אלמנט התשובה או כפתורי הניקוד חסרים ב-DOM');
         return;
     }
 
-    if (answer.style.display === 'none') {
-        answer.textContent = questions[currentQuestion].answer;
-        answer.style.display = 'block';
+    if (answerElement.style.display === 'none') {
+        answerElement.textContent = questions[currentQuestion].answer;
+        answerElement.style.display = 'block';
         scoreButtons.style.display = 'block';
     }
 }
