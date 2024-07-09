@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function startGameWithPredefinedQuestions() {
-    fetch('questions.json')
+    fetch('twenty-questions.json')
         .then(response => response.json())
         .then(data => {
             questions = data;
