@@ -40,7 +40,17 @@ function startGame() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('custom-questions-form').style.display = 'none';
     document.getElementById('game-screen').style.display = 'block';
+    currentQuestion = 0;
+    score = 0;
+    updateQuestionCounter();
     showQuestion();
+}
+
+function updateQuestionCounter() {
+    const counter = document.getElementById('current-question');
+    if (counter) {
+        counter.textContent = currentQuestion + 1;
+    }
 }
 
 function showQuestion() {
@@ -48,11 +58,13 @@ function showQuestion() {
         const questionElement = document.getElementById('question');
         const answerElement = document.getElementById('answer');
         const scoreButtons = document.getElementById('score-buttons');
+        const hr = document.querySelector('#question-card hr');
 
-        if (questionElement && answerElement && scoreButtons) {
+        if (questionElement && answerElement && scoreButtons && hr) {
             questionElement.textContent = questions[currentQuestion].question;
             answerElement.textContent = questions[currentQuestion].answer;
             answerElement.style.display = 'none';
+            hr.style.display = 'none';
             scoreButtons.style.display = 'none';
         } else {
             console.error('חלק מהאלמנטים הנדרשים חסרים ב-DOM');
@@ -65,10 +77,12 @@ function showQuestion() {
 function flipCard() {
     const answerElement = document.getElementById('answer');
     const scoreButtons = document.getElementById('score-buttons');
+    const hr = document.querySelector('#question-card hr');
     
-    if (answerElement && scoreButtons) {
+    if (answerElement && scoreButtons && hr) {
         if (answerElement.style.display === 'none') {
             answerElement.style.display = 'block';
+            hr.style.display = 'block';
             scoreButtons.style.display = 'block';
         }
     } else {
@@ -83,6 +97,7 @@ function updateScore(points) {
         scoreValue.textContent = score;
     }
     currentQuestion++;
+    updateQuestionCounter();
     showQuestion();
 }
 
