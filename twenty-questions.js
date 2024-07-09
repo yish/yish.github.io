@@ -44,13 +44,19 @@ function startGame() {
 }
 
 function showQuestion() {
-    const questionCard = document.getElementById('question-card');
-    const answerElement = document.getElementById('answer');
-    const scoreButtons = document.getElementById('score-buttons');
-
     if (currentQuestion < questions.length) {
-        questionCard.innerHTML = `<div id="question">${questions[currentQuestion].question}</div><div id="answer" style="display:none;"></div>`;
-        scoreButtons.style.display = 'none';
+        const questionElement = document.getElementById('question');
+        const answerElement = document.getElementById('answer');
+        const scoreButtons = document.getElementById('score-buttons');
+
+        if (questionElement && answerElement && scoreButtons) {
+            questionElement.textContent = questions[currentQuestion].question;
+            answerElement.textContent = questions[currentQuestion].answer;
+            answerElement.style.display = 'none';
+            scoreButtons.style.display = 'none';
+        } else {
+            console.error('חלק מהאלמנטים הנדרשים חסרים ב-DOM');
+        }
     } else {
         endGame();
     }
@@ -60,15 +66,13 @@ function flipCard() {
     const answerElement = document.getElementById('answer');
     const scoreButtons = document.getElementById('score-buttons');
     
-    if (!answerElement || !scoreButtons) {
+    if (answerElement && scoreButtons) {
+        if (answerElement.style.display === 'none') {
+            answerElement.style.display = 'block';
+            scoreButtons.style.display = 'block';
+        }
+    } else {
         console.error('אלמנט התשובה או כפתורי הניקוד חסרים ב-DOM');
-        return;
-    }
-
-    if (answerElement.style.display === 'none') {
-        answerElement.textContent = questions[currentQuestion].answer;
-        answerElement.style.display = 'block';
-        scoreButtons.style.display = 'block';
     }
 }
 
@@ -88,26 +92,25 @@ function endGame() {
     const finalScore = document.getElementById('final-score');
     const encouragement = document.getElementById('encouragement');
 
-    if (!gameScreen || !endScreen || !finalScore || !encouragement) {
-        console.error('חלק מהאלמנטים הנדרשים לסיום המשחק חסרים ב-DOM');
-        return;
-    }
-
-    gameScreen.style.display = 'none';
-    endScreen.style.display = 'block';
-    finalScore.textContent = score;
-    
-    let encouragementText;
-    if (score === 20) {
-        encouragementText = "מושלם! ציון מדהים!";
-    } else if (score >= 15) {
-        encouragementText = "כל הכבוד! תוצאה מצוינת!";
-    } else if (score >= 10) {
-        encouragementText = "לא רע! יש מקום לשיפור.";
+    if (gameScreen && endScreen && finalScore && encouragement) {
+        gameScreen.style.display = 'none';
+        endScreen.style.display = 'block';
+        finalScore.textContent = score;
+        
+        let encouragementText;
+        if (score === 20) {
+            encouragementText = "מושלם! ציון מדהים!";
+        } else if (score >= 15) {
+            encouragementText = "כל הכבוד! תוצאה מצוינת!";
+        } else if (score >= 10) {
+            encouragementText = "לא רע! יש מקום לשיפור.";
+        } else {
+            encouragementText = "המשך להתאמן, בפעם הבאה תצליח יותר!";
+        }
+        encouragement.textContent = encouragementText;
     } else {
-        encouragementText = "המשך להתאמן, בפעם הבאה תצליח יותר!";
+        console.error('חלק מהאלמנטים הנדרשים לסיום המשחק חסרים ב-DOM');
     }
-    encouragement.textContent = encouragementText;
 }
 
 function resetGame() {
@@ -116,14 +119,14 @@ function resetGame() {
     const scoreValue = document.getElementById('score-value');
     const endScreen = document.getElementById('end-screen');
     const startScreen = document.getElementById('start-screen');
+    const gameScreen = document.getElementById('game-screen');
 
-    if (scoreValue) {
+    if (scoreValue && endScreen && startScreen && gameScreen) {
         scoreValue.textContent = '0';
-    }
-    if (endScreen) {
         endScreen.style.display = 'none';
-    }
-    if (startScreen) {
+        gameScreen.style.display = 'none';
         startScreen.style.display = 'block';
+    } else {
+        console.error('חלק מהאלמנטים הנדרשים לאיפוס המשחק חסרים ב-DOM');
     }
 }
