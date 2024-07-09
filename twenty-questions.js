@@ -44,11 +44,20 @@ function startGame() {
 }
 
 function showQuestion() {
+    const gameScreen = document.getElementById('game-screen');
+    const questionCard = document.getElementById('question-card');
+    const scoreButtons = document.getElementById('score-buttons');
+    const answerElement = document.getElementById('answer');
+
+    if (!gameScreen || !questionCard || !scoreButtons || !answerElement) {
+        console.error('חלק מהאלמנטים הנדרשים חסרים ב-DOM');
+        return;
+    }
+
     if (currentQuestion < questions.length) {
-        const questionCard = document.getElementById('question-card');
         questionCard.innerHTML = `<div id="question">${questions[currentQuestion].question}</div>`;
-        document.getElementById('answer').style.display = 'none';
-        document.getElementById('score-buttons').style.display = 'none';
+        answerElement.style.display = 'none';
+        scoreButtons.style.display = 'none';
     } else {
         endGame();
     }
@@ -56,42 +65,72 @@ function showQuestion() {
 
 function flipCard() {
     const answer = document.getElementById('answer');
+    const scoreButtons = document.getElementById('score-buttons');
+    
+    if (!answer || !scoreButtons) {
+        console.error('אלמנט התשובה או כפתורי הניקוד חסרים ב-DOM');
+        return;
+    }
+
     if (answer.style.display === 'none') {
         answer.textContent = questions[currentQuestion].answer;
         answer.style.display = 'block';
-        document.getElementById('score-buttons').style.display = 'block';
+        scoreButtons.style.display = 'block';
     }
 }
 
 function updateScore(points) {
     score += points;
-    document.getElementById('score-value').textContent = score;
+    const scoreValue = document.getElementById('score-value');
+    if (scoreValue) {
+        scoreValue.textContent = score;
+    }
     currentQuestion++;
     showQuestion();
 }
 
 function endGame() {
-    document.getElementById('game-screen').style.display = 'none';
-    document.getElementById('end-screen').style.display = 'block';
-    document.getElementById('final-score').textContent = score;
-    
-    let encouragement;
-    if (score === 20) {
-        encouragement = "מושלם! ציון מדהים!";
-    } else if (score >= 15) {
-        encouragement = "כל הכבוד! תוצאה מצוינת!";
-    } else if (score >= 10) {
-        encouragement = "לא רע! יש מקום לשיפור.";
-    } else {
-        encouragement = "המשך להתאמן, בפעם הבאה תצליח יותר!";
+    const gameScreen = document.getElementById('game-screen');
+    const endScreen = document.getElementById('end-screen');
+    const finalScore = document.getElementById('final-score');
+    const encouragement = document.getElementById('encouragement');
+
+    if (!gameScreen || !endScreen || !finalScore || !encouragement) {
+        console.error('חלק מהאלמנטים הנדרשים לסיום המשחק חסרים ב-DOM');
+        return;
     }
-    document.getElementById('encouragement').textContent = encouragement;
+
+    gameScreen.style.display = 'none';
+    endScreen.style.display = 'block';
+    finalScore.textContent = score;
+    
+    let encouragementText;
+    if (score === 20) {
+        encouragementText = "מושלם! ציון מדהים!";
+    } else if (score >= 15) {
+        encouragementText = "כל הכבוד! תוצאה מצוינת!";
+    } else if (score >= 10) {
+        encouragementText = "לא רע! יש מקום לשיפור.";
+    } else {
+        encouragementText = "המשך להתאמן, בפעם הבאה תצליח יותר!";
+    }
+    encouragement.textContent = encouragementText;
 }
 
 function resetGame() {
     currentQuestion = 0;
     score = 0;
-    document.getElementById('score-value').textContent = '0';
-    document.getElementById('end-screen').style.display = 'none';
-    document.getElementById('start-screen').style.display = 'block';
+    const scoreValue = document.getElementById('score-value');
+    const endScreen = document.getElementById('end-screen');
+    const startScreen = document.getElementById('start-screen');
+
+    if (scoreValue) {
+        scoreValue.textContent = '0';
+    }
+    if (endScreen) {
+        endScreen.style.display = 'none';
+    }
+    if (startScreen) {
+        startScreen.style.display = 'block';
+    }
 }
