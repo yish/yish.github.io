@@ -48,6 +48,14 @@ function startGame() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('custom-questions-form').style.display = 'none';
     document.getElementById('game-screen').style.display = 'block';
+    
+    // Hide background upload and show conversation controls
+    document.getElementById('background-upload').style.display = 'none';
+    document.getElementById('show-conversation').style.display = 'none';
+    
+    // Hide conversation if it's currently shown
+    document.getElementById('conversation').style.display = 'none';
+    
     currentQuestion = 0;
     score = 0;
     updateQuestionCounter();
@@ -131,6 +139,10 @@ function endGame() {
             encouragementText = "המשך להתאמן, בפעם הבאה תצליח יותר!";
         }
         encouragement.textContent = encouragementText;
+
+        // Show background upload and show conversation controls
+        document.getElementById('background-upload').style.display = 'block';
+        document.getElementById('show-conversation').style.display = 'inline-block';
     } else {
         console.error('חלק מהאלמנטים הנדרשים לסיום המשחק חסרים ב-DOM');
     }
@@ -149,6 +161,10 @@ function resetGame() {
         endScreen.style.display = 'none';
         gameScreen.style.display = 'none';
         startScreen.style.display = 'block';
+
+        // Show background upload and show conversation controls
+        document.getElementById('background-upload').style.display = 'block';
+        document.getElementById('show-conversation').style.display = 'inline-block';
     } else {
         console.error('חלק מהאלמנטים הנדרשים לאיפוס המשחק חסרים ב-DOM');
     }
