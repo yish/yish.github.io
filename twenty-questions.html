@@ -7,35 +7,28 @@
     <link rel="stylesheet" href="twenty-questions.css">
 </head>
 <body>
-    <div id="game-container">
-        <h1>משחק 20 שאלות</h1>
-        <!-- ... (previous code remains unchanged) ... -->
-        <div id="game-screen" style="display: none;">
-            <div id="question-counter">שאלה <span id="current-question">1</span> מתוך 20</div>
-            <div id="question-card">
-                <div id="question"></div>
-                <hr style="display: none;">
-                <div id="answer" style="display: none;"></div>
-            </div>
-            <div id="score-buttons" style="display: none;">
-                <button id="correct">נכון</button>
-                <button id="half-correct">חצי נכון</button>
-                <button id="incorrect">לא נכון</button>
-            </div>
-            <div id="score">ניקוד: <span id="score-value">0</span></div>
+    <div id="background-container"></div>
+    <div id="content-wrapper">
+        <div id="game-container">
+            <!-- ... (previous game content remains unchanged) ... -->
         </div>
-        <!-- ... (rest of the code remains unchanged) ... -->
-    </div>
-    
-    <hr style="margin-top: 20px; margin-bottom: 20px;">
-    
-    <div id="game-info">
-        <p>משחק זה הוא חלק מאוסף משחקים המדגימים את האפשרויות של בניית משחקים לימודיים באמצעות קלוד. למידע נוסף, בקרו <a href=".">כאן</a>.</p>
-        <button id="show-conversation">איך בניתי את המשחק הזה?</button>
-    </div>
-    
-    <div id="conversation" style="display: none; margin-top: 20px;">
-        <!-- השיחה תוכנס כאן באמצעות JavaScript -->
+        
+        <hr style="margin-top: 20px; margin-bottom: 20px;">
+        
+        <div id="game-info">
+            <p>משחק זה הוא חלק מאוסף משחקים המדגימים את האפשרויות של בניית משחקים לימודיים באמצעות קלוד. למידע נוסף, בקרו <a href=".">כאן</a>.</p>
+            <button id="show-conversation">איך בניתי את המשחק הזה?</button>
+        </div>
+        
+        <div id="conversation" style="display: none; margin-top: 20px;">
+            <!-- השיחה תוכנס כאן באמצעות JavaScript -->
+        </div>
+
+        <div id="background-upload">
+            <h3>העלאת תמונת רקע</h3>
+            <input type="file" id="background-image-input" accept="image/*">
+            <button id="reset-background">איפוס רקע</button>
+        </div>
     </div>
 
     <script src="twenty-questions.js"></script>
