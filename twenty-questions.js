@@ -117,6 +117,7 @@ function updateScore(points) {
     showQuestion();
 }
 
+
 function endGame() {
     const gameScreen = document.getElementById('game-screen');
     const endScreen = document.getElementById('end-screen');
@@ -140,9 +141,9 @@ function endGame() {
         }
         encouragement.textContent = encouragementText;
 
-        // Show background upload and show conversation controls
-        document.getElementById('background-upload').style.display = 'block';
-        document.getElementById('show-conversation').style.display = 'inline-block';
+        // הכפתורים נשארים מוסתרים בסוף המשחק
+        document.getElementById('background-upload').style.display = 'none';
+        document.getElementById('show-conversation').style.display = 'none';
     } else {
         console.error('חלק מהאלמנטים הנדרשים לסיום המשחק חסרים ב-DOM');
     }
@@ -162,13 +163,14 @@ function resetGame() {
         gameScreen.style.display = 'none';
         startScreen.style.display = 'block';
 
-        // Show background upload and show conversation controls
+        // מציג את הכפתורים רק כאשר לוחצים על "שחק שוב"
         document.getElementById('background-upload').style.display = 'block';
         document.getElementById('show-conversation').style.display = 'inline-block';
     } else {
         console.error('חלק מהאלמנטים הנדרשים לאיפוס המשחק חסרים ב-DOM');
     }
 }
+
 
 function loadConversation() {
     fetch('twenty-questions-conversation.json')
