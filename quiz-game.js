@@ -68,7 +68,7 @@ function parseCSV(csv) {
             id: parseInt(id),
             correctAnswer: parseInt(correctAnswer),
             question,
-            answers
+            answers: answers.filter(answer => answer.trim() !== '')
         };
     });
     return { questions };
@@ -88,13 +88,13 @@ function startGame() {
     for (let i = 1; i <= 21; i++) {
         const button = document.createElement('button');
         button.classList.add('grid-item');
-        if (i === 11) {
+        if (i === 21) {
             button.textContent = '*';
             button.classList.add('star');
         } else {
-            button.textContent = i > 11 ? i - 1 : i;
+            button.textContent = i;
         }
-        button.addEventListener('click', () => showQuestion(i > 11 ? i - 1 : i));
+        button.addEventListener('click', () => showQuestion(i));
         grid.appendChild(button);
     }
 }
@@ -113,24 +113,30 @@ function showQuestion(id) {
     feedback.style.display = 'none';
 
     currentQuestion.answers.forEach((answer, index) => {
-        const button = document.createElement('button');
-        button.classList.add('answer-option');
-        button.textContent = answer;
-        button.addEventListener('click', () => checkAnswer(index));
-        answerOptions.appendChild(button);
+        if (answer.trim() !== '') {
+            const button = document.createElement('button');
+            button.classList.add('answer-option');
+            button.textContent = answer;
+            button.addEventListener('click', () => checkAnswer(index));
+            answerOptions.appendChild(button);
+        }
     });
 
-    const allButton = document.createElement('button');
-    allButton.classList.add('answer-option');
-    allButton.textContent = 'כולן';
-    allButton.addEventListener('click', () => checkAnswer(currentQuestion.answers.length));
-    answerOptions.appendChild(allButton);
+    if (currentQuestion.correctAnswer === 0 || currentQuestion.answers.some(answer => answer.trim() === '')) {
+        const allButton = document.createElement('button');
+        allButton.classList.add('answer-option');
+        allButton.textContent = 'כולן';
+        allButton.addEventListener('click', () => checkAnswer(currentQuestion.answers.length));
+        answerOptions.appendChild(allButton);
+    }
 
-    const noneButton = document.createElement('button');
-    noneButton.classList.add('answer-option');
-    noneButton.textContent = 'אף אחת';
-    noneButton.addEventListener('click', () => checkAnswer(currentQuestion.answers.length + 1));
-    answerOptions.appendChild(noneButton);
+    if (currentQuestion.correctAnswer === -1 || currentQuestion.answers.some(answer => answer.trim() === '')) {
+        const noneButton = document.createElement('button');
+        noneButton.classList.add('answer-option');
+        noneButton.textContent = 'אף אחת';
+        noneButton.addEventListener('click', () => checkAnswer(currentQuestion.answers.length + 1));
+        answerOptions.appendChild(noneButton);
+    }
 
     questionCard.style.display = 'block';
 }
@@ -185,7 +191,7 @@ function updateScore() {
 function hideFeedbackAndQuestion() {
     document.getElementById('question-card').style.display = 'none';
     document.getElementById('continue-button').style.display = 'none';
-    document.querySelector(`.grid-item:nth-child(${currentQuestion.id > 11 ? currentQuestion.id + 1 : currentQuestion.id})`).style.visibility = 'hidden';
+    document.querySelector(`.grid-item:nth-child(${currentQuestion.id})`).style.visibility = 'hidden';
 }
 
 function endGame() {
