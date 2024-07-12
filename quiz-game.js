@@ -7,12 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const startButton = document.getElementById('start-game');
     const backgroundUpload = document.getElementById('background-upload');
     const questionsUpload = document.getElementById('questions-upload');
+    const playAgainButton = document.getElementById('play-again');
+    const continueButton = document.getElementById('continue-button');
 
     startButton.addEventListener('click', startGame);
     backgroundUpload.addEventListener('change', handleBackgroundUpload);
     questionsUpload.addEventListener('change', handleQuestionsUpload);
+    playAgainButton.addEventListener('click', resetGame);
+    continueButton.addEventListener('click', hideFeedbackAndQuestion);
 
-    // טען את הנתונים מקובץ JSON מקומי אם לא הועלה קובץ
     if (!gameData) {
         loadDefaultGameData();
     }
@@ -36,8 +39,6 @@ function handleBackgroundUpload(event) {
         const reader = new FileReader();
         reader.onload = function(e) {
             document.body.style.backgroundImage = `url(${e.target.result})`;
-            document.body.style.backgroundSize = 'cover';
-            document.body.style.backgroundPosition = 'center';
         };
         reader.readAsDataURL(file);
     }
@@ -83,12 +84,17 @@ function startGame() {
     document.getElementById('game-screen').style.display = 'block';
     
     const grid = document.getElementById('question-grid');
-    grid.innerHTML = ''; // נקה את הגריד לפני הוספת כפתורים חדשים
+    grid.innerHTML = '';
     for (let i = 1; i <= 21; i++) {
         const button = document.createElement('button');
         button.classList.add('grid-item');
-        button.textContent = i === 21 ? '*' : i;
-        button.addEventListener('click', () => showQuestion(i));
+        if (i === 11) {
+            button.textContent = '*';
+            button.classList.add('star');
+        } else {
+            button.textContent = i > 11 ? i - 1 : i;
+        }
+        button.addEventListener('click', () => showQuestion(i > 11 ? i - 1 : i));
         grid.appendChild(button);
     }
 }
@@ -100,9 +106,11 @@ function showQuestion(id) {
     const questionCard = document.getElementById('question-card');
     const questionText = document.getElementById('question-text');
     const answerOptions = document.getElementById('answer-options');
+    const feedback = document.getElementById('feedback');
 
     questionText.textContent = currentQuestion.question;
     answerOptions.innerHTML = '';
+    feedback.style.display = 'none';
 
     currentQuestion.answers.forEach((answer, index) => {
         const button = document.createElement('button');
@@ -142,16 +150,31 @@ function checkAnswer(answerIndex) {
     showFeedback(isCorrect);
     updateScore();
 
-    setTimeout(() => {
-        hideFeedbackAndQuestion();
-    }, 2000);
+    if (questionsAnswered === gameData.questions.length) {
+        setTimeout(endGame, 2000);
+    } else {
+        document.getElementById('continue-button').style.display = 'block';
+    }
 }
 
 function showFeedback(isCorrect) {
     const feedback = document.getElementById('feedback');
     feedback.textContent = isCorrect ? 'תשובה נכונה!' : 'תשובה שגויה';
+    if (!isCorrect) {
+        feedback.textContent += ' התשובה הנכונה היא: ' + getCorrectAnswerText();
+    }
     feedback.className = isCorrect ? 'correct' : 'incorrect';
     feedback.style.display = 'block';
+}
+
+function getCorrectAnswerText() {
+    if (currentQuestion.correctAnswer === 0) {
+        return 'כולן';
+    } else if (currentQuestion.correctAnswer === -1) {
+        return 'אף אחת';
+    } else {
+        return currentQuestion.answers[currentQuestion.correctAnswer - 1];
+    }
 }
 
 function updateScore() {
@@ -160,7 +183,37 @@ function updateScore() {
 }
 
 function hideFeedbackAndQuestion() {
-    document.getElementById('feedback').style.display = 'none';
     document.getElementById('question-card').style.display = 'none';
-    document.querySelector(`.grid-item:nth-child(${currentQuestion.id})`).style.visibility = 'hidden';
+    document.getElementById('continue-button').style.display = 'none';
+    document.querySelector(`.grid-item:nth-child(${currentQuestion.id > 11 ? currentQuestion.id + 1 : currentQuestion.id})`).style.visibility = 'hidden';
+}
+
+function endGame() {
+    const gameEnd = document.getElementById('game-end');
+    const endMessage = document.getElementById('end-message');
+    gameEnd.style.display = 'block';
+    
+    const percentage = (score / gameData.questions.length) * 100;
+    let message = `סיימת את המשחק עם ${score} תשובות נכונות מתוך ${gameData.questions.length}!`;
+    
+    if (percentage === 100) {
+        message += ' מדהים! השגת ציון מושלם!';
+    } else if (percentage >= 80) {
+        message += ' כל הכבוד! תוצאה מצוינת!';
+    } else if (percentage >= 60) {
+        message += ' עבודה טובה! יש מקום לשיפור.';
+    } else {
+        message += ' אל תתייאש, נסה שוב ותשתפר!';
+    }
+    
+    endMessage.textContent = message;
+}
+
+function resetGame() {
+    score = 0;
+    questionsAnswered = 0;
+    document.getElementById('game-end').style.display = 'none';
+    document.getElementById('question-card').style.display = 'none';
+    updateScore();
+    startGame();
 }
