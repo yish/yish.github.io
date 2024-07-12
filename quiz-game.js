@@ -81,7 +81,7 @@ function startGame() {
     }
     
     document.getElementById('setup-screen').style.display = 'none';
-    document.getElementById('game-screen').style.display = 'block';
+    document.getElementById('game-screen').style.display = 'flex';
     
     const grid = document.getElementById('question-grid');
     grid.innerHTML = '';
@@ -114,8 +114,8 @@ function showQuestion(id) {
 
     if (currentQuestion.answers.length === 0) {
         // If there are no answer options, show "True" and "False" buttons
-        const trueButton = createAnswerButton('נכון', () => checkAnswer(true));
-        const falseButton = createAnswerButton('לא נכון', () => checkAnswer(false));
+        const trueButton = createAnswerButton('נכון', () => checkAnswer(1));
+        const falseButton = createAnswerButton('לא נכון', () => checkAnswer(-1));
         answerOptions.appendChild(trueButton);
         answerOptions.appendChild(falseButton);
     } else {
@@ -149,14 +149,7 @@ function createAnswerButton(text, onClick) {
 }
 
 function checkAnswer(answer) {
-    let isCorrect;
-    if (currentQuestion.answers.length === 0) {
-        // For True/False questions
-        isCorrect = (answer === true && currentQuestion.correctAnswer === 1) ||
-                    (answer === false && currentQuestion.correctAnswer === -1);
-    } else {
-        isCorrect = answer === currentQuestion.correctAnswer;
-    }
+    const isCorrect = answer === currentQuestion.correctAnswer;
 
     if (isCorrect) {
         score++;
