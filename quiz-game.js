@@ -1,4 +1,3 @@
-
 let gameData = null;
 let currentQuestion = null;
 let score = 0;
@@ -31,7 +30,7 @@ function loadDefaultGameData() {
         });
 }
 
-unction handleBackgroundUpload(event) {
+function handleBackgroundUpload(event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
@@ -39,7 +38,7 @@ unction handleBackgroundUpload(event) {
             document.body.style.backgroundImage = `url(${e.target.result})`;
             document.body.style.backgroundSize = 'cover';
             document.body.style.backgroundPosition = 'center';
-        }
+        };
         reader.readAsDataURL(file);
     }
 }
@@ -55,7 +54,7 @@ function handleQuestionsUpload(event) {
                 gameData = JSON.parse(e.target.result);
             }
             console.log('נטענו נתונים מקובץ שהועלה');
-        }
+        };
         reader.readAsText(file);
     }
 }
@@ -73,7 +72,6 @@ function parseCSV(csv) {
     });
     return { questions };
 }
-
 
 function startGame() {
     if (!gameData) {
