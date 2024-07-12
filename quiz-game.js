@@ -1,3 +1,4 @@
+
 let gameData = null;
 let currentQuestion = null;
 let score = 0;
@@ -11,9 +12,26 @@ document.addEventListener('DOMContentLoaded', () => {
     startButton.addEventListener('click', startGame);
     backgroundUpload.addEventListener('change', handleBackgroundUpload);
     questionsUpload.addEventListener('change', handleQuestionsUpload);
+
+    // טען את הנתונים מקובץ JSON מקומי אם לא הועלה קובץ
+    if (!gameData) {
+        loadDefaultGameData();
+    }
 });
 
-function handleBackgroundUpload(event) {
+function loadDefaultGameData() {
+    fetch('quiz-game.json')
+        .then(response => response.json())
+        .then(data => {
+            gameData = data;
+            console.log('נטענו נתוני ברירת מחדל');
+        })
+        .catch(error => {
+            console.error('שגיאה בטעינת נתוני ברירת המחדל:', error);
+        });
+}
+
+unction handleBackgroundUpload(event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
@@ -36,6 +54,7 @@ function handleQuestionsUpload(event) {
             } else if (file.name.endsWith('.json')) {
                 gameData = JSON.parse(e.target.result);
             }
+            console.log('נטענו נתונים מקובץ שהועלה');
         }
         reader.readAsText(file);
     }
@@ -55,9 +74,10 @@ function parseCSV(csv) {
     return { questions };
 }
 
+
 function startGame() {
     if (!gameData) {
-        alert('אנא העלה קובץ שאלות לפני תחילת המשחק');
+        alert('מחכה לטעינת נתוני המשחק. נסה שוב בעוד רגע.');
         return;
     }
     
@@ -65,6 +85,7 @@ function startGame() {
     document.getElementById('game-screen').style.display = 'block';
     
     const grid = document.getElementById('question-grid');
+    grid.innerHTML = ''; // נקה את הגריד לפני הוספת כפתורים חדשים
     for (let i = 1; i <= 21; i++) {
         const button = document.createElement('button');
         button.classList.add('grid-item');
