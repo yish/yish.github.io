@@ -112,41 +112,51 @@ function showQuestion(id) {
     answerOptions.innerHTML = '';
     feedback.style.display = 'none';
 
-    currentQuestion.answers.forEach((answer, index) => {
-        if (answer.trim() !== '') {
-            const button = document.createElement('button');
-            button.classList.add('answer-option');
-            button.textContent = answer;
-            button.addEventListener('click', () => checkAnswer(index));
-            answerOptions.appendChild(button);
+    if (currentQuestion.answers.length === 0) {
+        // If there are no answer options, show "True" and "False" buttons
+        const trueButton = createAnswerButton('נכון', () => checkAnswer(true));
+        const falseButton = createAnswerButton('לא נכון', () => checkAnswer(false));
+        answerOptions.appendChild(trueButton);
+        answerOptions.appendChild(falseButton);
+    } else {
+        currentQuestion.answers.forEach((answer, index) => {
+            if (answer.trim() !== '') {
+                const button = createAnswerButton(answer, () => checkAnswer(index + 1));
+                answerOptions.appendChild(button);
+            }
+        });
+
+        if (currentQuestion.correctAnswer === 0 || currentQuestion.answers.some(answer => answer.trim() === '')) {
+            const allButton = createAnswerButton('כולן', () => checkAnswer(0));
+            answerOptions.appendChild(allButton);
         }
-    });
 
-    if (currentQuestion.correctAnswer === 0 || currentQuestion.answers.some(answer => answer.trim() === '')) {
-        const allButton = document.createElement('button');
-        allButton.classList.add('answer-option');
-        allButton.textContent = 'כולן';
-        allButton.addEventListener('click', () => checkAnswer(currentQuestion.answers.length));
-        answerOptions.appendChild(allButton);
-    }
-
-    if (currentQuestion.correctAnswer === -1 || currentQuestion.answers.some(answer => answer.trim() === '')) {
-        const noneButton = document.createElement('button');
-        noneButton.classList.add('answer-option');
-        noneButton.textContent = 'אף אחת';
-        noneButton.addEventListener('click', () => checkAnswer(currentQuestion.answers.length + 1));
-        answerOptions.appendChild(noneButton);
+        if (currentQuestion.correctAnswer === -1 || currentQuestion.answers.some(answer => answer.trim() === '')) {
+            const noneButton = createAnswerButton('אף אחת', () => checkAnswer(-1));
+            answerOptions.appendChild(noneButton);
+        }
     }
 
     questionCard.style.display = 'block';
 }
 
-function checkAnswer(answerIndex) {
-    const isCorrect = (
-        (currentQuestion.correctAnswer === 0 && answerIndex === currentQuestion.answers.length) ||
-        (currentQuestion.correctAnswer === -1 && answerIndex === currentQuestion.answers.length + 1) ||
-        (currentQuestion.correctAnswer === answerIndex + 1)
-    );
+function createAnswerButton(text, onClick) {
+    const button = document.createElement('button');
+    button.classList.add('answer-option');
+    button.textContent = text;
+    button.addEventListener('click', onClick);
+    return button;
+}
+
+function checkAnswer(answer) {
+    let isCorrect;
+    if (currentQuestion.answers.length === 0) {
+        // For True/False questions
+        isCorrect = (answer === true && currentQuestion.correctAnswer === 1) ||
+                    (answer === false && currentQuestion.correctAnswer === -1);
+    } else {
+        isCorrect = answer === currentQuestion.correctAnswer;
+    }
 
     if (isCorrect) {
         score++;
@@ -174,7 +184,9 @@ function showFeedback(isCorrect) {
 }
 
 function getCorrectAnswerText() {
-    if (currentQuestion.correctAnswer === 0) {
+    if (currentQuestion.answers.length === 0) {
+        return currentQuestion.correctAnswer === 1 ? 'נכון' : 'לא נכון';
+    } else if (currentQuestion.correctAnswer === 0) {
         return 'כולן';
     } else if (currentQuestion.correctAnswer === -1) {
         return 'אף אחת';
@@ -191,13 +203,14 @@ function updateScore() {
 function hideFeedbackAndQuestion() {
     document.getElementById('question-card').style.display = 'none';
     document.getElementById('continue-button').style.display = 'none';
-    document.querySelector(`.grid-item:nth-child(${currentQuestion.id})`).style.visibility = 'hidden';
+    document.querySelector(`.grid-item:nth-child(${currentQuestion.id === 21 ? 21 : currentQuestion.id})`).style.visibility = 'hidden';
 }
 
 function endGame() {
     const gameEnd = document.getElementById('game-end');
     const endMessage = document.getElementById('end-message');
     gameEnd.style.display = 'block';
+    document.getElementById('question-card').style.display = 'none';
     
     const percentage = (score / gameData.questions.length) * 100;
     let message = `סיימת את המשחק עם ${score} תשובות נכונות מתוך ${gameData.questions.length}!`;
