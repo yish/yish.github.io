@@ -38,9 +38,14 @@
             <div id="question-card" style="display: none;">
                 <h2 id="question-text"></h2>
                 <div id="answer-options"></div>
+                <div id="feedback" style="display: none;"></div>
+                <button id="continue-button" style="display: none;">המשך</button>
             </div>
-            <div id="feedback" style="display: none;"></div>
             <div id="score">ניקוד: <span id="correct-answers">0</span> / <span id="total-questions">0</span></div>
+            <div id="game-end" style="display: none;">
+                <h2 id="end-message"></h2>
+                <button id="play-again" class="primary-button">שחק שוב</button>
+            </div>
         </div>
     </div>
     <script src="quiz-game.js"></script>
