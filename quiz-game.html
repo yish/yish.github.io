@@ -9,11 +9,30 @@
 <body>
     <div id="game-container">
         <div id="setup-screen">
-            <h1>הגדרות משחק</h1>
-            <input type="file" id="background-upload" accept="image/*">
-            <input type="file" id="questions-upload" accept=".csv,.json">
-            <button id="start-game">התחל משחק</button>
+            <h1>ברוכים הבאים למשחק החידון!</h1>
+            
+            <div class="setup-section">
+                <h2>הגדרות רקע</h2>
+                <p>בחר תמונת רקע למשחק (אופציונלי):</p>
+                <input type="file" id="background-upload" accept="image/*">
+                <p class="note">הערה: אם לא תבחר תמונה, יוצג רקע ברירת המחדל.</p>
+            </div>
+
+            <div class="setup-section">
+                <h2>הגדרות שאלות</h2>
+                <p>בחר קובץ שאלות למשחק (אופציונלי):</p>
+                <input type="file" id="questions-upload" accept=".csv,.json">
+                <p class="note">הערה: אם לא תבחר קובץ, ישמשו שאלות ברירת המחדל.</p>
+                <p>פורמטים נתמכים:</p>
+                <ul>
+                    <li>קובץ JSON עם מבנה מתאים</li>
+                    <li>קובץ CSV עם העמודות: מספר שאלה, תשובה נכונה, שאלה, תשובות</li>
+                </ul>
+            </div>
+
+            <button id="start-game" class="primary-button">התחל משחק</button>
         </div>
+
         <div id="game-screen" style="display: none;">
             <div id="question-grid"></div>
             <div id="question-card" style="display: none;">
