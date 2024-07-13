@@ -99,6 +99,7 @@ function startGame() {
     }
 }
 
+
 function showQuestion(id) {
     currentQuestion = gameData.questions.find(q => q.id === id);
     if (!currentQuestion) return;
@@ -113,12 +114,13 @@ function showQuestion(id) {
     feedback.style.display = 'none';
 
     if (currentQuestion.answers.length === 0) {
-        // If there are no answer options, show "True" and "False" buttons
+        // אם אין אפשרויות תשובה, הצג "נכון" ו"לא נכון"
         const trueButton = createAnswerButton('נכון', () => checkAnswer(1));
         const falseButton = createAnswerButton('לא נכון', () => checkAnswer(-1));
         answerOptions.appendChild(trueButton);
         answerOptions.appendChild(falseButton);
     } else {
+        // אם יש אפשרויות תשובה, הצג אותן
         currentQuestion.answers.forEach((answer, index) => {
             if (answer.trim() !== '') {
                 const button = createAnswerButton(answer, () => checkAnswer(index + 1));
@@ -126,12 +128,12 @@ function showQuestion(id) {
             }
         });
 
-        if (currentQuestion.correctAnswer === 0 || currentQuestion.answers.some(answer => answer.trim() === '')) {
+        // הוסף "כולן" ו"אף אחת" רק אם הן רלוונטיות
+        if (currentQuestion.correctAnswer === 0) {
             const allButton = createAnswerButton('כולן', () => checkAnswer(0));
             answerOptions.appendChild(allButton);
         }
-
-        if (currentQuestion.correctAnswer === -1 || currentQuestion.answers.some(answer => answer.trim() === '')) {
+        if (currentQuestion.correctAnswer === -1) {
             const noneButton = createAnswerButton('אף אחת', () => checkAnswer(-1));
             answerOptions.appendChild(noneButton);
         }
