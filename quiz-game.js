@@ -112,7 +112,7 @@ function showQuestion(id) {
     answerOptions.innerHTML = '';
     feedback.style.display = 'none';
 
-    if (currentQuestion.answers.length === 1) {
+    if (currentQuestion.correctAnswer === -2) {
         // שאלה פתוחה
         const showAnswerButton = document.createElement('button');
         showAnswerButton.textContent = 'הצג תשובה';
@@ -207,7 +207,7 @@ function checkAnswer(answer) {
 function showFeedback(isCorrect) {
     const feedback = document.getElementById('feedback');
     feedback.textContent = isCorrect ? 'תשובה נכונה!' : 'תשובה שגויה';
-    if (!isCorrect && currentQuestion.answers.length > 1) {
+    if (!isCorrect && currentQuestion.correctAnswer !== -2) {
         feedback.textContent += ' התשובה הנכונה היא: ' + getCorrectAnswerText();
     }
     feedback.className = isCorrect ? 'correct' : 'incorrect';
