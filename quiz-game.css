@@ -153,3 +153,31 @@ body {
     font-size: 1.1em;
     font-weight: bold;
 }
+
+
+.show-answer-button {
+    background-color: rgba(52, 152, 219, 0.8);
+    color: white;
+    padding: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+    text-align: center;
+    transition: background-color 0.3s;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.show-answer-button:hover {
+    background-color: rgba(41, 128, 185, 0.8);
+}
+
+#answer-options p {
+    background-color: rgba(236, 240, 241, 0.9);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
