@@ -23,10 +23,13 @@
                 <p>בחר קובץ שאלות למשחק (אופציונלי):</p>
                 <input type="file" id="questions-upload" accept=".csv,.json">
                 <p class="note">הערה: אם לא תבחר קובץ, ישמשו שאלות ברירת המחדל.</p>
-                <p>פורמטים נתמכים:</p>
+                <h3>מבנה קובץ השאלות:</h3>
+                <p>הקובץ יכול להיות בפורמט JSON או CSV עם המבנה הבא:</p>
                 <ul>
-                    <li>קובץ JSON עם מבנה מתאים</li>
-                    <li>קובץ CSV עם העמודות: מספר שאלה, תשובה נכונה, שאלה, תשובות</li>
+                    <li>id: מספר השאלה</li>
+                    <li>correctAnswer: מספר התשובה הנכונה (1-מספר התשובות), 0 ל"כולן", -1 ל"אף אחת", -2 לשאלה פתוחה</li>
+                    <li>question: טקסט השאלה</li>
+                    <li>answers: מערך של תשובות אפשריות (לשאלה פתוחה - רק תשובה אחת)</li>
                 </ul>
             </div>
 
@@ -48,6 +51,21 @@
             </div>
         </div>
     </div>
+    
+    <div id="footer">
+        <p>משחק זה פותח על ידי דר' ישי מור וקלוד, כחלק מאוסף משחקים המדגימים את האפשרויות של בניית משחקים לימודיים באמצעות קלוד. <a href="#">לאוסף המשחקים</a></p>
+        <hr>
+        <button id="show-conversation" class="secondary-button">כיצד בנינו את המשחק?</button>
+    </div>
+
+    <div id="conversation-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>השיחה שהובילה ליצירת המשחק</h2>
+            <div id="conversation-content"></div>
+        </div>
+    </div>
+
     <script src="quiz-game.js"></script>
 </body>
 </html>
