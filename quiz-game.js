@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     playAgainButton.addEventListener('click', resetGame);
     continueButton.addEventListener('click', hideFeedbackAndQuestion);
 
+    // טען את תמונת הרקע כברירת מחדל
+    document.body.style.backgroundImage = 'url("quiz-background.jpg")';
+
     if (!gameData) {
         loadDefaultGameData();
     }
