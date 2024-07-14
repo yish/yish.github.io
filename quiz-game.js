@@ -3,18 +3,26 @@ let currentQuestion = null;
 let score = 0;
 let questionsAnswered = 0;
 
+
 document.addEventListener('DOMContentLoaded', () => {
     const startButton = document.getElementById('start-game');
     const backgroundUpload = document.getElementById('background-upload');
     const questionsUpload = document.getElementById('questions-upload');
     const playAgainButton = document.getElementById('play-again');
     const continueButton = document.getElementById('continue-button');
+    const showConversationButton = document.getElementById('show-conversation');
+    const conversationModal = document.getElementById('conversation-modal');
+    const closeModal = document.querySelector('.close');
 
     startButton.addEventListener('click', startGame);
     backgroundUpload.addEventListener('change', handleBackgroundUpload);
     questionsUpload.addEventListener('change', handleQuestionsUpload);
     playAgainButton.addEventListener('click', resetGame);
     continueButton.addEventListener('click', hideFeedbackAndQuestion);
+    showConversationButton.addEventListener('click', showConversation);
+    closeModal.addEventListener('click', () => {
+        conversationModal.style.display = 'none';
+    });
 
     // טען את תמונת הרקע כברירת מחדל
     document.body.style.backgroundImage = 'url("quiz-background.jpg")';
@@ -260,6 +268,25 @@ function endGame() {
     }
     
     endMessage.textContent = message;
+}
+
+function showConversation() {
+    fetch('quiz-game-conversation.json')
+        .then(response => response.json())
+        .then(data => {
+            const conversationContent = document.getElementById('conversation-content');
+            conversationContent.innerHTML = '';
+            data.conversation.forEach(message => {
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${message.sender.toLowerCase()}`;
+                messageElement.innerHTML = `<strong>${message.sender}:</strong> ${message.content}`;
+                conversationContent.appendChild(messageElement);
+            });
+            document.getElementById('conversation-modal').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('שגיאה בטעינת השיחה:', error);
+        });
 }
 
 function resetGame() {
