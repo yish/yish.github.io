@@ -99,7 +99,6 @@ function startGame() {
     }
 }
 
-
 function showQuestion(id) {
     currentQuestion = gameData.questions.find(q => q.id === id);
     if (!currentQuestion) return;
@@ -113,14 +112,21 @@ function showQuestion(id) {
     answerOptions.innerHTML = '';
     feedback.style.display = 'none';
 
-    if (currentQuestion.answers.length === 0) {
-        // אם אין אפשרויות תשובה, הצג "נכון" ו"לא נכון"
+    if (currentQuestion.answers.length === 1) {
+        // שאלה פתוחה
+        const showAnswerButton = document.createElement('button');
+        showAnswerButton.textContent = 'הצג תשובה';
+        showAnswerButton.classList.add('show-answer-button');
+        showAnswerButton.addEventListener('click', () => showOpenAnswer(currentQuestion.answers[0]));
+        answerOptions.appendChild(showAnswerButton);
+    } else if (currentQuestion.answers.length === 0) {
+        // שאלת נכון/לא נכון
         const trueButton = createAnswerButton('נכון', () => checkAnswer(1));
         const falseButton = createAnswerButton('לא נכון', () => checkAnswer(-1));
         answerOptions.appendChild(trueButton);
         answerOptions.appendChild(falseButton);
     } else {
-        // אם יש אפשרויות תשובה, הצג אותן
+        // שאלה רגילה עם מספר אפשרויות
         currentQuestion.answers.forEach((answer, index) => {
             if (answer.trim() !== '') {
                 const button = createAnswerButton(answer, () => checkAnswer(index + 1));
@@ -128,7 +134,6 @@ function showQuestion(id) {
             }
         });
 
-        // הוסף "כולן" ו"אף אחת" רק אם הן רלוונטיות
         if (currentQuestion.correctAnswer === 0) {
             const allButton = createAnswerButton('כולן', () => checkAnswer(0));
             answerOptions.appendChild(allButton);
@@ -140,6 +145,37 @@ function showQuestion(id) {
     }
 
     questionCard.style.display = 'block';
+}
+
+function showOpenAnswer(answer) {
+    const answerOptions = document.getElementById('answer-options');
+    answerOptions.innerHTML = '';
+
+    const answerText = document.createElement('p');
+    answerText.textContent = `התשובה: ${answer}`;
+    answerOptions.appendChild(answerText);
+
+    const correctButton = createAnswerButton('נכון', () => checkOpenAnswer(1));
+    const partiallyCorrectButton = createAnswerButton('בערך', () => checkOpenAnswer(0.5));
+    const incorrectButton = createAnswerButton('לא נכון', () => checkOpenAnswer(0));
+
+    answerOptions.appendChild(correctButton);
+    answerOptions.appendChild(partiallyCorrectButton);
+    answerOptions.appendChild(incorrectButton);
+}
+
+function checkOpenAnswer(points) {
+    score += points;
+    questionsAnswered++;
+
+    showFeedback(points > 0);
+    updateScore();
+
+    if (questionsAnswered === gameData.questions.length) {
+        setTimeout(endGame, 2000);
+    } else {
+        document.getElementById('continue-button').style.display = 'block';
+    }
 }
 
 function createAnswerButton(text, onClick) {
@@ -171,7 +207,7 @@ function checkAnswer(answer) {
 function showFeedback(isCorrect) {
     const feedback = document.getElementById('feedback');
     feedback.textContent = isCorrect ? 'תשובה נכונה!' : 'תשובה שגויה';
-    if (!isCorrect) {
+    if (!isCorrect && currentQuestion.answers.length > 1) {
         feedback.textContent += ' התשובה הנכונה היא: ' + getCorrectAnswerText();
     }
     feedback.className = isCorrect ? 'correct' : 'incorrect';
