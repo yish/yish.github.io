@@ -1,0 +1,26 @@
+{
+    "gameName": "משחק ניחוש תמונות",
+    "gameDescription": "נחשו את התשובה הנכונה לכל תמונה!",
+    "backgroundImage": "background.jpg",
+    "exitUrl": "https://www.example.com",
+    "questions": [
+        {
+            "image": "image1.jpg",
+            "options": ["מהיר", "איטי", "נייח"],
+            "correctAnswer": "מהיר",
+            "explanation": "התמונה מציגה חיה מהירה במיוחד."
+        },
+        {
+            "image": "image2.jpg",
+            "options": ["קר", "חם", "נעים"],
+            "correctAnswer": "קר",
+            "explanation": "התמונה מציגה נוף מושלג, המעיד על טמפרטורות נמוכות."
+        },
+        {
+            "image": "image3.jpg",
+            "options": ["יבש", "רטוב", "לח"],
+            "correctAnswer": "רטוב",
+            "explanation": "התמונה מציגה גשם כבד, המעיד על מצב רטוב."
+        }
+    ]
+}

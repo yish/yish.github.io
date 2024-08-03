@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משחק ניחוש תמונות</title>
+    <link rel="stylesheet" href="styles.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6EYSNBW3Q"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-F6EYSNBW3Q');
+    </script>
+</head>
+<body>
+    <div id="game-container">
+        <h1 id="game-title"></h1>
+        <p id="game-description"></p>
+        <div id="question-container">
+            <img id="question-image" src="" alt="תמונת שאלה">
+            <div id="options-container"></div>
+        </div>
+        <div id="result-container" style="display: none;">
+            <p id="result-text"></p>
+            <p id="explanation"></p>
+        </div>
+        <p id="score">ניקוד: <span id="score-value">0</span></p>
+        <div id="end-game-container" style="display: none;">
+            <button id="play-again">נשחק שוב?</button>
+            <button id="exit-game">תודה, מיצינו</button>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
