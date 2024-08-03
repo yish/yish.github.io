@@ -17,15 +17,29 @@ body {
     text-align: center;
     max-width: 600px;
     width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 h1 {
     color: #333;
+    margin-top: 0;
+}
+
+#question-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #question-image {
     max-width: 100%;
-    height: auto;
+    max-height: 50vh;
+    object-fit: contain;
     margin-bottom: 20px;
 }
 
@@ -41,7 +55,7 @@ button {
     background-color: #4CAF50;
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
