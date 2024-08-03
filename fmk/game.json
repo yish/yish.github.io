@@ -2,22 +2,22 @@
     "gameName": "משחק ניחוש תמונות",
     "gameDescription": "נחשו את התשובה הנכונה לכל תמונה!",
     "backgroundImage": "background.jpg",
-    "exitUrl": "https://www.example.com",
+    "exitUrl": "https://www.ahimlaneshek.org",
     "questions": [
         {
-            "image": "image1.jpg",
+            "image": "Ron_Scherf.jpg",
             "options": ["מהיר", "איטי", "נייח"],
             "correctAnswer": "מהיר",
             "explanation": "התמונה מציגה חיה מהירה במיוחד."
         },
         {
-            "image": "image2.jpg",
+            "image": "yinon.jpg",
             "options": ["קר", "חם", "נעים"],
             "correctAnswer": "קר",
             "explanation": "התמונה מציגה נוף מושלג, המעיד על טמפרטורות נמוכות."
         },
         {
-            "image": "image3.jpg",
+            "image": "Yaki_Ademker.jpg",
             "options": ["יבש", "רטוב", "לח"],
             "correctAnswer": "רטוב",
             "explanation": "התמונה מציגה גשם כבד, המעיד על מצב רטוב."
