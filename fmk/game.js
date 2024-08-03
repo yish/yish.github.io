@@ -26,7 +26,9 @@ function showQuestion() {
     }
 
     const question = gameData.questions[currentQuestionIndex];
-    document.getElementById('question-image').src = question.image;
+    const img = document.getElementById('question-image');
+    img.src = question.image;
+    img.onload = adjustImageSize;
     
     const optionsContainer = document.getElementById('options-container');
     optionsContainer.innerHTML = '';
@@ -38,6 +40,27 @@ function showQuestion() {
     });
 
     document.getElementById('result-container').style.display = 'none';
+}
+
+function adjustImageSize() {
+    const img = document.getElementById('question-image');
+    const container = document.getElementById('question-container');
+    const maxHeight = container.clientHeight * 0.6; // 60% of container height
+    const maxWidth = container.clientWidth * 0.9;  // 90% of container width
+
+    if (img.naturalHeight > maxHeight || img.naturalWidth > maxWidth) {
+        const aspectRatio = img.naturalWidth / img.naturalHeight;
+        if (maxHeight * aspectRatio > maxWidth) {
+            img.style.width = `${maxWidth}px`;
+            img.style.height = 'auto';
+        } else {
+            img.style.height = `${maxHeight}px`;
+            img.style.width = 'auto';
+        }
+    } else {
+        img.style.width = 'auto';
+        img.style.height = 'auto';
+    }
 }
 
 function checkAnswer(selectedOption) {
@@ -71,7 +94,7 @@ document.getElementById('play-again').onclick = () => {
     score = 0;
     document.getElementById('score-value').textContent = '0';
     document.getElementById('end-game-container').style.display = 'none';
-    document.getElementById('question-container').style.display = 'block';
+    document.getElementById('question-container').style.display = 'flex';
     showQuestion();
 };
 
@@ -80,3 +103,4 @@ document.getElementById('exit-game').onclick = () => {
 };
 
 window.onload = loadGame;
+window.onresize = adjustImageSize;
