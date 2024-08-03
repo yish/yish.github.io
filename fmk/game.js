@@ -1,6 +1,7 @@
 let gameData;
 let currentQuestionIndex = 0;
 let score = 0;
+let selectedQuestions = [];
 
 function loadGame() {
     fetch('game-data.json')
@@ -16,16 +17,28 @@ function initializeGame() {
     document.getElementById('game-title').textContent = gameData.gameName;
     document.getElementById('game-description').textContent = gameData.gameDescription;
     document.body.style.backgroundImage = `url(${gameData.backgroundImage})`;
+    selectRandomQuestions();
     showQuestion();
 }
 
+function selectRandomQuestions() {
+    const allQuestions = [...gameData.questions];
+    selectedQuestions = [];
+    const numQuestions = Math.min(gameData.gameLength, allQuestions.length);
+    
+    for (let i = 0; i < numQuestions; i++) {
+        const randomIndex = Math.floor(Math.random() * allQuestions.length);
+        selectedQuestions.push(allQuestions.splice(randomIndex, 1)[0]);
+    }
+}
+
 function showQuestion() {
-    if (currentQuestionIndex >= gameData.questions.length) {
+    if (currentQuestionIndex >= selectedQuestions.length) {
         endGame();
         return;
     }
 
-    const question = gameData.questions[currentQuestionIndex];
+    const question = selectedQuestions[currentQuestionIndex];
     const img = document.getElementById('question-image');
     img.src = question.image;
     img.onload = adjustImageSize;
@@ -45,8 +58,8 @@ function showQuestion() {
 function adjustImageSize() {
     const img = document.getElementById('question-image');
     const container = document.getElementById('question-container');
-    const maxHeight = container.clientHeight * 0.6; // 60% of container height
-    const maxWidth = container.clientWidth * 0.9;  // 90% of container width
+    const maxHeight = container.clientHeight * 0.6;
+    const maxWidth = container.clientWidth * 0.9;
 
     if (img.naturalHeight > maxHeight || img.naturalWidth > maxWidth) {
         const aspectRatio = img.naturalWidth / img.naturalHeight;
@@ -64,7 +77,7 @@ function adjustImageSize() {
 }
 
 function checkAnswer(selectedOption) {
-    const question = gameData.questions[currentQuestionIndex];
+    const question = selectedQuestions[currentQuestionIndex];
     const isCorrect = selectedOption === question.correctAnswer;
     
     if (isCorrect) {
@@ -87,6 +100,7 @@ function endGame() {
     document.getElementById('question-container').style.display = 'none';
     document.getElementById('result-container').style.display = 'none';
     document.getElementById('end-game-container').style.display = 'block';
+    document.getElementById('final-score').textContent = `הציון הסופי שלך: ${score} מתוך ${selectedQuestions.length}`;
 }
 
 document.getElementById('play-again').onclick = () => {
@@ -95,6 +109,7 @@ document.getElementById('play-again').onclick = () => {
     document.getElementById('score-value').textContent = '0';
     document.getElementById('end-game-container').style.display = 'none';
     document.getElementById('question-container').style.display = 'flex';
+    selectRandomQuestions();
     showQuestion();
 };
 
