@@ -83,3 +83,23 @@ button:hover {
 #end-game-container {
     margin-top: 20px;
 }
+
+
+#game-footer {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: auto;
+    padding: 10px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+#game-footer a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+#game-footer a:hover {
+    text-decoration: underline;
+}
