@@ -2,6 +2,8 @@ let gameData;
 let currentQuestionIndex = 0;
 let score = 0;
 let selectedQuestions = [];
+let canProceed = false;
+let timeoutId;
 
 function loadGame() {
     fetch('game-data.json')
@@ -19,6 +21,9 @@ function initializeGame() {
     document.body.style.backgroundImage = `url(${gameData.backgroundImage})`;
     selectRandomQuestions();
     showQuestion();
+    
+    // הוספת מאזין אירועים לgame-container
+    document.getElementById('game-container').addEventListener('click', handleContainerClick);
 }
 
 function selectRandomQuestions() {
@@ -38,6 +43,7 @@ function showQuestion() {
         return;
     }
 
+    canProceed = false;
     const question = selectedQuestions[currentQuestionIndex];
     const img = document.getElementById('question-image');
     img.src = question.image;
@@ -48,7 +54,10 @@ function showQuestion() {
     question.options.forEach(option => {
         const button = document.createElement('button');
         button.textContent = option;
-        button.onclick = () => checkAnswer(option);
+        button.onclick = (e) => {
+            e.stopPropagation(); // מונע מהאירוע להתפשט לgame-container
+            checkAnswer(option);
+        };
         optionsContainer.appendChild(button);
     });
 
@@ -90,18 +99,30 @@ function checkAnswer(selectedOption) {
     document.getElementById('explanation').textContent = question.explanation;
     document.getElementById('result-container').style.display = 'block';
 
+    canProceed = true;
+
     const delay = calculateDelay(question.explanation);
-    setTimeout(() => {
-        currentQuestionIndex++;
-        showQuestion();
+    timeoutId = setTimeout(() => {
+        proceedToNextQuestion();
     }, delay);
 }
 
 function calculateDelay(explanation) {
-    // משתמשים בנוסחה: 1000 מילישניות לכל 5 מילים, עם מינימום של 3000 מילישניות ומקסימום של 10000 מילישניות
     const wordsCount = explanation.split(/\s+/).length;
     const baseDelay = Math.max(3000, Math.min(10000, wordsCount * 200));
     return baseDelay;
+}
+
+function handleContainerClick() {
+    if (canProceed) {
+        clearTimeout(timeoutId);
+        proceedToNextQuestion();
+    }
+}
+
+function proceedToNextQuestion() {
+    currentQuestionIndex++;
+    showQuestion();
 }
 
 function endGame() {
