@@ -90,10 +90,18 @@ function checkAnswer(selectedOption) {
     document.getElementById('explanation').textContent = question.explanation;
     document.getElementById('result-container').style.display = 'block';
 
+    const delay = calculateDelay(question.explanation);
     setTimeout(() => {
         currentQuestionIndex++;
         showQuestion();
-    }, 3000);
+    }, delay);
+}
+
+function calculateDelay(explanation) {
+    // משתמשים בנוסחה: 1000 מילישניות לכל 5 מילים, עם מינימום של 3000 מילישניות ומקסימום של 10000 מילישניות
+    const wordsCount = explanation.split(/\s+/).length;
+    const baseDelay = Math.max(3000, Math.min(10000, wordsCount * 200));
+    return baseDelay;
 }
 
 function endGame() {
