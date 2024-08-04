@@ -3,7 +3,7 @@
     "gameDescription": "האם אתם יודעים מי נלחם בשבילכם?",
     "backgroundImage": "background.jpg",
     "exitUrl": "https://www.ahimlaneshek.org",
-    "gameLength": 3,
+    "gameLength": 4,
     "questions": [
         {
             "image": "Ron_Scherf.jpg",
