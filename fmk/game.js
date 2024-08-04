@@ -3,7 +3,7 @@ let currentQuestionIndex = 0;
 let score = 0;
 let selectedQuestions = [];
 let canProceed = false;
-let timeoutId;
+let timeoutIds = [];
 
 function loadGame() {
     fetch('game-data.json')
@@ -22,7 +22,6 @@ function initializeGame() {
     selectRandomQuestions();
     showQuestion();
     
-    // הוספת מאזין אירועים לgame-container
     document.getElementById('game-container').addEventListener('click', handleContainerClick);
 }
 
@@ -38,12 +37,13 @@ function selectRandomQuestions() {
 }
 
 function showQuestion() {
+    clearAllTimeouts();
+    canProceed = false;
     if (currentQuestionIndex >= selectedQuestions.length) {
         endGame();
         return;
     }
 
-    canProceed = false;
     const question = selectedQuestions[currentQuestionIndex];
     const img = document.getElementById('question-image');
     img.src = question.image;
@@ -55,7 +55,7 @@ function showQuestion() {
         const button = document.createElement('button');
         button.textContent = option;
         button.onclick = (e) => {
-            e.stopPropagation(); // מונע מהאירוע להתפשט לgame-container
+            e.stopPropagation();
             checkAnswer(option);
         };
         optionsContainer.appendChild(button);
@@ -86,6 +86,7 @@ function adjustImageSize() {
 }
 
 function checkAnswer(selectedOption) {
+    clearAllTimeouts();
     const question = selectedQuestions[currentQuestionIndex];
     const isCorrect = selectedOption === question.correctAnswer;
     
@@ -102,9 +103,10 @@ function checkAnswer(selectedOption) {
     canProceed = true;
 
     const delay = calculateDelay(question.explanation);
-    timeoutId = setTimeout(() => {
+    const timeoutId = setTimeout(() => {
         proceedToNextQuestion();
     }, delay);
+    timeoutIds.push(timeoutId);
 }
 
 function calculateDelay(explanation) {
@@ -115,17 +117,23 @@ function calculateDelay(explanation) {
 
 function handleContainerClick() {
     if (canProceed) {
-        clearTimeout(timeoutId);
         proceedToNextQuestion();
     }
 }
 
 function proceedToNextQuestion() {
+    clearAllTimeouts();
     currentQuestionIndex++;
     showQuestion();
 }
 
+function clearAllTimeouts() {
+    timeoutIds.forEach(id => clearTimeout(id));
+    timeoutIds = [];
+}
+
 function endGame() {
+    clearAllTimeouts();
     document.getElementById('question-container').style.display = 'none';
     document.getElementById('result-container').style.display = 'none';
     document.getElementById('end-game-container').style.display = 'block';
