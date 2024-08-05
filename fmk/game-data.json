@@ -4,7 +4,7 @@
     "backgroundImage": "background.jpg",
     "exitUrl": "https://www.ahimlaneshek.org",
     "gameLength": 4,
-    "speed": 3,
+    "speed": 2,
     "questions": [
         {
             "image": "Ron_Scherf.jpg",
