@@ -49,6 +49,8 @@ function showQuestion() {
     img.src = question.image;
     img.onload = adjustImageSize;
     
+    document.getElementById('image-caption').textContent = question.imageCaption;
+    
     const optionsContainer = document.getElementById('options-container');
     optionsContainer.innerHTML = '';
     question.options.forEach(option => {
@@ -99,6 +101,17 @@ function checkAnswer(selectedOption) {
     document.getElementById('result-text').textContent = resultText;
     document.getElementById('explanation').textContent = question.explanation;
     document.getElementById('result-container').style.display = 'block';
+
+    // שינוי צבעי הכפתורים
+    const buttons = document.querySelectorAll('#options-container button');
+    buttons.forEach(button => {
+        if (button.textContent === question.correctAnswer) {
+            button.classList.add('correct');
+        } else {
+            button.classList.add('incorrect');
+        }
+        button.disabled = true;  // מונע לחיצות נוספות
+    });
 
     canProceed = true;
 
