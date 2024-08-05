@@ -42,7 +42,13 @@ h1 {
     max-width: 100%;
     max-height: 50vh;
     object-fit: contain;
+    margin-bottom: 10px;
+}
+
+#image-caption {
+    font-style: italic;
     margin-bottom: 20px;
+    color: #666;
 }
 
 #options-container {
@@ -54,7 +60,7 @@ h1 {
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #00BFFF;  /* תכלת */
     border: none;
     color: white;
     padding: 10px 20px;
@@ -69,7 +75,15 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0099CC;
+}
+
+button.correct {
+    background-color: #4CAF50;  /* ירוק */
+}
+
+button.incorrect {
+    background-color: #808080;  /* אפור */
 }
 
 #result-container {
