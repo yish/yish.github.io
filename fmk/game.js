@@ -102,7 +102,6 @@ function checkAnswer(selectedOption) {
     document.getElementById('explanation').textContent = question.explanation;
     document.getElementById('result-container').style.display = 'block';
 
-    // שינוי צבעי הכפתורים
     const buttons = document.querySelectorAll('#options-container button');
     buttons.forEach(button => {
         if (button.textContent === question.correctAnswer) {
@@ -110,7 +109,7 @@ function checkAnswer(selectedOption) {
         } else {
             button.classList.add('incorrect');
         }
-        button.disabled = true;  // מונע לחיצות נוספות
+        button.disabled = true;
     });
 
     canProceed = true;
@@ -124,8 +123,15 @@ function checkAnswer(selectedOption) {
 
 function calculateDelay(explanation) {
     const wordsCount = explanation.split(/\s+/).length;
-    const baseDelay = Math.max(3000, Math.min(10000, wordsCount * 200));
-    return baseDelay;
+    const speed = gameData.speed;
+    
+    // חישוב מילישניות למילה בהתאם למהירות
+    const msPerWord = 300 - ((speed - 1) * 37.5);
+    
+    const baseDelay = wordsCount * msPerWord;
+    
+    // הגבלת הזמן המינימלי והמקסימלי
+    return Math.max(3000, Math.min(10000, baseDelay));
 }
 
 function handleContainerClick() {
