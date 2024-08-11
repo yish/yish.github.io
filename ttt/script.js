@@ -21,7 +21,68 @@ function makeMove(cell, index) {
             resetBoard();
         } else {
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            if (currentPlayer === 'O') {
+                aiMove();
+            }
         }
+    }
+}
+
+function aiMove() {
+    let bestScore = -Infinity;
+    let move;
+    for (let i = 0; i < cells.length; i++) {
+        if (cells[i].textContent === '') {
+            cells[i].textContent = 'O';
+            let score = minimax(cells, 0, false);
+            cells[i].textContent = '';
+            if (score > bestScore) {
+                bestScore = score;
+                move = i;
+            }
+        }
+    }
+    cells[move].textContent = 'O';
+    if (checkWin()) {
+        alert('O wins!');
+        resetBoard();
+    } else if (cells.every(cell => cell.textContent !== '')) {
+        alert('Draw!');
+        resetBoard();
+    } else {
+        currentPlayer = 'X';
+    }
+}
+
+function minimax(board, depth, isMaximizing) {
+    if (checkWin()) {
+        return isMaximizing ? -1 : 1;
+    } else if (cells.every(cell => cell.textContent !== '')) {
+        return 0;
+    }
+
+    if (isMaximizing) {
+        let bestScore = -Infinity;
+        for (let i = 0; i < board.length; i++) {
+            if (board[i].textContent === '') {
+                board[i].textContent = 'O';
+                let score = minimax(board, depth + 1, false);
+                board[i].textContent = '';
+                bestScore = Math.max(score, bestScore);
+            }
+        }
+        return bestScore;
+    } else {
+        let bestScore = Infinity;
+        for (let i = 0; i < board.length; i++) {
+            if (board[i].textContent === '') {
+                board[i].textContent = 'X';
+                let score = minimax(board, depth + 1, true);
+                board[i].textContent = '';
+                bestScore = Math.min(score, bestScore);
+            }
+        }
+        return bestScore;
     }
 }
 
