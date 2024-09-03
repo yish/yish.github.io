@@ -5,7 +5,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: #000;
     overflow: hidden;
 }
 
@@ -13,7 +13,6 @@ body {
     text-align: center;
     z-index: 1;
 }
-
 
 h1 {
     font-size: 3em;
@@ -55,12 +54,12 @@ h1 {
 }
 
 #image1 {
-    background-image: url('refaela.jpeg');
+    background-image: url('gal.jpeg');
     z-index: 1;
 }
 
 #image2 {
-    background-image: url('gal.jpeg');
+    background-image: url('refaela.jpeg');
     z-index: 2;
     opacity: 0;
 }
