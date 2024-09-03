@@ -39,7 +39,88 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ... (keep the existing Firework, Particle, random, createFireworks, and animate functions)
+    function random(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    function Firework() {
+        this.x = random(canvas.width * 0.2, canvas.width * 0.8);
+        this.y = canvas.height;
+        this.sx = random(-2, 2);
+        this.sy = random(-12, -15);
+        this.size = random(2, 4);
+        this.color = `hsl(${random(0, 360)}, 100%, 50%)`;
+
+        this.update = function() {
+            this.x += this.sx;
+            this.y += this.sy;
+            this.sy += 0.1;
+            if (this.size > 0.2) this.size -= 0.1;
+        }
+
+        this.draw = function() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function Particle(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.sx = random(-3, 3);
+        this.sy = random(-3, 3);
+        this.size = random(1, 3);
+        this.color = color;
+        this.life = 150;
+
+        this.update = function() {
+            this.x += this.sx;
+            this.y += this.sy;
+            this.sy += 0.05;
+            if (this.size > 0.1) this.size -= 0.02;
+            this.life--;
+        }
+
+        this.draw = function() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function createFireworks(num) {
+        for (let i = 0; i < num; i++) {
+            fireworks.push(new Firework());
+        }
+    }
+
+    function animate() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        fireworks.forEach((fw, index) => {
+            fw.update();
+            fw.draw();
+
+            if (fw.sy >= random(-3, 0) || fw.size <= 0.2) {
+                for (let i = 0; i < 100; i++) {
+                    particles.push(new Particle(fw.x, fw.y, fw.color));
+                }
+                fireworks.splice(index, 1);
+            }
+        });
+
+        particles.forEach((p, index) => {
+            p.update();
+            p.draw();
+            if (p.life <= 0) particles.splice(index, 1);
+        });
+
+        requestAnimationFrame(animate);
+    }
 
     animate();
 
