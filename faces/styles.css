@@ -30,12 +30,12 @@ body {
 }
 
 #image1 {
-    background-image: url('refaela.jpg');
+    background-image: url('refaela.jpeg');
     z-index: 1;
 }
 
 #image2 {
-    background-image: url('gal.jpg');
+    background-image: url('gal.jpeg');
     z-index: 2;
     opacity: 0;
 }
