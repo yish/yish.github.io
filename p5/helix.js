@@ -2,13 +2,30 @@ let angle = 0;
 let rotationSpeed = 0.01;
 let maxSpeed = 0.05;
 
+let lengthSlider, thicknessSlider;
+let helix1ColorPicker, helix2ColorPicker, bgColorPicker;
+
 function setup() {
-  createCanvas(400, 400, WEBGL);
-  colorMode(HSB);
+  createCanvas(600, 600, WEBGL);
+  
+  lengthSlider = createSlider(50, 200, 100);
+  lengthSlider.position(10, height + 10);
+  
+  thicknessSlider = createSlider(1, 10, 3);
+  thicknessSlider.position(10, height + 40);
+  
+  helix1ColorPicker = createColorPicker('#ff0000');
+  helix1ColorPicker.position(10, height + 70);
+  
+  helix2ColorPicker = createColorPicker('#0000ff');
+  helix2ColorPicker.position(70, height + 70);
+  
+  bgColorPicker = createColorPicker('#f0f0f0');
+  bgColorPicker.position(130, height + 70);
 }
 
 function draw() {
-  background(0);
+  background(bgColorPicker.color());
   
   // Lighting
   ambientLight(60);
@@ -19,16 +36,40 @@ function draw() {
   rotateX(angle * 0.5);
   
   // Draw first helix
-  drawHelix(0, 100);
+  drawHelix(0, lengthSlider.value(), helix1ColorPicker.color());
   
   // Draw second helix, offset by half a rotation
-  drawHelix(PI, 100);
+  drawHelix(PI, lengthSlider.value(), helix2ColorPicker.color());
   
   // Update angle
   angle += rotationSpeed;
   
-  // Handle mouse interaction
-  if (mouseIsPressed) {
+  // Handle mouse interaction for rotation speed
+  handleMouseInteraction();
+}
+
+function drawHelix(startAngle, radius, color) {
+  let points = 100;
+  let angleStep = TWO_PI / points;
+  
+  noFill();
+  strokeWeight(thicknessSlider.value());
+  
+  beginShape();
+  for (let i = 0; i < points; i++) {
+    stroke(color);
+    
+    let x = radius * cos(i * angleStep + startAngle);
+    let y = radius * sin(i * angleStep + startAngle);
+    let z = map(i, 0, points, -100, 100);
+    
+    vertex(x, y, z);
+  }
+  endShape();
+}
+
+function handleMouseInteraction() {
+  if (mouseIsPressed && mouseY < height) {  // Only handle interaction within the canvas
     let centerX = width / 2;
     let centerY = height / 2;
     let dx = mouseX - centerX;
@@ -44,25 +85,4 @@ function draw() {
       rotationSpeed = min(maxSpeed, targetSpeed);
     }
   }
-}
-
-function drawHelix(startAngle, radius) {
-  let points = 100;
-  let angleStep = TWO_PI / points;
-  
-  noFill();
-  strokeWeight(3);
-  
-  beginShape();
-  for (let i = 0; i < points; i++) {
-    let hue = map(i, 0, points, 0, 360);
-    stroke(hue, 100, 100);
-    
-    let x = radius * cos(i * angleStep + startAngle);
-    let y = radius * sin(i * angleStep + startAngle);
-    let z = map(i, 0, points, -100, 100);
-    
-    vertex(x, y, z);
-  }
-  endShape();
 }
