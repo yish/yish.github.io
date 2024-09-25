@@ -18,25 +18,29 @@
             <p lang="ar" dir="rtl">يعرض هذا المشروع حلزونين ثلاثيي الأبعاد متداخلين يدوران في الفضاء. يمكنك التحكم في طولهما وسمكهما وألوانهما باستخدام شرائط التمرير ومنتقي الألوان أدناه. اسحب الماوس على الرسم لتغيير سرعة الدوران.</p>
         </div>
     </header>
-    <div id="sketch-container"></div>
-    <div id="controls">
-        <div>
-            <label for="length-slider">Length:</label>
-            <span id="length-value"></span>
+    <main>
+        <div id="sketch-container"></div>
+        <div id="controls">
+            <div>
+                <label for="length-slider">Length:</label>
+                <span id="length-value"></span>
+            </div>
+            <div>
+                <label for="thickness-slider">Thickness:</label>
+                <span id="thickness-value"></span>
+            </div>
+            <div>
+                <label for="helix1-color">Helix 1 Color:</label>
+                <label for="helix2-color">Helix 2 Color:</label>
+                <label for="bg-color">Background Color:</label>
+            </div>
         </div>
-        <div>
-            <label for="thickness-slider">Thickness:</label>
-            <span id="thickness-value"></span>
+    </main>
+    <footer>
+        <div id="transcript-container">
+            <h2>Conversation Transcript</h2>
+            <div id="transcript"></div>
         </div>
-        <div>
-            <label for="helix1-color">Helix 1 Color:</label>
-            <label for="helix2-color">Helix 2 Color:</label>
-            <label for="bg-color">Background Color:</label>
-        </div>
-    </div>
-    <div id="transcript-container">
-        <h2>Conversation Transcript</h2>
-        <div id="transcript"></div>
-    </div>
+    </footer>
 </body>
 </html>
