@@ -7,8 +7,17 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="helix.js"></script>
+    <script src="transcript.js" defer></script>
 </head>
 <body>
+    <header>
+        <h1>Interleaved 3D Helixes Project</h1>
+        <div class="description">
+            <p lang="en">This project showcases two interleaved 3D helixes that rotate in space. You can control their length, thickness, and colors using the sliders and color pickers below. Drag your mouse on the sketch to change the rotation speed.</p>
+            <p lang="he" dir="rtl">פרויקט זה מציג שני סלילים תלת-ממדיים משולבים המסתובבים במרחב. ניתן לשלוט באורכם, עוביים וצבעיהם באמצעות המחוונים ובוחרי הצבעים למטה. גררו את העכבר על הסקיצה כדי לשנות את מהירות הסיבוב.</p>
+            <p lang="ar" dir="rtl">يعرض هذا المشروع حلزونين ثلاثيي الأبعاد متداخلين يدوران في الفضاء. يمكنك التحكم في طولهما وسمكهما وألوانهما باستخدام شرائط التمرير ومنتقي الألوان أدناه. اسحب الماوس على الرسم لتغيير سرعة الدوران.</p>
+        </div>
+    </header>
     <div id="sketch-container"></div>
     <div id="controls">
         <div>
@@ -24,6 +33,10 @@
             <label for="helix2-color">Helix 2 Color:</label>
             <label for="bg-color">Background Color:</label>
         </div>
+    </div>
+    <div id="transcript-container">
+        <h2>Conversation Transcript</h2>
+        <div id="transcript"></div>
     </div>
 </body>
 </html>
