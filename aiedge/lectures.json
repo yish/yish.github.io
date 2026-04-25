@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "Introduction to Physics",
+    "description": "Explores fundamental concepts of mechanics and gravity.",
+    "date": "2024-11-15T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "title": "Quantum Mechanics Basics",
+    "description": "A beginner-friendly look at the subatomic world.",
+    "date": "2024-11-16T14:00:00Z"
+  },
+  {
+    "id": 3,
+    "title": "String Theory Uncovered",
+    "description": "Discussing the leading ideas in multi-dimensional universes.",
+    "date": "2024-11-18T10:00:00Z"
+  }
+]
