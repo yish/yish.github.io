@@ -22,7 +22,7 @@ body {
   to { transform: scale(1); opacity: 1; }
 }
 
-/* Line clamp utilities */
+/* Line clamp utilities for vanilla HTML */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
