@@ -1,20 +1,65 @@
 [
   {
     "id": 1,
-    "title": "Introduction to Physics",
-    "description": "Explores fundamental concepts of mechanics and gravity.",
-    "date": "2024-11-15T10:00:00Z"
+    "date": "28.4.2026",
+    "image": "[https://ui-avatars.com/api/?name=Yuval+Laikin&background=0D8ABC&color=fff&size=200](https://ui-avatars.com/api/?name=Yuval+Laikin&background=0D8ABC&color=fff&size=200)",
+    "speaker": { "he": "יובל לייקין", "en": "Yuval Laikin", "ar": "يوفال لايكين" },
+    "title": { "he": "מהפכות בענייני חינוך", "en": "Revolutions in Education Affairs", "ar": "ثورات في شؤون التعليم" },
+    "abstract": { "he": "נסקור את הקשרים בין שינויים סוציולוגיים וחינוכיים במאה האחרונה והשפעת השינויים בשוק התעסוקה על מאפייני הלמידה הייחודית הנדרשים בעת הנוכחית.", "en": "We will review the connections between sociological and educational changes in the last century and the impact of changes in the job market on the unique learning characteristics required today.", "ar": "سنستعرض الروابط بين التغيرات الاجتماعية والتعليمية في القرن الماضي وتأثير التغيرات في سوق العمل على خصائص التعلم الفريدة المطلوبة اليوم." },
+    "bio": { "he": "מנהל תחום R&D בחברת IQL, יועץ ברשת ברנקו וייס ומלווה רשויות בצפון בתחום שילוב AI בתהליכים פדגוגיים. לשעבר ראש תחום ההדרכה באגף המודיעין של צה\"ל, שימש ראש התוכנית הלאומית לבינה מלאכותית בחינוך במשרד החינוך." }
   },
   {
     "id": 2,
-    "title": "Quantum Mechanics Basics",
-    "description": "A beginner-friendly look at the subatomic world.",
-    "date": "2024-11-16T14:00:00Z"
+    "date": "5.5.2026",
+    "image": "[https://ui-avatars.com/api/?name=Tom+Giladi&background=4F46E5&color=fff&size=200](https://ui-avatars.com/api/?name=Tom+Giladi&background=4F46E5&color=fff&size=200)",
+    "speaker": { "he": "תום הגלעדי", "en": "Tom Giladi", "ar": "توم جلعادي" },
+    "title": { "he": "חינוך ילדים בעידן הבינה המלאכותית", "en": "Raising Children in the AI Era", "ar": "تربية الأطفال في عصر الذكاء الاصطناعي" },
+    "abstract": { "he": "מהן משמעויות הכנסת טכנולוגיות בינה מלאכותית למרחב המחייה של ילדים? בהרצאה נבחן את ההשפעות הלא צפויות של הטכנולוגיה ונחשוב על תפקידו החדש של ההורה/מחנך בעולם רווי בינה מלאכותית.", "en": "What are the implications of introducing AI technologies into children's living spaces? We will examine the unexpected impacts of technology and reflect on the new role of the parent/educator.", "ar": "ما هي الآثار المترتبة على إدخال تقنيات الذكاء الاصطناعي في مساحات معيشة الأطفال؟ سنبحث الآثار غير المتوقعة للتكنولوجيا." },
+    "bio": { "he": "תום הגלעדי הוא מרצה, מנחה ויועץ המתמחה בהטמעת טכנולוגיות בינה מלאכותית במערכת החינוך. עוסק בפילוסופיה של הטכנולוגיה. מנהל את קהילת הפייסבוק \"בינה מלאכותית בחינוך ובאקדמיה\" ומגיש את הפודקאסט \"דיבורי בינה\"." }
   },
   {
     "id": 3,
-    "title": "String Theory Uncovered",
-    "description": "Discussing the leading ideas in multi-dimensional universes.",
-    "date": "2024-11-18T10:00:00Z"
+    "date": "12.5.2026",
+    "image": "[https://ui-avatars.com/api/?name=Lihi+Feldman&background=E11D48&color=fff&size=200](https://ui-avatars.com/api/?name=Lihi+Feldman&background=E11D48&color=fff&size=200)",
+    "speaker": { "he": "ליהי פלדמן", "en": "Lihi Feldman", "ar": "ليهي فيلدمان" },
+    "title": { "he": "מהם כללי המשחק? רגולציה של AI", "en": "What are the rules? AI Regulation", "ar": "ما هي القواعد؟ تنظيم الذكاء الاصطناعي" },
+    "abstract": { "he": "הכרות עם האתגרים המשפטיים והאתיים בשילוב בינה מלאכותית במערכת החינוך והכרת המסגרת האתית להטמעת טכנולוגיות קצה תוך דגש על הגנת הפרטיות ובטיחות.", "en": "An introduction to the legal and ethical challenges of integrating AI in the education system, focusing on privacy protection and student safety.", "ar": "مقدمة عن التحديات القانونية والأخلاقية لدمج الذكاء الاصطناعي في نظام التعليم، مع التركيز على حماية الخصوصية." },
+    "bio": { "he": "עו\"ד ליהי פלדמן היא מומחית למשפט וטכנולוגיה המובילה את רגולציית הבינה המלאכותית (AI) במשרד החינוך. פועלת ליצירת איזון בין חדשנות פדגוגית לניהול סיכונים משפטי." }
+  },
+  {
+    "id": 4,
+    "date": "19.5.2026",
+    "image": "[https://ui-avatars.com/api/?name=Maayan+Sayag&background=059669&color=fff&size=200](https://ui-avatars.com/api/?name=Maayan+Sayag&background=059669&color=fff&size=200)",
+    "speaker": { "he": "מעיין סייג", "en": "Maayan Sayag", "ar": "معيان سياغ" },
+    "title": { "he": "הטמעה אתית ומקצועית של AI בחינוך", "en": "Ethical and Professional Implementation of AI", "ar": "التنفيذ الأخلاقي والمهني للذكاء الاصطناعي" },
+    "abstract": { "he": "דיון על גישור בין האקדמיה לשטח לקידום מודלים פדגוגיים מבוססי בינה מלאכותית דוגמת נבו\"ן.", "en": "Discussion on bridging academia and the field to promote AI-based pedagogical models.", "ar": "مناقشة حول سد الفجوة بين الأوساط الأكاديمية والميدان لتعزيز النماذج التربوية." },
+    "bio": { "he": "מעיין סייג היא מובילת מו\"פ במכון למחקר יישומי של בינה מלאכותית בחינוך וחוקרת באוניברסיטה הפתוחה. עומדת בראש קהילת \"בינה מלאכותית בחינוך\" ומנחה את קהילת \"סוכני שינוי\" במכללת בית ברל." }
+  },
+  {
+    "id": 5,
+    "date": "26.5.2026",
+    "image": "[https://ui-avatars.com/api/?name=Limor+Leibovich&background=D97706&color=fff&size=200](https://ui-avatars.com/api/?name=Limor+Leibovich&background=D97706&color=fff&size=200)",
+    "speaker": { "he": "לימור ליבוביץ", "en": "Limor Leibovich", "ar": "ليمور ليبوفيتش" },
+    "title": { "he": "קוד יפן: אנושיות ואנטי-שבירות בעידן ה-AI", "en": "Japan Code: Humanity and Anti-fragility in the AI Era", "ar": "رمز اليابان: الإنسانية ومكافحة الهشاشة في عصر الذكاء الاصطناعي" },
+    "abstract": { "he": "איך בונים חברה חסינה בעולם של בינה מלאכותית? מסע ויזואלי מרתק מטוקיו אל שאלות הממוקדות בעתיד החינוך והחברה בארץ ובעולם. בהרצאה נכיר את מודל האנטי-שבירות.", "en": "How do we build a resilient society in an AI world? A visual journey from Tokyo exploring the future of education and society.", "ar": "كيف نبني مجتمعاً مرناً في عالم الذكاء الاصطناعي؟ رحلة بصرية من طوكيو تستكشف مستقبل التعليم والمجتمع." },
+    "bio": { "he": "חוקרת חברה ועתיד החינוך, מפתחת מודל האנטי-שבירות מתוך הספר \"דור ה-AI\"." }
+  },
+  {
+    "id": 6,
+    "date": "2.6.2026",
+    "image": "[https://ui-avatars.com/api/?name=Yifat+Filo&background=7C3AED&color=fff&size=200](https://ui-avatars.com/api/?name=Yifat+Filo&background=7C3AED&color=fff&size=200)",
+    "speaker": { "he": "יפעת פילו", "en": "Yifat Filo", "ar": "يفعات فيلو" },
+    "title": { "he": "מודל כשירויות הבינה המלאכותית", "en": "The AI Competency Model", "ar": "نموذج كفاءات الذكاء الاصطناعي" },
+    "abstract": { "he": "סקירת מודל הכשירויות המהווה תשתית מקצועית להטמעת טכנולוגיות קצה במערכת החינוך.", "en": "Review of the competency model serving as professional infrastructure for adopting edge technologies.", "ar": "مراجعة لنموذج الكفاءات الذي يشكل بنية تحتية مهنية لتبني التقنيات المتقدمة." },
+    "bio": { "he": "יפעת פילו היא מדריכה פדגוגית במרכז הפסג\"ה ראש העין וחוקרת בינה מלאכותית באגף מו\"פ במשרד החינוך. מובילה את פיתוח מודל כשירויות הבינה המלאכותית של משרד החינוך." }
+  },
+  {
+    "id": 7,
+    "date": "9.6.2026",
+    "image": "[https://ui-avatars.com/api/?name=Naama+Meroz&background=0891B2&color=fff&size=200](https://ui-avatars.com/api/?name=Naama+Meroz&background=0891B2&color=fff&size=200)",
+    "speaker": { "he": "נעמה מרוז", "en": "Naama Meroz", "ar": "نعمة ميروز" },
+    "title": { "he": "מדעני בינה מלאכותית בחינוך", "en": "AI Scientists in Education", "ar": "علماء الذكاء الاصطناعي في التعليم" },
+    "abstract": { "he": "על התוכנית הלאומית להקמת מגמת מדעני בינה מלאכותית ושיתופי פעולה אסטרטגיים.", "en": "About the national program to establish the AI Scientists major and strategic collaborations.", "ar": "حول البرنامج الوطني لإنشاء تخصص علماء الذكاء الاصطناعي والتعاون الاستراتيجي." },
+    "bio": { "he": "נעמה מרוז מובילה את תחום הבינה המלאכותית בחינוך הטכנולוגי במשרד החינוך ומנהלת את התוכנית הלאומית להקמת מגמת \"מדעני בינה מלאכותית\". אחראית על פיתוח תוכניות לימוד ועיצוב בחינות בגרות משולבות AI." }
   }
 ]
