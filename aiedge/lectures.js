@@ -1,8 +1,7 @@
 // --- DATA MANAGEMENT ---
 let talksData = []; 
 let currentLang = 'he';
-const googleFormsEmbed = "[https://docs.google.com/forms/d/e/1FAIpQLSdXwZg50NkkH7V-gV65_Lovijs8FzNS5/viewform?embedded=true](https://docs.google.com/forms/d/e/1FAIpQLSdXwZg50NkkH7V-gV65_Lovijs8FzNS5/viewform?embedded=true)";
-
+const googleFormsEmbed = "https://docs.google.com/forms/d/e/1FAIpQLSdAihOFUcmDJmw1uBrpnJpQm89ZZRSomoDKzxuwgxJscspQLw/viewform?usp=header";
 const translations = {
   he: {
     dir: 'rtl', logoText: 'מכללת בית ברל', title: 'על קצה הבינה', subtitle: 'סדרת הרצאות אורח על בינה מלאכותית בחינוך', aboutBtn: 'אודות הסדרה', registerBtn: 'הרשמה להרצאות', contactBtn: 'צור קשר', mailYishay: 'שלח דוא"ל לישי מור', whatsappYishay: 'וואטסאפ לישי מור', talksTitle: 'הרצאות האורח שלנו', readMore: 'קרא עוד', close: 'סגור', timeLabel: 'ימי שלישי בשעה 18:30-19:30', locationLabel: 'מפגשי זום (Zoom)', aboutModalTitle: 'אודות קורס פיתוח ושימוש ביישומי בינה מלאכותית',
