@@ -2,7 +2,7 @@
   {
     "id": 1,
     "date": "28.4.2026",
-    "image": "[https://ui-avatars.com/api/?name=Yuval+Laikin&background=0D8ABC&color=fff&size=200](https://ui-avatars.com/api/?name=Yuval+Laikin&background=0D8ABC&color=fff&size=200)",
+    "image": "Laikin.jpg",
     "speaker": { "he": "יובל לייקין", "en": "Yuval Laikin", "ar": "يوفال لايكين" },
     "title": { "he": "מהפכות בענייני חינוך", "en": "Revolutions in Education Affairs", "ar": "ثورات في شؤون التعليم" },
     "abstract": { "he": "נסקור את הקשרים בין שינויים סוציולוגיים וחינוכיים במאה האחרונה והשפעת השינויים בשוק התעסוקה על מאפייני הלמידה הייחודית הנדרשים בעת הנוכחית.", "en": "We will review the connections between sociological and educational changes in the last century and the impact of changes in the job market on the unique learning characteristics required today.", "ar": "سنستعرض الروابط بين التغيرات الاجتماعية والتعليمية في القرن الماضي وتأثير التغيرات في سوق العمل على خصائص التعلم الفريدة المطلوبة اليوم." },
