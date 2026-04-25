@@ -20,7 +20,7 @@
   {
     "id": 3,
     "date": "12.5.2026",
-    "image": "[https://ui-avatars.com/api/?name=Lihi+Feldman&background=E11D48&color=fff&size=200](https://ui-avatars.com/api/?name=Lihi+Feldman&background=E11D48&color=fff&size=200)",
+    "image": "feldman.jpg",
     "speaker": { "he": "ליהי פלדמן", "en": "Lihi Feldman", "ar": "ليهي فيلدمان" },
     "title": { "he": "מהם כללי המשחק? רגולציה של AI", "en": "What are the rules? AI Regulation", "ar": "ما هي القواعد؟ تنظيم الذكاء الاصطناعي" },
     "abstract": { "he": "הכרות עם האתגרים המשפטיים והאתיים בשילוב בינה מלאכותית במערכת החינוך והכרת המסגרת האתית להטמעת טכנולוגיות קצה תוך דגש על הגנת הפרטיות ובטיחות.", "en": "An introduction to the legal and ethical challenges of integrating AI in the education system, focusing on privacy protection and student safety.", "ar": "مقدمة عن التحديات القانونية والأخلاقية لدمج الذكاء الاصطناعي في نظام التعليم، مع التركيز على حماية الخصوصية." },
@@ -29,7 +29,7 @@
   {
     "id": 4,
     "date": "19.5.2026",
-    "image": "[https://ui-avatars.com/api/?name=Maayan+Sayag&background=059669&color=fff&size=200](https://ui-avatars.com/api/?name=Maayan+Sayag&background=059669&color=fff&size=200)",
+    "image": "sayag.jpg",
     "speaker": { "he": "מעיין סייג", "en": "Maayan Sayag", "ar": "معيان سياغ" },
     "title": { "he": "הטמעה אתית ומקצועית של AI בחינוך", "en": "Ethical and Professional Implementation of AI", "ar": "التنفيذ الأخلاقي والمهني للذكاء الاصطناعي" },
     "abstract": { "he": "דיון על גישור בין האקדמיה לשטח לקידום מודלים פדגוגיים מבוססי בינה מלאכותית דוגמת נבו\"ן.", "en": "Discussion on bridging academia and the field to promote AI-based pedagogical models.", "ar": "مناقشة حول سد الفجوة بين الأوساط الأكاديمية والميدان لتعزيز النماذج التربوية." },
@@ -47,7 +47,7 @@
   {
     "id": 6,
     "date": "2.6.2026",
-    "image": "[https://ui-avatars.com/api/?name=Yifat+Filo&background=7C3AED&color=fff&size=200](https://ui-avatars.com/api/?name=Yifat+Filo&background=7C3AED&color=fff&size=200)",
+    "image": "filo.jpg",
     "speaker": { "he": "יפעת פילו", "en": "Yifat Filo", "ar": "يفعات فيلو" },
     "title": { "he": "מודל כשירויות הבינה המלאכותית", "en": "The AI Competency Model", "ar": "نموذج كفاءات الذكاء الاصطناعي" },
     "abstract": { "he": "סקירת מודל הכשירויות המהווה תשתית מקצועית להטמעת טכנולוגיות קצה במערכת החינוך.", "en": "Review of the competency model serving as professional infrastructure for adopting edge technologies.", "ar": "مراجعة لنموذج الكفاءات الذي يشكل بنية تحتية مهنية لتبني التقنيات المتقدمة." },
@@ -56,7 +56,7 @@
   {
     "id": 7,
     "date": "9.6.2026",
-    "image": "[https://ui-avatars.com/api/?name=Naama+Meroz&background=0891B2&color=fff&size=200](https://ui-avatars.com/api/?name=Naama+Meroz&background=0891B2&color=fff&size=200)",
+    "image": "meroz.jpg",
     "speaker": { "he": "נעמה מרוז", "en": "Naama Meroz", "ar": "نعمة ميروز" },
     "title": { "he": "מדעני בינה מלאכותית בחינוך", "en": "AI Scientists in Education", "ar": "علماء الذكاء الاصطناعي في التعليم" },
     "abstract": { "he": "על התוכנית הלאומית להקמת מגמת מדעני בינה מלאכותית ושיתופי פעולה אסטרטגיים.", "en": "About the national program to establish the AI Scientists major and strategic collaborations.", "ar": "حول البرنامج الوطني لإنشاء تخصص علماء الذكاء الاصطناعي والتعاون الاستراتيجي." },
