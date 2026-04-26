@@ -1,7 +1,7 @@
 // --- DATA MANAGEMENT ---
 let talksData = []; 
 let currentLang = 'he';
-const googleFormsEmbed = "https://docs.google.com/forms/d/e/1FAIpQLSdXwZg50NkkH7V-gV65_Lovijs8FzNS5/viewform?embedded=true";
+const googleFormsEmbed = "https://docs.google.com/forms/d/e/1FAIpQLSdAihOFUcmDJmw1uBrpnJpQm89ZZRSomoDKzxuwgxJscspQLw/viewform?embedded=true";
 
 const translations = {
    he: {
