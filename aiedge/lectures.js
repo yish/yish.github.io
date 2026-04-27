@@ -4,7 +4,7 @@ let currentLang = 'he';
 const googleFormsEmbed = "https://docs.google.com/forms/d/e/1FAIpQLSdAihOFUcmDJmw1uBrpnJpQm89ZZRSomoDKzxuwgxJscspQLw/viewform?embedded=true";
 
 const translations = {
-   he: {
+  he: {
     dir: 'rtl', logoText: 'המכללה האקדמית בית ברל', title: 'על קצה הבינה', subtitle: 'סדרת הרצאות אורח על בינה מלאכותית בחינוך', aboutBtn: 'אודות הסדרה', registerBtn: 'הרשמה להרצאות', contactBtn: 'צור קשר', mailYishay: 'שלח דוא"ל לישי מור', whatsappYishay: 'וואטסאפ לישי מור', talksTitle: 'ההרצאות', readMore: 'קרא עוד', close: 'סגור', timeLabel: 'ימי שלישי בשעה 18:30-19:30', locationLabel: 'מפגשי זום (Zoom)', aboutModalTitle: 'אודות קורס פיתוח ושימוש ביישומי בינה מלאכותית',
     aboutModalContent: `קורס ״פיתוח ושימוש ביישומי בינה מלאכותית בחינוך״ ניתן במכללת בית ברל במסגרת הסמכת מורים למגמת תקשוב. מגמת מערכות תקשוב היא מגמה צעירה בתיכון, הפונה לתלמידים מגוונים, וחסרים בה מורים בעלי ידע תוכן ומיומנויות הוראה הולמות. התוכנית כוללת לימודי תשתית בתחומים: תשתיות ורשתות תקשורת, אבטחת מידע וסייבר, מערכות הפעלה ותכנות.\n\nקורס זה מקנה לסטודנטים כשירות מתקדמת בבינה מלאכותית (AI) בדגש על פיתוח יישומים חינוכיים בגישת ה-Vibe Coding.\nהקורס כולל סדרה של הרצאות אורח, והמכללה מזמינה את המתעניינים להצטרף כשומעים. מס' המקומות מוגבל!`,
     registerModalTitle: 'הרשמה לסדרת ההרצאות', abstractLabel: 'תקציר ההרצאה', aboutSpeakerLabel: 'על המרצה', advisorBannerText: 'רוצים לשמוע עוד על התוכנית לבינה מלאכותית וחינוך? דברו עם היועץ הדיגיטלי'
@@ -88,16 +88,17 @@ function renderGrid() {
   if (!talksData || talksData.length === 0) return;
 
   talksData.forEach(talk => {
-    const title = talk.title[currentLang] || talk.title.he;
-    const speaker = talk.speaker[currentLang] || talk.speaker.he;
+    // Safe fallbacks in case JSON misses a language
+    const title = talk.title ? (talk.title[currentLang] || talk.title.he) : "כותרת חסרה";
+    const speaker = talk.speaker ? (talk.speaker[currentLang] || talk.speaker.he) : "מרצה חסר";
     
-    let abstract = talk.abstract[currentLang] || talk.abstract.he;
+    let abstract = talk.abstract ? (talk.abstract[currentLang] || talk.abstract.he) : "";
     if (Array.isArray(abstract)) {
       abstract = abstract.join(" "); 
     }
 
     const cardHTML = `
-      <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-slate-100 overflow-hidden transition-all duration-300 flex flex-col group cursor-pointer" onclick="openModal(${talk.id})">
+      <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl border border-slate-100 overflow-hidden transition-all duration-300 flex flex-col group cursor-pointer" onclick="openModal('${talk.id}')">
         <div class="p-6 flex-grow">
           <div class="flex items-center gap-4 mb-4">
             <img src="${talk.image}" alt="${speaker}" class="w-16 h-16 rounded-full object-cover border-2 border-indigo-100 group-hover:border-indigo-400 transition-colors" />
@@ -170,13 +171,16 @@ function openModal(typeOrId) {
     `;
   } 
   else {
-    const talk = talksData.find(t => t.id === typeOrId);
+    // Use string conversion to prevent number/string mismatch errors with IDs
+    const talk = talksData.find(item => String(item.id) === String(typeOrId));
     if (!talk) return;
 
-    const speaker = talk.speaker[currentLang] || talk.speaker.he;
-    const title = talk.title[currentLang] || talk.title.he;
+    // Bulletproof extraction of data
+    const speaker = talk.speaker ? (talk.speaker[currentLang] || talk.speaker.he) : "";
+    const title = talk.title ? (talk.title[currentLang] || talk.title.he) : "";
     
-    let abstractData = talk.abstract[currentLang] || talk.abstract.he;
+    // Handle Abstract Data
+    let abstractData = talk.abstract ? (talk.abstract[currentLang] || talk.abstract.he) : "";
     let abstractHTML = "";
     
     if (Array.isArray(abstractData)) {
@@ -187,6 +191,14 @@ function openModal(typeOrId) {
       abstractHTML += "</ul>";
     } else {
       abstractHTML = `<p class="text-slate-700 leading-relaxed">${abstractData}</p>`;
+    }
+
+    // Handle Bio Data (allows strings OR objects)
+    let bioText = "";
+    if (typeof talk.bio === 'string') {
+      bioText = talk.bio;
+    } else if (talk.bio) {
+      bioText = talk.bio[currentLang] || talk.bio.he || "";
     }
 
     titleEl.innerText = speaker;
@@ -210,7 +222,7 @@ function openModal(typeOrId) {
         </div>
         <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
           <h4 class="text-sm font-bold text-slate-900 mb-2">${t.aboutSpeakerLabel}</h4>
-          <p class="text-slate-600 text-sm leading-relaxed">${talk.bio.he}</p>
+          <p class="text-slate-600 text-sm leading-relaxed">${bioText}</p>
         </div>
       </div>
     `;
