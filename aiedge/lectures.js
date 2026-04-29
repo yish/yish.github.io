@@ -141,6 +141,7 @@ document.addEventListener('click', () => {
   }
 });
 
+
 function openModal(typeOrId) {
   const overlay = document.getElementById('modal-overlay');
   const titleEl = document.getElementById('modal-title');
@@ -171,11 +172,9 @@ function openModal(typeOrId) {
     `;
   } 
   else {
-    // Use string conversion to prevent number/string mismatch errors with IDs
     const talk = talksData.find(item => String(item.id) === String(typeOrId));
     if (!talk) return;
 
-    // Bulletproof extraction of data
     const speaker = talk.speaker ? (talk.speaker[currentLang] || talk.speaker.he) : "";
     const title = talk.title ? (talk.title[currentLang] || talk.title.he) : "";
     
@@ -193,12 +192,23 @@ function openModal(typeOrId) {
       abstractHTML = `<p class="text-slate-700 leading-relaxed">${abstractData}</p>`;
     }
 
-    // Handle Bio Data (allows strings OR objects)
+    // Handle Bio Data
     let bioText = "";
     if (typeof talk.bio === 'string') {
       bioText = talk.bio;
     } else if (talk.bio) {
       bioText = talk.bio[currentLang] || talk.bio.he || "";
+    }
+
+    // --- VIDEO EMBED LOGIC ---
+    // Create an iframe wrapper if a video URL is provided in the JSON
+    let videoHTML = "";
+    if (talk.video) {
+      videoHTML = `
+        <div class="mb-6 w-full aspect-video rounded-xl overflow-hidden shadow-sm border border-slate-100 bg-slate-900">
+          <iframe src="${talk.video}" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      `;
     }
 
     titleEl.innerText = speaker;
@@ -215,6 +225,10 @@ function openModal(typeOrId) {
           </div>
         </div>
       </div>
+      
+      <!-- Insert video here if it exists -->
+      ${videoHTML}
+
       <div class="space-y-6">
         <div>
           <h4 class="text-sm font-bold text-indigo-600 uppercase tracking-wider mb-2">${t.abstractLabel}</h4>
