@@ -3,7 +3,8 @@
     "id": 1,
     "date": "28.4.2026",
     "image": "laikin.jpg",
-    "speaker": { "he": "יובל לייקין", "en": "Yuval Laikin", "ar": "يوفال لايكين" },
+    "video": "https://youtu.be/EX-Z2laoYjU?si=QnIhsFegwBGZKtCr",
+    "speaker": { "he": "יובל לייקין", "en": "Yuval Laykin", "ar": "يوفال لايكين" },    
     "title": { "he": "מהפכות בענייני חינוך", "en": "Revolutions in Education Affairs", "ar": "ثورات في شؤون التعليم" },
     "abstract": { "he": "נסקור את הקשרים בין שינויים סוציולוגיים וחינוכיים במאה האחרונה והשפעת השינויים בשוק התעסוקה על מאפייני הלמידה הייחודית הנדרשים בעת הנוכחית.", "en": "We will review the connections between sociological and educational changes in the last century and the impact of changes in the job market on the unique learning characteristics required today.", "ar": "سنستعرض الروابط بين التغيرات الاجتماعية والتعليمية في القرن الماضي وتأثير التغيرات في سوق العمل على خصائص التعلم الفريدة المطلوبة اليوم." },
     "bio": { "he": "מנהל תחום R&D בחברת IQL, יועץ ברשת ברנקו וייס ומלווה רשויות בצפון בתחום שילוב AI בתהליכים פדגוגיים. לשעבר ראש תחום ההדרכה באגף המודיעין של צה\"ל, שימש ראש התוכנית הלאומית לבינה מלאכותית בחינוך במשרד החינוך." }
