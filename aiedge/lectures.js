@@ -214,6 +214,7 @@ function openModal(typeOrId) {
     titleEl.innerText = speaker;
     
     bodyEl.innerHTML = `
+bodyEl.innerHTML = `
       <div class="flex flex-col sm:flex-row gap-6 mb-8">
         <img src="${talk.image}" alt="${speaker}" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-slate-50 shadow-md" />
         <div>
@@ -226,21 +227,21 @@ function openModal(typeOrId) {
         </div>
       </div>
       
+      <!-- Abstract is now here, ABOVE the video -->
+      <div class="mb-6">
+        <h4 class="text-sm font-bold text-indigo-600 uppercase tracking-wider mb-2">${t.abstractLabel}</h4>
+        <div class="text-slate-700 leading-relaxed">${abstractHTML}</div>
+      </div>
+
       <!-- Insert video here if it exists -->
       ${videoHTML}
 
-      <div class="space-y-6">
-        <div>
-          <h4 class="text-sm font-bold text-indigo-600 uppercase tracking-wider mb-2">${t.abstractLabel}</h4>
-          <div class="text-slate-700 leading-relaxed">${abstractHTML}</div>
-        </div>
-        <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
-          <h4 class="text-sm font-bold text-slate-900 mb-2">${t.aboutSpeakerLabel}</h4>
-          <p class="text-slate-600 text-sm leading-relaxed">${bioText}</p>
-        </div>
+      <!-- Bio is below the video -->
+      <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+        <h4 class="text-sm font-bold text-slate-900 mb-2">${t.aboutSpeakerLabel}</h4>
+        <p class="text-slate-600 text-sm leading-relaxed">${bioText}</p>
       </div>
     `;
-
     footerEl.classList.remove('hidden');
     footerEl.classList.add('flex');
     footerEl.innerHTML = `
