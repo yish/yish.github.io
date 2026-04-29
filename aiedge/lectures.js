@@ -214,7 +214,6 @@ function openModal(typeOrId) {
     titleEl.innerText = speaker;
     
     bodyEl.innerHTML = `
-bodyEl.innerHTML = `
       <div class="flex flex-col sm:flex-row gap-6 mb-8">
         <img src="${talk.image}" alt="${speaker}" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-slate-50 shadow-md" />
         <div>
