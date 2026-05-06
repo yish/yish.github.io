@@ -14,6 +14,7 @@
     "date": "5.5.2026",
     "image": "hagiladi.jpg",
     "speaker": { "he": "תום הגלעדי", "en": "Tom Giladi", "ar": "توم جلعادي" },
+    "video": "https://www.youtube.com/embed/0R6FkRlE1v0?si=7RO4EM9AyHOT37OF",
     "title": { "he": "חינוך ילדים בעידן הבינה המלאכותית", "en": "Raising Children in the AI Era", "ar": "تربية الأطفال في عصر الذكاء الاصطناعي" },
     "abstract": { "he": "מהן משמעויות הכנסת טכנולוגיות בינה מלאכותית למרחב המחייה של ילדים? בהרצאה נבחן את ההשפעות הלא צפויות של הטכנולוגיה ונחשוב על תפקידו החדש של ההורה/מחנך בעולם רווי בינה מלאכותית.", "en": "What are the implications of introducing AI technologies into children's living spaces? We will examine the unexpected impacts of technology and reflect on the new role of the parent/educator.", "ar": "ما هي الآثار المترتبة على إدخال تقنيات الذكاء الاصطناعي في مساحات معيشة الأطفال؟ سنبحث الآثار غير المتوقعة للتكنولوجيا." },
     "bio": { "he": "תום הגלעדי הוא מרצה, מנחה ויועץ המתמחה בהטמעת טכנולוגיות בינה מלאכותית במערכת החינוך. עוסק בפילוסופיה של הטכנולוגיה. מנהל את קהילת הפייסבוק \"בינה מלאכותית בחינוך ובאקדמיה\" ומגיש את הפודקאסט \"דיבורי בינה\"." }
