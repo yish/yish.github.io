@@ -24,6 +24,7 @@
     "date": "12.5.2026",
     "image": "feldman.jpg",
     "speaker": { "he": "ליהי פלדמן", "en": "Lihi Feldman", "ar": "ليهي فيلدمان" },
+    "video": "https://www.youtube.com/embed/DDnWMx0QWCg?si=sjGwJnk7poJ_q0aN",
     "title": { "he": "מהם כללי המשחק? רגולציה של AI", "en": "What are the rules? AI Regulation", "ar": "ما هي القواعد؟ تنظيم الذكاء الاصطناعي" },
     "abstract": { "he": "הכרות עם האתגרים המשפטיים והאתיים בשילוב בינה מלאכותית במערכת החינוך והכרת המסגרת האתית להטמעת טכנולוגיות קצה תוך דגש על הגנת הפרטיות ובטיחות.", "en": "An introduction to the legal and ethical challenges of integrating AI in the education system, focusing on privacy protection and student safety.", "ar": "مقدمة عن التحديات القانونية والأخلاقية لدمج الذكاء الاصطناعي في نظام التعليم، مع التركيز على حماية الخصوصية." },
     "bio": { "he": "עו\"ד ליהי פלדמן היא מומחית למשפט וטכנולוגיה המובילה את רגולציית הבינה המלאכותית (AI) במשרד החינוך. פועלת ליצירת איזון בין חדשנות פדגוגית לניהול סיכונים משפטי." }
