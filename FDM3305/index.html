@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signature Pedagogy For the Hybrid Age - Interactive Explorer</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              950: '#030712',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar behaviors for premium web feel */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #030712;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.25s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans antialiased selection:bg-teal-500 selection:text-slate-950">
+
+  <!-- Top Banner & Title Card -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50 px-4 py-3 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-teal-500/10 text-teal-400 border border-teal-500/20 uppercase tracking-widest">
+            Interactive Companion
+          </span>
+          <span class="text-slate-500 text-xs">|</span>
+          <span class="text-slate-400 text-xs font-mono">Agentic Symbiosis Framework</span>
+        </div>
+        <h1 class="text-xl lg:text-2xl font-black text-slate-100 tracking-tight">
+          Signature Pedagogy For the Hybrid Age
+        </h1>
+        <p class="text-xs text-slate-400">
+          Theoretical paradigm by <strong class="text-slate-200">Yishay Mor</strong> &bull; Digitally rendered for active epistemic monitoring
+        </p>
+      </div>
+      
+      <!-- Main Navigation Tabs -->
+      <nav class="flex flex-wrap gap-1 p-1 bg-slate-950/80 rounded-lg border border-slate-800">
+        <button onclick="switchTab('overview')" data-tab="overview" class="nav-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all bg-gradient-to-r from-teal-500/20 to-indigo-500/20 text-teal-300 border border-teal-500/30 shadow">
+          <i data-lucide="brain" class="w-3.5 h-3.5"></i>
+          <span>Framework Overview</span>
+        </button>
+        <button onclick="switchTab('matrix')" data-tab="matrix" class="nav-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 border border-transparent">
+          <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+          <span>Theoretical Matrix</span>
+        </button>
+        <button onclick="switchTab('delegation')" data-tab="delegation" class="nav-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 border border-transparent">
+          <i data-lucide="file-signature" class="w-3.5 h-3.5"></i>
+          <span>Delegation Canvas</span>
+        </button>
+        <button onclick="switchTab('friction')" data-tab="friction" class="nav-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 border border-transparent">
+          <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+          <span>Friction Lab</span>
+        </button>
+        <button onclick="switchTab('reading')" data-tab="reading" class="nav-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 border border-transparent">
+          <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+          <span>Full Paper</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-grow max-w-7xl w-full mx-auto p-4 lg:p-8 grid grid-cols-1 gap-6">
+    
+    <!-- ================= TAB 1: OVERVIEW ================= -->
+    <div id="tab-overview" class="tab-content space-y-8 animate-fade-in">
+      <!-- Hero Quote Card -->
+      <div class="p-6 lg:p-8 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/30 border border-slate-800 relative overflow-hidden shadow-2xl">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-teal-500/5 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-1/3 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="max-w-3xl space-y-4">
+          <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-indigo-500/10 text-indigo-400 text-xs font-mono font-medium border border-indigo-500/20">
+            <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Shift from Productivity to Epistemic Growth
+          </span>
+          <h2 class="text-2xl lg:text-4xl font-extrabold tracking-tight text-slate-100 leading-tight">
+            Learning is not merely the automated optimization of performance, but a deliberate process of selective delegation and active monitoring.
+          </h2>
+          <p class="text-slate-400 text-sm leading-relaxed lg:text-base">
+            When a student can seamlessly offload structural writing, thinking, and calculation to generative agents, flawless execution no longer indicates cognitive growth. Our mission is to preserve <span class="text-teal-400 font-semibold">Human Epistemic Agency</span> by introducing structural checkpoints, dynamic co-regulation, and intentional friction.
+          </p>
+        </div>
+      </div>
+
+      <!-- Core Pillars Concept Map -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Pillar 1 -->
+        <div class="p-6 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
+              <i data-lucide="brain" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-100">Epistemic Agency</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Learners must view themselves as the authors of their baseline understanding, setting explicit intellectual goals before delegating tasks to artificial agents.
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-800/80 text-xs text-teal-400 font-mono font-bold flex items-center gap-1">
+            Agency-First Task Architecture <i data-lucide="arrow-right" class="w-3 h-3"></i>
+          </div>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="p-6 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+              <i data-lucide="scale" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-100">Epistemic Vigilance</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              A systemic stance of skeptical cross-examination. LLM outputs must be approached not as final facts, but as highly fluent conceptual proposals demanding manual audit.
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-800/80 text-xs text-amber-400 font-mono font-bold flex items-center gap-1">
+            Active Error-Spotting <i data-lucide="arrow-right" class="w-3 h-3"></i>
+          </div>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="p-6 rounded-xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+              <i data-lucide="award" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-100">Cognitive Courage</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Rejecting the siren call of "metacognitive laziness." Embracing the friction of working memory limits as the essential prerequisite to permanent schema generation.
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-800/80 text-xs text-purple-400 font-mono font-bold flex items-center gap-1">
+            Embracing Desirable Difficulties <i data-lucide="arrow-right" class="w-3 h-3"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- The Dialogic Cycle Visualizer -->
+      <div class="p-6 rounded-xl bg-slate-900 border border-slate-800">
+        <h3 class="text-base font-bold text-slate-200 mb-6 flex items-center gap-2">
+          <i data-lucide="sliders" class="text-indigo-400 w-4 h-4"></i> Visualizing Agentic Symbiosis & Co-Regulation
+        </h3>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 relative">
+          <!-- Step 1 -->
+          <div class="p-4 rounded-lg bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-4 relative">
+            <div>
+              <span class="text-2xl font-bold font-mono text-slate-700">01</span>
+              <h4 class="text-sm font-bold text-slate-300 mt-1">Goal Calibration</h4>
+              <p class="text-xs text-slate-500 mt-2">
+                Human establishes target constraints, formulating the baseline concepts entirely in working memory.
+              </p>
+            </div>
+            <div class="text-[10px] font-mono bg-teal-900/20 text-teal-400 px-2 py-1 rounded inline-block self-start border border-teal-900/30">
+              Human Exclusive
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="p-4 rounded-lg bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-4 relative">
+            <div>
+              <span class="text-2xl font-bold font-mono text-slate-700">02</span>
+              <h4 class="text-sm font-bold text-slate-300 mt-1">Delegation Contract</h4>
+              <p class="text-xs text-slate-500 mt-2">
+                Systematic boundary drawing specifying which operations to run via AI, and which cognitive tasks to retain.
+              </p>
+            </div>
+            <div class="text-[10px] font-mono bg-blue-900/20 text-blue-400 px-2 py-1 rounded inline-block self-start border border-blue-900/30">
+              Symbiotic Boundary
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="p-4 rounded-lg bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-4 relative">
+            <div class="absolute inset-0 bg-red-500/5 animate-pulse rounded-lg pointer-events-none"></div>
+            <div>
+              <span class="text-2xl font-bold font-mono text-slate-700">03</span>
+              <h4 class="text-sm font-bold text-slate-300 mt-1">The Friction Gate</h4>
+              <p class="text-xs text-slate-500 mt-2">
+                Intentional barrier where AI raw synthesis is halted. Mandatory "Critique Logs" and "Divergent Audits" are triggered.
+              </p>
+            </div>
+            <div class="text-[10px] font-mono bg-amber-900/20 text-amber-400 px-2 py-1 rounded inline-block self-start border border-amber-900/30 animate-pulse">
+              Friction Checkpoint
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="p-4 rounded-lg bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-4 relative">
+            <div>
+              <span class="text-2xl font-bold font-mono text-slate-700">04</span>
+              <h4 class="text-sm font-bold text-slate-300 mt-1">Internalization</h4>
+              <p class="text-xs text-slate-500 mt-2">
+                Formulation of Delta-Statements, aligning the AI representation with the mental model to generate durable memory.
+              </p>
+            </div>
+            <div class="text-[10px] font-mono bg-purple-900/20 text-purple-400 px-2 py-1 rounded inline-block self-start border border-purple-900/30">
+              Schema Reconstructed
+            </div>
+          </div>
+        </div>
+
+        <!-- HHAIR Model Tab -->
+        <div class="mt-8 pt-8 border-t border-slate-800">
+          <div class="bg-slate-950 rounded-xl p-6 border border-slate-800">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+              <div>
+                <h4 class="text-sm font-bold text-slate-200">
+                  Molenaar's HHAIR Scaffold Model
+                </h4>
+                <p class="text-xs text-slate-500">
+                  Visualizing the gradual fading of AI regulatory control as human self-regulated learning (SRL) matures.
+                </p>
+              </div>
+              
+              <!-- Tab Controls -->
+              <div class="flex gap-1.5 p-1 bg-slate-900 rounded border border-slate-800 self-start">
+                <button onclick="setHhairPhase(1)" id="hhair-btn-1" class="hhair-btn px-2.5 py-1 text-xs font-semibold rounded bg-teal-500 text-slate-950 font-bold">
+                  P1
+                </button>
+                <button onclick="setHhairPhase(2)" id="hhair-btn-2" class="hhair-btn px-2.5 py-1 text-xs font-semibold rounded text-slate-400 hover:text-slate-200">
+                  P2
+                </button>
+                <button onclick="setHhairPhase(3)" id="hhair-btn-3" class="hhair-btn px-2.5 py-1 text-xs font-semibold rounded text-slate-400 hover:text-slate-200">
+                  P3
+                </button>
+                <button onclick="setHhairPhase(4)" id="hhair-btn-4" class="hhair-btn px-2.5 py-1 text-xs font-semibold rounded text-slate-400 hover:text-slate-200">
+                  P4
+                </button>
+              </div>
+            </div>
+
+            <!-- Content Split -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+              <div id="hhair-explanation" class="space-y-4 min-h-[160px]">
+                <!-- Dynamic contents injected here by script -->
+              </div>
+
+              <!-- Fading bar visualization -->
+              <div class="bg-slate-900 p-6 rounded-lg border border-slate-800 flex flex-col items-center justify-center relative min-h-[180px]">
+                <div class="flex justify-between w-full mb-2 text-[10px] font-mono text-slate-500">
+                  <span>AI REGULATION (BLUE)</span>
+                  <span>HUMAN REGULATION (GOLD)</span>
+                </div>
+                <div class="h-6 w-full bg-slate-950 rounded overflow-hidden flex relative border border-slate-800">
+                  <div id="hhair-bar-ai" class="bg-indigo-600 h-full transition-all duration-500 flex items-center justify-center text-[10px] font-black" style="width: 100%;">
+                    100%
+                  </div>
+                  <div id="hhair-bar-human" class="bg-amber-500 h-full transition-all duration-500 flex items-center justify-center text-[10px] font-black text-slate-950" style="width: 0%;">
+                  </div>
+                </div>
+                <div id="hhair-bar-caption" class="mt-4 text-xs text-slate-400 text-center">
+                  Extreme scaffolding: Risk of learned helplessness if permanent.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TAB 2: MATRICES ================= -->
+    <div id="tab-matrix" class="tab-content space-y-6 hidden animate-fade-in">
+      <div>
+        <h2 class="text-xl font-extrabold text-slate-100 flex items-center gap-2">
+          <i data-lucide="compass" class="text-teal-400 w-5 h-5"></i> Theoretical Grounding Matrix
+        </h2>
+        <p class="text-xs text-slate-400">
+          Tracing direct links between Epistemic Principles, peer-reviewed literature, and pedagogical designs.
+        </p>
+      </div>
+
+      <!-- Live Cards -->
+      <div class="space-y-4">
+        <!-- Matrix Item 1 -->
+        <div class="rounded-xl border border-slate-800 bg-slate-900 overflow-hidden shadow-lg grid grid-cols-1 lg:grid-cols-12">
+          <div class="lg:col-span-6 p-6 border-b lg:border-b-0 lg:border-r border-slate-800 space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-indigo-950 text-indigo-400 border border-indigo-500/30">EP1</span>
+              <h4 class="font-bold text-slate-100">The Performance-Learning Decoupling</h4>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Flawless task performance achieved via unmonitored AI delegation does not produce durable human capability or schema change.
+            </p>
+            <div class="pt-2 flex items-center gap-1.5 text-[10px] text-slate-500 font-mono">
+              <i data-lucide="book-marked" class="w-3.5 h-3.5"></i>
+              <span>Yan & Gašević (2026) (Agentivism); Fan et al. (2024) (Metacognitive Laziness)</span>
+            </div>
+          </div>
+          <div class="lg:col-span-6 p-6 bg-slate-900/60 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-teal-950 text-teal-400 border border-teal-500/30">PDP1</span>
+                <h4 class="font-bold text-teal-300">Introduce Desirable Epistemic Friction</h4>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Design mandatory "friction checkpoints" requiring learners to manually justify, audit, synthesize, and edit AI-mediated pathways and outputs.
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-slate-800/60">
+              <span class="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Target Tool</span>
+              <button onclick="switchTab('friction')" class="text-xs text-teal-400 hover:text-teal-300 font-bold flex items-center gap-1 transition-all">
+                Launch Sandbox <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Matrix Item 2 -->
+        <div class="rounded-xl border border-slate-800 bg-slate-900 overflow-hidden shadow-lg grid grid-cols-1 lg:grid-cols-12">
+          <div class="lg:col-span-6 p-6 border-b lg:border-b-0 lg:border-r border-slate-800 space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-indigo-950 text-indigo-400 border border-indigo-500/30">EP2</span>
+              <h4 class="font-bold text-slate-100">Shared Co-Regulation</h4>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Self-regulated learning (SRL) is not an all-or-nothing state; it is successfully developed when regulation is dynamically shared between human and AI, avoiding total offloading.
+            </p>
+            <div class="pt-2 flex items-center gap-1.5 text-[10px] text-slate-500 font-mono">
+              <i data-lucide="book-marked" class="w-3.5 h-3.5"></i>
+              <span>Molenaar (2022) (Hybrid Human-AI Regulation / HHAIR); Winne (2018)</span>
+            </div>
+          </div>
+          <div class="lg:col-span-6 p-6 bg-slate-900/60 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-teal-950 text-teal-400 border border-teal-500/30">PDP2</span>
+                <h4 class="font-bold text-teal-300">Scaffold Shared Regulatory Agency</h4>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Configure hybrid tasks to explicitly prompt, make visible, and transition the regulatory roles (planning, monitoring, evaluating) from AI-directed to human-directed.
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-slate-800/60">
+              <span class="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Target Tool</span>
+              <button onclick="switchTab('overview')" class="text-xs text-teal-400 hover:text-teal-300 font-bold flex items-center gap-1 transition-all">
+                Review Scaffold Stages <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Matrix Item 3 -->
+        <div class="rounded-xl border border-slate-800 bg-slate-900 overflow-hidden shadow-lg grid grid-cols-1 lg:grid-cols-12">
+          <div class="lg:col-span-6 p-6 border-b lg:border-b-0 lg:border-r border-slate-800 space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-indigo-950 text-indigo-400 border border-indigo-500/30">EP3</span>
+              <h4 class="font-bold text-slate-100">Externalization and Internalization</h4>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Learning is optimized when AI is utilized to make implicit human thinking visible (externalization) and convert machine models into internal mental structures (internalization).
+            </p>
+            <div class="pt-2 flex items-center gap-1.5 text-[10px] text-slate-500 font-mono">
+              <i data-lucide="book-marked" class="w-3.5 h-3.5"></i>
+              <span>Cukurova (2024) (Vision for Hybrid Intelligence); Vygotsky (1978)</span>
+            </div>
+          </div>
+          <div class="lg:col-span-6 p-6 bg-slate-900/60 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-teal-950 text-teal-400 border border-teal-500/30">PDP3</span>
+                <h4 class="font-bold text-teal-300">Mandate Double-Loop Explanations</h4>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Require learners to structurally contrast their baseline mental models with AI representations, articulating the precise conceptual evolution that occurred in between.
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-slate-800/60">
+              <span class="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Target Tool</span>
+              <button onclick="switchTab('friction')" class="text-xs text-teal-400 hover:text-teal-300 font-bold flex items-center gap-1 transition-all">
+                Audit & Delta Log <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Matrix Item 4 -->
+        <div class="rounded-xl border border-slate-800 bg-slate-900 overflow-hidden shadow-lg grid grid-cols-1 lg:grid-cols-12">
+          <div class="lg:col-span-6 p-6 border-b lg:border-b-0 lg:border-r border-slate-800 space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-indigo-950 text-indigo-400 border border-indigo-500/30">EP4</span>
+              <h4 class="font-bold text-slate-100">Agency Protection via Configuration Control</h4>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Human self-efficacy and agency degrade when AI interfaces act as opaque black boxes; they are protected when students actively direct and configure the AI's persona, boundaries, and level of support.
+            </p>
+            <div class="pt-2 flex items-center gap-1.5 text-[10px] text-slate-500 font-mono">
+              <i data-lucide="book-marked" class="w-3.5 h-3.5"></i>
+              <span>Viberg et al. (2025) (Protecting Agency); Jansen et al. (2025)</span>
+            </div>
+          </div>
+          <div class="lg:col-span-6 p-6 bg-slate-900/60 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-teal-950 text-teal-400 border border-teal-500/30">PDP4</span>
+                <h4 class="font-bold text-teal-300">Enforce Agentic Delegation Protocols</h4>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Require learners to explicitly declare a "delegation contract" before any human-AI collaboration, defining what cognitive tasks are offloaded, what are retained, and why.
+              </p>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-slate-800/60">
+              <span class="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Target Tool</span>
+              <button onclick="switchTab('delegation')" class="text-xs text-teal-400 hover:text-teal-300 font-bold flex items-center gap-1 transition-all">
+                Open Delegation Contract <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Critique block -->
+      <div class="p-6 rounded-xl border border-red-900/30 bg-red-950/10 space-y-4">
+        <h3 class="text-sm font-bold text-red-400 flex items-center gap-2">
+          <i data-lucide="alert-triangle" class="w-4 h-4"></i> Crucial Implementation Caveats (PDP Critiques)
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-slate-200">The UX-Learning Tension</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Over-designing friction checkpoints can yield acute user fatigue. If students must complete excessive reflection forms, they will simply use an external AI agent to generate the reflection itself—triggering a secondary offloading loop. Friction must be targeted strictly at <strong>critical conceptual pivots</strong>.
+            </p>
+          </div>
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-slate-200">The Scaffold Dependency Loop</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              If co-regulatory prompts remain permanently directive, students experience an illusion of capability but fall victim to SRL collapse (learned helplessness) when the scaffolding tools are withdrawn. Designers must establish an algorithmic "decay rate" on scaffolding alerts.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TAB 3: DELEGATION CANVAS ================= -->
+    <div id="tab-delegation" class="tab-content space-y-6 hidden animate-fade-in">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-100 flex items-center gap-2">
+            <i data-lucide="file-signature" class="text-teal-400 w-5 h-5"></i> Interactive Delegation Protocol Canvas
+          </h2>
+          <p class="text-xs text-slate-400">
+            Negotiate the cognitive division of labor before launching your AI. Protect human self-regulated agency.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-xs font-mono text-slate-400">Contractor Name:</label>
+          <input 
+            type="text" 
+            id="contractor-name-input"
+            oninput="updateContractorName()"
+            placeholder="Enter Student Name" 
+            class="bg-slate-900 border border-slate-800 rounded px-2.5 py-1 text-xs text-teal-300 focus:outline-none focus:border-teal-500"
+          >
+        </div>
+      </div>
+
+      <!-- Layout Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left configuration -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="flex items-center justify-between px-3 py-2 bg-slate-900 rounded border border-slate-800">
+            <span class="text-xs font-mono font-bold text-slate-400">Assignment Target Tasks</span>
+            <div class="flex gap-4 text-[10px] text-slate-400 font-mono">
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Human Only</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-teal-400"></span> Symbiotic</span>
+              <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-indigo-500"></span> AI Only</span>
+            </div>
+          </div>
+
+          <!-- Interactive Tasks Container -->
+          <div id="tasks-list" class="space-y-3">
+            <!-- Dynamically populated by JS -->
+          </div>
+        </div>
+
+        <!-- Right Side Index Calculators & Live Covenant -->
+        <div class="lg:col-span-5 space-y-6">
+          <div class="p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
+            <h3 class="text-sm font-bold text-slate-200">Symbiotic Calibration Index</h3>
+
+            <!-- Metric 1: Agency -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-mono">
+                <span class="text-slate-400">Epistemic Agency Index</span>
+                <span id="agency-index-label" class="font-bold text-teal-400">67%</span>
+              </div>
+              <div class="h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                <div id="agency-bar" class="h-full bg-teal-500 transition-all duration-300" style="width: 67%;"></div>
+              </div>
+            </div>
+
+            <!-- Metric 2: Productivity -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-mono">
+                <span class="text-slate-400">Productivity Score</span>
+                <span id="productivity-index-label" class="font-bold text-indigo-400">83%</span>
+              </div>
+              <div class="h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                <div id="productivity-bar" class="h-full bg-indigo-500 transition-all duration-300" style="width: 83%;"></div>
+              </div>
+            </div>
+
+            <!-- Metric 3: Risk -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-mono">
+                <span class="text-rose-400 font-semibold">Metacognitive Laziness Risk</span>
+                <span id="risk-index-label" class="font-bold text-slate-500">0%</span>
+              </div>
+              <div class="h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                <div id="risk-bar" class="h-full bg-slate-700 transition-all duration-300" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- Dynamic evaluation block -->
+            <div id="calibration-feedback" class="mt-4 p-3.5 rounded bg-slate-950 border border-slate-800 text-xs leading-relaxed text-slate-400">
+              <!-- Content updated dynamically by JS -->
+            </div>
+          </div>
+
+          <!-- Printable document output -->
+          <div class="p-6 rounded-xl border border-slate-800 bg-slate-900 space-y-4">
+            <div class="flex justify-between items-center">
+              <h3 class="text-xs font-mono uppercase tracking-widest text-slate-400">Generated Contract</h3>
+              <button onclick="copyContractToClipboard()" class="px-2.5 py-1 rounded bg-slate-800 text-[10px] font-mono hover:bg-slate-700 text-teal-300 transition-all flex items-center gap-1.5">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Contract Text
+              </button>
+            </div>
+
+            <!-- Visual Contract Card -->
+            <div class="p-4 rounded-lg bg-slate-950 border border-slate-800/80 font-mono text-xs text-slate-300 space-y-3 relative overflow-hidden">
+              <div class="absolute top-0 right-0 p-4 opacity-[0.03] select-none pointer-events-none">
+                <i data-lucide="file-signature" class="w-32 h-32"></i>
+              </div>
+              <div class="text-center border-b border-slate-800/80 pb-3">
+                <span class="text-[10px] text-slate-500 uppercase tracking-widest">Delegation Agreement</span>
+                <h4 class="font-bold text-slate-300">HYBRID AGENCY COVENANT</h4>
+              </div>
+              
+              <div class="space-y-1 text-[11px]">
+                <div><span class="text-slate-500">CONTRACTOR:</span> <span id="contract-name-display" class="text-teal-400">UNNAMED COGNITIVE ARCHITECT</span></div>
+                <div><span class="text-slate-500">AGENCY INDEX:</span> <span id="contract-agency-val">--</span></div>
+                <div><span class="text-slate-500">COGNITIVE RISK:</span> <span id="contract-risk-val">--</span></div>
+                <div><span class="text-slate-500">STATUS:</span> <span id="contract-status-val">SYMBIOSIS VALIDATED</span></div>
+              </div>
+
+              <!-- Mini task summary -->
+              <div id="contract-tasks-summary" class="border-t border-slate-800/60 pt-3 space-y-1.5 text-[10px]">
+                <!-- Populated dynamically -->
+              </div>
+
+              <div class="text-center text-[9px] text-slate-600 border-t border-slate-800/40 pt-2 italic">
+                "I hereby declare cognitive ownership over all synthesized outputs."
+              </div>
+            </div>
+
+            <!-- Custom alert modal/notification -->
+            <div id="copy-notification" class="hidden p-2 rounded bg-teal-500/10 border border-teal-500/20 text-xs text-center text-teal-300 animate-pulse">
+              Contract copied to your clipboard! Securely saved for academic logs.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TAB 4: FRICTION LAB ================= -->
+    <div id="tab-friction" class="tab-content space-y-6 hidden animate-fade-in">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-100 flex items-center gap-2">
+            <i data-lucide="activity" class="text-teal-400 w-5 h-5"></i> Interactive Epistemic Friction Lab
+          </h2>
+          <p class="text-xs text-slate-400">
+            Experience firsthand the difference between unmonitored "Copy-Paste Flow" vs a "Friction Gate" checkpoint.
+          </p>
+        </div>
+        <button onclick="resetFrictionSimulation()" class="px-3 py-1 bg-slate-900 border border-slate-800 rounded text-xs hover:text-teal-300 hover:border-teal-500 transition-all flex items-center gap-1 text-slate-400">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Reset Simulator
+        </button>
+      </div>
+
+      <!-- Main Stage -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Active Screen Module -->
+        <div id="friction-sandbox-screen" class="lg:col-span-8 p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-4 flex flex-col justify-between min-h-[440px]">
+          <!-- Active view handled dynamically by scripts -->
+        </div>
+
+        <!-- Comparative Telemetry Dashboard -->
+        <div class="lg:col-span-4 p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-6">
+          <h3 class="text-sm font-bold text-slate-200">The Friction vs. Cognitive Gain Trade-off</h3>
+          
+          <div class="space-y-6 text-xs">
+            <!-- Speed -->
+            <div class="space-y-2">
+              <div class="flex justify-between font-mono">
+                <span class="text-slate-400">Task Execution Speed</span>
+                <span id="telemetry-speed-val" class="text-slate-400 font-bold">100%</span>
+              </div>
+              <div class="h-4 bg-slate-950 rounded overflow-hidden flex border border-slate-800">
+                <div id="telemetry-speed-bar" class="bg-indigo-500 h-full transition-all duration-500" style="width: 100%;"></div>
+              </div>
+              <p class="text-[10px] text-slate-500 leading-relaxed">
+                Instant copy-paste yields fast document delivery but near-zero mental retention. Adding checkpoint friction slows completion speed but builds knowledge.
+              </p>
+            </div>
+
+            <!-- Schema Retention -->
+            <div class="space-y-2">
+              <div class="flex justify-between font-mono">
+                <span class="text-slate-400">Long-Term Memory Schema</span>
+                <span id="telemetry-retention-val" class="text-slate-400 font-bold">0%</span>
+              </div>
+              <div class="h-4 bg-slate-950 rounded overflow-hidden flex border border-slate-800">
+                <div id="telemetry-retention-bar" class="bg-emerald-500 h-full transition-all duration-500" style="width: 0%;"></div>
+              </div>
+              <p class="text-[10px] text-slate-500 leading-relaxed">
+                Active double-loop explanation (PDP3) ensures you structurally contrast your baseline model against machine representations.
+              </p>
+            </div>
+
+            <div class="p-4 bg-slate-950 rounded border border-slate-800/80 text-[11px] text-slate-400 leading-relaxed space-y-1.5">
+              <span class="text-amber-400 font-bold uppercase tracking-wider text-[9px] block">Philosophical Reminder:</span>
+              "If a student can delegate the entirety of their cognitive work to an AI system, successful performance can no longer be assumed to indicate learning."
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TAB 5: SCHOLARLY PAPER ================= -->
+    <div id="tab-reading" class="tab-content hidden animate-fade-in max-w-4xl mx-auto">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 lg:p-12 space-y-8 shadow-2xl">
+        <!-- Header -->
+        <div class="border-b border-slate-800 pb-8 text-center space-y-4">
+          <span class="text-xs font-mono tracking-widest text-slate-500 uppercase">Academic Treatise</span>
+          <h1 class="text-3xl lg:text-4xl font-black text-slate-100 tracking-tight max-w-2xl mx-auto leading-tight">
+            Signature Pedagogy For the Hybrid Age
+          </h1>
+          <div class="text-sm text-slate-400 font-mono">
+            <span>Author: <strong>Yishay Mor</strong></span>
+            <span class="mx-2">&bull;</span>
+            <span>With the assistance of the Signature Pedagogy Gem</span>
+          </div>
+          <div class="text-xs text-slate-500 tracking-wide uppercase font-semibold">
+            Designed for Education in the Era of Agentic and Generative AI
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="space-y-8 text-slate-300 text-sm lg:text-base leading-relaxed font-serif max-w-3xl mx-auto">
+          <!-- Section I -->
+          <section class="space-y-4">
+            <h2 class="text-xl font-bold font-sans text-slate-100 border-b border-slate-800 pb-2">
+              I. IMPLICIT STRUCTURE: PHILOSOPHY & VALUES
+            </h2>
+            <h3 class="text-base font-bold font-sans text-slate-200 mt-4">
+              1.1 Statement of Pedagogical Philosophy
+            </h3>
+            <p>
+              The signature pedagogy for the era of Hybrid Intelligence (HI) is anchored in <strong>Agentic Symbiosis</strong>—a theoretical worldview stating that learning is not merely the frictionless acquisition of information or the automated optimization of performance, but a deliberate, relational process of <em>selective cognitive delegation, active epistemic monitoring, and progressive internalization</em> (Yan & Gašević, 2026).
+            </p>
+            <p>
+              In an educational landscape saturated with agentic and generative artificial intelligence, traditional indicators of learning (such as successful task completion or flawless essay outputs) are decoupled from actual cognitive change. If a student can delegate the entirety of their cognitive work to an AI system, "successful performance can no longer be assumed to indicate learning" (Yan & Gašević, 2026).
+            </p>
+            <p>
+              Therefore, our pedagogy shifts the focus of educational design from <strong>productivity</strong> to <strong>epistemic growth</strong>. It treats the human-AI interaction not as an automation pipeline, but as a dialogic relationship where human agency is central, and AI is utilized as a dynamic scaffolding partner (Molenaar, 2022) and an epistemic mirror to externalize and internalize complex representations (Cukurova, 2024).
+            </p>
+
+            <!-- Cycle graphic -->
+            <div class="my-6 p-4 rounded bg-slate-950 text-xs text-slate-400 font-mono border border-slate-800 space-y-2">
+              <div class="text-center font-bold text-slate-500">THE DIALOGIC CYCLE OF AGENTIC SYMBIOSIS</div>
+              <div class="text-center text-teal-400">Human Epistemic Agency (Intentional Goal-Setting)</div>
+              <div class="text-center text-slate-600">&darr; Delegation Protocol & Goal Calibration</div>
+              <div class="text-center text-amber-400">Hybrid Co-Regulatory Space (Shared Action & Critiques) &lt;-- [Epistemic Friction Gate]</div>
+              <div class="text-center text-slate-600">&darr; Internalization & Synthesis</div>
+              <div class="text-center text-purple-400">Active Schema Reconstruction</div>
+            </div>
+
+            <h3 class="text-base font-bold font-sans text-slate-200 mt-4">
+              1.2 Core Pedagogical Values & Dispositions
+            </h3>
+            <ul class="list-disc pl-6 space-y-3 font-sans text-sm text-slate-400">
+              <li>
+                <strong class="text-slate-200">Epistemic Agency (Active Ownership):</strong> Learners must cultivate the intentional disposition to drive, structure, and own their cognitive journeys. This value demands that learners view themselves as the ultimate authors of their understanding, resisting the urge to passively offload critical thinking, reasoning, and planning to automated systems (Viberg et al., 2025). It prioritizes <em>agency-first</em> task designs where human goal-setting precedes machine execution.
+              </li>
+              <li>
+                <strong class="text-slate-200">Epistemic Vigilance (Critical Skepticism):</strong> In a world of highly fluent, plausible, yet fallible generative models, learners must maintain a stance of systematic doubt and rigorous cross-examination (Fan et al., 2024). Rather than treating AI outputs as authoritative answers, they must be approached as raw materials, cognitive provocations, or divergent ideas requiring thorough verification and contextual grounding.
+              </li>
+              <li>
+                <strong class="text-slate-200">Cognitive Courage (Valuing Friction):</strong> True learning requires schema reconstruction, which is inherently challenging and carries high cognitive load. Learners must develop the disposition to embrace <em>desirable difficulties</em> and resist "metacognitive laziness"—the tendency to rely on AI to bypass the productive struggle necessary to construct long-term memory structures (Fan et al., 2024).
+              </li>
+            </ul>
+          </section>
+
+          <!-- Section II -->
+          <section class="space-y-4">
+            <h2 class="text-xl font-bold font-sans text-slate-100 border-b border-slate-800 pb-2">
+              II. DEEP STRUCTURE: EPISTEMIC & PEDAGOGICAL DESIGN PRINCIPLES
+            </h2>
+            <h3 class="text-base font-bold font-sans text-slate-200 mt-4">
+              2.1 Theoretical Grounding Matrix Summary
+            </h3>
+            <p>
+              The paper establishes four central <strong>Epistemic Principles (EP)</strong> derived from research in self-regulation and hybrid intelligence, matching them directly to actionable <strong>Pedagogical Design Principles (PDP)</strong>:
+            </p>
+            <div class="pl-4 border-l-2 border-teal-500 space-y-3 font-sans text-xs text-slate-400">
+              <p>
+                <strong>PDP1: Introduce Desirable Epistemic Friction.</strong> Set up mandatory checkpoint boundaries for manual evaluation, synthesis audits, and delta statement logs to curb laziness.
+              </p>
+              <p>
+                <strong>PDP2: Scaffold Shared Regulatory Agency.</strong> Transition planning and evaluation responsibility dynamically via the HHAIR model.
+              </p>
+              <p>
+                <strong>PDP3: Mandate Double-Loop Explanations.</strong> Students must explicitly trace mental-model changes against AI proposals.
+              </p>
+              <p>
+                <strong>PDP4: Enforce Agentic Delegation Protocols.</strong> Declare formal task boundaries via Delegation Contracts prior to collaboration.
+              </p>
+            </div>
+
+            <h3 class="text-base font-bold font-sans text-slate-200 mt-4">
+              2.2 Critical Trade-offs & Sociodemographic Constraints
+            </h3>
+            <p>
+              In under-resourced or low-digital-literacy settings, complex hybrid intelligence frameworks risk widening the equity gap. If learners lack foundational domain knowledge, they cannot perform the "epistemic monitoring" required by PDP3. They are highly susceptible to accepting AI-generated hallucinations as absolute truths. Therefore, <strong>foundational, non-AI conceptual training must always precede agentic human-AI collaboration.</strong>
+            </p>
+          </section>
+
+          <!-- Section III -->
+          <section class="space-y-4">
+            <h2 class="text-xl font-bold font-sans text-slate-100 border-b border-slate-800 pb-2">
+              III. SURFACE STRUCTURE: THE DESIGN PATTERN LANGUAGE
+            </h2>
+            <h3 class="text-base font-bold font-sans text-slate-200">
+              3.1 Derived Design Narratives & "The Accidental Scribe"
+            </h3>
+            <p class="italic text-slate-400 bg-slate-950 p-4 rounded border border-slate-800/60 font-sans text-xs">
+              <strong>Source Scenario:</strong> In a graduate-level ed-tech seminar, students conducted a literature review on hybrid systems. Armed with agentic search tools, they quickly submitted polished syntheses but failed basic conceptual debate during oral exams. They had successfully offloaded the thinking process. 
+              <br /><br />
+              <strong>The Intervention:</strong> The class implemented a mandatory "Delegation Protocol." Before launching AI queries, students drafted a manual hand-drawn concept map and completed a formal delegation contract. They logged three critiques for every AI output generated, which restored oral mastery levels.
+            </p>
+
+            <h3 class="text-base font-bold font-sans text-slate-200 mt-4">
+              3.2 Component Design Patterns
+            </h3>
+            <p>
+              These components operate in synergy. <strong>Pattern 3 (The Delegation Protocol)</strong> prepares boundaries and ownership, which feeds directly into <strong>Pattern 1 (The Epistemic Checkpoint)</strong>, which outputs data and tracking values to calibrate <strong>Pattern 2 (Dynamic Co-regulatory Scaffold)</strong>.
+            </p>
+          </section>
+
+          <!-- Section IV -->
+          <section class="space-y-4 pt-6 border-t border-slate-800 font-sans text-xs text-slate-500">
+            <h2 class="text-sm font-bold text-slate-400 uppercase tracking-widest font-sans">
+              Bibliography
+            </h2>
+            <div class="space-y-2">
+              <p>Cukurova, M. (2024). The interplay of learning, analytics and artificial intelligence in education: A vision for hybrid intelligence. <em>British Journal of Educational Technology</em>, 56, 469–488.</p>
+              <p>Fan, Y., Tang, L., Le, H., Shen, K., Tan, S., Zhao, Y., Shen, Y., Li, X., & Gašević, D. (2024). Beware of Metacognitive Laziness: Effects of Generative Artificial Intelligence on Learning Motivation, Processes, and Performance. <em>Journal of Computer Assisted Learning</em> (Preprint/Early Access).</p>
+              <p>Goodyear, P. (2005). Educational design and networked learning: Patterns, pattern languages and design practice. <em>Australasian Journal of Educational Technology</em>, 21(1), 82–101.</p>
+              <p>Molenaar, I. (2022). The concept of hybrid human-AI regulation: Exemplifying how to support young learners’ self-regulated learning. <em>Computers and Education: Artificial Intelligence</em>, 3, 100070.</p>
+              <p>Mor, Y. (2013). SNaP! Re-using, sharing and communicating designs and design knowledge using scenarios, narratives and patterns. In R. Luckin et al. (Eds.), <em>Handbook of Design in Educational Technology</em> (pp. 189–200). Routledge.</p>
+              <p>Viberg, O. et al. (2025). Protecting and Promoting Human Agency in Education in the Age of Artificial Intelligence. White Paper / Preprint.</p>
+              <p>Yan, L., & Gašević, D. (2026). Agentivism: a learning theory for the age of artificial intelligence. <em>arXiv preprint arXiv:2604.07813v1</em>.</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-900 bg-slate-950 px-4 py-6 text-center text-xs text-slate-500 space-y-1">
+    <div>Signature Pedagogy Companion - Developed for Interactive Scholarly Exploration.</div>
+    <div class="font-mono text-[10px] text-slate-600">Preserving human cognitive agency in a generative era &bull; 2026</div>
+  </footer>
+
+  <!-- ================= STATE MANAGEMENT & LOGIC SCRIPTS ================= -->
+  <script>
+    // --- STATIC DATA MODELS ---
+    const DELEGATION_TASKS = [
+      { id: 't1', name: 'Intentional Goal-Setting & Mapping', weight: 'critical', desc: 'Defining research boundaries and baseline mental schemas.', assignment: 'symbiotic' },
+      { id: 't2', name: 'Critical Reading & Synthesis', weight: 'critical', desc: 'Analyzing source documents for hidden assumptions and bias.', assignment: 'symbiotic' },
+      { id: 't3', name: 'Divergent Brainstorming & Ideas', weight: 'medium', desc: 'Generating creative tangents or alternative thesis points.', assignment: 'symbiotic' },
+      { id: 't4', name: 'Drafting Core Logical Structure', weight: 'critical', desc: 'Outlining arguments and aligning structural evidence.', assignment: 'symbiotic' },
+      { id: 't5', name: 'Prose Polish & Grammatical Tuning', weight: 'low', desc: 'Refining lexical flow, punctuation, and linguistic delivery.', assignment: 'symbiotic' },
+      { id: 't6', name: 'Citation Syntax & Formatting', weight: 'low', desc: 'Compiling standard APA/Harvard bibliographical strings.', assignment: 'symbiotic' }
+    ];
+
+    const HHAIR_PHASES = {
+      1: {
+        title: "PHASE 1: AI-REGULATED",
+        subtitle: "System-Prompted Target Setting",
+        desc: "The student workspace blocks operations until the student answers structured planning queries. The AI governs target pathways, tracking task duration and formatting.",
+        snippet: '<span class="text-indigo-400 font-bold">System AI:</span> "Define your cognitive goal for the next 20 minutes before initiating the generator."',
+        barAi: 100,
+        barHuman: 0,
+        caption: "Extreme scaffolding: Risk of learned helplessness if permanent."
+      },
+      2: {
+        title: "PHASE 2: CO-REGULATED",
+        subtitle: "Collaborative Negotiation & Prompts",
+        desc: "The system suggests planning targets and displays live telemetry (revision indices). The student actively reviews, adjusts, and negotiates the task milestones.",
+        snippet: '<span class="text-indigo-400 font-bold">System AI:</span> "Telemetry shows high copy action but zero text variance. Should we pivot our search query?"',
+        barAi: 67,
+        barHuman: 33,
+        caption: "Balanced human-machine dynamic. Productive dialogue."
+      },
+      3: {
+        title: "PHASE 3: SHARED-REGULATED",
+        subtitle: "Fading Active Scaffolds",
+        desc: "The human owns the roadmap and schedules milestones. The system acts as a silent monitoring soundboard, providing diagnostic help only upon manual request.",
+        snippet: '<span class="text-teal-400 font-bold">Student:</span> [Initiates diagnosis] <br/><span class="text-indigo-400 font-bold">System AI:</span> "Calculated synthesis completeness matches 85% of standard literature."',
+        barAi: 33,
+        barHuman: 67,
+        caption: "Scaffolding fading as human metacognition stabilizes."
+      },
+      4: {
+        title: "PHASE 4: HUMAN-REGULATED",
+        subtitle: "Absolute Cognitive Ownership",
+        desc: "The human manages planning, active performance tracking, and evaluation. The artificial agent is stripped of regulatory agency and relegated to raw execution.",
+        snippet: '<span class="text-slate-400 font-bold">Workspace Status:</span> Scaffolds fully decoupled. Human agency fully restored.',
+        barAi: 0,
+        barHuman: 100,
+        caption: "Goal achieved. Complete human self-regulation."
+      }
+    };
+
+    // --- APPLICATION STATE VARIABLES ---
+    let contractorName = "UNNAMED COGNITIVE ARCHITECT";
+    let frictionState = "prompt"; // prompt, raw_output, audit, delta_completed
+    let highlightedInaccuracies = [];
+    let deltaStatement = "";
+
+    // --- MAIN INITIALIZATION ON LOAD ---
+    window.addEventListener('DOMContentLoaded', () => {
+      // Setup icons
+      lucide.createIcons();
+      // Render components
+      setHhairPhase(1);
+      renderDelegationCanvas();
+      renderFrictionScreen();
+    });
+
+    // --- NAVIGATION ROUTING ---
+    function switchTab(tabId) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      // Show targeted tab
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      
+      // Update nav link stylings
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        if (btn.dataset.tab === tabId) {
+          btn.className = "nav-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all bg-gradient-to-r from-teal-500/20 to-indigo-500/20 text-teal-300 border border-teal-500/30 shadow";
+        } else {
+          btn.className = "nav-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900/50 border border-transparent";
+        }
+      });
+    }
+
+    // --- HHAIR PROGRESSION MODEL CONTROLLER ---
+    function setHhairPhase(phase) {
+      // Highlight correct button
+      document.querySelectorAll('.hhair-btn').forEach((btn, i) => {
+        if ((i+1) === phase) {
+          btn.className = "hhair-btn px-2.5 py-1 text-xs font-semibold rounded bg-teal-500 text-slate-950 font-bold";
+        } else {
+          btn.className = "hhair-btn px-2.5 py-1 text-xs font-semibold rounded text-slate-400 hover:text-slate-200";
+        }
+      });
+
+      // Update Phase Text details
+      const content = HHAIR_PHASES[phase];
+      const explContainer = document.getElementById('hhair-explanation');
+      explContainer.innerHTML = `
+        <span class="text-xs font-mono font-bold text-teal-400">${content.title}</span>
+        <h5 class="text-base font-bold text-slate-100">${content.subtitle}</h5>
+        <p class="text-xs text-slate-400 leading-relaxed">${content.desc}</p>
+        <div class="p-3 bg-slate-900 rounded border border-slate-800 text-xs text-slate-400 font-mono">
+          ${content.snippet}
+        </div>
+      `;
+
+      // Update Fading graphical elements
+      const barAi = document.getElementById('hhair-bar-ai');
+      const barHuman = document.getElementById('hhair-bar-human');
+      const barCaption = document.getElementById('hhair-bar-caption');
+
+      barAi.style.width = content.barAi + '%';
+      barAi.innerText = content.barAi > 0 ? content.barAi + '%' : '';
+      
+      barHuman.style.width = content.barHuman + '%';
+      barHuman.innerText = content.barHuman > 0 ? content.barHuman + '%' : '';
+
+      barCaption.innerText = content.caption;
+    }
+
+    // --- DELEGATION CANVAS CONTROLLERS ---
+    function updateContractorName() {
+      const inputVal = document.getElementById('contractor-name-input').value;
+      contractorName = inputVal.trim() ? inputVal : "UNNAMED COGNITIVE ARCHITECT";
+      document.getElementById('contract-name-display').innerText = contractorName.toUpperCase();
+    }
+
+    function changeTaskAssignment(taskId, assignmentType) {
+      const task = DELEGATION_TASKS.find(t => t.id === taskId);
+      if (task) {
+        task.assignment = assignmentType;
+      }
+      renderDelegationCanvas();
+    }
+
+    function renderDelegationCanvas() {
+      const listContainer = document.getElementById('tasks-list');
+      listContainer.innerHTML = '';
+
+      DELEGATION_TASKS.forEach(task => {
+        const isCritical = task.weight === 'critical';
+        const cardHtml = `
+          <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition-all space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 class="text-sm font-bold text-slate-100">${task.name}</h4>
+                  <span class="text-[9px] px-1.5 py-0.2 rounded font-mono uppercase ${
+                    isCritical 
+                      ? 'bg-red-950/60 text-red-400 border border-red-900/40' 
+                      : 'bg-slate-800 text-slate-400'
+                  }">
+                    ${task.weight} Weight
+                  </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-1">${task.desc}</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-800/50">
+              <button
+                onclick="changeTaskAssignment('${task.id}', 'human')"
+                class="px-3 py-1.5 rounded text-[10px] font-bold font-mono border transition-all ${
+                  task.assignment === 'human'
+                    ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50 shadow'
+                    : 'bg-slate-950/60 text-slate-500 border-transparent hover:text-slate-300'
+                }"
+              >
+                Human Only
+              </button>
+              <button
+                onclick="changeTaskAssignment('${task.id}', 'symbiotic')"
+                class="px-3 py-1.5 rounded text-[10px] font-bold font-mono border transition-all ${
+                  task.assignment === 'symbiotic'
+                    ? 'bg-teal-500/20 text-teal-400 border-teal-500/50 shadow'
+                    : 'bg-slate-950/60 text-slate-500 border-transparent hover:text-slate-300'
+                }"
+              >
+                Co-Regulated
+              </button>
+              <button
+                onclick="changeTaskAssignment('${task.id}', 'delegated')"
+                class="px-3 py-1.5 rounded text-[10px] font-bold font-mono border transition-all ${
+                  task.assignment === 'delegated'
+                    ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/50 shadow'
+                    : 'bg-slate-950/60 text-slate-500 border-transparent hover:text-slate-300'
+                }"
+              >
+                AI Delegated
+              </button>
+            </div>
+          </div>
+        `;
+        listContainer.insertAdjacentHTML('beforeend', cardHtml);
+      });
+
+      calculateAndRenderMetrics();
+    }
+
+    function calculateAndRenderMetrics() {
+      let agencyPoints = 0;
+      let maximumAgency = 0;
+      let productivityPoints = 0;
+      let riskOfLazinessPoints = 0;
+
+      DELEGATION_TASKS.forEach(t => {
+        const wCoeff = t.weight === 'critical' ? 3 : t.weight === 'medium' ? 2 : 1;
+        maximumAgency += 3 * wCoeff;
+
+        if (t.assignment === 'human') {
+          agencyPoints += 3 * wCoeff;
+          productivityPoints += 1 * wCoeff;
+        } else if (t.assignment === 'symbiotic') {
+          agencyPoints += 2 * wCoeff;
+          productivityPoints += 2.5 * wCoeff;
+        } else if (t.assignment === 'delegated') {
+          agencyPoints += 0.2 * wCoeff;
+          productivityPoints += 3 * wCoeff;
+          if (t.weight === 'critical') {
+            riskOfLazinessPoints += 2.5 * wCoeff;
+          } else {
+            riskOfLazinessPoints += 0.8 * wCoeff;
+          }
+        }
+      });
+
+      const epistemicAgencyIndex = Math.round((agencyPoints / maximumAgency) * 100);
+      const productivityScore = Math.round((productivityPoints / (DELEGATION_TASKS.length * 3)) * 100);
+      const cognitiveRisk = Math.min(Math.round((riskOfLazinessPoints / 18) * 100), 100);
+
+      // Update Visuals
+      document.getElementById('agency-index-label').innerText = epistemicAgencyIndex + '%';
+      const agencyBar = document.getElementById('agency-bar');
+      agencyBar.style.width = epistemicAgencyIndex + '%';
+      if (epistemicAgencyIndex > 60) {
+        agencyBar.className = "h-full bg-teal-500 transition-all duration-300";
+        document.getElementById('agency-index-label').className = "font-bold text-teal-400";
+      } else {
+        agencyBar.className = "h-full bg-amber-500 transition-all duration-300";
+        document.getElementById('agency-index-label').className = "font-bold text-amber-400";
+      }
+
+      document.getElementById('productivity-index-label').innerText = productivityScore + '%';
+      document.getElementById('productivity-bar').style.width = productivityScore + '%';
+
+      document.getElementById('risk-index-label').innerText = cognitiveRisk + '%';
+      const riskBar = document.getElementById('risk-bar');
+      riskBar.style.width = cognitiveRisk + '%';
+      if (cognitiveRisk > 50) {
+        riskBar.className = "h-full bg-red-500 transition-all duration-300";
+        document.getElementById('risk-index-label').className = "font-bold text-red-400 animate-pulse";
+      } else {
+        riskBar.className = "h-full bg-slate-700 transition-all duration-300";
+        document.getElementById('risk-index-label').className = "font-bold text-slate-500";
+      }
+
+      // Render Dynamic Feedback Text
+      const feedbackContainer = document.getElementById('calibration-feedback');
+      if (cognitiveRisk > 50) {
+        feedbackContainer.innerHTML = `
+          <div class="flex gap-2 text-red-400">
+            <i data-lucide="alert-triangle" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <strong>Severe Decoupling Danger:</strong> You have delegated critical-weight learning tasks to the AI. This bypasses working memory and limits active schema construction. Try reclaiming <em>"Critical Reading"</em> or <em>"Logical Structure"</em> to reduce this risk.
+            </div>
+          </div>
+        `;
+      } else if (epistemicAgencyIndex < 50) {
+        feedbackContainer.innerHTML = `
+          <div class="flex gap-2 text-amber-400">
+            <i data-lucide="alert-triangle" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <strong>Low Epistemic Agency:</strong> Your current contract leans too heavily on machine regulation. Try transitioning more tasks to symbiotic co-regulation or human exclusive loops.
+            </div>
+          </div>
+        `;
+      } else {
+        feedbackContainer.innerHTML = `
+          <div class="flex gap-2 text-emerald-400">
+            <i data-lucide="check-circle" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <strong>Optimal Epistemic Balance:</strong> You have preserved agency on high-weight conceptual phases while delegating tedious low-weight formatting tasks. This is true agentic symbiosis!
+            </div>
+          </div>
+        `;
+      }
+
+      // Sync Covenant Card details
+      document.getElementById('contract-agency-val').innerText = epistemicAgencyIndex + '%';
+      document.getElementById('contract-risk-val').innerText = cognitiveRisk + '%';
+      
+      const statusLabel = document.getElementById('contract-status-val');
+      if (cognitiveRisk > 50) {
+        statusLabel.innerText = "CRITICAL COGNITIVE RISK";
+        statusLabel.className = "font-bold text-red-500";
+      } else {
+        statusLabel.innerText = "SYMBIOSIS VALIDATED";
+        statusLabel.className = "font-bold text-emerald-400";
+      }
+
+      const miniTasksSummary = document.getElementById('contract-tasks-summary');
+      miniTasksSummary.innerHTML = '';
+      DELEGATION_TASKS.forEach(t => {
+        let labelColor = 'text-indigo-400';
+        if (t.assignment === 'human') labelColor = 'text-emerald-400';
+        if (t.assignment === 'symbiotic') labelColor = 'text-teal-400';
+
+        const assignmentText = t.assignment === 'human' ? 'HUMAN' : t.assignment === 'symbiotic' ? 'CO-REG' : 'AI DELEGATED';
+
+        miniTasksSummary.insertAdjacentHTML('beforeend', `
+          <div class="flex justify-between">
+            <span class="text-slate-400">${t.name}:</span>
+            <span class="font-bold ${labelColor}">${assignmentText}</span>
+          </div>
+        `);
+      });
+
+      lucide.createIcons();
+    }
+
+    function copyContractToClipboard() {
+      const summary = DELEGATION_TASKS.map(t => `${t.name}: [${t.assignment.toUpperCase()}]`).join('\n');
+      const textToCopy = `EPISTEMIC DELEGATION PROTOCOL CONTRACT\nContractor: ${contractorName}\n\nTasks:\n${summary}`;
+      
+      // Iframe-proof copy method utilizing temporary textarea selection
+      const dummy = document.createElement('textarea');
+      document.body.appendChild(dummy);
+      dummy.value = textToCopy;
+      dummy.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummy);
+
+      const notify = document.getElementById('copy-notification');
+      notify.classList.remove('hidden');
+      setTimeout(() => {
+        notify.classList.add('hidden');
+      }, 3000);
+    }
+
+    // --- EPISTEMIC FRICTION SIMULATION CONTROLLER ---
+    function resetFrictionSimulation() {
+      frictionState = "prompt";
+      highlightedInaccuracies = [];
+      deltaStatement = "";
+      renderFrictionScreen();
+      updateFrictionTelemetry();
+    }
+
+    function advanceFrictionState(nextState) {
+      frictionState = nextState;
+      renderFrictionScreen();
+      updateFrictionTelemetry();
+    }
+
+    function toggleInaccuracyHighlight(id) {
+      if (frictionState !== 'audit') return;
+      if (highlightedInaccuracies.includes(id)) {
+        highlightedInaccuracies = highlightedInaccuracies.filter(i => i !== id);
+      } else {
+        highlightedInaccuracies.push(id);
+      }
+      renderFrictionScreen();
+    }
+
+    function updateFrictionTelemetry() {
+      const speedVal = document.getElementById('telemetry-speed-val');
+      const speedBar = document.getElementById('telemetry-speed-bar');
+      const retentionVal = document.getElementById('telemetry-retention-val');
+      const retentionBar = document.getElementById('telemetry-retention-bar');
+
+      if (frictionState === 'prompt') {
+        speedVal.innerText = "100%";
+        speedBar.style.width = "100%";
+        retentionVal.innerText = "0%";
+        retentionBar.style.width = "0%";
+      } else if (frictionState === 'raw_output') {
+        speedVal.innerText = "100% (Instant)";
+        speedBar.style.width = "100%";
+        retentionVal.innerText = "10% (Illusory)";
+        retentionBar.style.width = "10%";
+      } else if (frictionState === 'audit') {
+        speedVal.innerText = "40% (Slowed)";
+        speedBar.style.width = "40%";
+        retentionVal.innerText = "60%";
+        retentionBar.style.width = "60%";
+      } else if (frictionState === 'delta_completed') {
+        speedVal.innerText = "30% (Frictional)";
+        speedBar.style.width = "30%";
+        retentionVal.innerText = "95% (Durable)";
+        retentionBar.style.width = "95%";
+      }
+    }
+
+    function handleDeltaInput(text) {
+      deltaStatement = text;
+      const finishBtn = document.getElementById('friction-btn-finish');
+      if (finishBtn) {
+        if (text.trim().length > 20) {
+          finishBtn.disabled = false;
+          finishBtn.className = "px-6 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold tracking-wide transition-all shadow-lg flex items-center gap-2 text-xs ml-auto";
+        } else {
+          finishBtn.disabled = true;
+          finishBtn.className = "px-6 py-2.5 rounded-lg bg-slate-800 text-slate-500 font-bold tracking-wide cursor-not-allowed flex items-center gap-2 text-xs ml-auto";
+        }
+      }
+    }
+
+    function renderFrictionScreen() {
+      const screen = document.getElementById('friction-sandbox-screen');
+      screen.innerHTML = '';
+
+      if (frictionState === 'prompt') {
+        screen.innerHTML = `
+          <!-- Header terminal-style -->
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-red-500"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+              <span class="w-3 h-3 rounded-full bg-green-500"></span>
+              <span class="text-[10px] font-mono text-slate-500 ml-2">sandbox-env://epistemic-gate</span>
+            </div>
+            <span class="text-[10px] font-mono bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded border border-indigo-500/20">
+              Active Module: PDP1 / PDP3
+            </span>
+          </div>
+
+          <div class="my-auto space-y-6 text-center max-w-lg mx-auto py-6">
+            <div class="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-full flex items-center justify-center text-indigo-400 mx-auto">
+              <i data-lucide="terminal" class="w-6 h-6"></i>
+            </div>
+            <div class="space-y-2">
+              <h3 class="font-bold text-slate-200">Simulate a Rapid Literature Prompt</h3>
+              <p class="text-xs text-slate-400">
+                Imagine you are a graduate student writing a quick literature review on <strong>Cognitive Load Theory (CLT)</strong>. You type this prompt into a powerful LLM:
+              </p>
+            </div>
+            <div class="p-3 bg-slate-950 rounded border border-slate-800 text-xs font-mono text-slate-300 italic text-left">
+              "Write a comprehensive paragraph summarizing how Working Memory and Long-Term Memory interact in Cognitive Load Theory."
+            </div>
+            <button
+              onclick="advanceFrictionState('raw_output')"
+              class="px-6 py-2.5 rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold tracking-wide transition-all shadow-lg flex items-center gap-2 mx-auto text-sm"
+            >
+              Generate Raw AI Output <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        `;
+      } 
+      
+      else if (frictionState === 'raw_output') {
+        screen.innerHTML = `
+          <!-- Header terminal-style -->
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-red-500"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+              <span class="w-3 h-3 rounded-full bg-green-500"></span>
+              <span class="text-[10px] font-mono text-slate-500 ml-2">sandbox-env://epistemic-gate</span>
+            </div>
+            <span class="text-[10px] font-mono bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded border border-indigo-500/20">
+              Active Module: PDP1 / PDP3
+            </span>
+          </div>
+
+          <div class="my-auto space-y-6 py-4">
+            <div class="space-y-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-950 text-indigo-400 border border-indigo-500/20">
+                AI RESPONSE RECEIVED
+              </span>
+              <h3 class="text-lg font-bold text-slate-100">The Frictionless Trap</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                In a traditional unchecked workflow, the student copies this plausible-sounding summary straight to their paper. It looks perfectly scholarly. But is it accurate?
+              </p>
+            </div>
+
+            <div class="p-5 rounded-lg bg-slate-950 border border-indigo-500/20 text-slate-300 text-sm leading-relaxed font-serif relative">
+              <div class="absolute top-0 right-0 p-2 text-[10px] font-mono bg-indigo-500/10 text-indigo-400 border-l border-b border-indigo-500/20">
+                High Fluency Model
+              </div>
+              "According to Sweller's Cognitive Load Theory, human learning depends heavily on the interaction between two systems. Working memory processes new information and is essentially <span class="bg-yellow-500/20 text-yellow-300 px-1 border border-yellow-500/30 font-bold rounded text-amber-300">infinite in capacity</span>, allowing human brains to absorb complex ideas instantly. In contrast, long-term memory functions like an active processor, retaining schemas that are transferred. Therefore, unmonitored AI delegation actually optimizes human learning because students bypass working memory limits entirely."
+            </div>
+
+            <div class="bg-amber-950/20 border border-amber-900/30 rounded p-4 flex gap-3 text-xs text-amber-300">
+              <i data-lucide="alert-triangle" class="w-5 h-5 flex-shrink-0"></i>
+              <div>
+                <strong>Wait! Did you notice?</strong> The AI has hallucinated that working memory is <em>infinite</em>, and that bypassing it optimizes human learning. If you copy-paste this, you commit <em>metacognitive laziness</em>.
+              </div>
+            </div>
+
+            <button
+              onclick="advanceFrictionState('audit')"
+              class="px-6 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold tracking-wide transition-all shadow-lg flex items-center gap-2 self-end text-xs"
+            >
+              <i data-lucide="sliders" class="w-4 h-4"></i> Engage Epistemic Checkpoint (Friction Gate)
+            </button>
+          </div>
+        `;
+      } 
+      
+      else if (frictionState === 'audit') {
+        const isSelected1 = highlightedInaccuracies.includes(1) ? 'bg-red-500 text-slate-950 font-bold line-through' : 'bg-slate-800 hover:bg-slate-700 text-slate-200 decoration-dotted underline';
+        const isSelected2 = highlightedInaccuracies.includes(2) ? 'bg-red-500 text-slate-950 font-bold line-through' : 'bg-slate-800 hover:bg-slate-700 text-slate-200 decoration-dotted underline';
+        const isSelected3 = highlightedInaccuracies.includes(3) ? 'bg-red-500 text-slate-950 font-bold line-through' : 'bg-slate-800 hover:bg-slate-700 text-slate-200 decoration-dotted underline';
+
+        const allSpotted = highlightedInaccuracies.includes(1) && highlightedInaccuracies.includes(3);
+
+        let bottomActionBlockHtml = '';
+        if (highlightedInaccuracies.length >= 2) {
+          bottomActionBlockHtml = `
+            <div class="space-y-4 pt-4 border-t border-slate-800/80 animate-fade-in">
+              <div class="space-y-2">
+                <label class="text-xs font-mono font-bold text-slate-300">
+                  STEP 2: THE "DELTA-STATEMENT" LOG (PDP3)
+                </label>
+                <p class="text-[11px] text-slate-500">
+                  Articulate the precise conceptual difference between what you knew before, what the AI proposed, and what you now believe:
+                </p>
+                <textarea
+                  id="delta-input"
+                  oninput="handleDeltaInput(this.value)"
+                  placeholder="Example: The AI stated working memory is infinite, which is incorrect. In reality, working memory is strictly limited, requiring conscious cognitive load to build long-term memory schemas. Unmonitored delegation blocks this..."
+                  rows="3"
+                  class="w-full bg-slate-950 border border-slate-800 rounded p-3 text-xs text-slate-300 focus:outline-none focus:border-amber-500 font-sans"
+                >${deltaStatement}</textarea>
+              </div>
+
+              <button
+                id="friction-btn-finish"
+                disabled
+                onclick="advanceFrictionState('delta_completed')"
+                class="px-6 py-2.5 rounded-lg bg-slate-800 text-slate-500 font-bold tracking-wide cursor-not-allowed flex items-center gap-2 text-xs ml-auto"
+              >
+                Finalize Friction Cycle & Checkpoint <i data-lucide="check-circle" class="w-4 h-4"></i>
+              </button>
+            </div>
+          `;
+        }
+
+        screen.innerHTML = `
+          <!-- Header terminal-style -->
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-red-500"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+              <span class="w-3 h-3 rounded-full bg-green-500"></span>
+              <span class="text-[10px] font-mono text-slate-500 ml-2">sandbox-env://epistemic-gate</span>
+            </div>
+            <span class="text-[10px] font-mono bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded border border-indigo-500/20">
+              Active Module: PDP1 / PDP3
+            </span>
+          </div>
+
+          <div class="my-auto space-y-4 py-2">
+            <div class="space-y-1">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-950 text-amber-400 border border-amber-500/20">
+                STEP 1: DIVERGENT AUDIT IN PROGRESS
+              </span>
+              <h3 class="text-sm font-bold text-slate-100">Spot the Concept Oversimplification / Hallucination</h3>
+              <p class="text-[11px] text-slate-400">
+                Click on the segments in the AI draft that are conceptually dangerous or scientifically false according to Sweller's Cognitive Load Theory:
+              </p>
+            </div>
+
+            <!-- Interactive highlight area -->
+            <div class="p-5 rounded-lg bg-slate-950 border border-amber-500/20 text-slate-300 text-sm leading-relaxed font-serif select-none">
+              <p>
+                "According to Sweller's Cognitive Load Theory, human learning depends heavily on the interaction between two systems. Working memory processes new information and is essentially 
+                <span onclick="toggleInaccuracyHighlight(1)" class="cursor-pointer px-1 rounded transition-all select-none ${isSelected1}">
+                  infinite in capacity
+                </span>, allowing human brains to absorb complex ideas instantly. In contrast, 
+                <span onclick="toggleInaccuracyHighlight(2)" class="cursor-pointer px-1 rounded transition-all select-none ${isSelected2}">
+                  long-term memory functions like an active processor
+                </span>, retaining schemas that are transferred. Therefore, 
+                <span onclick="toggleInaccuracyHighlight(3)" class="cursor-pointer px-1 rounded transition-all select-none ${isSelected3}">
+                  unmonitored AI delegation actually optimizes human learning
+                </span> because students bypass working memory limits entirely."
+              </p>
+            </div>
+
+            <div class="flex items-center justify-between text-xs font-mono">
+              <span>Highlighted Errors: <strong>${highlightedInaccuracies.length}/3</strong></span>
+              ${allSpotted ? `
+                <span class="text-emerald-400 font-bold flex items-center gap-1">
+                  <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Core hallucinations spotted!
+                </span>
+              ` : `
+                <span class="text-amber-400 flex items-center gap-1">
+                  <i data-lucide="mouse-pointer-click" class="w-3.5 h-3.5 animate-bounce"></i> Click incorrect underlined segments to audit.
+                </span>
+              `}
+            </div>
+
+            ${bottomActionBlockHtml}
+          </div>
+        `;
+        // Keep button reactive on restore if text is already present
+        if (deltaStatement.trim().length > 20) {
+          handleDeltaInput(deltaStatement);
+        }
+      } 
+      
+      else if (frictionState === 'delta_completed') {
+        screen.innerHTML = `
+          <!-- Header terminal-style -->
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-red-500"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+              <span class="w-3 h-3 rounded-full bg-green-500"></span>
+              <span class="text-[10px] font-mono text-slate-500 ml-2">sandbox-env://epistemic-gate</span>
+            </div>
+            <span class="text-[10px] font-mono bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded border border-indigo-500/20">
+              Active Module: PDP1 / PDP3
+            </span>
+          </div>
+
+          <div class="my-auto space-y-6 text-center max-w-xl mx-auto py-6 animate-fade-in">
+            <div class="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center justify-center text-emerald-400 mx-auto">
+              <i data-lucide="award" class="w-8 h-8"></i>
+            </div>
+            
+            <div class="space-y-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-500/20">
+                COGNITIVE RECONSTRUCTION COMPLETE
+              </span>
+              <h3 class="text-xl font-bold text-slate-100">Epistemic Checkpoint Passed!</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                By forcing intentional epistemic friction (manual auditing and drafting a delta-statement), you processed the material on a deep schema level. The "performance-learning decoupling" has been averted.
+              </p>
+            </div>
+
+            <!-- Output Artifact Display -->
+            <div class="p-4 rounded-lg bg-slate-950 border border-slate-800 text-left font-mono text-xs space-y-2">
+              <div class="text-slate-500 text-[10px] uppercase">Your Exportable Delta Log:</div>
+              <div class="text-emerald-400">&bull; Spelled Out AI Hallucinations: Spoken & Purged</div>
+              <div class="text-slate-300 italic">"${deltaStatement}"</div>
+            </div>
+
+            <div class="flex gap-4 justify-center pt-2">
+              <button
+                onclick="resetFrictionSimulation()"
+                class="px-4 py-2 rounded bg-slate-800 text-xs hover:bg-slate-700 font-bold transition-all text-slate-300"
+              >
+                Run Sandbox Again
+              </button>
+              <button
+                onclick="switchTab('reading')"
+                class="px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-500 text-xs text-slate-100 font-bold transition-all"
+              >
+                Read Theoretical Background
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      // Reinitialize newly added lucide tags inside template blocks
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
