@@ -33,6 +33,7 @@
     "id": 4,
     "date": "19.5.2026",
     "image": "sayag.jpg",
+    "video": "https://www.youtube.com/embed/WgRR6LWhkaA",
     "speaker": { "he": "מעיין סייג", "en": "Maayan Sayag", "ar": "معيان سياغ" },
     "title": { "he": "הטמעה אתית ומקצועית של AI בחינוך", "en": "Ethical and Professional Implementation of AI", "ar": "التنفيذ الأخلاقي والمهني للذكاء الاصطناعي" },
     "abstract": { "he": "דיון על גישור בין האקדמיה לשטח לקידום מודלים פדגוגיים מבוססי בינה מלאכותית דוגמת נבו\"ן.", "en": "Discussion on bridging academia and the field to promote AI-based pedagogical models.", "ar": "مناقشة حول سد الفجوة بين الأوساط الأكاديمية والميدان لتعزيز النماذج التربوية." },
