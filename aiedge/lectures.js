@@ -5,17 +5,17 @@ const googleFormsEmbed = "https://docs.google.com/forms/d/e/1FAIpQLSdAihOFUcmDJm
 
 const translations = {
   he: {
-    dir: 'rtl', logoText: 'המכללה האקדמית בית ברל', title: 'על קצה הבינה', subtitle: 'סדרת הרצאות אורח על בינה מלאכותית בחינוך', aboutBtn: 'אודות הסדרה', registerBtn: 'הרשמה להרצאות', contactBtn: 'צור קשר', mailYishay: 'שלח דוא"ל לישי מור', whatsappYishay: 'וואטסאפ לישי מור', talksTitle: 'ההרצאות (לחצו לפרטים / הקלטה)', readMore: 'קרא עוד', close: 'סגור', timeLabel: 'ימי שלישי בשעה 18:30-19:30', locationLabel: 'מפגשי זום (Zoom)', aboutModalTitle: 'אודות קורס פיתוח ושימוש ביישומי בינה מלאכותית',
+    dir: 'rtl', logoText: 'המכללה האקדמית בית ברל', title: 'על קצה הבינה', subtitle: 'סדרת הרצאות אורח על בינה מלאכותית בחינוך', aboutBtn: 'אודות הסדרה', registerBtn: 'הרשמה להרצאות', playlistBtn: 'פלייליסט ההרצאות', playlistModalTitle: 'הקלטות ההרצאות', contactBtn: 'צור קשר', mailYishay: 'שלח דוא"ל לישי מור', whatsappYishay: 'וואטסאפ לישי מור', talksTitle: 'ההרצאות (לחצו לפרטים / הקלטה)', readMore: 'קרא עוד', close: 'סגור', timeLabel: 'ימי שלישי בשעה 18:30-19:30', locationLabel: 'מפגשי זום (Zoom)', aboutModalTitle: 'אודות קורס פיתוח ושימוש ביישומי בינה מלאכותית',
     aboutModalContent: `קורס ״פיתוח ושימוש ביישומי בינה מלאכותית בחינוך״ ניתן במכללת בית ברל במסגרת הסמכת מורים למגמת תקשוב. מגמת מערכות תקשוב היא מגמה צעירה בתיכון, הפונה לתלמידים מגוונים, וחסרים בה מורים בעלי ידע תוכן ומיומנויות הוראה הולמות. התוכנית כוללת לימודי תשתית בתחומים: תשתיות ורשתות תקשורת, אבטחת מידע וסייבר, מערכות הפעלה ותכנות.\n\nקורס זה מקנה לסטודנטים כשירות מתקדמת בבינה מלאכותית (AI) בדגש על פיתוח יישומים חינוכיים בגישת ה-Vibe Coding.\nהקורס כולל סדרה של הרצאות אורח, והמכללה מזמינה את המתעניינים להצטרף כשומעים. מס' המקומות מוגבל!`,
     registerModalTitle: 'הרשמה לסדרת ההרצאות', abstractLabel: 'תקציר ההרצאה', aboutSpeakerLabel: 'על המרצה', advisorBannerText: 'רוצים לשמוע עוד על התוכנית לבינה מלאכותית וחינוך? דברו עם היועץ הדיגיטלי'
   },
   en: {
-    dir: 'ltr', logoText: 'Beit Berl Academic College', title: 'On the Edge of Intelligence', subtitle: 'Guest Lecture Series on Artificial Intelligence in Education', aboutBtn: 'About the Series', registerBtn: 'Register Now', contactBtn: 'Contact Us', mailYishay: 'Email Yishay Mor', whatsappYishay: 'WhatsApp Yishay Mor', talksTitle: 'The Lectures (Click for Details / Recording)', readMore: 'Read More', close: 'Close', timeLabel: 'Tuesdays, 18:30-19:30', locationLabel: 'Zoom Meetings', aboutModalTitle: 'About the AI Applications Course',
+    dir: 'ltr', logoText: 'Beit Berl Academic College', title: 'On the Edge of Intelligence', subtitle: 'Guest Lecture Series on Artificial Intelligence in Education', aboutBtn: 'About the Series', registerBtn: 'Register Now', playlistBtn: 'Lecture Playlist', playlistModalTitle: 'Lecture Recordings', contactBtn: 'Contact Us', mailYishay: 'Email Yishay Mor', whatsappYishay: 'WhatsApp Yishay Mor', talksTitle: 'The Lectures (Click for Details / Recording)', readMore: 'Read More', close: 'Close', timeLabel: 'Tuesdays, 18:30-19:30', locationLabel: 'Zoom Meetings', aboutModalTitle: 'About the AI Applications Course',
     aboutModalContent: `The "Developing and Using AI Applications in Education" course is offered at Beit Berl College as part of the teacher certification for the ICT track. The program provides infrastructure studies in communications, cyber security, and programming.\n\nThe course provides students with advanced AI competency with an emphasis on developing educational applications using Vibe Coding.\nThe course includes a series of guest lectures, and the college invites interested parties to join as listeners. Spaces are limited!`,
     registerModalTitle: 'Register for the Lectures', abstractLabel: 'Abstract', aboutSpeakerLabel: 'About the Speaker', advisorBannerText: 'Want to hear more about the AI and Education program? Talk to our digital advisor'
   },
   ar: {
-    dir: 'rtl', logoText: 'الكلية الأكاديمية بيت بيرل', title: 'على حافة الذكاء', subtitle: 'سلسلة محاضرات للضيوف حول الذكاء الاصطناعي في التعليم', aboutBtn: 'حول السلسلة', registerBtn: 'سجل الآن', contactBtn: 'اتصل بنا', mailYishay: 'أرسل بريدًا إلى يشاي مور', whatsappYishay: 'واتساب يشاي مور', talksTitle: 'المحاضرات (انقر للتفاصيل / التسجيل)', readMore: 'اقرأ المزيد', close: 'إغلاق', timeLabel: 'أيام الثلاثاء، 18:30-19:30', locationLabel: 'لقاءات زووم (Zoom)', aboutModalTitle: 'حول دورة تطبيقات الذكاء الاصطناعي',
+    dir: 'rtl', logoText: 'الكلية الأكاديمية بيت بيرل', title: 'على حافة الذكاء', subtitle: 'سلسلة محاضرات للضيوف حول الذكاء الاصطناعي في التعليم', aboutBtn: 'حول السلسلة', registerBtn: 'سجل الآن', playlistBtn: 'قائمة تشغيل المحاضرات', playlistModalTitle: 'تسجيلات المحاضرات', contactBtn: 'اتصل بنا', mailYishay: 'أرسل بريدًا إلى يشاي مور', whatsappYishay: 'واتساب يشاي مور', talksTitle: 'المحاضرات (انقر للتفاصيل / التسجيل)', readMore: 'اقرأ المزيد', close: 'إغلاق', timeLabel: 'أيام الثلاثاء، 18:30-19:30', locationLabel: 'لقاءات زووم (Zoom)', aboutModalTitle: 'حول دورة تطبيقات الذكاء الاصطناعي',
     aboutModalContent: `تُقدم دورة "تطوير واستخدام تطبيقات الذكاء الاصطناعي في التعليم" في كلية بيت بيرل كجزء من تأهيل المعلمين لمسار تكنولوجيا المعلومات والاتصالات.\nتزود الدورة الطلاب بكفاءة متقدمة في الذكاء الاصطناعي مع التركيز على تطوير التطبيقات التعليمية.\nتتضمن الدورة سلسلة من محاضرات الضيوف، وتدعو الكلية المهتمين للانضمام كمستمعين. الأماكن محدودة!`,
     registerModalTitle: 'التسجيل في المحاضرات', abstractLabel: 'ملخص المحاضرة', aboutSpeakerLabel: 'حول المحاضر', advisorBannerText: 'تريد أن تسمع المزيد عن برنامج الذكاء الاصطناعي والتعليم؟ تحدث مع المستشار الرقمي'
   }
@@ -75,6 +75,11 @@ function renderApp() {
   const bannerTextEl = document.getElementById('advisor-banner-text');
   if(bannerTextEl) {
       bannerTextEl.innerText = t.advisorBannerText;
+  }
+  
+  const playlistBtnEl = document.getElementById('hero-btn-playlist');
+  if(playlistBtnEl) {
+      playlistBtnEl.innerText = t.playlistBtn;
   }
 
   renderGrid();
@@ -169,7 +174,15 @@ function openModal(typeOrId) {
         <iframe src="${googleFormsEmbed}" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0">טוען...</iframe>
       </div>
     `;
-  } 
+  }
+  else if (typeOrId === 'playlist') {
+    titleEl.innerText = t.playlistModalTitle;
+    bodyEl.innerHTML = `
+      <div class="w-full aspect-video rounded-xl overflow-hidden shadow-sm border border-slate-100 bg-slate-900">
+        <iframe src="https://www.youtube.com/embed/videoseries?list=PLp0It7fLcqJ1OgeBL-LTm41twUGR4H42c" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    `;
+  }
   else {
     // Use string conversion to prevent number/string mismatch errors with IDs
     const talk = talksData.find(item => String(item.id) === String(typeOrId));
