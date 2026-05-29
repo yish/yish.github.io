@@ -178,11 +178,17 @@ function openModal(typeOrId) {
   else if (typeOrId === 'playlist') {
     titleEl.innerText = t.playlistModalTitle;
     bodyEl.innerHTML = `
-      <div class="w-full aspect-video rounded-xl overflow-hidden shadow-sm border border-slate-100 bg-slate-900">
+      <div class="w-full aspect-video rounded-xl overflow-hidden shadow-sm border border-slate-100 bg-slate-900 mb-4">
         <iframe src="https://www.youtube.com/embed/videoseries?list=PLp0It7fLcqJ1OgeBL-LTm41twUGR4H42c" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
+      <div class="text-center mt-4">
+        <a href="https://youtube.com/playlist?list=PLp0It7fLcqJ1OgeBL-LTm41twUGR4H42c" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-lg transition-colors">
+          <i data-lucide="youtube" class="w-5 h-5 text-red-600"></i>
+          לפתיחת הפלייליסט המלא ב-YouTube
+        </a>
+      </div>
     `;
-  }    
+  }
   else {
     // Use string conversion to prevent number/string mismatch errors with IDs
     const talk = talksData.find(item => String(item.id) === String(typeOrId));
