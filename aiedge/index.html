@@ -101,7 +101,6 @@
         <p id="hero-subtitle" class="text-lg sm:text-xl text-indigo-50 font-light mb-8 leading-relaxed drop-shadow-sm">
           סדרת הרצאות אורח על בינה מלאכותית בחינוך
         </p>
-        
         <div class="flex flex-wrap gap-3">
           <button onclick="openModal('register')"
             class="flex items-center gap-2 px-5 py-2.5 bg-white text-indigo-900 font-bold rounded-lg shadow-lg hover:bg-indigo-50 transition-all transform hover:-translate-y-0.5 text-sm">
@@ -112,6 +111,12 @@
             class="flex items-center gap-2 px-5 py-2.5 bg-indigo-800/60 border border-indigo-400/30 text-white font-medium rounded-lg hover:bg-indigo-700/70 transition-all backdrop-blur-md text-sm">
             <i data-lucide="info" class="w-4 h-4"></i>
             <span id="hero-btn-about">אודות הסדרה</span>
+          </button>
+          <!-- כפתור הפלייליסט החדש -->
+          <button onclick="openModal('playlist')"
+            class="flex items-center gap-2 px-5 py-2.5 bg-rose-600/80 border border-rose-400/30 text-white font-medium rounded-lg hover:bg-rose-700/90 transition-all backdrop-blur-md text-sm">
+            <i data-lucide="play-circle" class="w-4 h-4"></i>
+            <span id="hero-btn-playlist">פלייליסט ההרצאות</span>
           </button>
         </div>
       </div>
