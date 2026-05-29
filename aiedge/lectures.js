@@ -182,7 +182,7 @@ function openModal(typeOrId) {
         <iframe src="https://www.youtube.com/embed/videoseries?list=PLp0It7fLcqJ1OgeBL-LTm41twUGR4H42c" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </div>
     `;
-  }
+  }    
   else {
     // Use string conversion to prevent number/string mismatch errors with IDs
     const talk = talksData.find(item => String(item.id) === String(typeOrId));
