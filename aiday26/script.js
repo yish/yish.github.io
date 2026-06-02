@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         ar: {
             selectLang: "اللغة / Language:", selectTheme: "عرض الوضع:",
-            registerBtn: "التسجيل في الفעالية", mainZoomBtn: "דכול אלמליאה (Zoom)",
+            registerBtn: "التسجيل في الفعالية", mainZoomBtn: "دخول الجلسة العامة (Zoom)",
             keynoteHeading: "المحاضرة الافتتاحية", workshopsHeading: "ورش العمل الاختيارية (15:30)",
             groupsHeading: "مجموعات التوجيه والتدريب (17:00)", thHost: "الميسر",
             thGroup: "المسار / المجموعة", thAction: "الرابط والاجتماع",
@@ -57,12 +57,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const prevBtn = document.getElementById("prev-carousel-btn");
     const nextBtn = document.getElementById("next-carousel-btn");
 
+    // Carousel Loop State Variables
+    let autoRotateTimer = null;
+    const scrollStep = 374; // Width of card (350px) + gap (24px)
+
     // Data Load pipeline
     fetch(jsonUrl)
         .then(res => { if (!res.ok) throw new Error("Could not load payload data map."); return res.json(); })
         .then(data => {
             loadedData = data;
-            renderView("he"); // default initialization state
+            renderView("he"); // Default initialization
+            initInfiniteCarousel();
         })
         .catch(err => {
             console.error(err);
@@ -83,18 +88,18 @@ document.addEventListener("DOMContentLoaded", () => {
             if (i18n[lang][token]) element.textContent = i18n[lang][token];
         });
 
-        // Set contextual global details
+        // Set layout constants
         mainTitle.textContent = (lang === "he") ? loadedData.eventTitle : (lang === "ar" ? "يوم الذكاء الاصطناعي - المسار فوق الابتدائي والمعهد الأكاديمي العربي" : "AI Seminar - Secondary Track & Arab Educational Institute");
         eventDate.textContent = `${i18n[lang].datePrefix} ${loadedData.eventDate}`;
         mainZoomBtn.href = loadedData.mainPlenaryZoom;
         regIframe.src = loadedData.registrationLink;
 
-        // Keynote Presenter Information Mapping
+        // Keynote Profile Mapping
         speakerName.textContent = loadedData.keynote.speaker;
         speakerInst.textContent = (lang === "en") ? "Haifa University" : (lang === "ar" ? "جامعة حيفا" : loadedData.keynote.institution);
-        speakerBio.textContent = (lang === "he") ? loadedData.keynote.bio : (lang === "ar" ? "خبير وباحث بارز في مجال الذكاء الاصطناعي التوليدي والدمج بين التكنولوجيا والتعليم ועלם הנפס." : "Leading Israeli researcher specializing in Generative AI (GenAI), educational psychology, and hybrid interactive software design elements inside school systems.");
+        speakerBio.textContent = (lang === "he") ? loadedData.keynote.bio : (lang === "ar" ? "خبير وباحث بارז في مجال الذكاء الاصطناعي التوليدي والدمج بين التكنولوجيا والتعليم." : "Leading Israeli researcher specializing in Generative AI (GenAI), educational psychology, and hybrid interactive software design.");
 
-        // Timeline Builder Engine
+        // Timeline Builder
         timelineContainer.innerHTML = loadedData.schedule.map(item => {
             let activityStr = item.activity;
             if (lang === "en") {
@@ -103,14 +108,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 else if(item.activity.includes("הפסקה")) activityStr = "Intermission Coffee Break";
                 else if(item.activity.includes("סדנאות")) activityStr = "Parallel Elective Workshops";
                 else if(item.activity.includes("התכנסות")) activityStr = "Practice Reflection Clusters";
-                else if(item.activity.includes("מליאת")) activityStr = "Closing Synthesis Plenary Session";
+                else if(item.activity.includes("מליאת")) activityStr = "Closing Synthesis Plenary";
                 else if(item.activity.includes("פיזור")) activityStr = "Adjournment & Departure";
             } else if (lang === "ar") {
                 if(item.activity.includes("פתיחה")) activityStr = "الافتتاح والترحيب";
                 else if(item.activity.includes("הרצאת מפתח")) activityStr = "الكاملة الرئيسية: البروفيسور زوهر أليوسيف";
-                else if(item.activity.includes("הפסקה")) activityStr = "استراحة קצירה";
-                else if(item.activity.includes("סדנאות")) activityStr = "ورش عمل اختيارية מתקדמת";
-                else if(item.activity.includes("התכנסות")) activityStr = "التجمع في مجموعات تجريبية وتلخيص الأفكار";
+                else if(item.activity.includes("הפסקה")) activityStr = "استراحة";
+                else if(item.activity.includes("סדנאות")) activityStr = "ورش عمل اختيارية";
+                else if(item.activity.includes("התכנסות")) activityStr = "التجمع في مجموعات تجريبية";
                 else if(item.activity.includes("מליאת")) activityStr = "الجلسة الختامية";
                 else if(item.activity.includes("פיזור")) activityStr = "مغادرة";
             }
@@ -122,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         }).join('');
 
-        // Workshops rendering pipeline
+        // Workshops Target Generation Loop
         workshopsContainer.innerHTML = loadedData.workshops.map(shop => `
             <div class="workshop-block">
                 <div>
@@ -144,22 +149,83 @@ document.addEventListener("DOMContentLoaded", () => {
         `).join('');
     }
 
-    // Carousel Navigation Engine Interactivity logic (Scroll actions offset by card parameters)
+    // --- LOOPING & ROTATION LOGIC WORKSPACE ---
+    function initInfiniteCarousel() {
+        const originalCards = Array.from(workshopsContainer.children);
+        if (originalCards.length === 0) return;
+
+        // Clone nodes to both ends to enable seamless wrapping
+        originalCards.forEach(card => {
+            const cloneAfter = card.cloneNode(true);
+            const cloneBefore = card.cloneNode(true);
+            workshopsContainer.appendChild(cloneAfter);
+            workshopsContainer.insertBefore(cloneBefore, workshopsContainer.firstChild);
+        });
+
+        // Align view to the middle segment (ignoring clones) on load
+        setTimeout(() => {
+            const initialOffset = originalCards.length * scrollStep;
+            carouselViewport.scrollLeft = htmlNode.getAttribute("dir") === "rtl" ? -initialOffset : initialOffset;
+        }, 50);
+
+        // Handle edge-wrapping seamlessly when boundaries are crossed
+        carouselViewport.addEventListener("scroll", () => {
+            const currentScroll = Math.abs(carouselViewport.scrollLeft);
+            const totalWidth = originalCards.length * scrollStep;
+
+            if (currentScroll >= totalWidth * 2) {
+                // Wrapped too far forward
+                carouselViewport.scrollLeft = htmlNode.getAttribute("dir") === "rtl" ? -totalWidth : totalWidth;
+            } else if (currentScroll <= scrollStep) {
+                // Wrapped too far backward
+                carouselViewport.scrollLeft = htmlNode.getAttribute("dir") === "rtl" ? -(totalWidth + currentScroll) : (totalWidth + currentScroll);
+            }
+        });
+
+        startAutoRotation();
+
+        // Pause rotation on hover
+        carouselViewport.addEventListener("mouseenter", stopAutoRotation);
+        carouselViewport.addEventListener("mouseleave", startAutoRotation);
+    }
+
+    function rotateCarouselNext() {
+        const directionFactor = htmlNode.getAttribute("dir") === "rtl" ? -1 : 1;
+        carouselViewport.scrollBy({ left: scrollStep * directionFactor, behavior: "smooth" });
+    }
+
+    function startAutoRotation() {
+        stopAutoRotation();
+        autoRotateTimer = setInterval(rotateCarouselNext, 10000); // Trigger step every 10 seconds
+    }
+
+    function stopAutoRotation() {
+        if (autoRotateTimer) clearInterval(autoRotateTimer);
+    }
+
+    // Manual Nav Controls (Resets timer on click)
     nextBtn.addEventListener("click", () => {
-        const scrollAmount = htmlNode.getAttribute("dir") === "rtl" ? -360 : 360;
-        carouselViewport.scrollBy({ left: scrollAmount, behavior: "smooth" });
+        rotateCarouselNext();
+        startAutoRotation();
     });
 
     prevBtn.addEventListener("click", () => {
-        const scrollAmount = htmlNode.getAttribute("dir") === "rtl" ? 360 : -360;
-        carouselViewport.scrollBy({ left: scrollAmount, behavior: "smooth" });
+        const directionFactor = htmlNode.getAttribute("dir") === "rtl" ? 1 : -1;
+        carouselViewport.scrollBy({ left: scrollStep * directionFactor, behavior: "smooth" });
+        startAutoRotation();
     });
 
     // Control configuration updates
-    langSelect.addEventListener("change", (e) => renderView(e.target.value));
+    langSelect.addEventListener("change", (e) => {
+        renderView(e.target.value);
+        // Recalculate original content offsets
+        const totalWidth = (workshopsContainer.children.length / 3) * scrollStep;
+        carouselViewport.scrollLeft = e.target.value === "en" ? totalWidth : -totalWidth;
+    });
+
     themeSelect.addEventListener("change", (e) => htmlNode.setAttribute("data-theme", e.target.value));
 
-    // Modal Control System toggles
+    // Modal Display Management
     openRegisterBtn.addEventListener("click", () => registerModal.classList.add("active"));
     closeRegisterBtn.addEventListener("click", () => registerModal.classList.remove("active"));
     window.addEventListener("click", (e) => { if (e.target === registerModal) registerModal.classList.remove("active"); });
