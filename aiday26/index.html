@@ -1,6 +1,5 @@
-
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="he" dir="rtl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,29 +8,52 @@
 </head>
 <body>
 
+    <!-- Video Background Loop -->
     <div class="video-bg-container">
         <video autoplay muted loop playsinline class="video-bg">
             <source src="robots_nursery_s.mpg" type="video/mp4">
-            </video>
+        </video>
         <div class="video-overlay"></div>
     </div>
 
+    <!-- Main Dynamic Application Container -->
     <div class="app-container">
         <header class="main-header">
+            <!-- Universal Configuration Controls Widget -->
+            <div class="controls-widget">
+                <div class="control-group">
+                    <label for="lang-select" data-i18n="selectLang">שפה / Language:</label>
+                    <select id="lang-select">
+                        <option value="he" selected>עברית</option>
+                        <option value="ar">العربية</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label id="theme-toggle-label" for="theme-select" data-i18n="selectTheme">מצב תצוגה:</label>
+                    <select id="theme-select">
+                        <option value="dark" selected>Dark Mode</option>
+                        <option value="light">Light Mode</option>
+                    </select>
+                </div>
+            </div>
+
             <h1 id="main-title">טוען נתונים...</h1>
             <p class="event-date" id="event-date"></p>
+            
             <div class="action-bar">
-                <button class="btn btn-primary" id="open-register-btn">הרשמה לאירוע</button>
-                <a href="#" id="main-zoom-btn" target="_blank" class="btn btn-secondary">כניסה למליאה (Zoom)</a>
+                <button class="btn btn-primary" id="open-register-btn" data-i18n="registerBtn">הרשמה לאירוע</button>
+                <a href="#" id="main-zoom-btn" target="_blank" class="btn btn-secondary" data-i18n="mainZoomBtn">כניסה למליאה (Zoom)</a>
             </div>
         </header>
 
-        <main class="dashboard-grid">
-            <div class="content-column">
+        <div class="dashboard-grid">
+            <main class="content-column">
+                <!-- Keynote Profile Block -->
                 <section class="card profile-card">
-                    <h2>הרצאת פתיחה</h2>
+                    <h2 data-i18n="keynoteHeading">הרצאת פתיחה</h2>
                     <div class="profile-layout">
-                        <img src="https://images.squarespace-cdn.com/content/v1/5be405101aef1dc47f0786cf/1614761048684-TMT8X7RCOQOEZ44U6KIP/Zohar+Elyoseph.png" alt="פרופ׳ זוהר אליוסף" class="profile-img">
+                        <img src="zohar.jpg" alt="פרופ׳ זוהר אליוסף" class="profile-img">
                         <div class="profile-details">
                             <h3 id="speaker-name"></h3>
                             <h4 id="speaker-inst"></h4>
@@ -40,46 +62,50 @@
                     </div>
                 </section>
 
+                <!-- Workshop Matrix -->
                 <section class="card">
-                    <h2>סדנאות לבחירה (15:30)</h2>
+                    <h2 data-i18n="workshopsHeading">סדנאות לבחירה (15:30)</h2>
                     <div class="grid-container" id="workshops-container"></div>
                 </section>
                 
+                <!-- Collaborative/Mentorship Practice Groups -->
                 <section class="card">
-                    <h2>קבוצות הדרכה והתנסות (17:00)</h2>
+                    <h2 data-i18n="groupsHeading">קבוצות הדרכה והתנסות (17:00)</h2>
                     <div class="table-wrapper">
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>מנחה</th>
-                                    <th>מסלול / קבוצה</th>
-                                    <th>קישור ומפגש</th>
+                                    <th data-i18n="thHost">מנחה</th>
+                                    <th data-i18n="thGroup">מסלול / קבוצה</th>
+                                    <th data-i18n="thAction">קישור ומפגש</th>
                                 </tr>
                             </thead>
                             <tbody id="groups-table-body"></tbody>
                         </table>
                     </div>
                 </section>
-            </div>
+            </main>
 
+            <!-- Sidebar Workspace -->
             <aside class="sidebar-column">
                 <section class="card timeline-card">
-                    <h2>סדר היום</h2>
+                    <h2 data-i18n="timelineHeading">סדר היום</h2>
                     <ul class="timeline" id="timeline-container"></ul>
                 </section>
             </aside>
-        </main>
+        </div>
     </div>
 
+    <!-- Frame Popup Window (Modal) -->
     <div class="modal-overlay" id="register-modal">
         <div class="modal-box">
             <button class="close-modal-btn" id="close-register-btn">&times;</button>
             <div class="modal-header">
-                <h3>טופס רישום ליום עיון בינה מלאכותית</h3>
-                <p>מלאו את הפרטים בטופס המאובטח להלן:</p>
+                <h3 data-i18n="modalTitle">טופס רישום ליום עיון בינה מלאכותית</h3>
+                <p data-i18n="modalSub">אנא מלאו את פרטי הרישום בטופס הבא:</p>
             </div>
             <div class="modal-body">
-                <iframe id="registration-iframe" src="" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0">טוען...</iframe>
+                <iframe id="registration-iframe" src="" width="100%" height="450" frameborder="0">טוען...</iframe>
             </div>
         </div>
     </div>
