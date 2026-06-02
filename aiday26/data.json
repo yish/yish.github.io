@@ -56,13 +56,17 @@
     }
   ],
   "groups": [
-    { "host": "סמר חאג' יחיא", "name": "על יסודי (ערבית ועברית) שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "14 סטודנטים" },
-    { "host": "מוצטפא בדראן", "name": "על יסודי (מדעים) שנה א גינרי", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "" },
-    { "host": "מונא טומא", "name": "יסודי מתמטיקה שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "" },
-    { "host": "שירין גבאלי", "name": "יסודי (ערבית עברית) שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "" },
-    { "host": "תגריד זועבי", "name": "ח\"מ שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "" },
-    { "host": "הבה חדיגה", "name": "ח\"מ שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "" },
-    { "host": "רים ותד", "name": "אנגלית שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "" },
-    { "host": "עביר חדאד", "name": "גיל רך שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "" }
+    { "host": "אנה", "name": "קבוצת הדרכה - מסלול על יסודי", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "" },
+    { "host": "בנה", "name": "קבוצת הדרכה - מסלול על יסודי", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "" },
+    { "host": "גנה", "name": "קבוצת הדרכה - מסלול על יסודי", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "" },
+    { "host": "דנה", "name": "קבוצת הדרכה - מסלול על יסודי", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "" },
+    { "host": "סמר חאג' יחיא", "name": "על יסודי (ערבית ועברית) שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "המכון הערבי - 14 סטודנטים" },
+    { "host": "מוצטפא בדראן", "name": "על יסודי (מדעים) שנה א גינרי", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "המכון הערבי" },
+    { "host": "מונא טומא", "name": "יסודי מתמטיקה שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "המכון הערבי" },
+    { "host": "שירין גבאלי", "name": "יסודי (ערבית עברית) שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "המכון הערבי" },
+    { "host": "תגריד זועבי", "name": "ח\"מ שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "המכון הערבי" },
+    { "host": "הבה חדיגה", "name": "ח\"מ שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "המכון הערבי" },
+    { "host": "רים ותד", "name": "אנגלית שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "המכון הערבי" },
+    { "host": "עביר חדאד", "name": "גיל רך שנה א", "zoom": "https://beitberl-ac-il.zoom.us/", "notes": "המכון הערבי" }
   ]
 }
