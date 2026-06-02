@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const jsonUrl = "data.json";
     let loadedData = null;
 
-    // Translation Framework Context Object
+    // Translation Framework Reference Dict
     const i18n = {
         he: {
             selectLang: "שפה / Language:", selectTheme: "מצב תצוגה:",
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         ar: {
             selectLang: "اللغة / Language:", selectTheme: "عرض الوضع:",
-            registerBtn: "التسجيل في الفعالية", mainZoomBtn: "دخول الجلسة العامة (Zoom)",
+            registerBtn: "التسجيل في الفעالية", mainZoomBtn: "דכול אלמליאה (Zoom)",
             keynoteHeading: "المحاضرة الافتتاحية", workshopsHeading: "ورش العمل الاختيارية (15:30)",
             groupsHeading: "مجموعات التوجيه والتدريب (17:00)", thHost: "الميسر",
             thGroup: "المسار / المجموعة", thAction: "الرابط والاجتماع",
@@ -24,16 +24,16 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         en: {
             selectLang: "Language / שפה:", selectTheme: "Theme Mode:",
-            registerBtn: "Register for Event", mainZoomBtn: "Enter Plenary (Zoom)",
-            keynoteHeading: "Keynote Opening", workshopsHeading: "Optional Workshops (15:30)",
-            groupsHeading: "Mentorship & Practice Groups (17:00)", thHost: "Moderator",
-            thGroup: "Track / Group", thAction: "Link & Connection",
-            modalTitle: "AI Seminar Registration Form", modalSub: "Please fill out the registration form details below:",
-            visitZoom: "Join Room &larr;", joinWorkshop: "Connect to Workshop Zoom", datePrefix: "Event Date:"
+            registerBtn: "Register Now", mainZoomBtn: "Enter Plenary (Zoom)",
+            keynoteHeading: "Keynote Session", workshopsHeading: "Concurrent Workshops (15:30)",
+            groupsHeading: "Reflection & Practice Groups (17:00)", thHost: "Facilitator",
+            thGroup: "Track / Group", thAction: "Link & Join",
+            modalTitle: "AI Seminar Registration Framework", modalSub: "Please fill out the form parameters beneath:",
+            visitZoom: "Enter Room &larr;", joinWorkshop: "Join Workshop Zoom", datePrefix: "Date:"
         }
     };
 
-    // DOM Selection Handles
+    // Node Tree Pointers
     const htmlNode = document.documentElement;
     const bodyNode = document.body;
     const mainTitle = document.getElementById("main-title");
@@ -45,72 +45,71 @@ document.addEventListener("DOMContentLoaded", () => {
     const timelineContainer = document.getElementById("timeline-container");
     const workshopsContainer = document.getElementById("workshops-container");
     const groupsTableBody = document.getElementById("groups-table-body");
-    const dashGrid = document.querySelector(".dashboard-grid");
+    const carouselViewport = document.querySelector(".carousel-viewport");
 
-    // Interactive UI controls
+    // Controls Handles
     const langSelect = document.getElementById("lang-select");
     const themeSelect = document.getElementById("theme-select");
     const registerModal = document.getElementById("register-modal");
     const openRegisterBtn = document.getElementById("open-register-btn");
     const closeRegisterBtn = document.getElementById("close-register-btn");
     const regIframe = document.getElementById("registration-iframe");
+    const prevBtn = document.getElementById("prev-carousel-btn");
+    const nextBtn = document.getElementById("next-carousel-btn");
 
-    // Initialize Network Payload Engine
+    // Data Load pipeline
     fetch(jsonUrl)
-        .then(res => { if (!res.ok) throw new Error("Could not fetch data map."); return res.json(); })
+        .then(res => { if (!res.ok) throw new Error("Could not load payload data map."); return res.json(); })
         .then(data => {
             loadedData = data;
-            renderView("he"); // Default initialization inside Hebrew view
+            renderView("he"); // default initialization state
         })
         .catch(err => {
             console.error(err);
-            mainTitle.textContent = "Error loading application context.";
+            mainTitle.textContent = "Error setting context variables.";
         });
 
-    // Translation Appender Framework Core Logic 
     function renderView(lang) {
         if (!loadedData) return;
 
-        // Alignment & Structural Adaptation properties
         const isRtl = (lang === "he" || lang === "ar");
         htmlNode.setAttribute("lang", lang);
         htmlNode.setAttribute("dir", isRtl ? "rtl" : "ltr");
         bodyNode.setAttribute("dir", isRtl ? "rtl" : "ltr");
-        dashGrid.setAttribute("dir", isRtl ? "rtl" : "ltr");
 
-        // Translate Static Markup Tokens
+        // Translate Static Tokens
         document.querySelectorAll("[data-i18n]").forEach(element => {
             const token = element.getAttribute("data-i18n");
             if (i18n[lang][token]) element.textContent = i18n[lang][token];
         });
 
         // Set contextual global details
-        mainTitle.textContent = (lang === "he") ? loadedData.eventTitle : (lang === "ar" ? "يوم الذكاء الاصطناعي - المسار فوق الابتدائي والمعهد الأكاديمي العربي" : "AI Day - Post-Primary Track & Arab Education Institute");
+        mainTitle.textContent = (lang === "he") ? loadedData.eventTitle : (lang === "ar" ? "يوم الذكاء الاصطناعي - المسار فوق الابتدائي والمعهد الأكاديمي العربي" : "AI Seminar - Secondary Track & Arab Educational Institute");
         eventDate.textContent = `${i18n[lang].datePrefix} ${loadedData.eventDate}`;
         mainZoomBtn.href = loadedData.mainPlenaryZoom;
         regIframe.src = loadedData.registrationLink;
 
-        // Profile mapping logic variations
+        // Keynote Presenter Information Mapping
         speakerName.textContent = loadedData.keynote.speaker;
         speakerInst.textContent = (lang === "en") ? "Haifa University" : (lang === "ar" ? "جامعة حيفا" : loadedData.keynote.institution);
-        speakerBio.textContent = (lang === "he") ? loadedData.keynote.bio : (lang === "ar" ? "خبير وباحث بارز في مجال الذكاء الاصطناعي التوليدي والدمج بين التكنولوجيا والتعليم وعلم النفس." : "Leading Israeli researcher specializing in Generative AI (GenAI), educational psychology, and clinical human-computer AI interactions.");
+        speakerBio.textContent = (lang === "he") ? loadedData.keynote.bio : (lang === "ar" ? "خبير وباحث بارز في مجال الذكاء الاصطناعي التوليدي والدمج بين التكنولوجيا والتعليم ועלם הנפס." : "Leading Israeli researcher specializing in Generative AI (GenAI), educational psychology, and hybrid interactive software design elements inside school systems.");
 
-        // Dynamic schedule pipeline builder
+        // Timeline Builder Engine
         timelineContainer.innerHTML = loadedData.schedule.map(item => {
             let activityStr = item.activity;
             if (lang === "en") {
-                if(item.activity.includes("פתיחה")) activityStr = "Opening & Greetings";
+                if(item.activity.includes("פתיחה")) activityStr = "Greetings & Welcome Address";
                 else if(item.activity.includes("הרצאת מפתח")) activityStr = "Keynote Address: Prof. Zohar Elyoseph";
-                else if(item.activity.includes("הפסקה")) activityStr = "Intermission Break";
-                else if(item.activity.includes("סדנאות")) activityStr = "Elective Interactive Workshops";
-                else if(item.activity.includes("התכנסות")) activityStr = "Practice Reflection Groups & Knowledge Synthesis";
-                else if(item.activity.includes("מליאת")) activityStr = "Concluding Plenary Session";
-                else if(item.activity.includes("פיזור")) activityStr = "Adjournment";
+                else if(item.activity.includes("הפסקה")) activityStr = "Intermission Coffee Break";
+                else if(item.activity.includes("סדנאות")) activityStr = "Parallel Elective Workshops";
+                else if(item.activity.includes("התכנסות")) activityStr = "Practice Reflection Clusters";
+                else if(item.activity.includes("מליאת")) activityStr = "Closing Synthesis Plenary Session";
+                else if(item.activity.includes("פיזור")) activityStr = "Adjournment & Departure";
             } else if (lang === "ar") {
                 if(item.activity.includes("פתיחה")) activityStr = "الافتتاح والترحيب";
                 else if(item.activity.includes("הרצאת מפתח")) activityStr = "الكاملة الرئيسية: البروفيسور زوهر أليوسيف";
-                else if(item.activity.includes("הפסקה")) activityStr = "استراحة";
-                else if(item.activity.includes("סדנאות")) activityStr = "ورش عمل اختيارية";
+                else if(item.activity.includes("הפסקה")) activityStr = "استراحة קצירה";
+                else if(item.activity.includes("סדנאות")) activityStr = "ورش عمل اختيارية מתקדמת";
                 else if(item.activity.includes("התכנסות")) activityStr = "التجمع في مجموعات تجريبية وتلخيص الأفكار";
                 else if(item.activity.includes("מליאת")) activityStr = "الجلسة الختامية";
                 else if(item.activity.includes("פיזור")) activityStr = "مغادرة";
@@ -123,21 +122,19 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         }).join('');
 
-        // Dynamic Workshop loop configuration
-        workshopsContainer.innerHTML = loadedData.workshops.map(shop => {
-            return `
-                <div class="workshop-block">
-                    <div>
-                        <h3>${shop.title}</h3>
-                        <div class="workshop-host">${i18n[lang].thHost}: ${shop.host}</div>
-                        <p class="workshop-desc">${shop.summary}</p>
-                    </div>
-                    <a href="${shop.zoom}" target="_blank" class="btn btn-secondary" style="font-size:0.85rem; padding:0.5rem 1rem; text-align:center;">${i18n[lang].joinWorkshop}</a>
+        // Workshops rendering pipeline
+        workshopsContainer.innerHTML = loadedData.workshops.map(shop => `
+            <div class="workshop-block">
+                <div>
+                    <h3>${shop.title}</h3>
+                    <div class="workshop-host">${i18n[lang].thHost}: ${shop.host}</div>
+                    <p class="workshop-desc">${shop.summary}</p>
                 </div>
-            `;
-        }).join('');
+                <a href="${shop.zoom}" target="_blank" class="btn btn-secondary" style="font-size:0.85rem; padding:0.6rem 1.2rem; text-align:center; justify-content:center; width:100%;">${i18n[lang].joinWorkshop}</a>
+            </div>
+        `).join('');
 
-        // Dynamic Reflection list builder
+        // Groups rendering pipeline
         groupsTableBody.innerHTML = loadedData.groups.map(group => `
             <tr>
                 <td><strong>${group.host}</strong></td>
@@ -147,14 +144,22 @@ document.addEventListener("DOMContentLoaded", () => {
         `).join('');
     }
 
-    // Input Control State Event Handlers
-    langSelect.addEventListener("change", (e) => renderView(e.target.value));
-    
-    themeSelect.addEventListener("change", (e) => {
-        htmlNode.setAttribute("data-theme", e.target.value);
+    // Carousel Navigation Engine Interactivity logic (Scroll actions offset by card parameters)
+    nextBtn.addEventListener("click", () => {
+        const scrollAmount = htmlNode.getAttribute("dir") === "rtl" ? -360 : 360;
+        carouselViewport.scrollBy({ left: scrollAmount, behavior: "smooth" });
     });
 
-    // Modal Display Management State machine
+    prevBtn.addEventListener("click", () => {
+        const scrollAmount = htmlNode.getAttribute("dir") === "rtl" ? 360 : -360;
+        carouselViewport.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    });
+
+    // Control configuration updates
+    langSelect.addEventListener("change", (e) => renderView(e.target.value));
+    themeSelect.addEventListener("change", (e) => htmlNode.setAttribute("data-theme", e.target.value));
+
+    // Modal Control System toggles
     openRegisterBtn.addEventListener("click", () => registerModal.classList.add("active"));
     closeRegisterBtn.addEventListener("click", () => registerModal.classList.remove("active"));
     window.addEventListener("click", (e) => { if (e.target === registerModal) registerModal.classList.remove("active"); });
