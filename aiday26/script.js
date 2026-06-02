@@ -32,6 +32,14 @@ document.addEventListener("DOMContentLoaded", () => {
             visitZoom: "Enter Room &larr;", joinWorkshop: "Join Workshop Zoom", datePrefix: "Date:"
         }
     };
+    const eventBlurbNode = document.getElementById("event-blurb");
+    if (lang === "he") {
+        eventBlurbNode.textContent = loadedData.eventBlurb;
+    } else if (lang === "ar") {
+        eventBlurbNode.textContent = "انضموا إلينا في يوم دراسي مميز يجمع بين الابتكار التكنولوجي والممارسة التعليمية המידאנית...";
+    } else {
+        eventBlurbNode.textContent = "Join us for an inspiring seminar bridging cutting-edge technological innovation and hands-on educational practice...";
+    }
 
     // Node Tree Pointers
     const htmlNode = document.documentElement;
