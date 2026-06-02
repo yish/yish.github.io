@@ -8,18 +8,15 @@
 </head>
 <body>
 
-    <!-- Video Background Loop -->
     <div class="video-bg-container">
-        <video autoplay muted loop playsinline class="video-bg">
-            <source src="robots_nursery_s.mpg" type="video/mp4">
+        <video autoplay muted loop playsinline class="video-bg" poster="zohar.jpg">
+            <source src="robot_nursery_q.mp4" type="video/mp4">
         </video>
         <div class="video-overlay"></div>
     </div>
 
-    <!-- Main Fluid Layout Container -->
     <div class="app-container">
         <header class="main-header glass">
-            <!-- Global Configuration Widget -->
             <div class="controls-widget">
                 <div class="control-group">
                     <label for="lang-select" data-i18n="selectLang">שפה / Language:</label>
@@ -47,7 +44,6 @@
             </div>
         </header>
 
-        <!-- Top Section split row: 70% Keynote / 30% Schedule -->
         <div class="split-hero-row">
             <section class="card profile-card glass keynote-box">
                 <h2 data-i18n="keynoteHeading">הרצאת פתיחה</h2>
@@ -67,7 +63,6 @@
             </aside>
         </div>
 
-        <!-- Workshops Carousel Wrapper Section -->
         <section class="card glass carousel-section">
             <div class="carousel-header">
                 <h2 data-i18n="workshopsHeading">סדנאות לבחירה (15:30)</h2>
@@ -81,7 +76,6 @@
             </div>
         </section>
         
-        <!-- Practice Groups Section -->
         <section class="card glass">
             <h2 data-i18n="groupsHeading">קבוצות הדרכה והתנסות (17:00)</h2>
             <div class="table-wrapper">
@@ -99,7 +93,6 @@
         </section>
     </div>
 
-    <!-- Registration Popup/Modal -->
     <div class="modal-overlay" id="register-modal">
         <div class="modal-box glass">
             <button class="close-modal-btn" id="close-register-btn">&times;</button>
