@@ -16,10 +16,10 @@
         <div class="video-overlay"></div>
     </div>
 
-    <!-- Main Dynamic Application Container -->
+    <!-- Main Fluid Layout Container -->
     <div class="app-container">
-        <header class="main-header">
-            <!-- Universal Configuration Controls Widget -->
+        <header class="main-header glass">
+            <!-- Global Configuration Widget -->
             <div class="controls-widget">
                 <div class="control-group">
                     <label for="lang-select" data-i18n="selectLang">שפה / Language:</label>
@@ -42,63 +42,66 @@
             <p class="event-date" id="event-date"></p>
             
             <div class="action-bar">
-                <button class="btn btn-primary" id="open-register-btn" data-i18n="registerBtn">הרשמה לאירוע</button>
+                <button class="btn btn-primary pulse" id="open-register-btn" data-i18n="registerBtn">הרשמה לאירוע</button>
                 <a href="#" id="main-zoom-btn" target="_blank" class="btn btn-secondary" data-i18n="mainZoomBtn">כניסה למליאה (Zoom)</a>
             </div>
         </header>
 
-        <div class="dashboard-grid">
-            <main class="content-column">
-                <!-- Keynote Profile Block -->
-                <section class="card profile-card">
-                    <h2 data-i18n="keynoteHeading">הרצאת פתיחה</h2>
-                    <div class="profile-layout">
-                        <img src="zohar.jpg" alt="פרופ׳ זוהר אליוסף" class="profile-img">
-                        <div class="profile-details">
-                            <h3 id="speaker-name"></h3>
-                            <h4 id="speaker-inst"></h4>
-                            <p id="speaker-bio"></p>
-                        </div>
+        <!-- Top Section split row: 70% Keynote / 30% Schedule -->
+        <div class="split-hero-row">
+            <section class="card profile-card glass keynote-box">
+                <h2 data-i18n="keynoteHeading">הרצאת פתיחה</h2>
+                <div class="profile-layout">
+                    <img src="zohar.jpg" alt="פרופ׳ זוהר אליוסף" class="profile-img">
+                    <div class="profile-details">
+                        <h3 id="speaker-name"></h3>
+                        <h4 id="speaker-inst"></h4>
+                        <p id="speaker-bio"></p>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                <!-- Workshop Matrix -->
-                <section class="card">
-                    <h2 data-i18n="workshopsHeading">סדנאות לבחירה (15:30)</h2>
-                    <div class="grid-container" id="workshops-container"></div>
-                </section>
-                
-                <!-- Collaborative/Mentorship Practice Groups -->
-                <section class="card">
-                    <h2 data-i18n="groupsHeading">קבוצות הדרכה והתנסות (17:00)</h2>
-                    <div class="table-wrapper">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th data-i18n="thHost">מנחה</th>
-                                    <th data-i18n="thGroup">מסלול / קבוצה</th>
-                                    <th data-i18n="thAction">קישור ומפגש</th>
-                                </tr>
-                            </thead>
-                            <tbody id="groups-table-body"></tbody>
-                        </table>
-                    </div>
-                </section>
-            </main>
-
-            <!-- Sidebar Workspace -->
-            <aside class="sidebar-column">
-                <section class="card timeline-card">
-                    <h2 data-i18n="timelineHeading">סדר היום</h2>
-                    <ul class="timeline" id="timeline-container"></ul>
-                </section>
+            <aside class="card timeline-card glass schedule-box">
+                <h2 data-i18n="timelineHeading">סדר היום</h2>
+                <ul class="timeline" id="timeline-container"></ul>
             </aside>
         </div>
+
+        <!-- Workshops Carousel Wrapper Section -->
+        <section class="card glass carousel-section">
+            <div class="carousel-header">
+                <h2 data-i18n="workshopsHeading">סדנאות לבחירה (15:30)</h2>
+                <div class="carousel-actions">
+                    <button class="carousel-nav-btn" id="prev-carousel-btn">&rarr;</button>
+                    <button class="carousel-nav-btn" id="next-carousel-btn">&larr;</button>
+                </div>
+            </div>
+            <div class="carousel-viewport">
+                <div class="carousel-track" id="workshops-container"></div>
+            </div>
+        </section>
+        
+        <!-- Practice Groups Section -->
+        <section class="card glass">
+            <h2 data-i18n="groupsHeading">קבוצות הדרכה והתנסות (17:00)</h2>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="thHost">מנחה</th>
+                            <th data-i18n="thGroup">מסלול / קבוצה</th>
+                            <th data-i18n="thAction">קישור ומפגש</th>
+                        </tr>
+                    </thead>
+                    <tbody id="groups-table-body"></tbody>
+                </table>
+            </div>
+        </section>
     </div>
 
-    <!-- Frame Popup Window (Modal) -->
+    <!-- Registration Popup/Modal -->
     <div class="modal-overlay" id="register-modal">
-        <div class="modal-box">
+        <div class="modal-box glass">
             <button class="close-modal-btn" id="close-register-btn">&times;</button>
             <div class="modal-header">
                 <h3 data-i18n="modalTitle">טופס רישום ליום עיון בינה מלאכותית</h3>
