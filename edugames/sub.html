@@ -1,1 +1,1329 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abyss Lab: Buoyancy Pilot (Laboratory Edition)</title>
+    <!-- Tailwind CSS for high-fidelity UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Space+Grotesk:wght@400;600;700&display=swap');
+        
+        .font-mono-tech {
+            font-family: 'Share Tech Mono', monospace;
+        }
+        .font-sans-modern {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        /* Custom light scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Sonar Radar sweep animation */
+        @keyframes sweep {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .sonar-sweep {
+            animation: sweep 10s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans-modern h-screen flex flex-col overflow-hidden select-none">
+
+    <!-- Top Navigation & Header -->
+    <header class="bg-white border-b border-slate-200 px-6 py-2.5 flex items-center justify-between z-10 shrink-0 shadow-sm">
+        <div class="flex items-center space-x-3">
+            <div class="bg-cyan-50 p-2 rounded-lg border border-cyan-200">
+                <i data-lucide="waves" class="w-6 h-6 text-cyan-600"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-wider text-slate-900 flex items-center gap-2">
+                    ABYSS LAB <span class="text-xs bg-cyan-100 text-cyan-800 border border-cyan-200 px-2 py-0.5 rounded font-mono-tech uppercase">Buoyancy Simulator v2.0</span>
+                </h1>
+                <p class="text-[11px] text-slate-500">Hydrostatic Equilibrium & Cargo Mass Lab</p>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-6">
+            <!-- Score & Integrity Indicators -->
+            <div class="flex items-center space-x-4 font-mono-tech text-xs">
+                <div class="text-right">
+                    <div class="text-[9px] text-slate-400 uppercase tracking-wider font-semibold">Hull Integrity</div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-20 bg-slate-100 rounded-full h-2 overflow-hidden border border-slate-200">
+                            <div id="hull-bar" class="bg-emerald-500 h-full transition-all duration-300" style="width: 100%"></div>
+                        </div>
+                        <span id="hull-text" class="text-xs font-bold text-emerald-600">100%</span>
+                    </div>
+                </div>
+                <div class="border-l border-slate-200 h-6"></div>
+                
+                <!-- Cargo Mass indicator -->
+                <div class="text-right">
+                    <div class="text-[9px] text-slate-400 uppercase tracking-wider font-semibold">Active Cargo</div>
+                    <div class="text-xs font-bold text-amber-600 flex items-center justify-end gap-1">
+                        <i data-lucide="package" class="w-3.5 h-3.5"></i>
+                        <span id="cargo-indicator-text">0 / 3 Pods (+0 kg)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Action Controls -->
+            <div class="flex space-x-2">
+                <button onclick="toggleTutorial(true)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg border border-slate-200 flex items-center gap-1.5 text-xs font-semibold transition-colors">
+                    <i data-lucide="book-open" class="w-4 h-4 text-cyan-600"></i> Physics Manual
+                </button>
+                <button onclick="resetSimulation()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-1.5 rounded-lg border border-slate-200 transition-colors" title="Reset Simulation">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Layout: Sidebars minimized to w-72 to maximize center view -->
+    <main class="flex-1 flex overflow-hidden p-3 gap-3">
+        
+        <!-- LEFT PANEL: Dynamic Telemetry Console -->
+        <section class="w-72 bg-white border border-slate-200 rounded-xl p-3 flex flex-col justify-between overflow-y-auto shrink-0 shadow-sm">
+            <div class="space-y-3">
+                <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-100 pb-1.5">
+                    <i data-lucide="gauge" class="w-4 h-4 text-cyan-600"></i> Telemetry Console
+                </h2>
+                
+                <div class="space-y-2.5 font-mono-tech">
+                    <!-- Depth Readout -->
+                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                        <div class="flex justify-between text-[10px] text-slate-500 mb-0.5">
+                            <span>CURRENT DEPTH</span>
+                            <span class="text-red-500">MAX: 100m</span>
+                        </div>
+                        <div class="flex items-baseline justify-between">
+                            <span id="telemetry-depth" class="text-2xl font-bold text-slate-800">0.0</span>
+                            <span class="text-xs text-slate-500">meters</span>
+                        </div>
+                    </div>
+
+                    <!-- Water Density -->
+                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                        <div class="flex justify-between text-[10px] text-slate-500 mb-0.5">
+                            <span>WATER DENSITY (<span class="italic">ρ</span>)</span>
+                            <span id="water-layer-tag" class="text-emerald-600 text-[9px] px-1 bg-emerald-50 rounded border border-emerald-100 font-bold">SURFACE WATER</span>
+                        </div>
+                        <div class="flex items-baseline justify-between">
+                            <span id="telemetry-density" class="text-xl font-bold text-emerald-600">960.0</span>
+                            <span class="text-xs text-slate-500">kg/m³</span>
+                        </div>
+                        <!-- Depth gradient visualizer slider -->
+                        <div class="mt-1.5 h-1.5 w-full bg-gradient-to-r from-sky-200 via-sky-400 to-sky-600 rounded-full relative overflow-hidden">
+                            <div id="density-slider-indicator" class="absolute top-0 bottom-0 w-1 bg-slate-800 shadow transition-all duration-100" style="left: 0%"></div>
+                        </div>
+                        <div class="flex justify-between text-[8px] text-slate-400 mt-1">
+                            <span>0m (960 kg/m³)</span>
+                            <span>100m (1040 kg/m³)</span>
+                        </div>
+                    </div>
+
+                    <!-- Mass details showing Cargo Addition -->
+                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-100 space-y-1.5">
+                        <div class="text-[10px] text-slate-500 border-b border-slate-200 pb-1 flex justify-between font-bold">
+                            <span>SUBMARINE MASS COMPOSITION</span>
+                            <span>MASS (kg)</span>
+                        </div>
+                        <div class="flex justify-between text-[11px] text-slate-600">
+                            <span>Dry Sub Hull:</span>
+                            <span class="font-semibold">48,000 kg</span>
+                        </div>
+                        <div class="flex justify-between text-[11px] text-cyan-600">
+                            <span>Ballast Water:</span>
+                            <span id="telemetry-ballast-mass" class="font-semibold">2,000 kg</span>
+                        </div>
+                        <div class="flex justify-between text-[11px] text-amber-600 bg-amber-50 px-1 rounded">
+                            <span>Collected Cargo:</span>
+                            <span id="telemetry-cargo-mass" class="font-bold">+0 kg</span>
+                        </div>
+                        <div class="flex justify-between text-xs font-bold border-t border-slate-200 pt-1 text-slate-800">
+                            <span>Total Sub Mass (m):</span>
+                            <span id="telemetry-total-mass">50,000 kg</span>
+                        </div>
+                    </div>
+
+                    <!-- Volume Displacement -->
+                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-100 flex justify-between items-center text-xs">
+                        <div>
+                            <div class="text-[9px] text-slate-400 font-bold uppercase">DISPLACED VOLUME (V)</div>
+                            <div class="text-sm font-bold text-slate-700">50.0 <span class="text-[10px] text-slate-400">m³</span></div>
+                        </div>
+                        <div class="text-right border-l border-slate-200 pl-3">
+                            <div class="text-[9px] text-slate-400 font-bold uppercase">GRAVITY (g)</div>
+                            <div class="text-sm font-bold text-slate-700">9.81 <span class="text-[10px] text-slate-400">m/s²</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vector Dynamics Output -->
+            <div class="border-t border-slate-100 pt-2.5 mt-2.5">
+                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <i data-lucide="arrow-up-down" class="w-4 h-4 text-indigo-600"></i> Vector Dynamics
+                </h3>
+                <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-100 font-mono-tech space-y-1.5 text-[11px]">
+                    <div class="flex justify-between items-center text-blue-600 font-semibold">
+                        <span class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Buoyancy (F<sub>b</sub>):
+                        </span>
+                        <span id="telemetry-fb">490.5 kN</span>
+                    </div>
+                    <div class="flex justify-between items-center text-red-600 font-semibold">
+                        <span class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Gravity (F<sub>g</sub>):
+                        </span>
+                        <span id="telemetry-fg">490.5 kN</span>
+                    </div>
+                    <div class="flex justify-between items-center text-slate-500">
+                        <span class="flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Fluid Drag (F<sub>d</sub>):
+                        </span>
+                        <span id="telemetry-fd">0.0 kN</span>
+                    </div>
+                    <div id="net-force-container" class="flex justify-between items-center border-t border-slate-200 pt-1.5 text-xs font-bold text-slate-800">
+                        <span>Net Force (ΣF):</span>
+                        <span id="telemetry-fnet">0.0 kN</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CENTER PANEL: Maximized Active Ocean Viewport -->
+        <section class="flex-1 flex flex-col gap-3 min-w-0">
+            <!-- Level Select & Guidance Strip -->
+            <div class="bg-white border border-slate-200 rounded-xl p-2.5 flex items-center justify-between shadow-sm shrink-0">
+                <div class="flex items-center space-x-2">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mission:</span>
+                    <div class="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200" role="group">
+                        <button onclick="loadLevel(0)" id="btn-lvl-0" class="px-2.5 py-1 text-xs font-semibold rounded-md bg-white text-cyan-700 shadow-sm border border-slate-200 transition-all">
+                            Lvl 1: Archimedes Basin
+                        </button>
+                        <button onclick="loadLevel(1)" id="btn-lvl-1" class="px-2.5 py-1 text-xs font-semibold rounded-md text-slate-500 hover:text-slate-800 transition-all ml-1">
+                            Lvl 2: The Halocline
+                        </button>
+                        <button onclick="loadLevel(2)" id="btn-lvl-2" class="px-2.5 py-1 text-xs font-semibold rounded-md text-slate-500 hover:text-slate-800 transition-all ml-1">
+                            Lvl 3: Abyssal Trench
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live instructional alert -->
+                <div class="flex items-center gap-1.5 bg-cyan-50 border border-cyan-100 px-2.5 py-1 rounded-lg max-w-sm lg:max-w-md xl:max-w-xl overflow-hidden">
+                    <i data-lucide="info" class="w-3.5 h-3.5 text-cyan-600 shrink-0"></i>
+                    <p id="level-instruction" class="text-xs text-cyan-800 truncate font-medium">Hover perfectly at the targets using the ballast controls.</p>
+                </div>
+            </div>
+
+            <!-- Sonar Viewport Box -->
+            <div class="flex-1 bg-sky-50 border border-slate-200 rounded-xl relative overflow-hidden flex flex-col shadow-inner">
+                <!-- Instrument/Sonar Grid Overlay -->
+                <div class="absolute inset-0 pointer-events-none opacity-20 overflow-hidden">
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] border border-cyan-400 rounded-full sonar-sweep"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] border border-cyan-300 rounded-full"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-cyan-200 rounded-full"></div>
+                    <div class="absolute inset-0 bg-[linear-gradient(to_right,#0ea5e908_1px,transparent_1px),linear-gradient(to_bottom,#0ea5e908_1px,transparent_1px)] bg-[size:30px_30px]"></div>
+                </div>
+
+                <!-- Depth Markers (Left scale) -->
+                <div class="absolute left-2.5 top-0 bottom-0 flex flex-col justify-between py-6 text-[10px] text-slate-500 font-mono-tech select-none z-10 pointer-events-none font-bold">
+                    <div>0m (Surface)</div>
+                    <div>20m</div>
+                    <div>40m</div>
+                    <div>60m</div>
+                    <div>80m</div>
+                    <div>100m (Seabed)</div>
+                </div>
+
+                <!-- Ocean Stratification Markers (Right scale) -->
+                <div id="layer-boundaries" class="absolute right-2.5 top-0 bottom-0 w-44 flex flex-col justify-between py-6 text-[9px] text-right font-mono-tech select-none z-10 pointer-events-none text-slate-500 font-bold">
+                    <div class="h-1/3 flex flex-col justify-start border-r-2 border-sky-300 pr-1.5">
+                        <span class="text-sky-600">Epipelagic Layer</span>
+                        <span>ρ: ~960 kg/m³</span>
+                        <span>Warm Surface Freshwater</span>
+                    </div>
+                    <div class="h-1/3 flex flex-col justify-center border-r-2 border-teal-300 pr-1.5">
+                        <span class="text-teal-600">Thermocline/Halocline</span>
+                        <span>ρ scales: 960→1000 kg/m³</span>
+                        <span>Sharp Density Transition</span>
+                    </div>
+                    <div class="h-1/3 flex flex-col justify-end border-r-2 border-blue-400 pr-1.5">
+                        <span class="text-blue-600 font-bold">Abyssal Brine</span>
+                        <span>ρ scales: 1000→1040 kg/m³</span>
+                        <span>Cold / Highly Saline</span>
+                    </div>
+                </div>
+
+                <!-- Main Physical World Simulation Canvas -->
+                <canvas id="game-canvas" class="w-full h-full block z-0 relative cursor-pointer"></canvas>
+
+                <!-- On-Screen HUD alerts -->
+                <div id="game-alert" class="absolute top-4 left-1/2 -translate-x-1/2 bg-amber-50 border border-amber-300 text-amber-900 px-4 py-1.5 rounded-lg text-xs font-mono-tech shadow-md transition-all transform scale-0 z-20 flex items-center gap-2">
+                    <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600 animate-bounce"></i>
+                    <span id="game-alert-text">HULL STRESS WARNING</span>
+                </div>
+
+                <!-- Active Buoyancy Tip Bubble -->
+                <div id="equilibrium-tip" class="absolute bottom-4 left-4 bg-white/95 backdrop-blur border border-slate-200 p-2.5 rounded-lg text-xs shadow-md max-w-xs z-10">
+                    <span class="text-indigo-600 font-bold block mb-0.5">ℹ️ Buoyancy Equation:</span>
+                    To hover neutrally at <span id="tip-depth" class="font-bold">35m</span>, combined mass must match displaced volume weight. Ideal Ballast setting: <span id="tip-ballast" class="text-cyan-600 font-bold">50%</span>.
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT PANEL: Ballast System & Cargo Management -->
+        <section class="w-72 bg-white border border-slate-200 rounded-xl p-3 flex flex-col justify-between shrink-0 shadow-sm">
+            
+            <!-- Ballast Cutaway Graphic -->
+            <div class="flex-1 flex flex-col min-h-0">
+                <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5 border-b border-slate-100 pb-1.5">
+                    <i data-lucide="cylinder" class="w-4 h-4 text-cyan-600"></i> Ballast Tank Cutaway
+                </h2>
+
+                <div class="flex-1 bg-slate-50 rounded-xl border border-slate-100 p-3 relative flex flex-col justify-between overflow-hidden">
+                    <div class="flex-1 flex flex-col items-center justify-center relative">
+                        <!-- Compressed Air Chamber -->
+                        <div class="w-36 border border-slate-200 bg-white/90 rounded-t-xl py-1 text-center text-[9px] text-slate-500 z-10 font-mono-tech relative font-bold shadow-sm">
+                            PNEUMATIC MANIFOLD
+                            <div id="air-bubbles" class="hidden absolute top-full left-1/2 -translate-x-1/2 w-4 h-12 overflow-hidden pointer-events-none">
+                                <span class="block w-2.5 h-2.5 bg-sky-400/60 rounded-full mx-auto animate-bounce mt-1"></span>
+                            </div>
+                        </div>
+
+                        <!-- Chamber Cylinder -->
+                        <div class="w-36 h-36 border-x-4 border-b-4 border-slate-400 bg-slate-200/55 relative overflow-hidden flex flex-col justify-end">
+                            <!-- Water visual component -->
+                            <div id="ballast-water-fill" class="w-full bg-sky-500/70 border-t-2 border-sky-400 transition-all duration-100 ease-linear relative" style="height: 50%;">
+                                <div class="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(56,189,248,0.25),transparent)] animate-pulse"></div>
+                            </div>
+                            
+                            <!-- Static Markings -->
+                            <div class="absolute inset-y-0 left-1.5 flex flex-col justify-between text-[8px] text-slate-500 font-mono-tech select-none font-bold">
+                                <span>100% (Flooded)</span>
+                                <span>75%</span>
+                                <span>50% (Neutral Median)</span>
+                                <span>25%</span>
+                                <span>0% (Purged/Empty)</span>
+                            </div>
+
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="bg-white/95 px-2 py-0.5 rounded-lg border border-slate-200 text-center shadow-sm font-mono-tech">
+                                    <div class="text-[8px] text-slate-400 uppercase font-bold">Water Load</div>
+                                    <div id="ballast-percentage-label" class="text-xs font-bold text-cyan-600">50%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sea Inlet -->
+                        <div class="w-14 h-3.5 border-x border-b border-slate-300 bg-slate-100 text-[8px] text-slate-400 text-center font-mono-tech font-bold pt-0.5 shadow-sm">
+                            FLOOD VALVE
+                        </div>
+                    </div>
+
+                    <!-- Pumping Indicators -->
+                    <div class="mt-2 flex justify-between gap-1.5 font-mono-tech text-[9px]">
+                        <div id="flow-indicator-flood" class="flex-1 bg-sky-50 text-sky-700 border border-sky-200 rounded py-0.5 px-1 flex items-center justify-center gap-0.5 opacity-40 font-bold transition-all duration-150">
+                            <i data-lucide="arrow-down" class="w-3 h-3"></i> Flooding (+Mass)
+                        </div>
+                        <div id="flow-indicator-blow" class="flex-1 bg-amber-50 text-amber-700 border border-amber-200 rounded py-0.5 px-1 flex items-center justify-center gap-0.5 opacity-40 font-bold transition-all duration-150">
+                            <i data-lucide="arrow-up" class="w-3 h-3"></i> Venting (-Mass)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTROLS DASHBOARD -->
+            <div class="border-t border-slate-100 pt-3 mt-3 space-y-3">
+                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="sliders" class="w-4 h-4 text-cyan-600"></i> Active Controls
+                </h3>
+
+                <!-- Ballast control slider -->
+                <div class="space-y-1">
+                    <div class="flex justify-between text-xs font-mono-tech">
+                        <span class="text-slate-500 font-bold">BALLAST PUMPS:</span>
+                        <span id="slider-target-label" class="text-cyan-600 font-bold">50%</span>
+                    </div>
+                    <input type="range" id="ballast-slider" min="0" max="100" value="50" step="1" 
+                           class="w-full h-2.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-cyan-600 hover:accent-cyan-500 border border-slate-200">
+                    <div class="flex justify-between text-[8px] text-slate-400 font-mono-tech font-bold">
+                        <span>VENT AIR (FLOAT)</span>
+                        <span>FLOOD WATER (SINK)</span>
+                    </div>
+                </div>
+
+                <!-- Emergency Blow Panel -->
+                <div class="space-y-1">
+                    <button onclick="triggerEmergencyBlow()" id="btn-emergency-blow" class="w-full bg-red-500 hover:bg-red-600 active:scale-[0.98] text-white text-xs font-bold py-2 px-3 rounded-lg shadow-sm border border-red-300 transition-all flex items-center justify-center gap-1.5">
+                        <i data-lucide="flame" class="w-4 h-4"></i> EMERGENCY BLOW (VENT ALL)
+                    </button>
+                    <div id="cooldown-container" class="hidden text-center text-[9px] text-red-500 font-mono-tech font-bold">
+                        Purge Cooldown: <span id="cooldown-timer">15s</span>
+                    </div>
+                    <div class="text-[9px] text-slate-400 text-center italic">
+                        Instantly expels all ballast. Use if sinking with heavy cargo!
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Onboarding / Educational Modal -->
+    <div id="tutorial-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 shadow-2xl relative text-slate-700">
+            <button onclick="toggleTutorial(false)" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <div class="flex items-center space-x-3 border-b border-slate-100 pb-3 mb-4">
+                <div class="bg-cyan-50 p-2 rounded-xl border border-cyan-100">
+                    <i data-lucide="graduation-cap" class="w-7 h-7 text-cyan-600"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold tracking-wider text-slate-900 font-sans-modern">Deep Ocean Hydrostatics Guide</h2>
+                    <p class="text-xs text-slate-500 font-mono-tech">Balancing Density, Depth, and Variable Cargo Mass</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-xs leading-relaxed font-sans-modern">
+                <!-- Density gradient & Depth stabilization explanation -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-150">
+                    <h3 class="text-cyan-700 font-bold text-sm mb-1 flex items-center gap-1.5">
+                        <span class="bg-cyan-100 text-cyan-800 px-1.5 py-0.5 rounded text-[10px] font-mono-tech">A</span>
+                        Linear Water Density Gradient
+                    </h3>
+                    <p class="mb-2">
+                        In this advanced training basin, water density is not uniform; it increases linearly with depth due to natural thermal stratification and salinity pooling:
+                    </p>
+                    <div class="bg-white border border-slate-100 p-2 rounded text-center font-mono-tech text-xs text-emerald-600 mb-2 font-bold">
+                        $\rho(y) = 960 + 0.8 \times y \text{ kg/m}^3$
+                    </div>
+                    <p>
+                        This means <strong>every depth level ($y$) requires a specific ballast water mass to hover neutrally</strong>. If your sub is too heavy, it sinks to water that is dense enough to hold it up. If it is too light, it floats up until the lower density matches its weight!
+                    </p>
+                </div>
+
+                <!-- Cargo Mass Mechanism -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-150">
+                    <h3 class="text-amber-700 font-bold text-sm mb-1 flex items-center gap-1.5">
+                        <span class="bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded text-[10px] font-mono-tech">B</span>
+                        Variable Cargo Mass Challenge
+                    </h3>
+                    <p class="mb-2">
+                        Retrieving scientific research pods adds **$+800\text{ kg}$** of dry cargo weight directly to the submarine's hull frame.
+                    </p>
+                    <div class="bg-white border border-slate-100 p-2 rounded text-center font-mono-tech text-xs text-amber-600 mb-2 font-bold">
+                        $F_g = (M_{dry} + M_{ballast} + M_{cargo}) \times g$
+                    </div>
+                    <p>
+                        Because gravity ($F_g$) increases instantly upon pickup, **you must immediately vent/reduce your ballast slider (pump out water)** to avoid plunging straight down!
+                    </p>
+                </div>
+
+                <!-- Control summary -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-150">
+                    <h3 class="text-indigo-700 font-bold text-sm mb-1 flex items-center gap-1.5">
+                        <span class="bg-indigo-100 text-indigo-800 px-1.5 py-0.5 rounded text-[10px] font-mono-tech">C</span>
+                        Pilot Strategy Checklist
+                    </h3>
+                    <ul class="list-disc pl-4 space-y-1 text-slate-600 text-[11px]">
+                        <li><strong>Hover Depth:</strong> Find the exact target height. Match your ballast pumps so $F_b = F_g$.</li>
+                        <li><strong>Cargo Adjust:</strong> If your sub gains cargo, decrease your ballast immediately to compensate for the weight!</li>
+                        <li><strong>Avoid Mines & Crags:</strong> High vertical speed causes damage when collision occurs. Stay in the center channel.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-5 flex justify-end border-t border-slate-100 pt-3">
+                <button onclick="toggleTutorial(false)" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-5 py-2 rounded-xl transition-all font-sans-modern flex items-center gap-1.5 text-xs shadow-md">
+                    Initialize Hydrostatic Test Run <i data-lucide="chevrons-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over / Victory Modal -->
+    <div id="game-over-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white border-2 border-slate-200 rounded-2xl max-w-md w-full p-6 text-center shadow-2xl relative text-slate-700">
+            <div id="modal-icon-container" class="bg-red-50 p-4 rounded-full border border-red-200 w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                <i id="modal-icon" data-lucide="skull" class="w-8 h-8 text-red-600"></i>
+            </div>
+            
+            <h2 id="modal-title" class="text-xl font-bold text-slate-900 font-sans-modern mb-1">CRITICAL SYSTEM ERROR</h2>
+            <p id="modal-desc" class="text-xs text-slate-500 font-sans-modern mb-4">Submarine framework breached due to cavern ceiling or floor collision.</p>
+
+            <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl mb-4 font-mono-tech space-y-1.5 text-xs text-left">
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Maximum Depth Reached:</span>
+                    <span id="end-depth" class="font-bold text-slate-800">45.0m</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Cargo Salvaged:</span>
+                    <span id="end-pods" class="font-bold text-amber-600">0 / 3 Pods</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Payload Added Mass:</span>
+                    <span id="end-cargomass" class="font-bold text-amber-600">+0 kg</span>
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <button onclick="resetSimulation()" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 rounded-xl transition-all font-sans-modern text-xs flex items-center justify-center gap-1.5 shadow-md">
+                    <i data-lucide="play" class="w-4 h-4"></i> Restart Test Protocol
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Initialization Support for Lucide Icons -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+        });
+    </script>
+
+    <!-- Submarine Buoyancy Physics & Interactive Game Loop -->
+    <script>
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Physics Constants & Core Properties
+        const G = 9.81;              // Gravitational constant (m/s^2)
+        const SUB_VOLUME = 50.0;     // Submarine displacement volume (m^3)
+        const DRY_MASS = 48000;      // Mass of the empty vessel (kg)
+        const MAX_BALLAST_MASS = 4000; // Capacity of ballast tanks (kg of water)
+        const CARGO_UNIT_MASS = 800; // Weight of each salvaged scientific pod (kg)
+        const PUMP_RATE = 1500;      // Performance speed of pumps (kg of water transiting per second)
+        const DRAG_COEFF = 3800;     // Fluid resistance coefficient
+
+        // Simulator State Model
+        let sub = {
+            depth: 20.0,             // Current simulation depth (0 - 100 meters)
+            velocityY: 0.0,          // Vertical speed vector (m/s)
+            accelY: 0.0,             // Vertical acceleration rate (m/s^2)
+            massBallast: 2000,       // Active water load inside tanks (kg)
+            cargoCount: 0,           // Number of research pods actively loaded
+            hullIntegrity: 100,      // Hull health percentage
+            emergencyBlowCooldown: 0 // Blow cooldown counter
+        };
+
+        let targetBallastRatio = 0.5; // Input slider requested ratio
+        let currentBallastRatio = 0.5; // Physically achieved ballast ratio (delayed by pump lag)
+        let currentLevelIndex = 0;
+        let isGameOver = false;
+        let isLevelComplete = false;
+        let elapsedRealTime = 0;
+        let cameraX = 0;
+        const subVisualX = 180; // Main vessel coordinate offset
+
+        // Core Environment Profiles: Structured to support stable hovering across depth
+        // The linear profile translates ballast adjustments cleanly to target depths
+        const levelProfiles = [
+            {
+                name: "Level 1: Archimedes Basin",
+                instruction: "Learn linear density mechanics! Adjust ballast to stabilize the submarine at the glowing pod depths. Notice how collecting pods adds weight!",
+                densityProfile: (depth) => {
+                    // Perfect continuous density gradient across depth
+                    return 960.0 + (depth * 0.8); 
+                },
+                hazards: [], // Safe basin for training
+                targetPods: [
+                    { x: 300, y: 30, collected: false },
+                    { x: 600, y: 55, collected: false },
+                    { x: 900, y: 80, collected: false }
+                ],
+                cavernCeiling: (x) => 10,
+                cavernFloor: (x) => 90
+            },
+            {
+                name: "Level 2: The Halocline Shift",
+                instruction: "Halocline density spike! The density scales steeply past 40 meters. Avoid the floating deep ocean mines!",
+                densityProfile: (depth) => {
+                    // Density profile that increases with depth, with a sharper gradient zone
+                    if (depth < 40) return 960.0 + depth * 0.5; // Gentle surface gradient
+                    return 980.0 + (depth - 40) * 1.0; // Steeper halocline gradient
+                },
+                hazards: [
+                    { x: 420, y: 30, type: 'mine', radius: 14 },
+                    { x: 740, y: 65, type: 'mine', radius: 14 }
+                ],
+                targetPods: [
+                    { x: 260, y: 25, collected: false },
+                    { x: 580, y: 50, collected: false },
+                    { x: 920, y: 78, collected: false }
+                ],
+                cavernCeiling: (x) => 12,
+                cavernFloor: (x) => 88
+            },
+            {
+                name: "Level 3: Abyssal Trench Navigation",
+                instruction: "Maximum difficulty! High density environment. Cavern walls are tight, and multiple mines block the trench. Watch your ballast response times!",
+                densityProfile: (depth) => {
+                    // Ultra dense deep trench gradient
+                    return 980.0 + (depth * 0.6) + (depth > 60 ? (depth - 60) * 0.4 : 0);
+                },
+                hazards: [
+                    { x: 230, y: 25, type: 'mine', radius: 12 },
+                    { x: 360, y: 68, type: 'mine', radius: 12 },
+                    { x: 490, y: 40, type: 'mine', radius: 12 },
+                    { x: 640, y: 75, type: 'mine', radius: 12 },
+                    { x: 780, y: 22, type: 'mine', radius: 12 },
+                    { x: 910, y: 58, type: 'mine', radius: 12 }
+                ],
+                targetPods: [
+                    { x: 300, y: 40, collected: false },
+                    { x: 570, y: 58, collected: false },
+                    { x: 860, y: 42, collected: false }
+                ],
+                cavernCeiling: (x) => {
+                    if (x > 200 && x < 400) return 24;
+                    if (x > 600 && x < 800) return 28;
+                    return 12;
+                },
+                cavernFloor: (x) => {
+                    if (x > 300 && x < 500) return 76;
+                    if (x > 700 && x < 900) return 72;
+                    return 88;
+                }
+            }
+        ];
+
+        // Capture user input controls
+        const slider = document.getElementById('ballast-slider');
+        const sliderLabel = document.getElementById('slider-target-label');
+        const ballastPercentageLabel = document.getElementById('ballast-percentage-label');
+        const waterFillElement = document.getElementById('ballast-water-fill');
+        const flowIndicatorFlood = document.getElementById('flow-indicator-flood');
+        const flowIndicatorBlow = document.getElementById('flow-indicator-blow');
+
+        slider.addEventListener('input', (e) => {
+            targetBallastRatio = e.target.value / 100;
+            sliderLabel.innerText = `${e.target.value}%`;
+        });
+
+        function loadLevel(index) {
+            currentLevelIndex = index;
+            isGameOver = false;
+            isLevelComplete = false;
+            cameraX = 0;
+            
+            // Re-zero submarine state variables
+            sub.depth = 15.0;
+            sub.velocityY = 0.0;
+            sub.accelY = 0.0;
+            sub.hullIntegrity = 100;
+            sub.cargoCount = 0;
+            sub.massBallast = 2000;
+            currentBallastRatio = 0.5;
+            targetBallastRatio = 0.5;
+            slider.value = 50;
+            sliderLabel.innerText = "50%";
+            
+            document.getElementById('game-over-modal').classList.add('hidden');
+            levelProfiles[currentLevelIndex].targetPods.forEach(p => p.collected = false);
+
+            // Synchronize mission buttons styling
+            for (let i = 0; i < 3; i++) {
+                const btn = document.getElementById(`btn-lvl-${i}`);
+                if (i === index) {
+                    btn.className = "px-2.5 py-1 text-xs font-semibold rounded-md bg-white text-cyan-700 shadow-sm border border-slate-200 transition-all ml-1";
+                } else {
+                    btn.className = "px-2.5 py-1 text-xs font-semibold rounded-md text-slate-500 hover:text-slate-800 transition-all ml-1";
+                }
+            }
+            
+            document.getElementById('level-instruction').innerText = levelProfiles[currentLevelIndex].instruction;
+            updateUI();
+        }
+
+        function toggleTutorial(show) {
+            const mod = document.getElementById('tutorial-modal');
+            if (show) {
+                mod.classList.remove('hidden');
+                mod.style.opacity = '1';
+            } else {
+                mod.style.opacity = '0';
+                setTimeout(() => mod.classList.add('hidden'), 300);
+            }
+        }
+
+        function triggerEmergencyBlow() {
+            if (sub.emergencyBlowCooldown > 0) return;
+            
+            // Expel all water instantly
+            targetBallastRatio = 0.0;
+            currentBallastRatio = 0.0;
+            sub.massBallast = 0;
+            slider.value = 0;
+            sliderLabel.innerText = "0%";
+            
+            // Thrust upward to rescue crew
+            sub.velocityY = -2.8; 
+            
+            const bubbleDiv = document.getElementById('air-bubbles');
+            bubbleDiv.classList.remove('hidden');
+            setTimeout(() => bubbleDiv.classList.add('hidden'), 1800);
+
+            sub.emergencyBlowCooldown = 15;
+            document.getElementById('cooldown-container').classList.remove('hidden');
+            const btn = document.getElementById('btn-emergency-blow');
+            btn.classList.add('bg-slate-200', 'cursor-not-allowed', 'text-slate-400');
+            btn.classList.remove('bg-red-500', 'hover:bg-red-600');
+        }
+
+        function resetSimulation() {
+            loadLevel(currentLevelIndex);
+        }
+
+        let alertTimeout;
+        function showHUDAlert(msg) {
+            const alertBox = document.getElementById('game-alert');
+            const alertText = document.getElementById('game-alert-text');
+            alertText.innerText = msg;
+            alertBox.classList.remove('scale-0');
+            alertBox.classList.add('scale-100');
+            
+            clearTimeout(alertTimeout);
+            alertTimeout = setTimeout(() => {
+                alertBox.classList.remove('scale-100');
+                alertBox.classList.add('scale-0');
+            }, 2500);
+        }
+
+        // Live educational target calculation display
+        function calculateIdealBallastTip() {
+            const activeLevel = levelProfiles[currentLevelIndex];
+            const currentSubDepth = sub.depth;
+            const currentDensity = activeLevel.densityProfile(currentSubDepth);
+            const currentCargoMass = sub.cargoCount * CARGO_UNIT_MASS;
+            
+            // Neutral Hydrostatic balance formula:
+            // Fb = Fg
+            // => rho_water * V_sub * g = (M_dry + M_ballast + M_cargo) * g
+            // => M_ballast = (rho_water * V_sub) - M_dry - M_cargo
+            const idealBallastMass = (currentDensity * SUB_VOLUME) - DRY_MASS - currentCargoMass;
+            const idealPercentage = (idealBallastMass / MAX_BALLAST_MASS) * 100;
+            
+            document.getElementById('tip-depth').innerText = `${Math.round(currentSubDepth)}m`;
+            if (idealPercentage >= 0 && idealPercentage <= 100) {
+                document.getElementById('tip-ballast').innerText = `${Math.round(idealPercentage)}%`;
+            } else {
+                document.getElementById('tip-ballast').innerText = idealPercentage < 0 ? "0% (Exceeded payload threshold!)" : "100% (Need more density)";
+            }
+        }
+
+        // Integrated Physics update iteration
+        function updatePhysics(dt) {
+            if (isGameOver) return;
+
+            const currentLevel = levelProfiles[currentLevelIndex];
+
+            // 1. Simulate pump transfer speed
+            const diffRatio = targetBallastRatio - currentBallastRatio;
+            if (Math.abs(diffRatio) > 0.005) {
+                const step = (PUMP_RATE / MAX_BALLAST_MASS) * dt;
+                if (diffRatio > 0) {
+                    currentBallastRatio = Math.min(targetBallastRatio, currentBallastRatio + step);
+                    flowIndicatorFlood.classList.remove('opacity-40');
+                    flowIndicatorFlood.classList.add('bg-sky-100', 'text-sky-800');
+                    flowIndicatorBlow.classList.add('opacity-40');
+                } else {
+                    currentBallastRatio = Math.max(targetBallastRatio, currentBallastRatio - step);
+                    flowIndicatorBlow.classList.remove('opacity-40');
+                    flowIndicatorBlow.classList.add('bg-amber-100', 'text-amber-800');
+                    flowIndicatorFlood.classList.add('opacity-40');
+                }
+            } else {
+                flowIndicatorFlood.classList.add('opacity-40');
+                flowIndicatorFlood.classList.remove('bg-sky-100', 'text-sky-800');
+                flowIndicatorBlow.classList.add('opacity-40');
+                flowIndicatorBlow.classList.remove('bg-amber-100', 'text-amber-800');
+            }
+
+            sub.massBallast = currentBallastRatio * MAX_BALLAST_MASS;
+            
+            // Dynamic variable mass calculation
+            const cargoMass = sub.cargoCount * CARGO_UNIT_MASS;
+            const totalMass = DRY_MASS + sub.massBallast + cargoMass;
+
+            // 2. Fetch depth-dependent density values
+            const waterDensity = currentLevel.densityProfile(sub.depth);
+
+            // 3. Compute forces
+            const forceGravity = totalMass * G;                            // Downward pull
+            const forceBuoyant = SUB_VOLUME * waterDensity * G;            // Upward displacement push
+            const dragForce = -DRAG_COEFF * sub.velocityY * Math.abs(sub.velocityY); // Viscous resistance
+            
+            // Depth increases downwards, so net positive force accelerates downwards
+            const netForceY = forceGravity - forceBuoyant - dragForce;
+            sub.accelY = netForceY / totalMass;
+
+            // 4. Numerical integration
+            sub.velocityY += sub.accelY * dt;
+            sub.depth += sub.velocityY * dt;
+
+            // Outer boundaries constraint checks
+            if (sub.depth < 0) {
+                sub.depth = 0;
+                sub.velocityY = Math.max(0, sub.velocityY);
+            }
+            if (sub.depth > 100) {
+                sub.depth = 100;
+                sub.velocityY = Math.min(0, sub.velocityY);
+                if (Math.abs(sub.velocityY) > 0.15) {
+                    applyDamage(2);
+                    showHUDAlert("HULL GROUND COMPRESSION DAMAGE");
+                }
+            }
+
+            // 5. Scroll camera viewport horizontally
+            if (!isLevelComplete) {
+                cameraX += 40 * dt; 
+                if (cameraX > 1100) {
+                    isLevelComplete = true;
+                    showLevelComplete();
+                }
+            }
+
+            // Cooldown timers
+            if (sub.emergencyBlowCooldown > 0) {
+                sub.emergencyBlowCooldown -= dt;
+                document.getElementById('cooldown-timer').innerText = `${Math.ceil(sub.emergencyBlowCooldown)}s`;
+                if (sub.emergencyBlowCooldown <= 0) {
+                    document.getElementById('cooldown-container').classList.add('hidden');
+                    const btn = document.getElementById('btn-emergency-blow');
+                    btn.classList.remove('bg-slate-200', 'cursor-not-allowed', 'text-slate-400');
+                    btn.classList.add('bg-red-500', 'hover:bg-red-600');
+                }
+            }
+
+            checkCollisions(currentLevel);
+        }
+
+        function checkCollisions(level) {
+            const subWorldX = cameraX + subVisualX;
+            const subWorldY = sub.depth;
+
+            // Cavern boundary limits
+            const ceilingLim = level.cavernCeiling(subWorldX % 1200);
+            const floorLim = level.cavernFloor(subWorldX % 1200);
+
+            if (subWorldY < ceilingLim + 3.5) {
+                applyDamage(0.7);
+                sub.depth = ceilingLim + 3.6;
+                sub.velocityY = 0.4; // deflect back
+                showHUDAlert("UPPER CAVERN BREACH COLLISION");
+            }
+            if (subWorldY > floorLim - 3.5) {
+                applyDamage(0.7);
+                sub.depth = floorLim - 3.6;
+                sub.velocityY = -0.4; // deflect back
+                showHUDAlert("LOWER SHELF CRAG IMPACT");
+            }
+
+            // Hazard mines
+            level.hazards.forEach(h => {
+                const distance = Math.hypot(subWorldX - h.x, subWorldY - h.y);
+                if (distance < h.radius + 8) {
+                    applyDamage(20); // heavy explosive damage
+                    h.x = -2000; // eliminate hazard coordinate
+                    showHUDAlert("MINE DETONATED: SYSTEM COMPROMISED!");
+                }
+            });
+
+            // Pod salvage (adds cargo count to system)
+            level.targetPods.forEach(p => {
+                if (!p.collected) {
+                    const distance = Math.hypot(subWorldX - p.x, subWorldY - p.y);
+                    if (distance < 22) {
+                        p.collected = true;
+                        sub.cargoCount++;
+                        showHUDAlert("SCIENTIFIC RESOURCE RETRIEVED - SUB MASS INCREASED (+800kg)");
+                    }
+                }
+            });
+        }
+
+        function applyDamage(amount) {
+            if (isGameOver) return;
+            sub.hullIntegrity -= amount;
+            if (sub.hullIntegrity <= 0) {
+                sub.hullIntegrity = 0;
+                triggerGameOver(false);
+            }
+        }
+
+        function triggerGameOver(victory) {
+            isGameOver = true;
+            const modal = document.getElementById('game-over-modal');
+            const title = document.getElementById('modal-title');
+            const desc = document.getElementById('modal-desc');
+            const icon = document.getElementById('modal-icon');
+            const container = document.getElementById('modal-icon-container');
+
+            document.getElementById('end-depth').innerText = `${sub.depth.toFixed(1)} meters`;
+            document.getElementById('end-pods').innerText = `${sub.cargoCount} / ${levelProfiles[currentLevelIndex].targetPods.length} Pods`;
+            document.getElementById('end-cargomass').innerText = `+${(sub.cargoCount * CARGO_UNIT_MASS).toLocaleString()} kg`;
+
+            if (victory) {
+                title.innerText = "CHALLENGE RUN COMPLETED";
+                title.className = "text-xl font-bold tracking-wider text-emerald-600 font-sans-modern mb-1";
+                desc.innerText = "Exceptional piloting skills! You stabilized the submarine perfectly despite the severe shifts in fluid density and payload mass.";
+                container.className = "bg-emerald-50 p-4 rounded-full border border-emerald-200 w-16 h-16 flex items-center justify-center mx-auto mb-3";
+                icon.setAttribute('data-lucide', 'award');
+                icon.className = "w-8 h-8 text-emerald-600";
+            } else {
+                title.innerText = "Vessel Sunk / Breach Event";
+                title.className = "text-xl font-bold tracking-wider text-red-600 font-sans-modern mb-1";
+                desc.innerText = "The submarine suffered catastrophic framework failure due to structural overload. Return for inspection.";
+                container.className = "bg-red-50 p-4 rounded-full border border-red-200 w-16 h-16 flex items-center justify-center mx-auto mb-3";
+                icon.setAttribute('data-lucide', 'skull');
+                icon.className = "w-8 h-8 text-red-600 animate-pulse";
+            }
+            
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function showLevelComplete() {
+            triggerGameOver(true);
+        }
+
+        // Live GUI refresh cycle
+        function updateUI() {
+            const currentLevel = levelProfiles[currentLevelIndex];
+            const density = currentLevel.densityProfile(sub.depth);
+            const cargoMass = sub.cargoCount * CARGO_UNIT_MASS;
+            const totalMass = DRY_MASS + sub.massBallast + cargoMass;
+
+            // Text outputs
+            document.getElementById('telemetry-depth').innerText = sub.depth.toFixed(1);
+            document.getElementById('telemetry-density').innerText = density.toFixed(1);
+            
+            // Indicator bar
+            const sliderLeft = ((density - 960) / 80) * 100;
+            document.getElementById('density-slider-indicator').style.left = `${Math.max(0, Math.min(100, sliderLeft))}%`;
+
+            // Composition table
+            document.getElementById('telemetry-ballast-mass').innerText = `${sub.massBallast.toLocaleString()} kg`;
+            document.getElementById('telemetry-cargo-mass').innerText = `+${cargoMass.toLocaleString()} kg`;
+            document.getElementById('telemetry-total-mass').innerText = `${totalMass.toLocaleString()} kg`;
+            
+            document.getElementById('cargo-indicator-text').innerText = `${sub.cargoCount} / ${currentLevel.targetPods.length} Pods (+${cargoMass} kg)`;
+
+            // Force vectors calculations
+            const gravityForceKN = (totalMass * G) / 1000;
+            const buoyantForceKN = (SUB_VOLUME * density * G) / 1000;
+            const dragForceKN = (DRAG_COEFF * sub.velocityY * Math.abs(sub.velocityY)) / 1000;
+            
+            document.getElementById('telemetry-fg').innerText = `${gravityForceKN.toFixed(1)} kN`;
+            document.getElementById('telemetry-fb').innerText = `${buoyantForceKN.toFixed(1)} kN`;
+            document.getElementById('telemetry-fd').innerText = `${dragForceKN.toFixed(1)} kN`;
+
+            const netForceKN = gravityForceKN - buoyantForceKN - dragForceKN;
+            const netDisplay = document.getElementById('telemetry-fnet');
+            const netContainer = document.getElementById('net-force-container');
+            
+            netDisplay.innerText = `${Math.abs(netForceKN).toFixed(1)} kN`;
+            if (Math.abs(netForceKN) < 1.0) {
+                netDisplay.innerText += " (EQUILIBRIUM)";
+                netContainer.className = "flex justify-between items-center border-t border-slate-200 pt-1.5 text-xs font-bold text-emerald-600";
+            } else if (netForceKN > 0) {
+                netDisplay.innerText += " (SINKING) ⬇️";
+                netContainer.className = "flex justify-between items-center border-t border-slate-200 pt-1.5 text-xs font-bold text-red-600";
+            } else {
+                netDisplay.innerText += " (RISING) ⬆️";
+                netContainer.className = "flex justify-between items-center border-t border-slate-200 pt-1.5 text-xs font-bold text-blue-600";
+            }
+
+            // Layer boundary updates
+            const layerTag = document.getElementById('water-layer-tag');
+            if (sub.depth < 33.3) {
+                layerTag.innerText = "EPIPELAGIC LAYER";
+                layerTag.className = "text-sky-600 text-[9px] px-1 bg-sky-50 rounded border border-sky-200 font-bold";
+            } else if (sub.depth >= 33.3 && sub.depth <= 66.6) {
+                layerTag.innerText = "HALOCLINE STRATA";
+                layerTag.className = "text-teal-600 text-[9px] px-1 bg-teal-50 rounded border border-teal-200 font-bold";
+            } else {
+                layerTag.innerText = "ABYSS BRINE STRATA";
+                layerTag.className = "text-blue-600 text-[9px] px-1 bg-blue-50 rounded border border-blue-200 font-bold";
+            }
+
+            // Fill visual updates
+            ballastPercentageLabel.innerText = `${Math.round(currentBallastRatio * 100)}%`;
+            waterFillElement.style.height = `${currentBallastRatio * 100}%`;
+
+            // Health bar
+            document.getElementById('hull-bar').style.width = `${sub.hullIntegrity}%`;
+            document.getElementById('hull-text').innerText = `${Math.round(sub.hullIntegrity)}%`;
+            if (sub.hullIntegrity < 30) {
+                document.getElementById('hull-text').className = "text-xs font-bold text-red-600 animate-pulse";
+                document.getElementById('hull-bar').className = "bg-red-500 h-full transition-all duration-300";
+            } else if (sub.hullIntegrity < 65) {
+                document.getElementById('hull-text').className = "text-xs font-bold text-amber-600";
+                document.getElementById('hull-bar').className = "bg-amber-500 h-full transition-all duration-300";
+            } else {
+                document.getElementById('hull-text').className = "text-xs font-bold text-emerald-600";
+                document.getElementById('hull-bar').className = "bg-emerald-500 h-full transition-all duration-300";
+            }
+
+            calculateIdealBallastTip();
+        }
+
+        // Live high-fidelity rendering pipeline
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const activeLevel = levelProfiles[currentLevelIndex];
+
+            // 1. Fluid density ocean visual gradient (light, technical blue tones)
+            const oceanGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            oceanGradient.addColorStop(0, '#f0f9ff'); // surface sky blue
+            oceanGradient.addColorStop(0.4, '#e0f2fe'); // mid transition
+            oceanGradient.addColorStop(0.7, '#bae6fd'); // halocline barrier
+            oceanGradient.addColorStop(1, '#7dd3fc'); // deep dense blue
+            ctx.fillStyle = oceanGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 2. Cavern limits render (Solid neat structure)
+            ctx.fillStyle = '#e2e8f0'; // Clean slate rock
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 3;
+
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            for (let x = 0; x <= canvas.width; x += 10) {
+                const worldX = cameraX + x;
+                const topY = (activeLevel.cavernCeiling(worldX % 1200) / 100) * canvas.height;
+                ctx.lineTo(x, topY);
+            }
+            ctx.lineTo(canvas.width, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height);
+            for (let x = 0; x <= canvas.width; x += 10) {
+                const worldX = cameraX + x;
+                const bottomY = (activeLevel.cavernFloor(worldX % 1200) / 100) * canvas.height;
+                ctx.lineTo(x, bottomY);
+            }
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Thermocline boundaries visualization lines
+            ctx.strokeStyle = 'rgba(14, 165, 233, 0.25)';
+            ctx.setLineDash([4, 8]);
+            ctx.beginPath();
+            ctx.moveTo(0, 0.33 * canvas.height);
+            ctx.lineTo(canvas.width, 0.33 * canvas.height);
+            ctx.moveTo(0, 0.66 * canvas.height);
+            ctx.lineTo(canvas.width, 0.66 * canvas.height);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 3. Research pods render (Rotating high visibility yellow diamond)
+            activeLevel.targetPods.forEach(pod => {
+                const screenX = pod.x - cameraX;
+                if (screenX > -50 && screenX < canvas.width + 50 && !pod.collected) {
+                    const screenY = (pod.y / 100) * canvas.height;
+                    const angle = Date.now() / 350;
+                    
+                    ctx.save();
+                    ctx.translate(screenX, screenY);
+                    ctx.rotate(angle);
+                    
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#eab308';
+                    ctx.fillStyle = '#f59e0b';
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(0, -9);
+                    ctx.lineTo(9, 0);
+                    ctx.lineTo(0, 9);
+                    ctx.lineTo(-9, 0);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    // Inner crystalline core
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.restore();
+                }
+            });
+
+            // 4. Draw Obstacles (Floating sea mines)
+            activeLevel.hazards.forEach(hazard => {
+                const screenX = hazard.x - cameraX;
+                if (screenX > -50 && screenX < canvas.width + 50) {
+                    const screenY = (hazard.y / 100) * canvas.height;
+                    
+                    ctx.save();
+                    ctx.translate(screenX, screenY);
+
+                    // Anchor chain line
+                    ctx.strokeStyle = '#94a3b8';
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.lineTo(0, 250);
+                    ctx.stroke();
+
+                    // Mine triggers
+                    ctx.strokeStyle = '#dc2626';
+                    ctx.lineWidth = 2.5;
+                    for (let i = 0; i < 8; i++) {
+                        ctx.rotate(Math.PI / 4);
+                        ctx.beginPath();
+                        ctx.moveTo(0, 0);
+                        ctx.lineTo(0, hazard.radius + 5);
+                        ctx.stroke();
+                    }
+
+                    // Sphere
+                    ctx.fillStyle = '#475569';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, hazard.radius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Blinking alert trigger
+                    const blink = Math.abs(Math.sin(Date.now() / 150)) * 6;
+                    ctx.fillStyle = '#ef4444';
+                    ctx.shadowBlur = blink + 4;
+                    ctx.shadowColor = '#ef4444';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 4, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.restore();
+                }
+            });
+
+            // 5. Goal boundary mark
+            const completeX = 1100 - cameraX;
+            if (completeX < canvas.width + 100) {
+                ctx.save();
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 3;
+                ctx.setLineDash([6, 6]);
+                ctx.beginPath();
+                ctx.moveTo(completeX, 0);
+                ctx.lineTo(completeX, canvas.height);
+                ctx.stroke();
+
+                ctx.fillStyle = '#047857';
+                ctx.font = 'bold 11px "Share Tech Mono"';
+                ctx.fillText("MISSION RETRIEVAL HORIZON", completeX + 12, 40);
+                ctx.restore();
+            }
+
+            // 6. DRAW SUBMARINE (High detailed render)
+            const subY = (sub.depth / 100) * canvas.height;
+            ctx.save();
+            ctx.translate(subVisualX, subY);
+
+            // Propulsion wake effect
+            const engineWash = Math.abs(Math.sin(Date.now() / 70)) * 14;
+            const wakeGradient = ctx.createLinearGradient(-34, 0, -60, 0);
+            wakeGradient.addColorStop(0, 'rgba(14, 165, 233, 0.45)');
+            wakeGradient.addColorStop(1, 'rgba(14, 165, 233, 0)');
+            ctx.fillStyle = wakeGradient;
+            ctx.beginPath();
+            ctx.moveTo(-34, -4);
+            ctx.lineTo(-65 - engineWash, -12);
+            ctx.lineTo(-65 - engineWash, 12);
+            ctx.lineTo(-34, 4);
+            ctx.closePath();
+            ctx.fill();
+
+            // Sub Hull Frame (Modern naval navy blue with crisp cyan plating borders)
+            ctx.fillStyle = '#1e293b';
+            ctx.strokeStyle = '#0284c7';
+            ctx.lineWidth = 2.5;
+
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 34, 15, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Conning tower
+            ctx.beginPath();
+            ctx.rect(-4, -22, 11, 8);
+            ctx.fill();
+            ctx.stroke();
+
+            // Periscope optics
+            ctx.strokeStyle = '#0ea5e9';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(5, -22);
+            ctx.lineTo(5, -28);
+            ctx.lineTo(9, -28);
+            ctx.stroke();
+
+            // Rear stabilizing fins
+            ctx.fillStyle = '#334155';
+            ctx.beginPath();
+            ctx.moveTo(-26, -7);
+            ctx.lineTo(-36, -16);
+            ctx.lineTo(-32, -3);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(-26, 7);
+            ctx.lineTo(-36, 16);
+            ctx.lineTo(-32, 3);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Propeller spinning visual
+            ctx.strokeStyle = '#d97706';
+            ctx.lineWidth = 2.5;
+            const propState = Math.sin(Date.now() / 40) * 11;
+            ctx.beginPath();
+            ctx.moveTo(-36, -propState);
+            ctx.lineTo(-36, propState);
+            ctx.stroke();
+
+            // Crew cockpit observation ports
+            ctx.fillStyle = '#e0f2fe';
+            ctx.strokeStyle = '#0284c7';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(10, -2, 3.5, 0, Math.PI * 2);
+            ctx.arc(-8, -2, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // 7. CARGO CARRIER DECK RENDER (Visual Cargo boxes stacked under sub hull)
+            ctx.fillStyle = '#f59e0b'; // Amber yellow freight crate style
+            ctx.strokeStyle = '#d97706';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < sub.cargoCount; i++) {
+                // Stack horizontal or vertical cargo crates safely under sub
+                const offsetCrateX = -15 + (i * 12);
+                ctx.beginPath();
+                ctx.rect(offsetCrateX, 10, 9, 8);
+                ctx.fill();
+                ctx.stroke();
+                
+                // Draw little "C" or cross strapping label
+                ctx.strokeStyle = '#9a3412';
+                ctx.beginPath();
+                ctx.moveTo(offsetCrateX + 2, 10);
+                ctx.lineTo(offsetCrateX + 7, 18);
+                ctx.stroke();
+            }
+
+            // 8. Dynamic educational vectors rendering overlay
+            const cargoMass = sub.cargoCount * CARGO_UNIT_MASS;
+            const totalMass = DRY_MASS + sub.massBallast + cargoMass;
+            const gravityForce = totalMass * G;
+            const buoyantForce = SUB_VOLUME * activeLevel.densityProfile(sub.depth) * G;
+            
+            const vectorScale = 0.00016; // Standard visual ratio conversion factor
+
+            // Downward force vector arrow (GRAVITY - RED)
+            const gravityLen = Math.max(15, gravityForce * vectorScale);
+            ctx.strokeStyle = '#ef4444';
+            ctx.fillStyle = '#ef4444';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, gravityLen);
+            ctx.stroke();
+            // Arrow tip
+            ctx.beginPath();
+            ctx.moveTo(-4, gravityLen - 4);
+            ctx.lineTo(0, gravityLen);
+            ctx.lineTo(4, gravityLen - 4);
+            ctx.fill();
+            // Vector Text Label
+            ctx.font = 'bold 9px "Share Tech Mono"';
+            ctx.fillText(`Fg: ${Math.round(gravityForce/1000)}kN`, 7, gravityLen);
+
+            // Upward force vector arrow (BUOYANCY - BLUE)
+            const buoyancyLen = Math.max(15, buoyantForce * vectorScale);
+            ctx.strokeStyle = '#2563eb';
+            ctx.fillStyle = '#2563eb';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, -buoyancyLen);
+            ctx.stroke();
+            // Arrow tip
+            ctx.beginPath();
+            ctx.moveTo(-4, -buoyancyLen + 4);
+            ctx.lineTo(0, -buoyancyLen);
+            ctx.lineTo(4, -buoyancyLen + 4);
+            ctx.fill();
+            // Vector Text Label
+            ctx.fillText(`Fb: ${Math.round(buoyantForce/1000)}kN`, 7, -buoyancyLen + 7);
+
+            ctx.restore();
+        }
+
+        function resizeCanvas() {
+            const bounds = canvas.getBoundingClientRect();
+            canvas.width = bounds.width;
+            canvas.height = bounds.height;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        let lastTime = 0;
+        function gameLoop(timestamp) {
+            if (!lastTime) lastTime = timestamp;
+            const dt = (timestamp - lastTime) / 1000.0;
+            lastTime = timestamp;
+
+            const clampedDt = Math.min(0.08, dt);
+
+            if (!isGameOver) {
+                updatePhysics(clampedDt);
+                elapsedRealTime += clampedDt;
+            }
+            updateUI();
+            draw();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start initialization sequence
+        window.onload = function() {
+            resizeCanvas();
+            loadLevel(0);
+            toggleTutorial(true);
+            requestAnimationFrame(gameLoop);
+        };
+    </script>
+</body>
+</html>
