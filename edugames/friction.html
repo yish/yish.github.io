@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friction Lab: Whimsical Rube Goldberg Machine</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Playful typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #fefaf0;
+        }
+        .title-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+        /* Blueprint graph-paper background pattern */
+        .bg-blueprint {
+            background-color: #faf6eb;
+            background-size: 24px 24px;
+            background-image: linear-gradient(to right, rgba(217, 119, 6, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(217, 119, 6, 0.05) 1px, transparent 1px);
+        }
+        /* Whimsical shadows and cartoon styling */
+        .cartoon-border {
+            border: 3px solid #334155;
+        }
+        .cartoon-shadow {
+            box-shadow: 4px 4px 0px 0px #334155;
+        }
+        .cartoon-shadow-sm {
+            box-shadow: 2px 2px 0px 0px #334155;
+        }
+        .cartoon-shadow-hover:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px #334155;
+        }
+        .cartoon-shadow-active:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #334155;
+        }
+        /* Custom styled range sliders */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: #cbd5e1;
+            height: 8px;
+            border-radius: 4px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #f97316;
+            border: 2px solid #334155;
+            cursor: pointer;
+            box-shadow: 1px 1px 0px #334155;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-blueprint select-none overflow-x-hidden text-slate-800">
+
+    <!-- Playful Header -->
+    <header class="border-b-4 border-slate-700 bg-amber-100/90 px-6 py-4 flex flex-wrap items-center justify-between gap-4 z-10 sticky top-0">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-amber-400 cartoon-border cartoon-shadow flex items-center justify-center font-bold text-slate-800 text-2xl rotate-3">
+                ⚙️
+            </div>
+            <div>
+                <h1 class="text-2xl font-extrabold tracking-tight title-font text-slate-800 flex items-center gap-2">
+                    Friction Contraptions <span class="text-sm bg-orange-200 text-orange-800 px-2 py-0.5 rounded-full border-2 border-slate-700">Rube Goldberg Physics</span>
+                </h1>
+                <p class="text-xs text-slate-600 font-semibold">Tune material friction to trigger silly chain reactions!</p>
+            </div>
+        </div>
+
+        <!-- Whimsical Level Switcher tabs -->
+        <div class="flex gap-2 bg-slate-100 p-1 rounded-2xl border-3 border-slate-700 shadow-inner" id="levelSelector">
+            <button onclick="changeLevel(1)" id="btn-lvl-1" class="px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 bg-amber-400 border-2 border-slate-700 cartoon-shadow-sm text-slate-800">
+                🐱 Stage 1: Feed Kitten
+            </button>
+            <button onclick="changeLevel(2)" id="btn-lvl-2" class="px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 border-2 border-transparent text-slate-500 hover:text-slate-800">
+                🎈 Stage 2: Pop Balloon
+            </button>
+            <button onclick="changeLevel(3)" id="btn-lvl-3" class="px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 border-2 border-transparent text-slate-500 hover:text-slate-800">
+                🍞 Stage 3: Butter Toast
+            </button>
+        </div>
+
+        <!-- Sound and Assist Buttons -->
+        <div class="flex items-center gap-2">
+            <button onclick="toggleMute()" id="muteBtn" class="p-2.5 rounded-xl border-2 border-slate-700 bg-white hover:bg-slate-50 cartoon-shadow-sm transition active:scale-95" title="Toggle Sound">
+                <svg id="soundOnIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M12 18.75V5.25L7.75 9.5H4.5v5h3.25L12 18.75z" />
+                </svg>
+                <svg id="soundOffIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="flex-1 grid grid-cols-1 xl:grid-cols-12 gap-6 p-6 max-w-[1700px] w-full mx-auto">
+        
+        <!-- Left: Cartoon Blueprint canvas, status alerts, force readout -->
+        <div class="xl:col-span-8 flex flex-col gap-6">
+            
+            <!-- Blueprint Mission Board -->
+            <div class="bg-amber-100/50 border-3 border-slate-700 rounded-3xl p-4 flex gap-4 items-start cartoon-shadow">
+                <div class="w-14 h-14 rounded-2xl bg-orange-400 border-2 border-slate-700 flex items-center justify-center shrink-0 shadow-sm text-2xl -rotate-6">
+                    💡
+                </div>
+                <div>
+                    <h3 class="title-font font-bold text-slate-800 text-base tracking-wide uppercase flex items-center gap-2">
+                        Inventor's Sketchbook & Task
+                    </h3>
+                    <p id="levelInstructions" class="text-sm text-slate-700 font-medium mt-1 leading-relaxed">
+                        Slide the kitten's bowl down the ramp so it glides and stops *exactly* under the food dispenser. If too fast, it crashes and spills. If too slow, the kitten remains hungry!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Sketchbook Canvas Box -->
+            <div class="relative bg-white border-4 border-slate-700 rounded-3xl overflow-hidden cartoon-shadow flex flex-col">
+                
+                <!-- Quick Info Ribbon -->
+                <div class="absolute top-4 left-4 z-10 flex gap-2">
+                    <div class="bg-white/90 border-2 border-slate-700 rounded-xl px-3 py-1.5 text-xs font-bold shadow-sm backdrop-blur flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse border border-slate-700"></span>
+                        <span class="text-slate-600">Sled Velocity:</span>
+                        <span id="overlaySpeed" class="code-font text-slate-800">0.00 m/s</span>
+                    </div>
+                    <div class="bg-white/90 border-2 border-slate-700 rounded-xl px-3 py-1.5 text-xs font-bold shadow-sm backdrop-blur flex items-center gap-2">
+                        <span class="text-slate-600">Machine Phase:</span>
+                        <span id="overlayState" class="code-font text-amber-600 uppercase font-extrabold">Idle</span>
+                    </div>
+                </div>
+
+                <!-- Interactive Blueprint Canvas -->
+                <canvas id="physicsCanvas" class="w-full h-[460px] bg-[#f9f5eb] block cursor-crosshair"></canvas>
+
+                <!-- Whimsical Popup Messages inside Canvas layout -->
+                <div id="statusToast" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 hidden bg-white/95 border-3 border-slate-700 rounded-2xl px-8 py-4 cartoon-shadow max-w-md w-full transition-all duration-300 text-center">
+                    <div class="text-4xl mb-1" id="toastEmoji">🐱</div>
+                    <h4 id="toastTitle" class="title-font font-bold text-lg mb-1 text-slate-800">Sim Complete</h4>
+                    <p id="toastMessage" class="text-sm text-slate-600 font-semibold">Details of the attempt.</p>
+                </div>
+            </div>
+
+            <!-- Dynamic Hand-Drawn Style Vectors Dashboard -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-emerald-50 border-3 border-slate-700 rounded-2xl p-4 flex flex-col justify-between cartoon-shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 border border-slate-700"></span>
+                            <span class="text-xs text-slate-600 font-bold uppercase tracking-wider">Sliding Force ($F_{g,\parallel}$)</span>
+                        </div>
+                        <h4 class="text-2xl font-black mt-1 code-font text-emerald-700" id="valFg">0.00 N</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 font-medium mt-2">Force pulling the payload downhill. ($m \cdot g \cdot \sin\theta$)</p>
+                </div>
+                <div class="bg-purple-50 border-3 border-slate-700 rounded-2xl p-4 flex flex-col justify-between cartoon-shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3.5 h-3.5 rounded-full bg-purple-500 border border-slate-700"></span>
+                            <span class="text-xs text-slate-600 font-bold uppercase tracking-wider">Normal Support ($F_N$)</span>
+                        </div>
+                        <h4 class="text-2xl font-black mt-1 code-font text-purple-700" id="valFn">0.00 N</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 font-medium mt-2">Perpendicular support pushing back. ($m \cdot g \cdot \cos\theta$)</p>
+                </div>
+                <div class="bg-rose-50 border-3 border-slate-700 rounded-2xl p-4 flex flex-col justify-between cartoon-shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3.5 h-3.5 rounded-full bg-rose-500 border border-slate-700"></span>
+                            <span class="text-xs text-slate-600 font-bold uppercase tracking-wider">Friction Opposing ($F_f$)</span>
+                        </div>
+                        <h4 class="text-2xl font-black mt-1 code-font text-rose-700" id="valFf">0.00 N</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 font-medium mt-2">Opposing hold-back force. Equals static friction until break, then kinetic friction.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right: Control Deck, Material Customizer, Blackboard Math -->
+        <div class="xl:col-span-4 flex flex-col gap-6">
+            
+            <!-- Quick Action controls -->
+            <div class="bg-white border-3 border-slate-700 rounded-3xl p-5 cartoon-shadow">
+                <h3 class="title-font font-bold text-slate-800 mb-4 text-sm tracking-wide uppercase">Trigger Machine</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="runSimulation()" id="startBtn" class="flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-slate-800 border-2 border-slate-700 font-bold py-3 px-6 rounded-2xl transition-all cartoon-shadow-sm cartoon-shadow-hover active:scale-95">
+                        🚀 LAUNCH
+                    </button>
+                    <button onclick="resetSimulation()" id="resetBtn" class="flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border-2 border-slate-700 font-semibold py-3 px-6 rounded-2xl transition-all cartoon-shadow-sm active:scale-95">
+                        🔄 RESET
+                    </button>
+                </div>
+            </div>
+
+            <!-- Whimsical Material Selector -->
+            <div class="bg-white border-3 border-slate-700 rounded-3xl p-5 cartoon-shadow flex flex-col gap-5">
+                <div>
+                    <h3 class="title-font font-bold text-slate-800 text-sm tracking-wide uppercase">Rube Goldberg Finetuner</h3>
+                    <p class="text-xs text-slate-500 font-semibold mt-1">Select whimsical materials for segments of the machine to adjust friction levels.</p>
+                </div>
+
+                <!-- Zone 1: Ramp -->
+                <div class="border-t-2 border-dashed border-slate-200 pt-3" id="zone1Group">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-600">Zone 1: Gravity Slide Surface</label>
+                        <span class="text-xs text-orange-600 font-bold bg-orange-50 px-2 py-0.5 rounded border border-orange-200" id="zone1Coeffs">Loading...</span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2 animate-fadeIn" id="zone1Selector">
+                        <!-- Populated dynamic -->
+                    </div>
+                </div>
+
+                <!-- Zone 2: Deck -->
+                <div class="border-t-2 border-dashed border-slate-200 pt-3" id="zone2Group">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-600">Zone 2: Deceleration Pathway</label>
+                        <span class="text-xs text-orange-600 font-bold bg-orange-50 px-2 py-0.5 rounded border border-orange-200" id="zone2Coeffs">Loading...</span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2" id="zone2Selector">
+                        <!-- Populated dynamic -->
+                    </div>
+                </div>
+
+                <!-- Zone 3: Sled Underside (only Level 3) -->
+                <div class="border-t-2 border-dashed border-slate-200 pt-3 hidden" id="zone3Group">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-600">Zone 3: Bread Toaster Base</label>
+                        <span class="text-xs text-orange-600 font-bold bg-orange-50 px-2 py-0.5 rounded border border-orange-200" id="zone3Coeffs">Loading...</span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2" id="zone3Selector">
+                        <!-- Populated dynamic -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hand-Written Blackboard Math Notebook -->
+            <div class="bg-emerald-50/40 border-3 border-slate-700 rounded-3xl p-5 cartoon-shadow flex-1 flex flex-col gap-4">
+                <h3 class="title-font font-bold text-slate-800 text-sm tracking-wide uppercase flex items-center gap-2">
+                    📝 Live Calculations Board
+                </h3>
+                
+                <div class="bg-[#fcfdfa] p-4 rounded-2xl border-2 border-slate-700 text-xs text-slate-700 space-y-3 code-font shadow-inner">
+                    <div>
+                        <div class="text-emerald-700 font-bold mb-1">// Gravitational Component (Ramp)</div>
+                        <div class="font-semibold">F_g_parallel = m * g * sin(θ)</div>
+                        <div class="text-slate-500" id="mathFgParallel"> = ...</div>
+                    </div>
+                    <hr class="border-dashed border-slate-300">
+                    <div>
+                        <div class="text-purple-700 font-bold mb-1">// Static Friction Threshold</div>
+                        <div class="font-semibold">F_s_max = μ_s * m * g * cos(θ)</div>
+                        <div class="text-slate-500" id="mathFsMax"> = ...</div>
+                        <div class="mt-1 font-bold text-emerald-600" id="mathSlideCheck">...</div>
+                    </div>
+                    <hr class="border-dashed border-slate-300">
+                    <div>
+                        <div class="text-rose-700 font-bold mb-1">// Friction Loss While Sliding</div>
+                        <div class="font-semibold">F_k = μ_k * F_N</div>
+                        <div class="text-slate-500" id="mathFk"> = ...</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t-3 border-slate-700 bg-amber-100/50 py-4 text-center text-xs font-bold text-slate-600 px-4">
+        Friction Contraption Simulator &copy; 2026. Hand-sketched with classic mechanics and physics equations.
+    </footer>
+
+    <script>
+        // Web Audio Synthesizer for retro playful sounds
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+        let isMuted = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioCtx();
+            }
+        }
+
+        // Whimsical SFX synthesis
+        function playSound(type) {
+            if (isMuted) return;
+            initAudio();
+            if (!audioCtx) return;
+
+            try {
+                const now = audioCtx.currentTime;
+
+                if (type === 'slide') {
+                    // Friction scraping hum
+                    const osc = audioCtx.createOscillator();
+                    const filter = audioCtx.createBiquadFilter();
+                    const gain = audioCtx.createGain();
+                    
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(100, now);
+                    osc.frequency.exponentialRampToValueAtTime(130, now + 0.5);
+                    
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(400, now);
+                    
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.6);
+
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(now);
+                    osc.stop(now + 0.6);
+
+                } else if (type === 'meow') {
+                    // Cartoon cat sound! Rising-falling bend
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(450, now);
+                    osc.frequency.exponentialRampToValueAtTime(700, now + 0.15);
+                    osc.frequency.exponentialRampToValueAtTime(500, now + 0.35);
+                    
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.4);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+
+                } else if (type === 'pop') {
+                    // Sharp pop
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
+                    
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.08);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+
+                } else if (type === 'ding') {
+                    // Toaster ding / high chime
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(1200, now);
+                    
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(now);
+                    osc.stop(now + 0.8);
+
+                } else if (type === 'success') {
+                    // Cute triumph jingle
+                    const chords = [523.25, 659.25, 783.99, 1046.50]; // C Major
+                    chords.forEach((f, i) => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(f, now + i * 0.08);
+                        
+                        gain.gain.setValueAtTime(0.05, now + i * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.25);
+                        
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        
+                        osc.start(now + i * 0.08);
+                        osc.stop(now + i * 0.08 + 0.25);
+                    });
+
+                } else if (type === 'fail') {
+                    // Funny sliding down failure "boing"
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.linearRampToValueAtTime(90, now + 0.4);
+                    
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.4);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+
+                } else if (type === 'hit') {
+                    // Box collision
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(120, now);
+                    osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
+                    
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(now);
+                    osc.stop(now + 0.15);
+
+                } else if (type === 'click') {
+                    // Tiny selection click
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(900, now);
+                    gain.gain.setValueAtTime(0.03, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.03);
+                }
+            } catch (e) {
+                console.warn("Audio Context init/playback suspended.", e);
+            }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById('soundOnIcon').classList.toggle('hidden', isMuted);
+            document.getElementById('soundOffIcon').classList.toggle('hidden', !isMuted);
+        }
+
+        // Whimsical Material Definitions
+        const MATERIALS = {
+            ice: { name: 'Slippery Ice', emoji: '🧊', us: 0.04, uk: 0.02, color: '#bae6fd', border: '#38bdf8', text: 'Ultra slick slide' },
+            brass: { name: 'Shiny Brass', emoji: '🎺', us: 0.22, uk: 0.12, color: '#fef08a', border: '#eab308', text: 'Slick smooth glide' },
+            wood: { name: 'Pine Wood', emoji: '🌲', us: 0.44, uk: 0.28, color: '#fed7aa', border: '#ea580c', text: 'Classic sturdy wooden deck' },
+            sandpaper: { name: 'Sandpaper', emoji: '🏜️', us: 0.85, uk: 0.65, color: '#fca5a5', border: '#dc2626', text: 'Heavy friction hold' }
+        };
+
+        // Rube Goldberg levels definition
+        const LEVELS = {
+            1: {
+                title: 'Feed Hungry Kitten!',
+                emoji: '🐱',
+                brief: 'Slide the feeding bowl down the greasy slide, then over the dining deck. You must choose materials so that it stops EXACTLY under the dry kibble dispenser! Too much speed breaks the bowl; too little leaves the cat hungry.',
+                angle: 32,
+                mass: 1.4,
+                g: 9.8,
+                rampMat: 'brass',
+                deckMat: 'wood',
+                targetX: 520,
+                targetW: 80,
+                hasBlock: false,
+                requiresImpact: false
+            },
+            2: {
+                title: 'Pop the Party Balloon!',
+                emoji: '🎈',
+                brief: 'Send a giant wooden ball sliding down the ramp to hit the trigger wagon. The wagon rolls over and swings a pivot lever loaded with a sharp tack to POP the balloon! Needs a hefty kinetic impact speed between 1.0 and 2.5 m/s.',
+                angle: 42,
+                mass: 1.8,
+                g: 9.8,
+                rampMat: 'wood',
+                deckMat: 'ice',
+                targetX: 680,
+                targetW: 10,
+                hasBlock: true,
+                blockType: 'wagon',
+                blockX: 430,
+                blockW: 60,
+                blockH: 40,
+                requiresImpact: true,
+                minImpactSpeed: 1.0,
+                maxImpactSpeed: 2.5
+            },
+            3: {
+                title: 'Toasting Butter-Toast!',
+                emoji: '🍞',
+                brief: 'Slide the yellow slab of butter down the griddle so it falls directly on the toaster plunger! You need to configure the friction of the griddle, the slide, AND the heavy toaster base so that the toaster gets clicked down without flipping the unit over.',
+                angle: 38,
+                mass: 1.5,
+                g: 9.8,
+                rampMat: 'ice',
+                deckMat: 'brass',
+                sledMat: 'wood',
+                targetX: 640,
+                targetW: 70,
+                hasBlock: true,
+                blockType: 'toaster',
+                blockX: 480,
+                blockW: 70,
+                blockH: 55
+            }
+        };
+
+        let currentLvl = 1;
+        let simState = 'setup'; // 'setup', 'sliding_ramp', 'sliding_deck', 'reaction_active', 'success', 'failed', 'stuck_ramp'
+        let animFrameId = null;
+
+        // Interactive particle containers
+        let particles = [];
+
+        // Active physical objects state
+        let cargo = {
+            x: 0, y: 0,
+            vx: 0, vy: 0,
+            mass: 1.0,
+            w: 42, h: 26,
+            t: 0
+        };
+
+        // Rube Goldberg interactive targets
+        let activeBlock = {
+            x: 430, y: 0,
+            vx: 0, vy: 0,
+            w: 60, h: 40,
+            isActive: false,
+            type: 'wagon'
+        };
+
+        // Tipping/swinging mechanics
+        let reactionProg = 0; // percentage trigger movement (balloon pin rotation, kitten kibble drop, toaster lever click)
+        let isBalloonPopped = false;
+        let isToasterActive = false;
+
+        let activeRampMat = 'wood';
+        let activeDeckMat = 'wood';
+        let activeSledMat = 'wood';
+
+        const rampStart = { x: 60, y: 130 };
+        const rampEnd = { x: 310, y: 310 };
+        const deckEnd = { x: 750, y: 310 };
+
+        const canvas = document.getElementById('physicsCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Setup dimensions
+        function setupCanvas() {
+            canvas.width = 800;
+            canvas.height = 440;
+        }
+
+        // Change Active Levels
+        function changeLevel(lvlId) {
+            playSound('click');
+            currentLvl = lvlId;
+            
+            // Highlight Button inside playful light layout
+            for (let i = 1; i <= 3; i++) {
+                const btn = document.getElementById(`btn-lvl-${i}`);
+                if (i === lvlId) {
+                    btn.className = "px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 bg-amber-400 border-2 border-slate-700 cartoon-shadow-sm text-slate-800";
+                } else {
+                    btn.className = "px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 border-2 border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50";
+                }
+            }
+
+            const config = LEVELS[currentLvl];
+            activeRampMat = config.rampMat;
+            activeDeckMat = config.deckMat;
+            isBalloonPopped = false;
+            isToasterActive = false;
+            reactionProg = 0;
+            particles = [];
+
+            if (config.hasBlock) {
+                activeSledMat = config.sledMat || 'wood';
+                document.getElementById('zone3Group').classList.remove('hidden');
+            } else {
+                document.getElementById('zone3Group').classList.add('hidden');
+            }
+
+            document.getElementById('levelInstructions').innerHTML = config.brief;
+            
+            renderMaterialSelectors();
+            resetSimulation();
+        }
+
+        // Generate customized selector buttons
+        function renderMaterialSelectors() {
+            const zones = [
+                { id: 'zone1Selector', key: 'ramp', active: activeRampMat, action: (m) => { activeRampMat = m; } },
+                { id: 'zone2Selector', key: 'deck', active: activeDeckMat, action: (m) => { activeDeckMat = m; } },
+                { id: 'zone3Selector', key: 'sled', active: activeSledMat, action: (m) => { activeSledMat = m; } }
+            ];
+
+            zones.forEach(zone => {
+                const container = document.getElementById(zone.id);
+                if (!container) return;
+                container.innerHTML = '';
+                
+                Object.keys(MATERIALS).forEach(matKey => {
+                    const mat = MATERIALS[matKey];
+                    const isSelected = zone.active === matKey;
+                    
+                    const btn = document.createElement('button');
+                    btn.className = `flex flex-col items-center justify-center p-2 rounded-2xl border-2 text-center transition-all ${
+                        isSelected 
+                        ? 'bg-amber-100 border-slate-700 cartoon-shadow-sm text-slate-800 font-extrabold' 
+                        : 'bg-white border-slate-300 hover:border-slate-400 text-slate-500'
+                    }`;
+                    
+                    btn.onclick = () => {
+                        playSound('click');
+                        zone.action(matKey);
+                        renderMaterialSelectors();
+                        updateMathReadout();
+                        resetSimulation();
+                    };
+
+                    btn.innerHTML = `
+                        <span class="text-xl mb-1">${mat.emoji}</span>
+                        <span class="text-[10px] leading-tight font-bold tracking-tight block">${mat.name}</span>
+                        <span class="text-[8px] font-semibold text-slate-400">μk: ${mat.uk}</span>
+                    `;
+                    container.appendChild(btn);
+                });
+            });
+
+            // Update title labels
+            document.getElementById('zone1Coeffs').innerHTML = `<strong>${MATERIALS[activeRampMat].emoji} ${MATERIALS[activeRampMat].name}</strong> (μs: ${MATERIALS[activeRampMat].us})`;
+            document.getElementById('zone2Coeffs').innerHTML = `<strong>${MATERIALS[activeDeckMat].emoji} ${MATERIALS[activeDeckMat].name}</strong> (μs: ${MATERIALS[activeDeckMat].us})`;
+            if (LEVELS[currentLvl].hasBlock) {
+                document.getElementById('zone3Coeffs').innerHTML = `<strong>${MATERIALS[activeSledMat].emoji} ${MATERIALS[activeSledMat].name}</strong> (μs: ${MATERIALS[activeSledMat].us})`;
+            }
+        }
+
+        // Update dynamic hand-drawn board math
+        function updateMathReadout() {
+            const config = LEVELS[currentLvl];
+            const ramM = MATERIALS[activeRampMat];
+            
+            const mass = config.mass;
+            const g = config.g;
+            const thetaRad = config.angle * Math.PI / 180;
+            
+            const Fg_parallel = mass * g * Math.sin(thetaRad);
+            const Fn = mass * g * Math.cos(thetaRad);
+            const Fs_max = ramM.us * Fn;
+            const Fk = ramM.uk * Fn;
+            
+            const canSlide = Fg_parallel > Fs_max;
+
+            // Math expressions
+            document.getElementById('mathFgParallel').innerHTML = `= ${mass.toFixed(1)}kg * ${g}m/s² * sin(${config.angle}°) = <strong>${Fg_parallel.toFixed(2)} N</strong>`;
+            document.getElementById('mathFsMax').innerHTML = `= ${ramM.us.toFixed(2)} * ${mass.toFixed(1)}kg * ${g}m/s² * cos(${config.angle}°) = <strong>${Fs_max.toFixed(2)} N</strong>`;
+            document.getElementById('mathFk').innerHTML = `= ${ramM.uk.toFixed(2)} * ${Fn.toFixed(2)} N = <strong>${Fk.toFixed(2)} N</strong>`;
+
+            const slideCheckEl = document.getElementById('mathSlideCheck');
+            if (canSlide) {
+                slideCheckEl.innerHTML = `✔ Slide Check: F_g_parallel > F_s_max. Bowl breaks hold and glides!`;
+                slideCheckEl.className = "mt-1 font-bold text-emerald-600";
+            } else {
+                slideCheckEl.innerHTML = `❌ Friction Locked: F_g_parallel ≤ F_s_max. It remains stuck!`;
+                slideCheckEl.className = "mt-1 font-bold text-rose-600";
+            }
+
+            // Dashboard vector indicators
+            document.getElementById('valFg').textContent = Fg_parallel.toFixed(2) + " N";
+            document.getElementById('valFn').textContent = Fn.toFixed(2) + " N";
+            document.getElementById('valFf').textContent = (simState === 'sliding_ramp' ? Fk : (simState === 'setup' ? Math.min(Fg_parallel, Fs_max) : 0)).toFixed(2) + " N";
+        }
+
+        // Add dynamic floating cartoon spark particles
+        function addSpark(x, y, color, count = 10) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
+                    size: Math.random() * 5 + 3,
+                    color: color,
+                    alpha: 1.0,
+                    life: 1.0,
+                    decay: Math.random() * 0.05 + 0.02
+                });
+            }
+        }
+
+        // Render stylized cartoon blueprint artwork
+        function drawScene() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 1. Draw cozy soft gridlines
+            ctx.strokeStyle = 'rgba(217, 119, 6, 0.06)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < canvas.width; i += 24) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+            }
+            for (let j = 0; j < canvas.height; j += 24) {
+                ctx.beginPath();
+                ctx.moveTo(0, j);
+                ctx.lineTo(canvas.width, j);
+                ctx.stroke();
+            }
+
+            const config = LEVELS[currentLvl];
+
+            // 2. Draw Target Area based on levels
+            ctx.save();
+            if (currentLvl === 1) {
+                // automatic dry-food dispenser funnel
+                ctx.fillStyle = '#64748b';
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(config.targetX + config.targetW/2 - 20, 100);
+                ctx.lineTo(config.targetX + config.targetW/2 - 5, 230);
+                ctx.lineTo(config.targetX + config.targetW/2 + 5, 230);
+                ctx.lineTo(config.targetX + config.targetW/2 + 20, 100);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                // Cute funnel holder brace
+                ctx.strokeStyle = '#94a3b8';
+                ctx.beginPath();
+                ctx.moveTo(config.targetX + config.targetW/2 - 20, 120);
+                ctx.lineTo(config.targetX + config.targetW/2 - 60, 120);
+                ctx.moveTo(config.targetX + config.targetW/2 + 20, 120);
+                ctx.lineTo(config.targetX + config.targetW/2 + 60, 120);
+                ctx.stroke();
+
+                // Draw target safety zone marks
+                ctx.fillStyle = 'rgba(251, 191, 36, 0.2)';
+                ctx.fillRect(config.targetX, deckEnd.y - 4, config.targetW, 8);
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([4, 4]);
+                ctx.beginPath();
+                ctx.moveTo(config.targetX, deckEnd.y - 10);
+                ctx.lineTo(config.targetX, deckEnd.y + 10);
+                ctx.moveTo(config.targetX + config.targetW, deckEnd.y - 10);
+                ctx.lineTo(config.targetX + config.targetW, deckEnd.y + 10);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Draw a cute kitten sitting eagerly
+                drawCuteCat(680, deckEnd.y - 20);
+
+            } else if (currentLvl === 2) {
+                // Draw Balloon Pop apparatus
+                // Balloon Stand
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(710, deckEnd.y);
+                ctx.lineTo(710, deckEnd.y - 120);
+                ctx.stroke();
+
+                // Draw String and Balloon
+                if (!isBalloonPopped) {
+                    ctx.strokeStyle = '#94a3b8';
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.moveTo(710, deckEnd.y - 120);
+                    ctx.quadraticCurveTo(705, deckEnd.y - 150, 710, deckEnd.y - 170);
+                    ctx.stroke();
+
+                    // Giant Balloon
+                    ctx.fillStyle = '#ef4444';
+                    ctx.strokeStyle = '#991b1b';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.ellipse(710, deckEnd.y - 210, 24, 32, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    // Balloon knot
+                    ctx.beginPath();
+                    ctx.moveTo(710, deckEnd.y - 175);
+                    ctx.lineTo(705, deckEnd.y - 170);
+                    ctx.lineTo(715, deckEnd.y - 170);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+
+                // Draw pivoting needle lever
+                ctx.save();
+                ctx.translate(630, deckEnd.y - 50);
+                // Rotate needle downward depending on wagon kinetic collision progression
+                const angleRad = (reactionProg * 80 * Math.PI) / 180;
+                ctx.rotate(angleRad);
+                
+                // Wooden support post
+                ctx.fillStyle = '#ca8a04';
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.roundRect(-40, -6, 80, 12, 3);
+                ctx.fill();
+                ctx.stroke();
+
+                // Silver pin tack
+                ctx.fillStyle = '#cbd5e1';
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(40, -3);
+                ctx.lineTo(70, 0); // sharp needle end
+                ctx.lineTo(40, 3);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                // Pivot hinge center dot
+                ctx.fillStyle = '#f59e0b';
+                ctx.beginPath();
+                ctx.arc(0, 0, 5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                
+                ctx.restore();
+
+                // Trigger Button/Pivot brace base
+                ctx.fillStyle = '#ca8a04';
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.roundRect(620, deckEnd.y - 10, 20, 12, 2);
+                ctx.fill();
+                ctx.stroke();
+
+            } else if (currentLvl === 3) {
+                // Butter & Toaster Setup
+                // Draw a cute toaster with slotted lever
+                ctx.save();
+                ctx.fillStyle = '#94a3b8';
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 3.5;
+                
+                // toaster main chassis body
+                ctx.beginPath();
+                ctx.roundRect(config.targetX, deckEnd.y - 65, config.targetW, 65, 8);
+                ctx.fill();
+                ctx.stroke();
+
+                // toaster metallic side accent
+                ctx.fillStyle = '#cbd5e1';
+                ctx.beginPath();
+                ctx.roundRect(config.targetX + 6, deckEnd.y - 59, config.targetW - 12, 53, 4);
+                ctx.fill();
+
+                // Plunger slide slot
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(config.targetX + 15, deckEnd.y - 48);
+                ctx.lineTo(config.targetX + 15, deckEnd.y - 12);
+                ctx.stroke();
+
+                // Spring knob plunger lever (pushed down by weight impact!)
+                const leverY = deckEnd.y - 45 + (reactionProg * 30);
+                ctx.fillStyle = '#ef4444';
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.roundRect(config.targetX + 2, leverY, 20, 10, 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // If activated, show dynamic yellow golden toast popping out!
+                if (isToasterActive) {
+                    ctx.fillStyle = '#f59e0b';
+                    ctx.strokeStyle = '#b45309';
+                    ctx.lineWidth = 2.5;
+                    ctx.beginPath();
+                    // Toast sticking out of the top slot
+                    ctx.roundRect(config.targetX + 22, deckEnd.y - 88 + (1.0 - reactionProg)*15, 26, 30, [4, 4, 0, 0]);
+                    ctx.fill();
+                    ctx.stroke();
+                }
+
+                ctx.restore();
+            }
+            ctx.restore();
+
+            // 3. Draw Zone 1: Ramp slide
+            ctx.save();
+            ctx.strokeStyle = MATERIALS[activeRampMat].color;
+            ctx.lineWidth = 9;
+            ctx.lineCap = 'round';
+            ctx.shadowColor = MATERIALS[activeRampMat].border;
+            ctx.shadowBlur = 4;
+            ctx.beginPath();
+            ctx.moveTo(rampStart.x, rampStart.y);
+            ctx.lineTo(rampEnd.x, rampEnd.y);
+            ctx.stroke();
+
+            // Cartoon black outline
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.restore();
+
+            // 4. Draw Zone 2: Flat dining track
+            ctx.save();
+            ctx.strokeStyle = MATERIALS[activeDeckMat].color;
+            ctx.lineWidth = 9;
+            ctx.lineCap = 'round';
+            ctx.shadowColor = MATERIALS[activeDeckMat].border;
+            ctx.shadowBlur = 4;
+            ctx.beginPath();
+            ctx.moveTo(rampEnd.x, rampEnd.y);
+            ctx.lineTo(deckEnd.x, deckEnd.y);
+            ctx.stroke();
+
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.restore();
+
+            // Annotation markers
+            ctx.fillStyle = '#64748b';
+            ctx.font = 'bold 10px Quicksand';
+            ctx.fillText('SLIDE ZONE 1', rampStart.x - 20, rampStart.y - 12);
+            ctx.fillText('DECK ZONE 2', deckEnd.x - 100, deckEnd.y + 24);
+
+            // 5. Draw Obstacles / Level-specific movers
+            if (config.hasBlock) {
+                ctx.save();
+                ctx.fillStyle = MATERIALS[activeSledMat].color;
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 3;
+                
+                if (config.blockType === 'wagon') {
+                    // Draw a toy wagon carriage
+                    ctx.beginPath();
+                    ctx.roundRect(activeBlock.x, deckEnd.y - activeBlock.h + 8, activeBlock.w, activeBlock.h - 8, 4);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    // Wagon cute handle
+                    ctx.strokeStyle = '#334155';
+                    ctx.lineWidth = 2.5;
+                    ctx.beginPath();
+                    ctx.moveTo(activeBlock.x + activeBlock.w, deckEnd.y - 12);
+                    ctx.lineTo(activeBlock.x + activeBlock.w + 14, deckEnd.y - 20);
+                    ctx.stroke();
+
+                    // Tiny rolling wheels
+                    ctx.fillStyle = '#ef4444';
+                    ctx.beginPath();
+                    ctx.arc(activeBlock.x + 12, deckEnd.y - 2, 6, 0, Math.PI * 2);
+                    ctx.arc(activeBlock.x + activeBlock.w - 12, deckEnd.y - 2, 6, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
+                } else if (config.blockType === 'toaster') {
+                    // Butter toaster sled
+                    ctx.fillStyle = '#fbbf24';
+                    ctx.beginPath();
+                    ctx.roundRect(activeBlock.x, deckEnd.y - activeBlock.h, activeBlock.w, activeBlock.h, 6);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#f59e0b';
+                    ctx.font = 'bold 9px Quicksand';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('HEAVY SLED', activeBlock.x + activeBlock.w/2, deckEnd.y - activeBlock.h/2);
+                }
+                ctx.restore();
+            }
+
+            // 6. Draw cargo block (with eyes!)
+            ctx.save();
+            ctx.translate(cargo.x, cargo.y);
+            
+            let rotation = 0;
+            if (simState === 'sliding_ramp' || (simState === 'setup' && cargo.t === 0)) {
+                rotation = Math.atan2(rampEnd.y - rampStart.y, rampEnd.x - rampStart.x);
+            }
+            ctx.rotate(rotation);
+
+            // Customize cargo appearance according to level
+            if (currentLvl === 1) {
+                // A cute plastic pet food bowl
+                ctx.fillStyle = '#ef4444';
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(-cargo.w/2 - 6, 0);
+                ctx.lineTo(-cargo.w/2, -cargo.h);
+                ctx.lineTo(cargo.w/2, -cargo.h);
+                ctx.lineTo(cargo.w/2 + 6, 0);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                // Inner feeding space
+                ctx.fillStyle = '#fee2e2';
+                ctx.beginPath();
+                ctx.ellipse(0, -cargo.h + 2, cargo.w/2 - 2, 4, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+            } else if (currentLvl === 2) {
+                // A heavy striped toy bowling ball
+                ctx.fillStyle = '#a855f7';
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(0, -cargo.h/2, cargo.w/2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Finger hole dots
+                ctx.fillStyle = '#334155';
+                ctx.beginPath();
+                ctx.arc(-4, -cargo.h/2 - 5, 2.5, 0, Math.PI * 2);
+                ctx.arc(4, -cargo.h/2 - 5, 2.5, 0, Math.PI * 2);
+                ctx.arc(0, -cargo.h/2 + 2, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+
+            } else if (currentLvl === 3) {
+                // Cute slab of yellow butter
+                ctx.fillStyle = '#fef08a';
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.roundRect(-cargo.w/2, -cargo.h, cargo.w, cargo.h, 4);
+                ctx.fill();
+                ctx.stroke();
+
+                // Butter texture cuts
+                ctx.strokeStyle = '#facc15';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(-cargo.w/4, -cargo.h + 6);
+                ctx.lineTo(-cargo.w/4 + 10, -cargo.h + 6);
+                ctx.moveTo(-cargo.w/4 - 4, -cargo.h + 12);
+                ctx.lineTo(-cargo.w/4 + 14, -cargo.h + 12);
+                ctx.stroke();
+            }
+
+            // Draw cartoon animated googly eyes
+            ctx.fillStyle = '#ffffff';
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(-8, -cargo.h/2, 6, 0, Math.PI * 2);
+            ctx.arc(8, -cargo.h/2, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Pupil eyes tracking direction of movement
+            ctx.fillStyle = '#334155';
+            let pupilShiftX = (cargo.vx > 0) ? 2 : 0;
+            ctx.beginPath();
+            ctx.arc(-8 + pupilShiftX, -cargo.h/2, 2.5, 0, Math.PI * 2);
+            ctx.arc(8 + pupilShiftX, -cargo.h/2, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Force vector overlays on active simulation
+            if (simState === 'sliding_ramp' || simState === 'sliding_deck' || simState === 'stuck_ramp') {
+                const vectorScale = 8;
+                
+                // A. Gravity vector (emerald)
+                ctx.save();
+                ctx.rotate(-rotation);
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(0, -cargo.h/2);
+                ctx.lineTo(0, -cargo.h/2 + config.mass * 9.8 * vectorScale);
+                ctx.stroke();
+                ctx.restore();
+
+                // B. Normal vector (purple)
+                ctx.strokeStyle = '#a855f7';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(0, -cargo.h/2);
+                const FnVal = config.mass * 9.8 * (simState === 'sliding_ramp' ? Math.cos(config.angle * Math.PI/180) : 1);
+                ctx.lineTo(0, -cargo.h/2 - FnVal * vectorScale);
+                ctx.stroke();
+
+                // C. Friction force vector (rose)
+                ctx.strokeStyle = '#f43f5e';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(0, -cargo.h/2);
+                const activeMu = simState === 'sliding_ramp' ? MATERIALS[activeRampMat].uk : MATERIALS[activeDeckMat].uk;
+                const FfVal = simState === 'stuck_ramp' ? (config.mass * 9.8 * Math.sin(config.angle * Math.PI/180)) : (activeMu * FnVal);
+                ctx.lineTo(-FfVal * vectorScale * 2, -cargo.h/2);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+
+            // Draw dynamic particles (sparks, food, stars)
+            drawParticles();
+        }
+
+        // Draw cute cartoon kitten vector
+        function drawCuteCat(x, y) {
+            ctx.save();
+            ctx.translate(x, y);
+
+            // Tail
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 6;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(15, 10);
+            ctx.quadraticCurveTo(30, 0, 25, -20);
+            ctx.stroke();
+
+            // Feet
+            ctx.fillStyle = '#cbd5e1';
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.arc(-12, 16, 5, 0, Math.PI * 2);
+            ctx.arc(12, 16, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Main body
+            ctx.fillStyle = '#e2e8f0';
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 22, 18, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Head
+            ctx.beginPath();
+            ctx.arc(0, -16, 15, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Ears
+            ctx.fillStyle = '#e2e8f0';
+            ctx.beginPath();
+            // Left ear
+            ctx.moveTo(-12, -26);
+            ctx.lineTo(-16, -40);
+            ctx.lineTo(-2, -30);
+            ctx.closePath();
+            // Right ear
+            ctx.moveTo(12, -26);
+            ctx.lineTo(16, -40);
+            ctx.lineTo(2, -30);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Eyes
+            ctx.fillStyle = '#334155';
+            ctx.beginPath();
+            ctx.arc(-6, -18, 2.5, 0, Math.PI * 2);
+            ctx.arc(6, -18, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Cute nose
+            ctx.fillStyle = '#fda4af';
+            ctx.beginPath();
+            ctx.moveTo(-3, -14);
+            ctx.lineTo(3, -14);
+            ctx.lineTo(0, -11);
+            ctx.closePath();
+            ctx.fill();
+
+            // Whiskers
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(-8, -13); ctx.lineTo(-18, -15);
+            ctx.moveTo(-8, -12); ctx.lineTo(-19, -11);
+            ctx.moveTo(8, -13); ctx.lineTo(18, -15);
+            ctx.moveTo(8, -12); ctx.lineTo(19, -11);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        // Draw active dynamic particles
+        function drawParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= p.decay;
+                
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                    continue;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = p.life;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Reset Rube Goldberg chain states
+        function resetSimulation() {
+            if (animFrameId) cancelAnimationFrame(animFrameId);
+            
+            simState = 'setup';
+            const config = LEVELS[currentLvl];
+
+            // Setup cargo bowl position
+            cargo.t = 0;
+            cargo.x = rampStart.x;
+            cargo.y = rampStart.y;
+            cargo.vx = 0;
+            cargo.vy = 0;
+
+            // Setup target blocks
+            activeBlock.isActive = false;
+            activeBlock.x = config.blockX || 430;
+            activeBlock.vx = 0;
+            activeBlock.vy = 0;
+            activeBlock.w = config.blockW || 60;
+            activeBlock.h = config.blockH || 40;
+
+            reactionProg = 0;
+            isBalloonPopped = false;
+            isToasterActive = false;
+            particles = [];
+
+            // UI state
+            const startBtn = document.getElementById('startBtn');
+            startBtn.disabled = false;
+            startBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            
+            const toast = document.getElementById('statusToast');
+            toast.classList.add('hidden');
+
+            document.getElementById('overlaySpeed').textContent = '0.00 m/s';
+            document.getElementById('overlayState').className = 'code-font text-amber-600 uppercase font-extrabold';
+            document.getElementById('overlayState').textContent = 'Setup';
+
+            updateMathReadout();
+            drawScene();
+        }
+
+        // Start chain reaction physics simulation
+        function runSimulation() {
+            initAudio();
+
+            const config = LEVELS[currentLvl];
+            const ramM = MATERIALS[activeRampMat];
+
+            const thetaRad = config.angle * Math.PI / 180;
+            const Fg_parallel = config.mass * config.g * Math.sin(thetaRad);
+            const Fn_ramp = config.mass * config.g * Math.cos(thetaRad);
+            const Fs_max = ramM.us * Fn_ramp;
+
+            // Disable controls during runtime
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('startBtn').classList.add('opacity-50', 'cursor-not-allowed');
+
+            if (Fg_parallel <= Fs_max) {
+                // Static friction stops the slider immediately
+                simState = 'stuck_ramp';
+                playSound('fail');
+                showToast('❌ CONTRAPTION STUCK', 'Static friction is too high to start! The bowl gravity can\'t break the friction seal. Select a slipperier material like Ice or Brass.', '🎨', 'bg-rose-50 border-rose-500');
+                document.getElementById('overlayState').className = 'code-font text-rose-600 uppercase font-extrabold';
+                document.getElementById('overlayState').textContent = 'Friction Stuck';
+                updateMathReadout();
+                drawScene();
+                return;
+            }
+
+            // Normal running
+            simState = 'sliding_ramp';
+            document.getElementById('overlayState').className = 'code-font text-blue-600 uppercase font-extrabold';
+            document.getElementById('overlayState').textContent = 'Ramp Slide';
+            
+            lastTime = performance.now();
+            requestAnimationFrame(simulationLoop);
+        }
+
+        let lastTime = 0;
+
+        // Standard game-loop callback
+        function simulationLoop(time) {
+            if (simState === 'setup' || simState === 'success' || simState === 'failed' || simState === 'stuck_ramp') return;
+
+            const dt = Math.min((time - lastTime) / 1000, 0.04);
+            lastTime = time;
+
+            const config = LEVELS[currentLvl];
+            const ramM = MATERIALS[activeRampMat];
+            const deckM = MATERIALS[activeDeckMat];
+
+            // 1. Slopes / ramps
+            if (simState === 'sliding_ramp') {
+                const thetaRad = config.angle * Math.PI / 180;
+                const a = config.g * (Math.sin(thetaRad) - ramM.uk * Math.cos(thetaRad));
+                
+                const rampLength = Math.hypot(rampEnd.x - rampStart.x, rampEnd.y - rampStart.y);
+                const currentS = cargo.t * rampLength;
+                
+                const newS = currentS + cargo.vx * dt + 0.5 * a * dt * dt;
+                cargo.vx += a * dt;
+                cargo.t = newS / rampLength;
+
+                if (cargo.t >= 1) {
+                    // Switch to Flat Deck Runway
+                    cargo.t = 1;
+                    cargo.x = rampEnd.x;
+                    cargo.y = rampEnd.y;
+                    
+                    // Match horizontal component
+                    cargo.vx = cargo.vx * Math.cos(thetaRad);
+                    cargo.vy = 0;
+                    
+                    simState = 'sliding_deck';
+                    playSound('slide');
+                    addSpark(cargo.x, cargo.y, '#f59e0b', 8);
+                    document.getElementById('overlayState').className = 'code-font text-purple-600 uppercase font-extrabold';
+                    document.getElementById('overlayState').textContent = 'Decelerating';
+                } else {
+                    cargo.x = rampStart.x + cargo.t * (rampEnd.x - rampStart.x);
+                    cargo.y = rampStart.y + cargo.t * (rampEnd.y - rampStart.y);
+                }
+
+            // 2. Flat Deck Run
+            } else if (simState === 'sliding_deck') {
+                const a = -deckM.uk * config.g;
+                cargo.vx += a * dt;
+
+                if (cargo.vx <= 0) {
+                    cargo.vx = 0;
+                    evalSimulationEnd();
+                } else {
+                    cargo.x += cargo.vx * dt * 60; // scale kinematics step visually
+                }
+
+                // Check collision triggers with Level obstacles
+                if (config.hasBlock && !activeBlock.isActive) {
+                    const cargoRight = cargo.x + cargo.w/2;
+                    if (cargoRight >= activeBlock.x) {
+                        playSound('hit');
+                        addSpark(cargo.x + 10, cargo.y, '#f43f5e', 12);
+                        
+                        const m1 = config.mass;
+                        const m2 = 1.0; // Sled unit mass
+                        const v1 = cargo.vx;
+                        
+                        // Impact momentum transfer
+                        const e = 0.5; // coefficient of restitution
+                        const v1_post = ((m1 - e * m2) * v1) / (m1 + m2);
+                        const v2_post = ((m1 + e * m1) * v1) / (m1 + m2);
+
+                        cargo.vx = Math.max(0, v1_post);
+                        activeBlock.vx = v2_post;
+                        activeBlock.isActive = true;
+                    }
+                }
+
+                // Hit bounds check
+                if (cargo.x >= deckEnd.x) {
+                    cargo.x = deckEnd.x;
+                    cargo.vx = 0;
+                    evalSimulationEnd();
+                }
+            }
+
+            // 3. Obstacle Sled mechanics
+            if (activeBlock.isActive) {
+                // Sled decelerates under custom deck material friction
+                const aSled = -deckM.uk * config.g;
+                activeBlock.vx += aSled * dt;
+
+                if (activeBlock.vx <= 0) {
+                    activeBlock.vx = 0;
+                    evalSimulationEnd();
+                } else {
+                    activeBlock.x += activeBlock.vx * dt * 60;
+                }
+
+                // Triggering chain actions depending on Level
+                if (currentLvl === 2) {
+                    // Wagon pushes pivoting needle toward balloon
+                    const distToPivot = 630 - activeBlock.x;
+                    if (distToPivot < 40) {
+                        // Increase pin rotation progress
+                        reactionProg = Math.min(1.0, reactionProg + dt * 4.0);
+                        if (reactionProg >= 0.8 && !isBalloonPopped) {
+                            isBalloonPopped = true;
+                            playSound('pop');
+                            addSpark(710, deckEnd.y - 210, '#f43f5e', 35); // Balloon Pop particles!
+                        }
+                    }
+                } else if (currentLvl === 3) {
+                    // Sled hits Toaster plunger lever
+                    const toasterTriggerX = config.targetX;
+                    if (activeBlock.x + activeBlock.w >= toasterTriggerX) {
+                        // Plunger lever clicks down
+                        reactionProg = Math.min(1.0, reactionProg + dt * 5.0);
+                        if (reactionProg >= 0.95 && !isToasterActive) {
+                            isToasterActive = true;
+                            playSound('ding');
+                            addSpark(config.targetX + 35, deckEnd.y - 100, '#fbbf24', 20); // Toast Pop particles!
+                        }
+                    }
+                }
+
+                if (activeBlock.x + activeBlock.w >= deckEnd.x) {
+                    activeBlock.x = deckEnd.x - activeBlock.w;
+                    activeBlock.vx = 0;
+                    evalSimulationEnd();
+                }
+            }
+
+            // Real-time overlays speed
+            const speedOut = activeBlock.isActive ? activeBlock.vx : cargo.vx;
+            document.getElementById('overlaySpeed').textContent = speedOut.toFixed(2) + " m/s";
+
+            drawScene();
+            animFrameId = requestAnimationFrame(simulationLoop);
+        }
+
+        // Evaluate the physics result of each Rube Goldberg stage
+        function evalSimulationEnd() {
+            if (animFrameId) cancelAnimationFrame(animFrameId);
+            
+            const config = LEVELS[currentLvl];
+
+            if (currentLvl === 1) {
+                const finalX = cargo.x;
+                const minX = config.targetX;
+                const maxX = config.targetX + config.targetW;
+
+                if (finalX >= minX && finalX <= maxX) {
+                    simState = 'success';
+                    playSound('meow');
+                    playSound('success');
+                    // Feed the cat! Drop food particles
+                    for (let i = 0; i < 30; i++) {
+                        particles.push({
+                            x: config.targetX + config.targetW/2 + (Math.random() - 0.5) * 15,
+                            y: 230 + Math.random() * 10,
+                            vx: (Math.random() - 0.5) * 2,
+                            vy: Math.random() * 4 + 2,
+                            size: Math.random() * 4 + 3,
+                            color: '#b45309', // kibble brown
+                            life: 1.0,
+                            decay: 0.01
+                        });
+                    }
+                    showToast('🎉 CONTRAPTION TRIUMPH!', 'Perfect glidetime! The bowl landed right under the kibble dispenser. The hungry kitten is fed!', '🐱', 'bg-emerald-50 border-emerald-500');
+                    document.getElementById('overlayState').className = 'code-font text-emerald-600 uppercase font-extrabold';
+                    document.getElementById('overlayState').textContent = 'SUCCESS!';
+                } else if (finalX < minX) {
+                    simState = 'failed';
+                    playSound('fail');
+                    showToast('🥣 NOT ENOUGH SLIDE', 'The bowl came up short of the dispenser funnel! Friction on the wooden runway was too powerful. Try adding brass or ice.', '😿', 'bg-rose-50 border-rose-500');
+                    document.getElementById('overlayState').className = 'code-font text-rose-600 uppercase font-extrabold';
+                    document.getElementById('overlayState').textContent = 'Stops Short';
+                } else {
+                    simState = 'failed';
+                    playSound('fail');
+                    showToast('💥 CRASH OVERSHOOT', 'Overshot! The bowl slid past the dispenser and bumped the kitten. Choose higher friction surfaces like Wood or Sandpaper to slow it down.', '🙀', 'bg-rose-50 border-rose-500');
+                    document.getElementById('overlayState').className = 'code-font text-rose-600 uppercase font-extrabold';
+                    document.getElementById('overlayState').textContent = 'Overshot';
+                }
+
+            } else if (currentLvl === 2) {
+                if (isBalloonPopped) {
+                    simState = 'success';
+                    playSound('success');
+                    showToast('🎉 POPPED! VICTORY!', 'Incredible calculation! The rolling weight transferred the correct energy to swing the pin needle and pop the balloon!', '🎈', 'bg-emerald-50 border-emerald-500');
+                    document.getElementById('overlayState').className = 'code-font text-emerald-600 uppercase font-extrabold';
+                    document.getElementById('overlayState').textContent = 'SUCCESS!';
+                } else {
+                    simState = 'failed';
+                    playSound('fail');
+                    if (activeBlock.isActive) {
+                        showToast('🔧 WEAK MOMENTUM', 'The wagon rolled forward but hit too softly to push the lever pin into the balloon. Lower your slope or deck friction to speed up!', '🛡️', 'bg-rose-50 border-rose-500');
+                    } else {
+                        showToast('📉 STOPPED SHORT', 'The heavy ball stopped rolling before hitting the toy wagon. Friction is too high on the deck pathways.', '💤', 'bg-rose-50 border-rose-500');
+                    }
+                    document.getElementById('overlayState').className = 'code-font text-rose-600 uppercase font-extrabold';
+                    document.getElementById('overlayState').textContent = 'Chain Broken';
+                }
+
+            } else if (currentLvl === 3) {
+                if (isToasterActive) {
+                    simState = 'success';
+                    playSound('success');
+                    showToast('🎉 GOLDEN TOAST POPPED!', 'Hooray! The butter hit the plunger with perfect momentum, clicking down the spring. The golden bread popped up cleanly!', '🍞', 'bg-emerald-50 border-emerald-500');
+                    document.getElementById('overlayState').className = 'code-font text-emerald-600 uppercase font-extrabold';
+                    document.getElementById('overlayState').textContent = 'SUCCESS!';
+                } else {
+                    simState = 'failed';
+                    playSound('fail');
+                    showToast('🍞 TOASTER SLEEPS', 'The butter block or sled did not strike with enough kinetic energy to depress the toaster lever. Decrease friction surfaces!', '❄️', 'bg-rose-50 border-rose-500');
+                    document.getElementById('overlayState').className = 'code-font text-rose-600 uppercase font-extrabold';
+                    document.getElementById('overlayState').textContent = 'No Activation';
+                }
+            }
+        }
+
+        // Show playful modal toast
+        function showToast(title, msg, emoji, borderClasses) {
+            const toast = document.getElementById('statusToast');
+            document.getElementById('toastEmoji').textContent = emoji;
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastMessage').textContent = msg;
+
+            toast.className = `absolute bottom-6 left-1/2 transform -translate-x-1/2 border-3 rounded-3xl px-8 py-4 cartoon-shadow max-w-md w-full transition-all duration-300 text-center ${borderClasses}`;
+            toast.classList.remove('hidden');
+        }
+
+        // On window load bootstrap setup
+        window.onload = function() {
+            setupCanvas();
+            changeLevel(1);
+        };
+    </script>
+</body>
+</html>
