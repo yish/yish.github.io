@@ -52,7 +52,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wider text-slate-900 flex items-center gap-2">
-                    ABYSS LAB <span class="text-xs bg-cyan-100 text-cyan-800 border border-cyan-200 px-2 py-0.5 rounded font-mono-tech uppercase">Buoyancy Simulator v2.2</span>
+                    ABYSS LAB <span class="text-xs bg-cyan-100 text-cyan-800 border border-cyan-200 px-2 py-0.5 rounded font-mono-tech uppercase">Buoyancy Simulator v2.3</span>
                 </h1>
                 <p class="text-[11px] text-slate-500">Hydrostatic Equilibrium & Cargo Mass Lab</p>
             </div>
@@ -77,7 +77,7 @@
                     <div class="text-[9px] text-slate-400 uppercase tracking-wider font-semibold">Active Cargo</div>
                     <div class="text-xs font-bold text-amber-600 flex items-center justify-end gap-1">
                         <i data-lucide="package" class="w-3.5 h-3.5"></i>
-                        <span id="cargo-indicator-text">0 / 3 Pods (+0 kg)</span>
+                        <span id="cargo-indicator-text">0 / 6 Pods (+0 kg)</span>
                     </div>
                 </div>
             </div>
@@ -501,7 +501,7 @@
                 </div>
                 <div class="flex justify-between">
                     <span class="text-slate-500">Cargo Salvaged:</span>
-                    <span id="end-pods" class="font-bold text-amber-600">0 / 3 Pods</span>
+                    <span id="end-pods" class="font-bold text-amber-600">0 / 6 Pods</span>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-slate-500">Payload Added Mass:</span>
@@ -538,10 +538,13 @@
         const PUMP_RATE = 1500;      // Performance speed of pumps (kg of water transiting per second)
         const DRAG_COEFF = 3800;     // Quadratic drag fluid resistance coefficient
         const LINEAR_DRAG = 20000;   // Linear damping coefficient to stabilize small oscillations
+        
+        // LEVEL NAVIGATION LENGTH (Extended from 1100 to 3600 for over 3x longer gameplay!)
+        const LEVEL_LENGTH = 3600;
 
         // Simulator State Model
         let sub = {
-            depth: 15.0,             // Current simulation depth (0 - 100 meters)
+            depth: 20.0,             // Current simulation depth (0 - 100 meters)
             velocityY: 0.0,          // Vertical speed vector (m/s)
             accelY: 0.0,             // Vertical acceleration rate (m/s^2)
             massBallast: 2000,       // Active water load inside tanks (kg)
@@ -561,73 +564,89 @@
         let cameraX = 0;
         const subVisualX = 180; // Main vessel coordinate offset
 
-        // Core Environment Profiles: Structured to support stable hovering across depth
-        // The linear profile translates ballast adjustments cleanly to target depths
+        // Core Environment Profiles: Extended level lengths (3600px total length) and distributed items
         const levelProfiles = [
             {
                 name: "Level 1: Archimedes Basin",
-                instruction: "Learn linear density mechanics! Adjust ballast to stabilize the submarine at the glowing pod depths. Notice how collecting pods adds weight!",
+                instruction: "Enjoy the expanded basin path! Find equilibrium at the continuous density gradient to safely salvage all 6 pods across the seabed.",
                 densityProfile: (depth) => {
-                    // Perfect continuous density gradient across depth
                     return 960.0 + (depth * 0.8); 
                 },
                 hazards: [], // Safe basin for training
                 targetPods: [
-                    { x: 300, y: 30, collected: false },
-                    { x: 600, y: 55, collected: false },
-                    { x: 900, y: 80, collected: false }
+                    { x: 450, y: 30, collected: false },
+                    { x: 1000, y: 55, collected: false },
+                    { x: 1500, y: 80, collected: false },
+                    { x: 2100, y: 45, collected: false },
+                    { x: 2700, y: 70, collected: false },
+                    { x: 3200, y: 35, collected: false }
                 ],
                 cavernCeiling: (x) => 10,
                 cavernFloor: (x) => 90
             },
             {
                 name: "Level 2: The Halocline Shift",
-                instruction: "Halocline density spike! The density scales steeply past 40 meters. Avoid the floating deep ocean mines!",
+                instruction: "Density changes sharply past 40 meters. Control your vertical momentum as you navigate the long tunnel and dodge deep mines!",
                 densityProfile: (depth) => {
-                    // Density profile that increases with depth, with a sharper gradient zone
-                    if (depth < 40) return 960.0 + depth * 0.5; // Gentle surface gradient
-                    return 980.0 + (depth - 40) * 1.0; // Steeper halocline gradient
+                    if (depth < 40) return 960.0 + depth * 0.5;
+                    return 980.0 + (depth - 40) * 1.0;
                 },
                 hazards: [
-                    { x: 420, y: 30, type: 'mine', radius: 14 },
-                    { x: 740, y: 65, type: 'mine', radius: 14 }
+                    { x: 600, y: 30, type: 'mine', radius: 14 },
+                    { x: 1100, y: 65, type: 'mine', radius: 14 },
+                    { x: 1750, y: 40, type: 'mine', radius: 14 },
+                    { x: 2300, y: 75, type: 'mine', radius: 14 },
+                    { x: 2850, y: 35, type: 'mine', radius: 14 },
+                    { x: 3350, y: 70, type: 'mine', radius: 14 }
                 ],
                 targetPods: [
-                    { x: 260, y: 25, collected: false },
-                    { x: 580, y: 50, collected: false },
-                    { x: 920, y: 78, collected: false }
+                    { x: 400, y: 25, collected: false },
+                    { x: 900, y: 50, collected: false },
+                    { x: 1400, y: 78, collected: false },
+                    { x: 2000, y: 35, collected: false },
+                    { x: 2600, y: 65, collected: false },
+                    { x: 3100, y: 45, collected: false }
                 ],
                 cavernCeiling: (x) => 12,
                 cavernFloor: (x) => 88
             },
             {
                 name: "Level 3: Abyssal Trench Navigation",
-                instruction: "Maximum difficulty! High density environment. Cavern walls are tight, and multiple mines block the trench. Watch your ballast response times!",
+                instruction: "The ultimate endurance course! High-pressure brine and undulating cavern walls with double the mines. Precision is key!",
                 densityProfile: (depth) => {
-                    // Ultra dense deep trench gradient
                     return 980.0 + (depth * 0.6) + (depth > 60 ? (depth - 60) * 0.4 : 0);
                 },
                 hazards: [
-                    { x: 230, y: 25, type: 'mine', radius: 12 },
-                    { x: 360, y: 68, type: 'mine', radius: 12 },
-                    { x: 490, y: 40, type: 'mine', radius: 12 },
-                    { x: 640, y: 75, type: 'mine', radius: 12 },
-                    { x: 780, y: 22, type: 'mine', radius: 12 },
-                    { x: 910, y: 58, type: 'mine', radius: 12 }
+                    { x: 350, y: 25, type: 'mine', radius: 12 },
+                    { x: 650, y: 68, type: 'mine', radius: 12 },
+                    { x: 950, y: 35, type: 'mine', radius: 12 },
+                    { x: 1250, y: 75, type: 'mine', radius: 12 },
+                    { x: 1600, y: 22, type: 'mine', radius: 12 },
+                    { x: 1900, y: 58, type: 'mine', radius: 12 },
+                    { x: 2200, y: 30, type: 'mine', radius: 12 },
+                    { x: 2500, y: 70, type: 'mine', radius: 12 },
+                    { x: 2800, y: 28, type: 'mine', radius: 12 },
+                    { x: 3100, y: 62, type: 'mine', radius: 12 },
+                    { x: 3350, y: 38, type: 'mine', radius: 12 }
                 ],
                 targetPods: [
-                    { x: 300, y: 40, collected: false },
-                    { x: 570, y: 58, collected: false },
-                    { x: 860, y: 42, collected: false }
+                    { x: 450, y: 40, collected: false },
+                    { x: 800, y: 58, collected: false },
+                    { x: 1400, y: 42, collected: false },
+                    { x: 2050, y: 68, collected: false },
+                    { x: 2650, y: 35, collected: false },
+                    { x: 3200, y: 52, collected: false }
                 ],
                 cavernCeiling: (x) => {
                     if (x > 200 && x < 400) return 24;
                     if (x > 600 && x < 800) return 28;
+                    if (x > 1000 && x < 1200) return 22;
                     return 12;
                 },
                 cavernFloor: (x) => {
                     if (x > 300 && x < 500) return 76;
                     if (x > 700 && x < 900) return 72;
+                    if (x > 1100 && x < 1300) return 75;
                     return 88;
                 }
             }
@@ -856,11 +875,9 @@
             
             // DAMPING CALCULATIONS:
             // Combines quadratic drag (for high speed) with linear drag (for precise hovering stability)
-            // Viscous resistance opposes velocity, hence the negative signs.
             const dragForce = (-DRAG_COEFF * sub.velocityY * Math.abs(sub.velocityY)) - (LINEAR_DRAG * sub.velocityY); 
             
             // Depth increases downwards, so net positive force accelerates downwards
-            // dragForce is already negative when moving downwards, so we add it directly
             const netForceY = forceGravity - forceBuoyant + dragForce;
             sub.accelY = netForceY / totalMass;
 
@@ -882,10 +899,10 @@
                 }
             }
 
-            // 5. Scroll camera viewport horizontally with variable cruise speed
+            // 5. Scroll camera viewport horizontally with variable cruise speed (Up to LEVEL_LENGTH)
             if (!isLevelComplete) {
                 cameraX += cruiseSpeed * dt; 
-                if (cameraX > 1100) {
+                if (cameraX > LEVEL_LENGTH) {
                     isLevelComplete = true;
                     showLevelComplete();
                 }
@@ -910,7 +927,7 @@
             const subWorldX = cameraX + subVisualX;
             const subWorldY = sub.depth;
 
-            // Cavern boundary limits
+            // Cavern boundary limits (repeating cycle matching length)
             const ceilingLim = level.cavernCeiling(subWorldX % 1200);
             const floorLim = level.cavernFloor(subWorldX % 1200);
 
@@ -974,7 +991,7 @@
             if (victory) {
                 title.innerText = "CHALLENGE RUN COMPLETED";
                 title.className = "text-xl font-bold tracking-wider text-emerald-600 font-sans-modern mb-1";
-                desc.innerText = "Exceptional piloting skills! You stabilized the submarine perfectly despite the severe shifts in fluid density and payload mass.";
+                desc.innerText = "Exceptional piloting skills! You stabilized the submarine perfectly over the entire long course despite fluid density and payload mass shifts.";
                 container.className = "bg-emerald-50 p-4 rounded-full border border-emerald-200 w-16 h-16 flex items-center justify-center mx-auto mb-3";
                 icon.setAttribute('data-lucide', 'award');
                 icon.className = "w-8 h-8 text-emerald-600";
@@ -1211,8 +1228,8 @@
                 }
             });
 
-            // 5. Goal boundary mark
-            const completeX = 1100 - cameraX;
+            // 5. Goal boundary mark (Set to new extended LEVEL_LENGTH)
+            const completeX = LEVEL_LENGTH - cameraX;
             if (completeX < canvas.width + 100) {
                 ctx.save();
                 ctx.strokeStyle = '#10b981';
