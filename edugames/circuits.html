@@ -45,7 +45,7 @@
 <body class="bg-slate-100 text-slate-800 overflow-hidden h-screen w-screen flex flex-col lg:flex-row select-none">
 
   <!-- LEFT CONTROL PANEL - INSTRUCTIONS & OBJECTIVES -->
-  <div class="flex flex-col w-full lg:w-80 bg-white border-b lg:border-b-0 lg:border-r border-slate-200 shrink-0 overflow-y-auto shadow-sm z-10">
+  <div class="flex flex-col w-full lg:w-72 bg-white border-b lg:border-b-0 lg:border-r border-slate-200 shrink-0 overflow-y-auto shadow-sm z-10">
     
     <!-- Header -->
     <div class="p-4 border-b border-slate-100 bg-slate-50/50 sticky top-0 backdrop-blur">
@@ -189,79 +189,90 @@
     <div class="flex-1 flex flex-col md:flex-row p-4 gap-4 overflow-hidden">
       
       <!-- MAP CANVAS PANEL (EXPANDED WORKSPACE) -->
-      <div class="flex-1 bg-white rounded-2xl border border-slate-200 flex flex-col items-center justify-center relative p-2 shadow-sm overflow-auto select-none">
+      <div class="flex-1 bg-white rounded-2xl border border-slate-200 flex flex-col relative shadow-sm overflow-auto select-none">
         
-        <!-- Interactive map visualization canvas -->
-        <svg
-          id="map-svg"
-          viewBox="0 0 800 580"
-          class="w-full max-w-5xl h-auto"
-        >
-          <!-- Background and Decorative Pathways -->
-          <rect x="0" y="0" width="800" height="580" fill="#fcfcfd" rx="16" />
-          <g class="opacity-15">
-            <path d="M 400 310 L 190 200 L 190 130" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
-            <path d="M 190 130 L 230 90 L 190 200" stroke="#cbd5e1" stroke-width="18" fill="none" stroke-linecap="round" />
-            <path d="M 400 310 L 610 200 L 650 130" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
-            <path d="M 650 130 L 570 90 L 610 200" stroke="#cbd5e1" stroke-width="18" fill="none" stroke-linecap="round" />
-            <path d="M 400 310 L 260 450 L 180 410" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
-            <path d="M 400 310 L 540 450 L 620 410" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
-          </g>
+        <!-- Live Diagnostic Status Banner -->
+        <div id="diagnostic-banner" class="w-full bg-slate-100 border-b border-slate-200 px-4 py-2.5 flex items-center justify-between text-xs font-semibold select-none rounded-t-2xl shrink-0 transition-colors duration-300">
+          <div class="flex items-center gap-2">
+            <span id="diagnostic-icon" class="text-base">🔌</span>
+            <span id="diagnostic-message" class="text-slate-700">GRID SYSTEM STANDBY. Toggle power switch to ON to diagnose.</span>
+          </div>
+          <div id="diagnostic-status-tag" class="px-2 py-0.5 rounded text-[10px] uppercase font-mono tracking-wider bg-slate-200 text-slate-600 font-bold">Offline</div>
+        </div>
 
-          <!-- SECTOR GRAPHIC BOUNDARIES (HIGH-CONTRAST ACCESSIBILITY ENHANCED) -->
-          <!-- Carousel Garden -->
-          <g>
-            <rect x="80" y="40" width="220" height="200" fill="rgba(244,63,94,0.02)" rx="16" />
-            <rect x="80" y="40" width="220" height="200" fill="none" stroke="#f43f5e" stroke-width="2.5" class="map-sector-boundary" />
-            <rect x="90" y="50" width="130" height="20" fill="#f43f5e" rx="4" />
-            <text x="155" y="64" fill="#ffffff" font-size="10" font-weight="900" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎪 Carousel Garden</text>
-          </g>
+        <div class="flex-1 flex items-center justify-center p-2 overflow-auto">
+          <!-- Interactive map visualization canvas -->
+          <svg
+            id="map-svg"
+            viewBox="0 0 800 580"
+            class="w-full max-w-5xl h-auto"
+          >
+            <!-- Background and Decorative Pathways -->
+            <rect id="map-bg" x="0" y="0" width="800" height="580" fill="#fcfcfd" rx="16" />
+            <g class="opacity-15">
+              <path d="M 400 310 L 190 200 L 190 130" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
+              <path d="M 190 130 L 230 90 L 190 200" stroke="#cbd5e1" stroke-width="18" fill="none" stroke-linecap="round" />
+              <path d="M 400 310 L 610 200 L 650 130" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
+              <path d="M 650 130 L 570 90 L 610 200" stroke="#cbd5e1" stroke-width="18" fill="none" stroke-linecap="round" />
+              <path d="M 400 310 L 260 450 L 180 410" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
+              <path d="M 400 310 L 540 450 L 620 410" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
+            </g>
 
-          <!-- Coaster Plaza -->
-          <g>
-            <rect x="500" y="40" width="220" height="200" fill="rgba(6,182,212,0.02)" rx="16" />
-            <rect x="500" y="40" width="220" height="200" fill="none" stroke="#06b6d4" stroke-width="2.5" class="map-sector-boundary" />
-            <rect x="510" y="50" width="130" height="20" fill="#06b6d4" rx="4" />
-            <text x="575" y="64" fill="#ffffff" font-size="10" font-weight="900" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎢 Coaster Plaza</text>
-          </g>
+            <!-- SECTOR GRAPHIC BOUNDARIES (HIGH-CONTRAST ACCESSIBILITY ENHANCED) -->
+            <!-- Carousel Garden -->
+            <g>
+              <rect x="80" y="40" width="220" height="200" fill="rgba(244,63,94,0.01)" rx="16" />
+              <rect x="80" y="40" width="220" height="200" fill="none" stroke="#f43f5e" stroke-width="2.5" class="map-sector-boundary" />
+              <rect x="90" y="50" width="135" height="22" fill="#f43f5e" rx="4" />
+              <text x="157" y="65" fill="#ffffff" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎪 Carousel Garden</text>
+            </g>
 
-          <!-- Haunted Shadows -->
-          <g>
-            <rect x="80" y="340" width="220" height="200" fill="rgba(147,51,234,0.02)" rx="16" />
-            <rect x="80" y="340" width="220" height="200" fill="none" stroke="#9333ea" stroke-width="2.5" class="map-sector-boundary" />
-            <rect x="90" y="350" width="135" height="20" fill="#9333ea" rx="4" />
-            <text x="157" y="364" fill="#ffffff" font-size="10" font-weight="900" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">👻 Haunted Shadows</text>
-          </g>
+            <!-- Coaster Plaza -->
+            <g>
+              <rect x="500" y="40" width="220" height="200" fill="rgba(6,182,212,0.01)" rx="16" />
+              <rect x="500" y="40" width="220" height="200" fill="none" stroke="#06b6d4" stroke-width="2.5" class="map-sector-boundary" />
+              <rect x="510" y="50" width="135" height="22" fill="#06b6d4" rx="4" />
+              <text x="577" y="65" fill="#ffffff" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎢 Coaster Plaza</text>
+            </g>
 
-          <!-- Ferris Wheel -->
-          <g>
-            <rect x="500" y="340" width="220" height="200" fill="rgba(217,119,6,0.02)" rx="16" />
-            <rect x="500" y="340" width="220" height="200" fill="none" stroke="#d97706" stroke-width="2.5" class="map-sector-boundary" />
-            <rect x="510" y="350" width="135" height="20" fill="#d97706" rx="4" />
-            <text x="577" y="364" fill="#ffffff" font-size="10" font-weight="900" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎡 Ferris Wheel Plaza</text>
-          </g>
+            <!-- Haunted Shadows -->
+            <g>
+              <rect x="80" y="340" width="220" height="200" fill="rgba(147,51,234,0.01)" rx="16" />
+              <rect x="80" y="340" width="220" height="200" fill="none" stroke="#9333ea" stroke-width="2.5" class="map-sector-boundary" />
+              <rect x="90" y="350" width="140" height="22" fill="#9333ea" rx="4" />
+              <text x="160" y="365" fill="#ffffff" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">👻 Haunted Shadows</text>
+            </g>
 
-          <!-- Central Generator Station Graphic -->
-          <g transform="translate(350, 275)" class="filter drop-shadow-sm">
-            <rect x="0" y="0" width="100" height="60" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" />
-            <rect x="5" y="5" width="90" height="20" rx="4" fill="#0f172a" />
-            <text x="50" y="18" fill="#38bdf8" font-size="8" font-weight="bold" text-anchor="middle" class="font-mono">CENTRAL POWER</text>
-            <circle cx="20" cy="42" r="4" fill="#ef4444" />
-            <circle cx="80" cy="42" r="4" fill="#3b82f6" />
-          </g>
+            <!-- Ferris Wheel -->
+            <g>
+              <rect x="500" y="340" width="220" height="200" fill="rgba(217,119,6,0.01)" rx="16" />
+              <rect x="500" y="340" width="220" height="200" fill="none" stroke="#d97706" stroke-width="2.5" class="map-sector-boundary" />
+              <rect x="510" y="350" width="140" height="22" fill="#d97706" rx="4" />
+              <text x="580" y="365" fill="#ffffff" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎡 Ferris Wheel Plaza</text>
+            </g>
 
-          <!-- Connections & Components Container -->
-          <g id="connections-layer"></g>
+            <!-- Central Generator Station Graphic -->
+            <g transform="translate(350, 275)" class="filter drop-shadow-sm">
+              <rect x="0" y="0" width="100" height="60" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" />
+              <rect x="5" y="5" width="90" height="20" rx="4" fill="#0f172a" />
+              <text x="50" y="18" fill="#38bdf8" font-size="8" font-weight="bold" text-anchor="middle" class="font-mono">CENTRAL POWER</text>
+              <circle cx="20" cy="42" r="4" fill="#ef4444" />
+              <circle cx="80" cy="42" r="4" fill="#3b82f6" />
+            </g>
 
-          <!-- Temporary Wire Draft Path preview -->
-          <line id="preview-wire-line" x1="0" y1="0" x2="0" y2="0" stroke="#4f46e5" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="4, 4" class="hidden animate-pulse"></line>
+            <!-- Connections & Components Container -->
+            <g id="connections-layer"></g>
 
-          <!-- Post interactive nodes -->
-          <g id="nodes-layer"></g>
+            <!-- Temporary Wire Draft Path preview -->
+            <line id="preview-wire-line" x1="0" y1="0" x2="0" y2="0" stroke="#4f46e5" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="4, 4" class="hidden animate-pulse"></line>
 
-          <!-- Multimeter Probes Lines -->
-          <g id="multimeter-layer"></g>
-        </svg>
+            <!-- Post interactive nodes -->
+            <g id="nodes-layer"></g>
+
+            <!-- Multimeter Probes Lines -->
+            <g id="multimeter-layer"></g>
+          </svg>
+        </div>
 
         <!-- Float warnings -->
         <div id="short-circuit-warning" class="hidden absolute top-4 left-4 right-4 bg-rose-50 border border-rose-300 p-2.5 rounded-xl text-center shadow z-20">
@@ -272,7 +283,7 @@
       </div>
 
       <!-- THE PHYSICAL TOOLBOX & MULTIMETER MODULES (SLIM WIDTH) -->
-      <div class="w-full md:w-56 space-y-4 shrink-0 flex flex-col justify-start">
+      <div class="w-full md:w-52 space-y-4 shrink-0 flex flex-col justify-start">
         
         <!-- The Box of Components (Inventory Theme) -->
         <div class="bg-white border border-slate-200 p-3.5 rounded-2xl shadow-sm space-y-3">
@@ -287,6 +298,17 @@
                 <div class="w-3.5 h-0.5 bg-indigo-500 rotate-45"></div>
               </div>
               <span class="text-[9px]">Wire Coil</span>
+            </button>
+
+            <!-- Junction Node Tool Added -->
+            <button
+              id="tool-node"
+              class="tool-btn flex flex-col items-center justify-center p-2 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+            >
+              <div class="w-6 h-6 rounded-full border-2 border-slate-500 flex items-center justify-center mb-0.5 bg-slate-100">
+                <div class="w-2.5 h-2.5 rounded-full bg-slate-500"></div>
+              </div>
+              <span class="text-[9px]">Junction Node</span>
             </button>
 
             <button
@@ -311,7 +333,7 @@
 
             <button
               id="tool-switch"
-              class="tool-btn flex flex-col items-center justify-center p-2 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+              class="tool-btn flex flex-col items-center justify-center p-2 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 animate-none col-span-2"
             >
               <div class="w-6 h-6 rounded-full border-2 border-emerald-500 flex items-center justify-center mb-0.5 bg-emerald-50">
                 <div class="w-3.5 h-0.5 bg-emerald-500 origin-left -rotate-45"></div>
@@ -633,6 +655,7 @@
     const inspectorContent = document.getElementById('inspector-content');
 
     // ==========================================
+    // INITS & LEVEL SETUP
     // ==========================================
     function init() {
       // Draw level selector buttons
@@ -697,6 +720,55 @@
         }
       });
 
+      // SVG Click Listener for custom Node Tool placements
+      const svg = document.getElementById('map-svg');
+      svg.addEventListener('click', (e) => {
+        if (selectedTool !== 'node') return;
+        
+        // Filter out clicks that hit pre-existing elements on the canvas
+        if (e.target.id !== 'map-bg' && e.target.tagName !== 'svg') {
+          return;
+        }
+
+        const svgRect = svg.getBoundingClientRect();
+        const x = Math.round(((e.clientX - svgRect.left) / svgRect.width) * 800);
+        const y = Math.round(((e.clientY - svgRect.top) / svgRect.height) * 580);
+
+        // Safe margins to avoid border clipping
+        if (x < 30 || x > 770 || y < 30 || y > 550) return;
+
+        // Verify distance threshold to avoid overlapping junction posts
+        const tooClose = MAP_NODES.some(n => {
+          if (n.deleted) return false;
+          const dist = Math.sqrt((n.x - x)**2 + (n.y - y)**2);
+          return dist < 25;
+        });
+        if (tooClose) return;
+
+        // Categorize dynamic sector boundaries for constraints verification
+        let sector = "power";
+        if (x >= 80 && x <= 300 && y >= 40 && y <= 240) sector = "carousel";
+        else if (x >= 500 && x <= 720 && y >= 40 && y <= 240) sector = "coaster";
+        else if (x >= 80 && x <= 300 && y >= 340 && y <= 540) sector = "haunted";
+        else if (x >= 500 && x <= 720 && y >= 340 && y <= 540) sector = "ferris";
+
+        const newId = MAP_NODES.length;
+        MAP_NODES.push({
+          id: newId,
+          label: `Custom Node ${newId}`,
+          x: x,
+          y: y,
+          sector: sector,
+          color: "#94a3b8", // distinct metallic coloring
+          name: `Junc ${newId}`,
+          isCustom: true,
+          deleted: false
+        });
+
+        playSound('click');
+        solveMapCircuit();
+      });
+
       selectLevel(0);
     }
 
@@ -707,6 +779,12 @@
       activeStartNode = null;
       gridPowerOn = false; // Always powered off on initial select
       updateMasterPowerButtonUI();
+
+      // Clean out custom nodes upon level reset to maintain baseline setup
+      for (let i = MAP_NODES.length - 1; i >= 16; i--) {
+        MAP_NODES.pop();
+      }
+      MAP_NODES.forEach(n => { n.deleted = false; });
 
       LEVELS.forEach((_, i) => {
         const btn = document.getElementById(`level-btn-${i}`);
@@ -732,13 +810,11 @@
       // Inject some pre-connected components based on selected level
       let starterConns = [];
       if (lvl.id === 1) {
-        // Gen + linked to West distribution, Gen - linked to CC post
         starterConns = [
           { id: "start-1", from: 0, to: 14, type: "wire", state: {} },
           { id: "start-2", from: 1, to: 4, type: "wire", state: {} }
         ];
       } else if (lvl.id === 2) {
-        // Power Hub rails to East Junction Split Node
         starterConns = [
           { id: "start-1", from: 0, to: 15, type: "wire", state: {} },
           { id: "start-2", from: 1, to: 7, type: "wire", state: {} }
@@ -895,13 +971,13 @@
       let html = '';
       if (probeRed !== null) {
         const node = MAP_NODES.find(n => n.id === probeRed);
-        if (node) {
+        if (node && !node.deleted) {
           html += `<path d="M 680 320 Q 720 300, ${node.x} ${node.y}" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="4, 4" />`;
         }
       }
       if (probeBlack !== null) {
         const node = MAP_NODES.find(n => n.id === probeBlack);
-        if (node) {
+        if (node && !node.deleted) {
           html += `<path d="M 740 320 Q 760 300, ${node.x} ${node.y}" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="4, 4" />`;
         }
       }
@@ -909,9 +985,13 @@
     }
 
     // ==========================================
+    // SOLVER & PHYSICS ENGINE
     // ==========================================
     function solveMapCircuit() {
-      const numNodes = 16;
+      const numNodes = MAP_NODES.length; // Dynamically adjusts based on dynamic custom node placements
+
+      // Reset solver matrices with dynamic sizing
+      solvedNodes = Array(numNodes).fill(0);
 
       // Group zero-impedance nodes connected by Wires or Closed Switches
       let parent = Array.from({ length: numNodes }, (_, i) => i);
@@ -990,6 +1070,7 @@
         resetSolvers();
         renderMap();
         validateLevelConstraints();
+        updateDiagnosticFeedback();
         return;
       }
 
@@ -1036,6 +1117,7 @@
         resetSolvers();
         renderMap();
         validateLevelConstraints();
+        updateDiagnosticFeedback();
         return;
       }
 
@@ -1120,10 +1202,11 @@
       updateMultimeterUI();
       renderMap();
       validateLevelConstraints();
+      updateDiagnosticFeedback();
     }
 
     function resetSolvers() {
-      solvedNodes = Array(16).fill(0);
+      solvedNodes = Array(MAP_NODES.length).fill(0);
       solvedEdges = connections.map(c => ({
         ...c,
         solved: { voltage: 0, current: 0, wattage: 0 }
@@ -1164,6 +1247,7 @@
     }
 
     // ==========================================
+    // REVISED TASK CONSTRAINTS WITH DYNAMIC NODES
     // ==========================================
     function validateLevelConstraints() {
       const lvl = LEVELS[currentLevelIdx];
@@ -1188,7 +1272,7 @@
         return (solvedEdges || []).filter(c => {
           let nodeFrom = MAP_NODES.find(n => n.id === c.from);
           let nodeTo = MAP_NODES.find(n => n.id === c.to);
-          return nodeFrom && nodeTo && (nodeFrom.sector === sectorName || nodeTo.sector === sectorName);
+          return nodeFrom && nodeTo && !nodeFrom.deleted && !nodeTo.deleted && (nodeFrom.sector === sectorName || nodeTo.sector === sectorName);
         });
       };
 
@@ -1282,6 +1366,7 @@
         playSound('success');
       }
 
+      // Display Checklist
       checksContainer.innerHTML = currentChecks.map(check => `
         <div class="flex items-start gap-2 text-xs text-slate-700">
           <div class="mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 border ${
@@ -1310,9 +1395,8 @@
       }
     }
 
-    // Simulated series/parallel verify dry-run helper
     function simulateCircuitWithUnscrewed(unscrewedConnId) {
-      const numNodes = 16;
+      const numNodes = MAP_NODES.length;
       let parent = Array.from({ length: numNodes }, (_, i) => i);
       const find = (i) => {
         if (parent[i] === i) return i;
@@ -1416,6 +1500,55 @@
     }
 
     // ==========================================
+    // DIAGNOSTIC FEEDBACK SYSTEM
+    // ==========================================
+    function updateDiagnosticFeedback() {
+      const banner = document.getElementById('diagnostic-banner');
+      const icon = document.getElementById('diagnostic-icon');
+      const message = document.getElementById('diagnostic-message');
+      const tag = document.getElementById('diagnostic-status-tag');
+
+      if (shortCircuit && gridPowerOn) {
+        banner.className = "w-full bg-rose-50 border-b border-rose-200 px-4 py-2.5 flex items-center justify-between text-xs font-semibold select-none rounded-t-2xl shrink-0 text-rose-800 transition-colors duration-300";
+        icon.textContent = "⚠";
+        message.innerHTML = "<strong>SHORT CIRCUIT!</strong> Positive (+) and Negative (-) terminals are directly shorted. Grid bypassed for safety.";
+        tag.textContent = "Short Circuit";
+        tag.className = "px-2 py-0.5 rounded text-[10px] uppercase font-mono tracking-wider bg-rose-200 text-rose-800 font-bold animate-pulse";
+      } else if (fuseBlown && gridPowerOn) {
+        banner.className = "w-full bg-rose-50 border-b border-rose-200 px-4 py-2.5 flex items-center justify-between text-xs font-semibold select-none rounded-t-2xl shrink-0 text-rose-800 transition-colors duration-300";
+        icon.textContent = "💥";
+        message.innerHTML = "<strong>FUSE OVERLOAD!</strong> Current draw exceeded 1.2A. Reduce parallel branches or add resistors, then click Reset.";
+        tag.textContent = "Overloaded";
+        tag.className = "px-2 py-0.5 rounded text-[10px] uppercase font-mono tracking-wider bg-rose-200 text-rose-800 font-bold animate-pulse";
+      } else if (blownBulbs.size > 0 && gridPowerOn) {
+        banner.className = "w-full bg-amber-50 border-b border-amber-200 px-4 py-2.5 flex items-center justify-between text-xs font-semibold select-none rounded-t-2xl shrink-0 text-amber-800 transition-colors duration-300";
+        icon.textContent = "🔥";
+        message.innerHTML = "<strong>FILAMENT BURNED!</strong> Overvoltage (&gt;6.5V) blew out a light. Lower your voltage or add resistance, then Reset.";
+        tag.textContent = "Bulb Blown";
+        tag.className = "px-2 py-0.5 rounded text-[10px] uppercase font-mono tracking-wider bg-amber-200 text-amber-800 font-bold";
+      } else if (!gridPowerOn) {
+        banner.className = "w-full bg-slate-100 border-b border-slate-200 px-4 py-2.5 flex items-center justify-between text-xs font-semibold select-none rounded-t-2xl shrink-0 text-slate-700 transition-colors duration-300";
+        icon.textContent = "🔌";
+        message.innerHTML = "<strong>GRID POWER IS OFF.</strong> Wire up paths, place bulbs, or add junction nodes. Click ON above to test your setup.";
+        tag.textContent = "Standby";
+        tag.className = "px-2 py-0.5 rounded text-[10px] uppercase font-mono tracking-wider bg-slate-200 text-slate-600 font-bold";
+      } else if (gridPowerOn && !levelCleared) {
+        banner.className = "w-full bg-indigo-50 border-b border-indigo-200 px-4 py-2.5 flex items-center justify-between text-xs font-semibold select-none rounded-t-2xl shrink-0 text-indigo-800 transition-colors duration-300";
+        icon.textContent = "📋";
+        message.innerHTML = "<strong>GRID ONLINE.</strong> Currents are flowing, but some sector requirements haven't been met yet. Check your checklist.";
+        tag.textContent = "Testing";
+        tag.className = "px-2 py-0.5 rounded text-[10px] uppercase font-mono tracking-wider bg-indigo-200 text-indigo-800 font-bold";
+      } else if (gridPowerOn && levelCleared) {
+        banner.className = "w-full bg-emerald-50 border-b border-emerald-200 px-4 py-2.5 flex items-center justify-between text-xs font-semibold select-none rounded-t-2xl shrink-0 text-emerald-800 transition-colors duration-300";
+        icon.textContent = "🎉";
+        message.innerHTML = "<strong>GRID APPROVED!</strong> Excellent circuit engineering. Every attraction zone is safe, lit, and operational!";
+        tag.textContent = "Nominal";
+        tag.className = "px-2 py-0.5 rounded text-[10px] uppercase font-mono tracking-wider bg-emerald-200 text-emerald-800 font-bold animate-bounce";
+      }
+    }
+
+    // ==========================================
+    // RENDERING FUNCTIONS
     // ==========================================
     function renderMap() {
       // Render components & wires layer
@@ -1423,7 +1556,7 @@
       solvedEdges.forEach(c => {
         const nodeFrom = MAP_NODES.find(n => n.id === c.from);
         const nodeTo = MAP_NODES.find(n => n.id === c.to);
-        if (!nodeFrom || !nodeTo) return;
+        if (!nodeFrom || !nodeTo || nodeFrom.deleted || nodeTo.deleted) return;
 
         const isLit = gridPowerOn && c.solved?.voltage > 0.5 && !blownBulbs.has(c.id);
         const isBlown = blownBulbs.has(c.id);
@@ -1483,14 +1616,14 @@
               ${c.type === 'bulb' ? `
                 <g transform="scale(0.95)">
                   ${isLit ? `<circle cx="0" cy="0" r="14" fill="rgba(251,191,36,0.3)" class="animate-pulse" />` : ''}
-                  <circle cx="0" cy="0" r="8" fill="${isBlown ? "#cbd5e1" : isUnscrewed ? "#f1f5f9" : isLit ? "#fef08a" : "#cbd5e1"}" stroke="${isBlown ? "#94a3b8" : isLit ? "#ca8a04" : "#475569"}" stroke-width="2" />
+                  <circle cx="0" cy="0" r="8" fill="${isBlown ? "#94a3b8" : isUnscrewed ? "#f1f5f9" : isLit ? "#fef08a" : "#e2e8f0"}" stroke="${isBlown ? "#475569" : isLit ? "#ca8a04" : "#475569"}" stroke-width="2" />
                   
                   <!-- Bulb cap base -->
                   <rect x="-3.5" y="7" width="7" height="4" fill="#94a3b8" rx="1" />
                   
                   <!-- Blown wire filament line overlay -->
                   ${isBlown ? `
-                    <!-- Jagged crack -->
+                    <!-- Jagged crack overlay -->
                     <path d="M-4,-4 L0,0 L-1,4 M4,-4 L1,0 L2,4" fill="none" stroke="#dc2626" stroke-width="1.5" />
                   ` : `
                     <path d="M-3,3 L-1,-2 L1,-2 L3,3" fill="none" stroke="${isLit ? "#d97706" : "#64748b"}" stroke-width="1.5" />
@@ -1527,10 +1660,16 @@
       // Render nodes layer
       let nodesHtml = '';
       MAP_NODES.forEach(node => {
+        if (node.deleted) return;
         const isActive = activeStartNode === node.id;
         const isSelectedRed = probeRed === node.id;
         const isSelectedBlack = probeBlack === node.id;
         const potential = gridPowerOn ? (solvedNodes[node.id] || 0) : 0;
+
+        let baseColor = node.color || "#ffffff";
+        if (node.isCustom) {
+          baseColor = "#94a3b8"; // custom nodes rendered with metallic silver styling
+        }
 
         nodesHtml += `
           <g onclick="clickNode(${node.id})" class="cursor-pointer group">
@@ -1546,7 +1685,7 @@
             <circle
               cx="${node.x}" cy="${node.y}"
               r="8"
-              fill="${node.color || "#ffffff"}"
+              fill="${baseColor}"
               stroke="${isActive ? "#4f46e5" : isSelectedRed ? "#f43f5e" : isSelectedBlack ? "#2563eb" : "#475569"}"
               stroke-width="2.5"
               class="transition group-hover:scale-115 filter drop-shadow-sm"
@@ -1587,6 +1726,15 @@
       }
 
       if (selectedTool === 'eraser') {
+        const node = MAP_NODES.find(n => n.id === id);
+        if (node && node.isCustom) {
+          // Erase dynamic nodes cleanly without altering index dependencies of the system
+          node.deleted = true;
+          connections = connections.filter(c => c.from !== id && c.to !== id);
+          if (probeRed === id) probeRed = null;
+          if (probeBlack === id) probeBlack = null;
+          solveMapCircuit();
+        }
         return;
       }
 
