@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Theme Park Electrician - Circuit Lab</title>
+  <title>Theme Park Circuit Pro - Lab Edition</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
@@ -45,23 +45,23 @@
 <body class="bg-slate-100 text-slate-800 overflow-hidden h-screen w-screen flex flex-col lg:flex-row select-none">
 
   <!-- LEFT CONTROL PANEL - INSTRUCTIONS & OBJECTIVES -->
-  <div class="flex flex-col w-full lg:w-72 bg-white border-b lg:border-b-0 lg:border-r border-slate-200 shrink-0 overflow-y-auto shadow-sm z-10">
+  <div class="flex flex-col w-full lg:w-80 bg-white border-b lg:border-b-0 lg:border-r border-slate-200 shrink-0 overflow-y-auto shadow-sm z-10">
     
     <!-- Header -->
     <div class="p-4 border-b border-slate-100 bg-slate-50/50 sticky top-0 backdrop-blur">
-      <div class="flex items-center gap-1.5 mb-1 text-indigo-600 font-mono text-[10px] uppercase tracking-wider font-bold">
-        <svg class="w-3.5 h-3.5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+      <div class="flex items-center gap-1.5 mb-1.5 text-indigo-600 font-mono text-[10px] uppercase tracking-wider font-bold">
+        <svg class="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
         Park Power Architect
       </div>
-      <h1 class="text-lg font-extrabold text-slate-950 tracking-tight leading-none">Theme Park Circuit Builder</h1>
+      <h1 class="text-base font-extrabold text-slate-950 tracking-tight leading-none">Theme Park Circuit Builder</h1>
     </div>
 
-    <!-- Level Chooser -->
+    <!-- Level Selector -->
     <div class="p-4 space-y-4">
       <div>
-        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Select Park Sector Grid:</label>
+        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Select Attraction Sector:</label>
         <div id="level-grid-container" class="grid grid-cols-4 gap-1">
           <!-- Dynamic level buttons inserted here -->
         </div>
@@ -74,12 +74,12 @@
           <span id="level-difficulty" class="px-1.5 py-0.5 text-[8px] font-mono rounded-full font-bold uppercase tracking-wider">Easy</span>
         </div>
         
-        <p id="level-story" class="text-[11px] text-slate-600 leading-relaxed mb-2">
+        <p id="level-story" class="text-[11px] text-slate-600 leading-relaxed mb-2.5">
           Level story and narrative constraints...
         </p>
 
         <div class="border-t border-slate-200 pt-2">
-          <h4 class="text-[10px] font-bold text-indigo-700 mb-0.5">Pedagogical Objective:</h4>
+          <h4 class="text-[10px] font-bold text-indigo-700 mb-0.5">Pedagogical Lesson:</h4>
           <p id="level-goal" class="text-[10px] text-slate-500 italic leading-normal">
             Target science explanation...
           </p>
@@ -90,9 +90,9 @@
       <div class="space-y-1.5">
         <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Wiring Constraints Checklist:</h3>
         
-        <!-- Interactive Power Hint Warning -->
+        <!-- Interactive Power Warning Reminder -->
         <div id="power-feedback-hint" class="p-2 bg-amber-50 border border-amber-200 rounded-lg text-[10px] text-amber-800 leading-normal mb-1.5">
-          ⚡ <strong>Grid Power is OFF.</strong> Wire up components, then toggle the <strong>GRID POWER switch</strong> above to ON to test and verify your constraints.
+          🔌 <strong>Grid Power is OFF.</strong> Wire up components, then toggle the <strong>GRID POWER switch</strong> above to ON to test and verify your constraints.
         </div>
 
         <div id="checks-container" class="space-y-1">
@@ -101,7 +101,7 @@
       </div>
 
       <!-- Level success celebrate panel -->
-      <div id="success-panel" class="hidden p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 text-center animate-bounce shadow-sm">
+      <div id="success-panel" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-center animate-bounce shadow-sm">
         <h3 class="text-emerald-800 font-bold text-xs mb-0.5">🎉 Grid Cleared & Approved!</h3>
         <p class="text-[10px] text-emerald-600 mb-2">The sector lights up successfully.</p>
         <button id="next-level-btn" class="w-full py-1.5 text-xs font-bold bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 transition shadow">
@@ -129,18 +129,18 @@
       <div class="flex flex-wrap items-center gap-4">
         
         <!-- MASTER ON/OFF POWER SWITCH -->
-        <div class="flex items-center gap-2 bg-slate-100 px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-inner">
+        <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 shadow-inner">
           <span class="text-[10px] font-mono text-slate-500 font-bold tracking-wider">GRID POWER:</span>
           <button 
             id="master-power-btn" 
-            class="px-4 py-1 text-xs font-extrabold rounded-lg transition-all duration-300 uppercase tracking-widest bg-rose-500 text-white shadow hover:bg-rose-600 active:scale-95 border-b-4 border-rose-700"
+            class="px-4 py-1 text-xs font-extrabold rounded-lg transition-all duration-300 uppercase tracking-widest bg-rose-500 text-white shadow hover:bg-rose-600 active:scale-95 border-b-4 border-rose-750"
           >
             OFF
           </button>
         </div>
 
         <!-- Power generator dial -->
-        <div class="flex items-center gap-2.5 bg-slate-100/60 px-3.5 py-1.5 rounded-xl border border-slate-200">
+        <div class="flex items-center gap-2.5 bg-slate-100/60 px-3 py-1.5 rounded-xl border border-slate-200">
           <span class="text-[10px] font-mono text-slate-500 font-bold">PSU VOLTS:</span>
           <input
             id="psu-voltage-slider"
@@ -188,7 +188,7 @@
     <!-- WORKSPACE AREA -->
     <div class="flex-1 flex flex-col md:flex-row p-4 gap-4 overflow-hidden">
       
-      <!-- MAP CANVAS PANEL (EXPANDED SIZE) -->
+      <!-- MAP CANVAS PANEL (EXPANDED WORKSPACE) -->
       <div class="flex-1 bg-white rounded-2xl border border-slate-200 flex flex-col items-center justify-center relative p-2 shadow-sm overflow-auto select-none">
         
         <!-- Interactive map visualization canvas -->
@@ -198,7 +198,7 @@
           class="w-full max-w-5xl h-auto"
         >
           <!-- Background and Decorative Pathways -->
-          <rect x="0" y="0" width="800" height="580" fill="#f8fafc" rx="16" />
+          <rect x="0" y="0" width="800" height="580" fill="#fcfcfd" rx="16" />
           <g class="opacity-15">
             <path d="M 400 310 L 190 200 L 190 130" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
             <path d="M 190 130 L 230 90 L 190 200" stroke="#cbd5e1" stroke-width="18" fill="none" stroke-linecap="round" />
@@ -208,42 +208,46 @@
             <path d="M 400 310 L 540 450 L 620 410" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
           </g>
 
-          <!-- SECTOR GRAPHIC BOUNDARIES -->
-          <!-- Carousel -->
+          <!-- SECTOR GRAPHIC BOUNDARIES (HIGH-CONTRAST ACCESSIBILITY ENHANCED) -->
+          <!-- Carousel Garden -->
           <g>
-            <rect x="100" y="40" width="180" height="200" fill="rgba(244,63,94,0.01)" rx="16" />
-            <rect x="100" y="40" width="180" height="200" fill="none" stroke="rgba(244,63,94,0.18)" stroke-width="2" class="map-sector-boundary" />
-            <text x="190" y="30" fill="rgba(244,63,94,0.7)" font-size="10" font-weight="bold" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎪 Carousel Garden</text>
+            <rect x="80" y="40" width="220" height="200" fill="rgba(244,63,94,0.02)" rx="16" />
+            <rect x="80" y="40" width="220" height="200" fill="none" stroke="#f43f5e" stroke-width="2.5" class="map-sector-boundary" />
+            <rect x="90" y="50" width="130" height="20" fill="#f43f5e" rx="4" />
+            <text x="155" y="64" fill="#ffffff" font-size="10" font-weight="900" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎪 Carousel Garden</text>
           </g>
 
-          <!-- Rollercoaster -->
+          <!-- Coaster Plaza -->
           <g>
-            <rect x="520" y="40" width="180" height="200" fill="rgba(34,211,238,0.01)" rx="16" />
-            <rect x="520" y="40" width="180" height="200" fill="none" stroke="rgba(34,211,238,0.18)" stroke-width="2" class="map-sector-boundary" />
-            <text x="610" y="30" fill="rgba(34,211,238,0.7)" font-size="10" font-weight="bold" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎢 Coaster Plaza</text>
+            <rect x="500" y="40" width="220" height="200" fill="rgba(6,182,212,0.02)" rx="16" />
+            <rect x="500" y="40" width="220" height="200" fill="none" stroke="#06b6d4" stroke-width="2.5" class="map-sector-boundary" />
+            <rect x="510" y="50" width="130" height="20" fill="#06b6d4" rx="4" />
+            <text x="575" y="64" fill="#ffffff" font-size="10" font-weight="900" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎢 Coaster Plaza</text>
           </g>
 
           <!-- Haunted Shadows -->
           <g>
-            <rect x="100" y="340" width="220" height="170" fill="rgba(168,85,247,0.01)" rx="16" />
-            <rect x="100" y="340" width="220" height="170" fill="none" stroke="rgba(168,85,247,0.18)" stroke-width="2" class="map-sector-boundary" />
-            <text x="210" y="530" fill="rgba(168,85,247,0.7)" font-size="10" font-weight="bold" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">👻 Haunted Shadows</text>
+            <rect x="80" y="340" width="220" height="200" fill="rgba(147,51,234,0.02)" rx="16" />
+            <rect x="80" y="340" width="220" height="200" fill="none" stroke="#9333ea" stroke-width="2.5" class="map-sector-boundary" />
+            <rect x="90" y="350" width="135" height="20" fill="#9333ea" rx="4" />
+            <text x="157" y="364" fill="#ffffff" font-size="10" font-weight="900" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">👻 Haunted Shadows</text>
           </g>
 
           <!-- Ferris Wheel -->
           <g>
-            <rect x="480" y="340" width="220" height="170" fill="rgba(245,158,11,0.01)" rx="16" />
-            <rect x="480" y="340" width="220" height="170" fill="none" stroke="rgba(245,158,11,0.18)" stroke-width="2" class="map-sector-boundary" />
-            <text x="590" y="530" fill="rgba(245,158,11,0.7)" font-size="10" font-weight="bold" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎡 Ferris Wheel Plaza</text>
+            <rect x="500" y="340" width="220" height="200" fill="rgba(217,119,6,0.02)" rx="16" />
+            <rect x="500" y="340" width="220" height="200" fill="none" stroke="#d97706" stroke-width="2.5" class="map-sector-boundary" />
+            <rect x="510" y="350" width="135" height="20" fill="#d97706" rx="4" />
+            <text x="577" y="364" fill="#ffffff" font-size="10" font-weight="900" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎡 Ferris Wheel Plaza</text>
           </g>
 
           <!-- Central Generator Station Graphic -->
           <g transform="translate(350, 275)" class="filter drop-shadow-sm">
-            <rect x="0" y="0" width="100" height="60" rx="8" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="3" />
+            <rect x="0" y="0" width="100" height="60" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" />
             <rect x="5" y="5" width="90" height="20" rx="4" fill="#0f172a" />
             <text x="50" y="18" fill="#38bdf8" font-size="8" font-weight="bold" text-anchor="middle" class="font-mono">CENTRAL POWER</text>
-            <circle cx="15" cy="42" r="3" fill="#ef4444" />
-            <circle cx="85" cy="42" r="3" fill="#3b82f6" />
+            <circle cx="20" cy="42" r="4" fill="#ef4444" />
+            <circle cx="80" cy="42" r="4" fill="#3b82f6" />
           </g>
 
           <!-- Connections & Components Container -->
@@ -267,8 +271,8 @@
         </div>
       </div>
 
-      <!-- THE PHYSICAL TOOLBOX & MULTIMETER MODULES (COMPACT WIDTH) -->
-      <div class="w-full md:w-52 space-y-4 shrink-0 flex flex-col justify-start">
+      <!-- THE PHYSICAL TOOLBOX & MULTIMETER MODULES (SLIM WIDTH) -->
+      <div class="w-full md:w-56 space-y-4 shrink-0 flex flex-col justify-start">
         
         <!-- The Box of Components (Inventory Theme) -->
         <div class="bg-white border border-slate-200 p-3.5 rounded-2xl shadow-sm space-y-3">
@@ -454,7 +458,7 @@
           });
         }
       } catch (e) {
-        // Suppress audio context warnings
+        // Suppress audio warnings
       }
     };
 
@@ -534,23 +538,30 @@
       }
     ];
 
+    // 16-Node map terminal network grid
     const MAP_NODES = [
-      { id: 0, label: "Generator Positive (+)", x: 380, y: 310, sector: "power", color: "#f87171" },
-      { id: 1, label: "Generator Negative (-)", x: 420, y: 310, sector: "power", color: "#60a5fa" },
+      { id: 0, label: "Generator Positive (+)", x: 370, y: 317, sector: "power", color: "#f87171", name: "Gen (+)" },
+      { id: 1, label: "Generator Negative (-)", x: 430, y: 317, sector: "power", color: "#60a5fa", name: "Gen (-)" },
       
-      { id: 2, label: "Carousel Post A", x: 150, y: 130, sector: "carousel", name: "Post CA" },
-      { id: 3, label: "Carousel Post B", x: 230, y: 90, sector: "carousel", name: "Post CB" },
-      { id: 4, label: "Carousel Post C", x: 190, y: 200, sector: "carousel", name: "Post CC" },
+      { id: 2, label: "Carousel Post A", x: 130, y: 130, sector: "carousel", name: "Post CA" },
+      { id: 3, label: "Carousel Post B", x: 230, y: 110, sector: "carousel", name: "Post CB" },
+      { id: 4, label: "Carousel Post C", x: 180, y: 200, sector: "carousel", name: "Post CC" },
       
-      { id: 5, label: "Coaster Post A", x: 650, y: 130, sector: "coaster", name: "Post RA" },
-      { id: 6, label: "Coaster Post B", x: 570, y: 90, sector: "coaster", name: "Post RB" },
+      { id: 5, label: "Coaster Post A", x: 670, y: 130, sector: "coaster", name: "Post RA" },
+      { id: 6, label: "Coaster Post B", x: 550, y: 110, sector: "coaster", name: "Post RB" },
       { id: 7, label: "Coaster Post C", x: 610, y: 200, sector: "coaster", name: "Post RC" },
       
-      { id: 8, label: "Haunted Post A", x: 180, y: 410, sector: "haunted", name: "Post HA" },
-      { id: 9, label: "Haunted Post B", x: 260, y: 450, sector: "haunted", name: "Post HB" },
+      { id: 8, label: "Haunted Post A", x: 130, y: 410, sector: "haunted", name: "Post HA" },
+      { id: 9, label: "Haunted Post B", x: 230, y: 430, sector: "haunted", name: "Post HB" },
+      { id: 10, label: "Haunted Post C", x: 180, y: 500, sector: "haunted", name: "Post HC" },
       
-      { id: 10, label: "Ferris Post A", x: 620, y: 410, sector: "ferris", name: "Post FA" },
-      { id: 11, label: "Ferris Post B", x: 540, y: 450, sector: "ferris", name: "Post FB" }
+      { id: 11, label: "Ferris Post A", x: 670, y: 410, sector: "ferris", name: "Post FA" },
+      { id: 12, label: "Ferris Post B", x: 550, y: 430, sector: "ferris", name: "Post FB" },
+      { id: 13, label: "Ferris Post C", x: 610, y: 500, sector: "ferris", name: "Post FC" },
+
+      // Dual intermediate junction posts for easy parallel splitting
+      { id: 14, label: "Junction Hub West", x: 290, y: 290, sector: "power", color: "#a1a1aa", name: "Junc W" },
+      { id: 15, label: "Junction Hub East", x: 510, y: 290, sector: "power", color: "#a1a1aa", name: "Junc E" }
     ];
 
     // ==========================================
@@ -560,7 +571,7 @@
     let selectedTool = 'wire';
     let psuVoltage = 9.0;
     let selectedResistance = 20;
-    let gridPowerOn = false; // "ON/OFF" master switch state
+    let gridPowerOn = false; // Grid ON/OFF Switch
 
     let connections = [];
     let activeStartNode = null;
@@ -568,7 +579,7 @@
     let blownBulbs = new Set();
     let fuseBlown = false;
 
-    let solvedNodes = Array(12).fill(0);
+    let solvedNodes = Array(16).fill(0);
     let solvedEdges = [];
     let totalCurrent = 0;
     let shortCircuit = false;
@@ -622,10 +633,9 @@
     const inspectorContent = document.getElementById('inspector-content');
 
     // ==========================================
-    // INITS & LEVEL SETUP
     // ==========================================
     function init() {
-      // Draw level selection grid
+      // Draw level selector buttons
       levelGridContainer.innerHTML = LEVELS.map((lvl, index) => `
         <button
           onclick="selectLevel(${index})"
@@ -636,7 +646,7 @@
         </button>
       `).join('');
 
-      // Build Tool Chest Bindings
+      // Build Tool Chest bindings
       document.querySelectorAll('.tool-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const id = e.currentTarget.id.replace('tool-', '');
@@ -644,7 +654,7 @@
         });
       });
 
-      // Bind Resistance sub-config buttons
+      // Bind Resistance sub-config values
       document.querySelectorAll('.res-val-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const val = parseInt(e.currentTarget.getAttribute('data-res'));
@@ -652,14 +662,14 @@
         });
       });
 
-      // Slider binding
+      // Slider bindings
       psuVoltageSlider.addEventListener('input', (e) => {
         psuVoltage = parseFloat(e.target.value);
         psuVoltageText.textContent = psuVoltage.toFixed(1) + 'V';
         solveMapCircuit();
       });
 
-      // General Buttons
+      // Utility bindings
       repairBtn.addEventListener('click', repairFuseAndBulbs);
       clearBtn.addEventListener('click', clearWorkspace);
       nextLevelBtn.addEventListener('click', () => {
@@ -668,14 +678,14 @@
         }
       });
 
-      // Master Switch power toggle binding
+      // On/Off Switch binding
       masterPowerBtn.addEventListener('click', toggleMasterPower);
 
-      // Multimeter Bindings
+      // Multimeter bindings
       multimeterToggle.addEventListener('click', toggleMultimeter);
       multimeterReset.addEventListener('click', resetProbes);
 
-      // Mouse tracking for drag/draft wire preview line
+      // Mouse tracking for wire draft guideline preview
       document.getElementById('map-svg').addEventListener('mousemove', (e) => {
         if (activeStartNode !== null) {
           const svgRect = document.getElementById('map-svg').getBoundingClientRect();
@@ -687,7 +697,6 @@
         }
       });
 
-      // Setup Level 0 to start
       selectLevel(0);
     }
 
@@ -696,10 +705,9 @@
       currentLevelIdx = idx;
       levelCleared = false;
       activeStartNode = null;
-      gridPowerOn = false; // Always start Powered Off on a new level
+      gridPowerOn = false; // Always powered off on initial select
       updateMasterPowerButtonUI();
-      
-      // Update Level Selector styling
+
       LEVELS.forEach((_, i) => {
         const btn = document.getElementById(`level-btn-${i}`);
         if (i === idx) {
@@ -719,23 +727,26 @@
       }`;
       levelStory.textContent = lvl.story;
       levelGoal.textContent = lvl.educationalGoal;
-
-      // Update instructions list
       hintsList.innerHTML = lvl.hints.map(h => `<li>${h}</li>`).join('');
 
-      // Setup starter connections
+      // Inject some pre-connected components based on selected level
       let starterConns = [];
       if (lvl.id === 1) {
-        starterConns = [{ id: "start-1", from: 0, to: 2, type: "wire", state: {} }];
-      } else if (lvl.id === 2) {
+        // Gen + linked to West distribution, Gen - linked to CC post
         starterConns = [
-          { id: "start-1", from: 0, to: 5, type: "wire", state: {} },
+          { id: "start-1", from: 0, to: 14, type: "wire", state: {} },
+          { id: "start-2", from: 1, to: 4, type: "wire", state: {} }
+        ];
+      } else if (lvl.id === 2) {
+        // Power Hub rails to East Junction Split Node
+        starterConns = [
+          { id: "start-1", from: 0, to: 15, type: "wire", state: {} },
           { id: "start-2", from: 1, to: 7, type: "wire", state: {} }
         ];
       } else if (lvl.id === 3) {
         starterConns = [
-          { id: "start-1", from: 0, to: 8, type: "wire", state: {} },
-          { id: "start-2", from: 0, to: 6, type: "wire", state: {} }
+          { id: "start-1", from: 0, to: 14, type: "wire", state: {} },
+          { id: "start-2", from: 0, to: 15, type: "wire", state: {} }
         ];
       }
 
@@ -746,7 +757,6 @@
       probeBlack = null;
       hoveredConnection = null;
 
-      // Reset multimeter UI indicators
       updateMultimeterUI();
       solveMapCircuit();
     };
@@ -765,7 +775,7 @@
         powerFeedbackHint.classList.add('hidden');
       } else {
         masterPowerBtn.textContent = "OFF";
-        masterPowerBtn.className = "px-4 py-1 text-xs font-extrabold rounded-lg transition-all duration-300 uppercase tracking-widest bg-rose-500 text-white shadow hover:bg-rose-600 active:scale-95 border-b-4 border-rose-700";
+        masterPowerBtn.className = "px-4 py-1 text-xs font-extrabold rounded-lg transition-all duration-300 uppercase tracking-widest bg-rose-500 text-white shadow hover:bg-rose-600 active:scale-95 border-b-4 border-rose-750";
         powerFeedbackHint.classList.remove('hidden');
       }
     }
@@ -776,7 +786,6 @@
       activeStartNode = null;
       previewWireLine.classList.add('hidden');
 
-      // Update Toolbar buttons selection
       document.querySelectorAll('.tool-btn').forEach(btn => {
         const id = btn.id.replace('tool-', '');
         if (id === tool) {
@@ -788,7 +797,6 @@
         }
       });
 
-      // Resistor sub-config toggle
       if (tool === 'resistor') {
         resistorSubconfig.classList.remove('hidden');
       } else {
@@ -831,7 +839,7 @@
     function toggleMultimeter() {
       playSound('toggle');
       multimeterActive = !multimeterActive;
-      activeStartNode = null; // drop wire selection
+      activeStartNode = null;
       previewWireLine.classList.add('hidden');
 
       if (multimeterActive) {
@@ -860,7 +868,6 @@
     }
 
     function updateMultimeterUI() {
-      // Multimeter displays live voltages if power is ON, otherwise 0
       if ((probeRed !== null || probeBlack !== null) && gridPowerOn) {
         let vRed = probeRed !== null ? solvedNodes[probeRed] : 0;
         let vBlack = probeBlack !== null ? solvedNodes[probeBlack] : 0;
@@ -902,12 +909,11 @@
     }
 
     // ==========================================
-    // SOLVER & PHYSICS ENGINE
     // ==========================================
     function solveMapCircuit() {
-      const numNodes = 12;
+      const numNodes = 16;
 
-      // Union-Find setup for short circuits
+      // Group zero-impedance nodes connected by Wires or Closed Switches
       let parent = Array.from({ length: numNodes }, (_, i) => i);
       const find = (i) => {
         if (parent[i] === i) return i;
@@ -927,7 +933,7 @@
 
       let roots = {};
       let uniqueRoots = [];
-      let groundRoot = find(1); // Ground reference Node 1
+      let groundRoot = find(1); // Node 1 (-) is ground reference
       roots[groundRoot] = 0;
       uniqueRoots.push(groundRoot);
 
@@ -950,8 +956,6 @@
       }
 
       let passives = [];
-      
-      // If the Master Power Switch is OFF, the source voltage is evaluated at 0V
       const activeSourceVoltage = (gridPowerOn && !fuseBlown) ? psuVoltage : 0;
 
       let batteries = [
@@ -969,7 +973,7 @@
         } else if (c.type === 'switch' && c.state.open) {
           R = 1e12;
         } else if (c.type === 'wire' || c.type === 'switch') {
-          return; // Handled directly by nodal unions
+          return; // Handled directly in supernodes
         }
 
         let sa = roots[find(c.from)];
@@ -989,16 +993,15 @@
         return;
       }
 
-      // Linear System Setup A * X = B
+      // Linear Matrix equation configuration
       let AMatrix = Array(size).fill(0).map(() => Array(size).fill(0));
       let BVector = Array(size).fill(0);
 
-      // Avoid structural singularity with Ground leakage shunt
       for (let i = 1; i < numElectricalNodes; i++) {
         AMatrix[i - 1][i - 1] += 1e-9;
       }
 
-      // Fill passives
+      // Populate conductances
       passives.forEach(p => {
         let g = 1.0 / p.R;
         let nA = p.sa;
@@ -1014,7 +1017,7 @@
         }
       });
 
-      // Fill source nodes
+      // Populate voltages
       batteries.forEach((bat, index) => {
         let nP = bat.sp;
         let nN = bat.sn;
@@ -1028,7 +1031,6 @@
         if (nN !== 0) AMatrix[nN - 1][varIdx] -= 1;
       });
 
-      // Solve equations
       let solution = solveLinearSystem(AMatrix, BVector);
       if (!solution) {
         resetSolvers();
@@ -1037,19 +1039,17 @@
         return;
       }
 
-      // Map solutions to supernode potentials
+      // Map solutions
       let nodeVoltages = Array(numElectricalNodes).fill(0);
       for (let i = 1; i < numElectricalNodes; i++) {
         nodeVoltages[i] = solution[i - 1];
       }
 
-      // Map potentials to standard nodes
       for (let i = 0; i < numNodes; i++) {
         let supernode = roots[find(i)];
         solvedNodes[i] = nodeVoltages[supernode];
       }
 
-      // Calculate branches
       solvedEdges = connections.map(c => {
         let vDrop = Math.abs(solvedNodes[c.from] - solvedNodes[c.to]);
         let R = 1e12;
@@ -1058,13 +1058,13 @@
         } else if (c.type === 'resistor') {
           R = c.state.resistance || 20;
         } else if (c.type === 'wire' || (c.type === 'switch' && !c.state.open)) {
-          R = 1e-4; // wire model shunt
+          R = 1e-4;
         }
 
         let current = vDrop / R;
         let wattage = vDrop * current;
 
-        // Overvoltage burnout check (only when powered ON)
+        // Bulb filament blowout threshold check (> 6.5V drops)
         if (gridPowerOn && c.type === 'bulb' && vDrop > 6.5 && !blownBulbs.has(c.id) && !c.state.unscrewed) {
           blownBulbs.add(c.id);
           playSound('blow');
@@ -1082,20 +1082,20 @@
         };
       });
 
-      // Measure Generator current
+      // Total current supplied
       let currentSourced = gridPowerOn ? Math.abs(solution[solution.length - 1] || 0) : 0;
       totalCurrent = currentSourced;
 
       totalCurrentText.textContent = `${totalCurrent.toFixed(3)} A`;
 
-      // Central Fuse Overload check (only when powered ON)
+      // Fuse blowout check
       if (gridPowerOn && currentSourced > 1.2 && !fuseBlown) {
         fuseBlown = true;
         playSound('blow');
         setTimeout(solveMapCircuit, 50);
       }
 
-      // Update Fuse UI state card
+      // Update Fuse badge states
       if (fuseBlown) {
         fuseBadge.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border bg-rose-50 border-rose-200 text-rose-700 font-semibold";
         fuseBadgeText.textContent = "FUSE BLOWN! (>1.2A)";
@@ -1117,14 +1117,13 @@
         }
       }
 
-      // Render, update multimeter reading & inspector card details
       updateMultimeterUI();
       renderMap();
       validateLevelConstraints();
     }
 
     function resetSolvers() {
-      solvedNodes = Array(12).fill(0);
+      solvedNodes = Array(16).fill(0);
       solvedEdges = connections.map(c => ({
         ...c,
         solved: { voltage: 0, current: 0, wattage: 0 }
@@ -1143,7 +1142,7 @@
         let tempRow = A[i]; A[i] = A[maxRow]; A[maxRow] = tempRow;
         let tempB = B[i]; B[i] = B[maxRow]; B[maxRow] = tempB;
 
-        if (Math.abs(A[i][i]) < 1e-15) return null; // Unsolvable
+        if (Math.abs(A[i][i]) < 1e-15) return null;
 
         for (let k = i + 1; k < n; k++) {
           let factor = A[k][i] / A[i][i];
@@ -1165,14 +1164,13 @@
     }
 
     // ==========================================
-    // CONSTRAINTS VERIFIER FOR EDUCATION
     // ==========================================
     function validateLevelConstraints() {
       const lvl = LEVELS[currentLevelIdx];
       let currentChecks = lvl.checks.map(c => ({ ...c }));
       let isCleared = false;
 
-      // If the power switch is OFF, checks are kept unverified
+      // Keep checks grey/uncalculated if main power is shut OFF
       if (!gridPowerOn) {
         checksContainer.innerHTML = currentChecks.map(check => `
           <div class="flex items-start gap-2 text-xs text-slate-400">
@@ -1195,7 +1193,6 @@
       };
 
       if (lvl.id === 1) {
-        // Series Test
         let carouselBulbs = inZone("carousel").filter(c => c.type === 'bulb');
         let check1 = carouselBulbs.length >= 3;
         currentChecks[0].status = check1;
@@ -1221,7 +1218,6 @@
         isCleared = check1 && check2 && check3;
 
       } else if (lvl.id === 2) {
-        // Parallel Test
         let coasterBulbs = inZone("coaster").filter(c => c.type === 'bulb');
         let check1 = coasterBulbs.length >= 3;
         currentChecks[0].status = check1;
@@ -1247,7 +1243,6 @@
         isCleared = check1 && check2 && check3;
 
       } else if (lvl.id === 3) {
-        // Resistor mixed
         let hauntedBulbs = inZone("haunted").filter(c => c.type === 'bulb');
         let coasterBulbs = inZone("coaster").filter(c => c.type === 'bulb');
 
@@ -1262,7 +1257,6 @@
         isCleared = check1 && check2;
 
       } else if (lvl.id === 4) {
-        // Grand Gala full load
         let carouselBulbs = inZone("carousel").filter(c => c.type === 'bulb');
         let coasterBulbs = inZone("coaster").filter(c => c.type === 'bulb');
         let hauntedBulbs = inZone("haunted").filter(c => c.type === 'bulb');
@@ -1283,13 +1277,11 @@
         isCleared = carOk && coasterOk && hauntedOk && ferrisOk && fuseOk;
       }
 
-      // Fanfare trigger once
       if (isCleared && !levelCleared) {
         levelCleared = true;
         playSound('success');
       }
 
-      // Display Checklist
       checksContainer.innerHTML = currentChecks.map(check => `
         <div class="flex items-start gap-2 text-xs text-slate-700">
           <div class="mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 border ${
@@ -1318,8 +1310,9 @@
       }
     }
 
+    // Simulated series/parallel verify dry-run helper
     function simulateCircuitWithUnscrewed(unscrewedConnId) {
-      const numNodes = 12;
+      const numNodes = 16;
       let parent = Array.from({ length: numNodes }, (_, i) => i);
       const find = (i) => {
         if (parent[i] === i) return i;
@@ -1423,22 +1416,20 @@
     }
 
     // ==========================================
-    // RENDERING FUNCTIONS
     // ==========================================
     function renderMap() {
-      // 1. Render Connections Layer
+      // Render components & wires layer
       let connsHtml = '';
       solvedEdges.forEach(c => {
         const nodeFrom = MAP_NODES.find(n => n.id === c.from);
         const nodeTo = MAP_NODES.find(n => n.id === c.to);
         if (!nodeFrom || !nodeTo) return;
 
-        // If Grid Power is OFF, bulbs are unlit and no currents flow.
         const isLit = gridPowerOn && c.solved?.voltage > 0.5 && !blownBulbs.has(c.id);
         const isBlown = blownBulbs.has(c.id);
         const isUnscrewed = c.state.unscrewed;
 
-        // Flow properties
+        // Flow particle styling
         const isReversed = solvedNodes[c.from] < solvedNodes[c.to];
         const hasFlow = gridPowerOn && c.solved && c.solved.current > 0.01;
         let flowStyle = '';
@@ -1458,8 +1449,8 @@
             <line
               x1="${nodeFrom.x}" y1="${nodeFrom.y}"
               x2="${nodeTo.x}" y2="${nodeTo.y}"
-              stroke="#475569"
-              stroke-width="3.5"
+              stroke="#cbd5e1"
+              stroke-width="5"
               stroke-linecap="round"
             />
             
@@ -1469,7 +1460,7 @@
                 x1="${nodeFrom.x}" y1="${nodeFrom.y}"
                 x2="${nodeTo.x}" y2="${nodeTo.y}"
                 stroke="#f59e0b"
-                stroke-width="4"
+                stroke-width="4.5"
                 stroke-linecap="round"
                 style="${flowStyle}"
               />
@@ -1483,17 +1474,27 @@
               onmouseleave="unhoverConnection()"
               onclick="clickConnection('${c.id}')"
             >
-              <circle cx="0" cy="0" r="16" fill="rgba(255,255,255,0.95)" stroke="${selectedTool === 'eraser' ? '#f43f5e' : '#cbd5e1'}" stroke-width="1.5" class="transition hover:scale-110" />
+              <circle cx="0" cy="0" r="16" fill="rgba(255,255,255,0.95)" stroke="${selectedTool === 'eraser' ? '#f43f5e' : '#94a3b8'}" stroke-width="2" class="transition hover:scale-110 shadow-sm" />
               
               ${c.type === 'wire' ? `
                 <circle cx="0" cy="0" r="5" fill="#475569" />
               ` : ''}
 
               ${c.type === 'bulb' ? `
-                <g>
-                  ${isLit ? `<circle cx="0" cy="0" r="12" fill="rgba(250,204,21,0.25)" class="animate-pulse" />` : ''}
-                  <circle cx="0" cy="0" r="8" fill="${isBlown ? "#f87171" : isUnscrewed ? "#cbd5e1" : isLit ? "#fef08a" : "#64748b"}" stroke="${isLit ? "#eab308" : "#475569"}" stroke-width="1.5" />
-                  ${(!isBlown && !isUnscrewed) ? `<path d="M-4,1 L0,-4 L4,1" fill="none" stroke="${isLit ? "#ca8a04" : "#e2e8f0"}" stroke-width="1.5" />` : ''}
+                <g transform="scale(0.95)">
+                  ${isLit ? `<circle cx="0" cy="0" r="14" fill="rgba(251,191,36,0.3)" class="animate-pulse" />` : ''}
+                  <circle cx="0" cy="0" r="8" fill="${isBlown ? "#cbd5e1" : isUnscrewed ? "#f1f5f9" : isLit ? "#fef08a" : "#cbd5e1"}" stroke="${isBlown ? "#94a3b8" : isLit ? "#ca8a04" : "#475569"}" stroke-width="2" />
+                  
+                  <!-- Bulb cap base -->
+                  <rect x="-3.5" y="7" width="7" height="4" fill="#94a3b8" rx="1" />
+                  
+                  <!-- Blown wire filament line overlay -->
+                  ${isBlown ? `
+                    <!-- Jagged crack -->
+                    <path d="M-4,-4 L0,0 L-1,4 M4,-4 L1,0 L2,4" fill="none" stroke="#dc2626" stroke-width="1.5" />
+                  ` : `
+                    <path d="M-3,3 L-1,-2 L1,-2 L3,3" fill="none" stroke="${isLit ? "#d97706" : "#64748b"}" stroke-width="1.5" />
+                  `}
                 </g>
               ` : ''}
 
@@ -1523,7 +1524,7 @@
       });
       connectionsLayer.innerHTML = connsHtml;
 
-      // 2. Render Node Dots Layer
+      // Render nodes layer
       let nodesHtml = '';
       MAP_NODES.forEach(node => {
         const isActive = activeStartNode === node.id;
@@ -1533,29 +1534,26 @@
 
         nodesHtml += `
           <g onclick="clickNode(${node.id})" class="cursor-pointer group">
-            <!-- Node hot click zone -->
             <circle cx="${node.x}" cy="${node.y}" r="22" fill="transparent" />
 
-            <!-- Active wire select ping -->
             ${isActive ? `
               <circle cx="${node.x}" cy="${node.y}" r="14" fill="none" stroke="#4f46e5" stroke-width="3" class="animate-ping" />
             ` : ''}
 
-            <!-- Node Base Tower Structure -->
-            <rect x="${node.x - 4}" y="${node.y}" width="8" height="16" fill="#475569" rx="1" />
+            <!-- Node Terminal post tower -->
+            <rect x="${node.x - 4}" y="${node.y}" width="8" height="16" fill="#64748b" rx="1" />
             
-            <!-- Core dot -->
             <circle
               cx="${node.x}" cy="${node.y}"
               r="8"
               fill="${node.color || "#ffffff"}"
-              stroke="${isActive ? "#4f46e5" : isSelectedRed ? "#ef4444" : isSelectedBlack ? "#2563eb" : "#475569"}"
+              stroke="${isActive ? "#4f46e5" : isSelectedRed ? "#f43f5e" : isSelectedBlack ? "#2563eb" : "#475569"}"
               stroke-width="2.5"
-              class="transition group-hover:scale-110 filter drop-shadow-sm"
+              class="transition group-hover:scale-115 filter drop-shadow-sm"
             />
             <circle cx="${node.x}" cy="${node.y}" r="3" fill="#1e293b" />
 
-            <!-- Hover Volt Tag -->
+            <!-- Absolute Volt hover indicator tag -->
             <g class="opacity-0 group-hover:opacity-100 transition pointer-events-none">
               <rect x="${node.x - 22}" y="${node.y - 25}" width="44" height="15" rx="3" fill="#1e293b" />
               <text x="${node.x}" y="${node.y - 15}" fill="#38bdf8" font-size="8" font-weight="bold" text-anchor="middle" class="font-mono">
@@ -1569,7 +1567,7 @@
     }
 
     // ==========================================
-    // INTERACTION BRIDGES (GLOBALLY ACCESSIBLE)
+    // INTERACTION BRIDGES
     // ==========================================
     window.clickNode = function(id) {
       playSound('click');
@@ -1589,7 +1587,7 @@
       }
 
       if (selectedTool === 'eraser') {
-        return; // handle element click directly instead
+        return;
       }
 
       if (activeStartNode === null) {
@@ -1607,7 +1605,6 @@
           return;
         }
 
-        // Prevent duplicates
         const duplicate = connections.some(c => 
           (c.from === activeStartNode && c.to === id) || (c.from === id && c.to === activeStartNode)
         );
@@ -1658,7 +1655,6 @@
         return;
       }
 
-      // Action interactions on elements directly
       if (target.type === 'switch') {
         target.state.open = !target.state.open;
         playSound('toggle');
@@ -1685,14 +1681,13 @@
       let statusText = 'Offline';
       let colorClass = 'text-slate-400';
 
-      // Always show offline details if power is OFF, but show component ratings
       const activeVoltage = gridPowerOn ? (conn.solved?.voltage || 0) : 0;
       const activeCurrent = gridPowerOn ? (conn.solved?.current || 0) : 0;
       const activePower = gridPowerOn ? (conn.solved?.wattage || 0) : 0;
 
       if (conn.type === 'bulb') {
         if (isBlown) {
-          statusText = '💥 BLOWN! (&gt;6.5V)';
+          statusText = '💥 BLOWN FILAMENT (&gt;6.5V)';
           colorClass = 'text-rose-600 font-bold';
         } else if (isUnscrewed) {
           statusText = 'Unscrewed';
@@ -1750,7 +1745,6 @@
       `;
     };
 
-    // Initialize layout when ready
     window.onload = init;
   </script>
 </body>
