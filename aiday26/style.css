@@ -190,18 +190,33 @@ body {
 
 .split-hero-row {
     display: flex;
+    flex-direction: row;       /* Forces horizontal alignment layout */
+    flex-wrap: nowrap;         /* CRITICAL: Prevents columns from dropping below each other */
     gap: 1.5rem;
     margin-bottom: 1.5rem;
+    width: 100%;
 }
 
-.keynote-box { flex: 0 0 70%; margin-bottom: 0 !important; }
-.schedule-box { flex: 0 0 30%; margin-bottom: 0 !important; }
+.keynote-box { 
+    flex: 0 0 70%;             /* Locks width perfectly at 70% space */
+    margin-bottom: 0 !important; 
+}
 
+.schedule-box { 
+    flex: 0 0 30%;             /* Locks width perfectly at 30% space */
+    margin-bottom: 0 !important; 
+}
+
+/* Responsiveness rule: only stack them vertically on tablets/mobiles */
 @media (max-width: 1024px) {
-    .split-hero-row { flex-direction: column; }
-    .keynote-box, .schedule-box { flex: 1 1 100%; }
+    .split-hero-row { 
+        flex-direction: column; 
+        flex-wrap: wrap;
+    }
+    .keynote-box, .schedule-box { 
+        flex: 1 1 100%; 
+    }
 }
-
 .card {
     border-radius: var(--radius);
     padding: 2rem;
