@@ -52,7 +52,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wider text-slate-900 flex items-center gap-2">
-                    ABYSS LAB <span class="text-xs bg-cyan-100 text-cyan-800 border border-cyan-200 px-2 py-0.5 rounded font-mono-tech uppercase">Buoyancy Simulator v2.3</span>
+                    ABYSS LAB <span class="text-xs bg-cyan-100 text-cyan-800 border border-cyan-200 px-2 py-0.5 rounded font-mono-tech uppercase">Buoyancy Simulator v2.4</span>
                 </h1>
                 <p class="text-[11px] text-slate-500">Hydrostatic Equilibrium & Cargo Mass Lab</p>
             </div>
@@ -145,11 +145,11 @@
                         </div>
                         <div class="flex justify-between text-[11px] text-slate-600">
                             <span>Dry Sub Hull:</span>
-                            <span class="font-semibold">48,000 kg</span>
+                            <span id="telemetry-dry-mass" class="font-semibold">40,000 kg</span>
                         </div>
                         <div class="flex justify-between text-[11px] text-cyan-600">
                             <span>Ballast Water:</span>
-                            <span id="telemetry-ballast-mass" class="font-semibold">2,000 kg</span>
+                            <span id="telemetry-ballast-mass" class="font-semibold">8,600 kg</span>
                         </div>
                         <div class="flex justify-between text-[11px] text-amber-600 bg-amber-50 px-1 rounded">
                             <span>Collected Cargo:</span>
@@ -157,7 +157,7 @@
                         </div>
                         <div class="flex justify-between text-xs font-bold border-t border-slate-200 pt-1 text-slate-800">
                             <span>Total Sub Mass (m):</span>
-                            <span id="telemetry-total-mass">50,000 kg</span>
+                            <span id="telemetry-total-mass">48,600 kg</span>
                         </div>
                     </div>
 
@@ -185,13 +185,13 @@
                         <span class="flex items-center gap-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Buoyancy (F<sub>b</sub>):
                         </span>
-                        <span id="telemetry-fb">490.5 kN</span>
+                        <span id="telemetry-fb">476.8 kN</span>
                     </div>
                     <div class="flex justify-between items-center text-red-600 font-semibold">
                         <span class="flex items-center gap-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Gravity (F<sub>g</sub>):
                         </span>
-                        <span id="telemetry-fg">490.5 kN</span>
+                        <span id="telemetry-fg">476.8 kN</span>
                     </div>
                     <div class="flex justify-between items-center text-slate-500">
                         <span class="flex items-center gap-1">
@@ -532,14 +532,17 @@
         // Physics Constants & Core Properties
         const G = 9.81;              // Gravitational constant (m/s^2)
         const SUB_VOLUME = 50.0;     // Submarine displacement volume (m^3)
-        const DRY_MASS = 48000;      // Mass of the empty vessel (kg)
-        const MAX_BALLAST_MASS = 4000; // Capacity of ballast tanks (kg of water)
+        
+        // RECALIBRATED MASS VALUES (Submarine lightened, ballast increased to fix cargo lock-out)
+        const DRY_MASS = 40000;         // Lightened from 48000 kg (16.6% lighter)
+        const MAX_BALLAST_MASS = 12000; // Multiplied ballast water limit from 4000 to 12000 kg (3x volume capacity)
+        
         const CARGO_UNIT_MASS = 800; // Weight of each salvaged scientific pod (kg)
-        const PUMP_RATE = 1500;      // Performance speed of pumps (kg of water transiting per second)
+        const PUMP_RATE = 2000;      // Performance speed of pumps (upgraded to 2000 kg/s to handle bigger volume)
         const DRAG_COEFF = 3800;     // Quadratic drag fluid resistance coefficient
         const LINEAR_DRAG = 20000;   // Linear damping coefficient to stabilize small oscillations
         
-        // LEVEL NAVIGATION LENGTH (Extended from 1100 to 3600 for over 3x longer gameplay!)
+        // LEVEL NAVIGATION LENGTH
         const LEVEL_LENGTH = 3600;
 
         // Simulator State Model
@@ -547,7 +550,7 @@
             depth: 20.0,             // Current simulation depth (0 - 100 meters)
             velocityY: 0.0,          // Vertical speed vector (m/s)
             accelY: 0.0,             // Vertical acceleration rate (m/s^2)
-            massBallast: 2000,       // Active water load inside tanks (kg)
+            massBallast: 8600,       // Active water load inside tanks (kg)
             cargoCount: 0,           // Number of research pods actively loaded
             hullIntegrity: 100,      // Hull health percentage
             emergencyBlowCooldown: 0 // Blow cooldown counter
@@ -1028,6 +1031,7 @@
             document.getElementById('density-slider-indicator').style.left = `${Math.max(0, Math.min(100, sliderLeft))}%`;
 
             // Composition table
+            document.getElementById('telemetry-dry-mass').innerText = `${DRY_MASS.toLocaleString()} kg`;
             document.getElementById('telemetry-ballast-mass').innerText = `${sub.massBallast.toLocaleString()} kg`;
             document.getElementById('telemetry-cargo-mass').innerText = `+${cargoMass.toLocaleString()} kg`;
             document.getElementById('telemetry-total-mass').innerText = `${totalMass.toLocaleString()} kg`;
@@ -1228,7 +1232,7 @@
                 }
             });
 
-            // 5. Goal boundary mark (Set to new extended LEVEL_LENGTH)
+            // 5. Goal boundary mark (Set to LEVEL_LENGTH)
             const completeX = LEVEL_LENGTH - cameraX;
             if (completeX < canvas.width + 100) {
                 ctx.save();
