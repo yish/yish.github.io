@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Park Electrician - Circuit Lab</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-mono {
+      font-family: 'Fira Code', monospace;
+    }
+    @keyframes flowAnim {
+      to {
+        stroke-dashoffset: -20;
+      }
+    }
+    .map-sector-boundary {
+      stroke-dasharray: 6, 6;
+    }
+    /* Style custom range inputs nicely */
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #4f46e5;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      background: #4338ca;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 overflow-hidden h-screen w-screen flex flex-col lg:flex-row select-none">
+
+  <!-- LEFT CONTROL PANEL - INSTRUCTIONS & OBJECTIVES -->
+  <div class="flex flex-col w-full lg:w-96 bg-white border-b lg:border-b-0 lg:border-r border-slate-200 shrink-0 overflow-y-auto shadow-sm z-10">
+    
+    <!-- Header -->
+    <div class="p-5 border-b border-slate-100 bg-slate-50/50 sticky top-0 backdrop-blur">
+      <div class="flex items-center gap-2 mb-1.5 text-indigo-600 font-mono text-xs uppercase tracking-wider font-bold">
+        <svg class="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        Park Power Architect
+      </div>
+      <h1 class="text-xl font-extrabold text-slate-950 tracking-tight">Theme Park Circuit Builder</h1>
+    </div>
+
+    <!-- Level Chooser -->
+    <div class="p-5 space-y-4">
+      <div>
+        <label class="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-1.5">Select Park Sector Grid:</label>
+        <div id="level-grid-container" class="grid grid-cols-4 gap-1.5">
+          <!-- Dynamic level buttons inserted here -->
+        </div>
+      </div>
+
+      <!-- Level Details Card -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60 shadow-inner">
+        <div class="flex justify-between items-start mb-2">
+          <h2 id="level-title" class="text-sm font-bold text-slate-900 leading-tight">Level Title</h2>
+          <span id="level-difficulty" class="px-2 py-0.5 text-[9px] font-mono rounded-full font-bold uppercase tracking-wider">Easy</span>
+        </div>
+        
+        <p id="level-story" class="text-xs text-slate-600 leading-relaxed mb-3">
+          Level story and narrative constraints...
+        </p>
+
+        <div class="border-t border-slate-200 pt-3">
+          <h4 class="text-xs font-bold text-indigo-700 mb-1">Pedagogical Objective:</h4>
+          <p id="level-goal" class="text-xs text-slate-500 italic leading-normal">
+            Target science explanation...
+          </p>
+        </div>
+      </div>
+
+      <!-- Checks list -->
+      <div class="space-y-2">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500">Wiring Constraints Checklist:</h3>
+        <div id="checks-container" class="space-y-1.5">
+          <!-- Dynamic checkboxes inserted here -->
+        </div>
+      </div>
+
+      <!-- Level success celebrate panel -->
+      <div id="success-panel" class="hidden p-4 rounded-xl bg-emerald-50 border border-emerald-300 text-center animate-bounce">
+        <h3 class="text-emerald-800 font-bold text-sm mb-1">🎉 Grid Cleared & Authenticated!</h3>
+        <p class="text-xs text-emerald-600 mb-3">The sector lights up successfully.</p>
+        <button id="next-level-btn" class="w-full py-2 text-xs font-bold bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 transition shadow">
+          Move to Next Sector
+        </button>
+      </div>
+
+      <!-- Blueprint Advice List -->
+      <div class="border-t border-slate-200 pt-4">
+        <h4 class="text-xs font-bold text-slate-800 mb-1.5 flex items-center gap-1">
+          💡 Construction Blueprint Notes:
+        </h4>
+        <ul id="hints-list" class="list-disc pl-4 space-y-1 text-[11px] text-slate-500">
+          <!-- Dynamic hints inserted here -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER WORKSPACE & RIGHT CONTROL RACK -->
+  <div class="flex-1 flex flex-col h-full overflow-hidden bg-slate-50">
+    
+    <!-- Real-time Central Generator dashboard -->
+    <div class="flex flex-wrap items-center justify-between gap-4 p-4 border-b border-slate-200 bg-white shadow-sm z-10">
+      <div class="flex items-center gap-5">
+        
+        <!-- Power generator dial -->
+        <div class="flex items-center gap-3 bg-slate-100/60 px-4 py-1.5 rounded-xl border border-slate-200">
+          <span class="text-xs font-mono text-slate-500 font-bold">POWER SUPPLY:</span>
+          <input
+            id="psu-voltage-slider"
+            type="range"
+            min="1.5"
+            max="15.0"
+            step="0.5"
+            value="9.0"
+            class="w-24 accent-indigo-600 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+          />
+          <span id="psu-voltage-text" class="text-sm font-mono font-bold text-indigo-600 w-12 text-right">9.0V</span>
+        </div>
+
+        <!-- Current Readout -->
+        <div class="flex items-center gap-3 bg-slate-100/60 px-4 py-1.5 rounded-xl border border-slate-200">
+          <span class="text-xs font-mono text-slate-500 font-bold">TOTAL DRAW:</span>
+          <span id="total-current-text" class="text-sm font-mono font-bold text-emerald-600">0.000 A</span>
+        </div>
+
+        <!-- FUSE State light -->
+        <div id="fuse-badge" class="flex items-center gap-2 px-3 py-1.5 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-700 font-semibold">
+          <div id="fuse-indicator-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500" /></div>
+          <span id="fuse-badge-text" class="text-xs font-mono uppercase tracking-wide">FUSE ACTIVE (1.2A Limit)</span>
+        </div>
+
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button
+          id="repair-btn"
+          class="hidden px-3.5 py-1.5 text-xs font-bold bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition flex items-center gap-1 shadow-sm"
+        >
+          Reset Fuse & Bulbs
+        </button>
+
+        <button
+          id="clear-btn"
+          class="px-3.5 py-1.5 text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 rounded-lg transition"
+        >
+          Clear Grid
+        </button>
+      </div>
+    </div>
+
+    <!-- WORKSPACE AREA -->
+    <div class="flex-1 flex flex-col md:flex-row p-6 gap-6 overflow-hidden">
+      
+      <!-- MAP CANVAS PANEL -->
+      <div class="flex-1 bg-white rounded-2xl border border-slate-200 flex flex-col items-center justify-center relative p-4 shadow-sm overflow-auto select-none">
+        
+        <!-- Interactive map visualization canvas -->
+        <svg
+          id="map-svg"
+          viewBox="0 0 800 580"
+          class="w-full max-w-3xl h-auto"
+        >
+          <!-- Background and Decorative Pathways -->
+          <rect x="0" y="0" width="800" height="580" fill="#f8fafc" rx="16" />
+          <g class="opacity-15">
+            <path d="M 400 310 L 190 200 L 190 130" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
+            <path d="M 190 130 L 230 90 L 190 200" stroke="#cbd5e1" stroke-width="18" fill="none" stroke-linecap="round" />
+            <path d="M 400 310 L 610 200 L 650 130" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
+            <path d="M 650 130 L 570 90 L 610 200" stroke="#cbd5e1" stroke-width="18" fill="none" stroke-linecap="round" />
+            <path d="M 400 310 L 260 450 L 180 410" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
+            <path d="M 400 310 L 540 450 L 620 410" stroke="#cbd5e1" stroke-width="24" fill="none" stroke-linecap="round" />
+          </g>
+
+          <!-- SECTOR GRAPHIC BOUNDARIES -->
+          <!-- Carousel -->
+          <g>
+            <rect x="100" y="40" width="180" height="200" fill="rgba(244,63,94,0.02)" rx="16" />
+            <rect x="100" y="40" width="180" height="200" fill="none" stroke="rgba(244,63,94,0.18)" stroke-width="2" class="map-sector-boundary" />
+            <text x="190" y="30" fill="rgba(244,63,94,0.7)" font-size="10" font-weight="bold" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎪 Carousel Garden</text>
+          </g>
+
+          <!-- Rollercoaster -->
+          <g>
+            <rect x="520" y="40" width="180" height="200" fill="rgba(34,211,238,0.02)" rx="16" />
+            <rect x="520" y="40" width="180" height="200" fill="none" stroke="rgba(34,211,238,0.18)" stroke-width="2" class="map-sector-boundary" />
+            <text x="610" y="30" fill="rgba(34,211,238,0.7)" font-size="10" font-weight="bold" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎢 Coaster Plaza</text>
+          </g>
+
+          <!-- Haunted Shadows -->
+          <g>
+            <rect x="100" y="340" width="220" height="170" fill="rgba(168,85,247,0.02)" rx="16" />
+            <rect x="100" y="340" width="220" height="170" fill="none" stroke="rgba(168,85,247,0.18)" stroke-width="2" class="map-sector-boundary" />
+            <text x="210" y="530" fill="rgba(168,85,247,0.7)" font-size="10" font-weight="bold" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">👻 Haunted Shadows</text>
+          </g>
+
+          <!-- Ferris Wheel -->
+          <g>
+            <rect x="480" y="340" width="220" height="170" fill="rgba(245,158,11,0.02)" rx="16" />
+            <rect x="480" y="340" width="220" height="170" fill="none" stroke="rgba(245,158,11,0.18)" stroke-width="2" class="map-sector-boundary" />
+            <text x="590" y="530" fill="rgba(245,158,11,0.7)" font-size="10" font-weight="bold" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎡 Ferris Wheel Plaza</text>
+          </g>
+
+          <!-- Central Generator Station Graphic -->
+          <g transform="translate(350, 275)" class="filter drop-shadow-sm">
+            <rect x="0" y="0" width="100" height="60" rx="8" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="3" />
+            <rect x="5" y="5" width="90" height="20" rx="4" fill="#0f172a" />
+            <text x="50" y="18" fill="#38bdf8" font-size="8" font-weight="bold" text-anchor="middle" class="font-mono">CENTRAL POWER</text>
+            <circle cx="15" cy="42" r="3" fill="#ef4444" />
+            <circle cx="85" cy="42" r="3" fill="#3b82f6" />
+          </g>
+
+          <!-- Connections & Components Container -->
+          <g id="connections-layer"></g>
+
+          <!-- Temporary Wire Draft Path preview -->
+          <line id="preview-wire-line" x1="0" y1="0" x2="0" y2="0" stroke="#4f46e5" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="4, 4" class="hidden animate-pulse"></line>
+
+          <!-- Post interactive nodes -->
+          <g id="nodes-layer"></g>
+
+          <!-- Multimeter Probes Lines -->
+          <g id="multimeter-layer"></g>
+        </svg>
+
+        <!-- Float warnings -->
+        <div id="short-circuit-warning" class="hidden absolute top-4 left-4 right-4 bg-rose-50 border border-rose-300 p-2.5 rounded-xl text-center shadow">
+          <p class="text-xs font-mono text-rose-700 font-bold uppercase tracking-wider animate-pulse">
+            ⚠ SHORT CIRCUIT DETECTED! POWER BYPASSED!
+          </p>
+        </div>
+      </div>
+
+      <!-- THE PHYSICAL TOOLBOX & MULTIMETER MODULES -->
+      <div class="w-full md:w-64 space-y-4 shrink-0 flex flex-col justify-start">
+        
+        <!-- The Box of Components (Inventory Theme) -->
+        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm space-y-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Box of Components:</h3>
+          
+          <div class="grid grid-cols-2 gap-2">
+            <button
+              id="tool-wire"
+              class="tool-btn flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition bg-indigo-50 border-indigo-400 text-indigo-700 font-bold"
+            >
+              <div class="w-8 h-8 rounded-full border-2 border-indigo-500 flex items-center justify-center mb-1 bg-indigo-50">
+                <div class="w-4 h-0.5 bg-indigo-500 rotate-45"></div>
+              </div>
+              <span class="text-[10px]">Wire Coil</span>
+            </button>
+
+            <button
+              id="tool-bulb"
+              class="tool-btn flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+            >
+              <div class="w-8 h-8 rounded-full border-2 border-amber-500 flex items-center justify-center mb-1 bg-amber-50">
+                <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+              </div>
+              <span class="text-[10px]">Light Bulb</span>
+            </button>
+
+            <button
+              id="tool-resistor"
+              class="tool-btn flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+            >
+              <div class="w-8 h-8 rounded-full border-2 border-amber-600 flex items-center justify-center mb-1 bg-amber-50">
+                <div class="w-4 h-2 bg-amber-700 rounded-sm"></div>
+              </div>
+              <span class="text-[10px]">Resistor</span>
+            </button>
+
+            <button
+              id="tool-switch"
+              class="tool-btn flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+            >
+              <div class="w-8 h-8 rounded-full border-2 border-emerald-500 flex items-center justify-center mb-1 bg-emerald-50">
+                <div class="w-4 h-0.5 bg-emerald-500 origin-left -rotate-45"></div>
+              </div>
+              <span class="text-[10px]">Knife Switch</span>
+            </button>
+
+            <button
+              id="tool-eraser"
+              class="tool-btn col-span-2 flex items-center justify-center gap-2 p-2 rounded-xl border text-center transition bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100 font-bold text-xs"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7" />
+              </svg>
+              Wire Cutter / Eraser
+            </button>
+          </div>
+
+          <!-- Resistor resistance selector sub-config -->
+          <div id="resistor-subconfig" class="hidden border-t border-slate-100 pt-2.5 space-y-1">
+            <span class="text-[9px] font-semibold text-slate-400 uppercase block">Resistance value to place:</span>
+            <div class="flex gap-1">
+              <button data-res="10" class="res-val-btn flex-1 py-1 text-xs font-mono font-bold rounded border bg-slate-50 text-slate-600 hover:bg-slate-100">10Ω</button>
+              <button data-res="20" class="res-val-btn flex-1 py-1 text-xs font-mono font-bold rounded border bg-indigo-600 text-white border-indigo-600">20Ω</button>
+              <button data-res="50" class="res-val-btn flex-1 py-1 text-xs font-mono font-bold rounded border bg-slate-50 text-slate-600 hover:bg-slate-100">50Ω</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Benchtop Multimeter Module -->
+        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Digital Multimeter:</h3>
+            <button
+              id="multimeter-toggle"
+              class="px-2 py-0.5 text-[9px] font-bold rounded-full border transition uppercase bg-slate-100 text-slate-500 border-slate-200"
+            >
+              Off
+            </button>
+          </div>
+
+          <div id="multimeter-module-body" class="space-y-3 hidden">
+            <div class="bg-slate-900 text-amber-400 p-3 rounded-xl text-center font-mono relative shadow-inner">
+              <span class="text-[8px] text-slate-500 uppercase absolute top-1 left-2">VOLTS DC</span>
+              <div id="multimeter-readout" class="text-xl font-bold tracking-widest mt-1">0.00 V</div>
+            </div>
+
+            <div class="space-y-1 text-[10px] text-slate-500">
+              <div class="flex justify-between">
+                <span>V+ (Red Probe):</span>
+                <span id="probe-red-text" class="">Tap Lightpost</span>
+              </div>
+              <div class="flex justify-between">
+                <span>COM (Black Probe):</span>
+                <span id="probe-black-text" class="">Tap Lightpost</span>
+              </div>
+            </div>
+
+            <button
+              id="multimeter-reset"
+              class="w-full py-1 text-[9px] bg-slate-50 border border-slate-200 rounded-lg font-bold hover:bg-slate-100 text-slate-500"
+            >
+              Reset Probes
+            </button>
+          </div>
+          
+          <div id="multimeter-module-placeholder" class="text-[10px] text-slate-400 leading-relaxed italic">
+            Equip the multimeter, then tap any two lightpost terminals to analyze electrical potential drop.
+          </div>
+        </div>
+
+        <!-- Selected Component Inspection Card -->
+        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm flex-1 min-h-[140px] flex flex-col justify-between">
+          <div id="inspector-body">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Component Inspector:</h3>
+            <div id="inspector-content">
+              <p class="text-[10px] text-slate-400 leading-relaxed italic">Hover over any placed wire's circular icon to inspect real-time potential and current drops.</p>
+            </div>
+          </div>
+
+          <!-- Physical formulas helper -->
+          <div class="border-t border-slate-100 pt-2 mt-2 text-[9px] text-slate-400 font-mono flex justify-around">
+            <span>V = I × R</span>
+            <span>•</span>
+            <span>P = V × I</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Vanila JS App Controllers logic -->
+  <script>
+    // ==========================================
+    // AUDIO ENGINE
+    // ==========================================
+    const playSound = (type) => {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+
+        if (type === 'click') {
+          osc.frequency.setValueAtTime(550, now);
+          osc.frequency.exponentialRampToValueAtTime(180, now + 0.08);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'toggle') {
+          osc.frequency.setValueAtTime(300, now);
+          osc.frequency.setValueAtTime(450, now + 0.05);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        } else if (type === 'blow') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(110, now);
+          osc.frequency.linearRampToValueAtTime(10, now + 0.35);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else if (type === 'success') {
+          const chords = [293.66, 369.99, 440.00, 587.33];
+          chords.forEach((f, i) => {
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            o.connect(g);
+            g.connect(ctx.destination);
+            o.frequency.setValueAtTime(f, now + i * 0.06);
+            g.gain.setValueAtTime(0.1, now + i * 0.06);
+            g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.25);
+            o.start(now + i * 0.06);
+            o.stop(now + i * 0.06 + 0.25);
+          });
+        }
+      } catch (e) {
+        // Suppress audio context browser security alerts
+      }
+    };
+
+    // ==========================================
+    // DATA DECLARATIONS
+    // ==========================================
+    const LEVELS = [
+      {
+        id: 1,
+        title: "Level 1: Carousel Entrance",
+        difficulty: "Easy",
+        story: "The Grand Carousel needs 3 glowing decorative lightposts wired up. To ensure safety, connect them in a continuous Series Loop with the Power Hub. If any light is unscrewed, they must all safely go dark!",
+        educationalGoal: "In Series, current must traverse every component in a single loop. If the path opens anywhere, all flow ceases.",
+        hints: [
+          "Select Wire from the box, connect the Power Hub (+) terminal to Carousel Post A.",
+          "Select Bulb, connect Carousel Post A to B, and B to C.",
+          "Use Wire to link Carousel Post C back to the Power Hub (-) terminal.",
+          "Adjust the PSU Voltage until the bulbs shine inside their green 'Ideal' zone (2.3V - 4.7V)."
+        ],
+        checks: [
+          { text: "At least 3 bulbs active in the Carousel Garden", status: false },
+          { text: "Bulbs are receiving ideal voltage (2.3V - 4.7V)", status: false },
+          { text: "Circuit is wired strictly in a Series Loop", status: false }
+        ]
+      },
+      {
+        id: 2,
+        title: "Level 2: Rollercoaster Plaza",
+        difficulty: "Medium",
+        story: "The Rollercoaster Plaza needs 3 bulbs that operate independently. If one bulb fails or is unscrewed, the remaining two must stay brightly lit! Wire them in a parallel configuration.",
+        educationalGoal: "In Parallel, branches share the same electrical potential difference. An open loop in one branch does not affect current flow in other branches.",
+        hints: [
+          "Run main power lines (wires) from the Power Hub to Coaster Post A and Coaster Post B.",
+          "Install three parallel light bulbs across the hot and return rails.",
+          "Verify by clicking any bulb to unscrew it; the others should remain glowing!"
+        ],
+        checks: [
+          { text: "At least 3 bulbs active in the Coaster Plaza", status: false },
+          { text: "All 3 bulbs glow ideally without blowing out", status: false },
+          { text: "Circuit is wired in Parallel", status: false }
+        ]
+      },
+      {
+        id: 3,
+        title: "Level 3: Haunted Shadows & Coaster",
+        difficulty: "Hard",
+        story: "Atmospheric challenge! The Haunted House needs 1 dim light (1.0V to 2.2V) to keep it spooky, while the Rollercoaster next door requires 1 extremely bright bulb (4.5V to 6.5V). Run both from the same Power Hub!",
+        educationalGoal: "Using resistors in series with a bulb increases overall loop resistance, dropping local voltage and keeping it beautifully dim.",
+        hints: [
+          "Connect a bulb between the Haunted Posts. Put a Resistor (e.g., 20Ω or 50Ω) in series to limit its voltage drop.",
+          "Connect another bulb directly to the Rollercoaster posts to maximize its brightness.",
+          "Adjust the generator voltage to perfect the balance!"
+        ],
+        checks: [
+          { text: "Haunted Post bulb is glowing Dim (0.9V - 2.2V)", status: false },
+          { text: "Rollercoaster bulb is glowing Bright (4.5V - 6.5V)", status: false }
+        ]
+      },
+      {
+        id: 4,
+        title: "Level 4: The Grand Gala",
+        difficulty: "Expert",
+        story: "Tonight is the Grand Gala opening! You must light up all 4 major zones: Carousel Garden, Rollercoaster Plaza, Haunted Shadows, and Ferris Wheel Plaza. But beware: the central grid has a strict 1.2A fuse limit to prevent grid meltdowns!",
+        educationalGoal: "Balance equivalent resistances to distribute power to all 4 sectors simultaneously without overloading the circuit limit.",
+        hints: [
+          "Place at least 1 bulb in each of the 4 zones on the map.",
+          "Use resistors strategically in series with some lines to limit total current draw.",
+          "Keep total current under 1.2 Amps so the central fuse doesn't blow!"
+        ],
+        checks: [
+          { text: "Active bulb in Carousel Garden (Ideal)", status: false },
+          { text: "Active bulb in Rollercoaster Plaza (Bright/Ideal)", status: false },
+          { text: "Active bulb in Haunted Shadows (Dim)", status: false },
+          { text: "Active bulb in Ferris Wheel Plaza (Ideal)", status: false },
+          { text: "Central Fuse intact (Current < 1.2A)", status: false }
+        ]
+      }
+    ];
+
+    const MAP_NODES = [
+      { id: 0, label: "Generator Positive (+)", x: 380, y: 310, sector: "power", color: "#f87171" },
+      { id: 1, label: "Generator Negative (-)", x: 420, y: 310, sector: "power", color: "#60a5fa" },
+      
+      { id: 2, label: "Carousel Post A", x: 150, y: 130, sector: "carousel", name: "Post CA" },
+      { id: 3, label: "Carousel Post B", x: 230, y: 90, sector: "carousel", name: "Post CB" },
+      { id: 4, label: "Carousel Post C", x: 190, y: 200, sector: "carousel", name: "Post CC" },
+      
+      { id: 5, label: "Coaster Post A", x: 650, y: 130, sector: "coaster", name: "Post RA" },
+      { id: 6, label: "Coaster Post B", x: 570, y: 90, sector: "coaster", name: "Post RB" },
+      { id: 7, label: "Coaster Post C", x: 610, y: 200, sector: "coaster", name: "Post RC" },
+      
+      { id: 8, label: "Haunted Post A", x: 180, y: 410, sector: "haunted", name: "Post HA" },
+      { id: 9, label: "Haunted Post B", x: 260, y: 450, sector: "haunted", name: "Post HB" },
+      
+      { id: 10, label: "Ferris Post A", x: 620, y: 410, sector: "ferris", name: "Post FA" },
+      { id: 11, label: "Ferris Post B", x: 540, y: 450, sector: "ferris", name: "Post FB" }
+    ];
+
+    // ==========================================
+    // APP STATE
+    // ==========================================
+    let currentLevelIdx = 0;
+    let selectedTool = 'wire';
+    let psuVoltage = 9.0;
+    let selectedResistance = 20;
+
+    let connections = [];
+    let activeStartNode = null;
+
+    let blownBulbs = new Set();
+    let fuseBlown = false;
+
+    let solvedNodes = Array(12).fill(0);
+    let solvedEdges = [];
+    let totalCurrent = 0;
+    let shortCircuit = false;
+
+    let multimeterActive = false;
+    let probeRed = null;
+    let probeBlack = null;
+
+    let hoveredConnection = null;
+    let levelCleared = false;
+
+    // ==========================================
+    // DOM CACHING
+    // ==========================================
+    const levelGridContainer = document.getElementById('level-grid-container');
+    const levelTitle = document.getElementById('level-title');
+    const levelDifficulty = document.getElementById('level-difficulty');
+    const levelStory = document.getElementById('level-story');
+    const levelGoal = document.getElementById('level-goal');
+    const checksContainer = document.getElementById('checks-container');
+    const hintsList = document.getElementById('hints-list');
+    const successPanel = document.getElementById('success-panel');
+    const nextLevelBtn = document.getElementById('next-level-btn');
+
+    const psuVoltageSlider = document.getElementById('psu-voltage-slider');
+    const psuVoltageText = document.getElementById('psu-voltage-text');
+    const totalCurrentText = document.getElementById('total-current-text');
+    const fuseBadge = document.getElementById('fuse-badge');
+    const fuseBadgeText = document.getElementById('fuse-badge-text');
+    const fuseIndicatorDot = document.getElementById('fuse-indicator-dot');
+    const repairBtn = document.getElementById('repair-btn');
+    const clearBtn = document.getElementById('clear-btn');
+
+    const connectionsLayer = document.getElementById('connections-layer');
+    const nodesLayer = document.getElementById('nodes-layer');
+    const multimeterLayer = document.getElementById('multimeter-layer');
+    const previewWireLine = document.getElementById('preview-wire-line');
+    const shortCircuitWarning = document.getElementById('short-circuit-warning');
+
+    const multimeterToggle = document.getElementById('multimeter-toggle');
+    const multimeterModuleBody = document.getElementById('multimeter-module-body');
+    const multimeterModulePlaceholder = document.getElementById('multimeter-module-placeholder');
+    const multimeterReadout = document.getElementById('multimeter-readout');
+    const probeRedText = document.getElementById('probe-red-text');
+    const probeBlackText = document.getElementById('probe-black-text');
+    const multimeterReset = document.getElementById('multimeter-reset');
+
+    const resistorSubconfig = document.getElementById('resistor-subconfig');
+    const inspectorContent = document.getElementById('inspector-content');
+
+    // ==========================================
+    // INITS & LEVEL SETUP
+    // ==========================================
+    function init() {
+      // Draw level selection grid
+      levelGridContainer.innerHTML = LEVELS.map((lvl, index) => `
+        <button
+          onclick="selectLevel(${index})"
+          id="level-btn-${index}"
+          class="py-2 text-xs font-bold rounded transition duration-150 border bg-slate-50 text-slate-700 hover:bg-slate-100 border-slate-200"
+        >
+          Zone ${lvl.id}
+        </button>
+      `).join('');
+
+      // Build Tool Chest Bindings
+      document.querySelectorAll('.tool-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.currentTarget.id.replace('tool-', '');
+          selectTool(id);
+        });
+      });
+
+      // Bind Resistance sub-config buttons
+      document.querySelectorAll('.res-val-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const val = parseInt(e.currentTarget.getAttribute('data-res'));
+          selectResistanceVal(val);
+        });
+      });
+
+      // Slider binding
+      psuVoltageSlider.addEventListener('input', (e) => {
+        psuVoltage = parseFloat(e.target.value);
+        psuVoltageText.textContent = psuVoltage.toFixed(1) + 'V';
+        solveMapCircuit();
+      });
+
+      // General Buttons
+      repairBtn.addEventListener('click', repairFuseAndBulbs);
+      clearBtn.addEventListener('click', clearWorkspace);
+      nextLevelBtn.addEventListener('click', () => {
+        if (currentLevelIdx < LEVELS.length - 1) {
+          selectLevel(currentLevelIdx + 1);
+        }
+      });
+
+      // Multimeter Bindings
+      multimeterToggle.addEventListener('click', toggleMultimeter);
+      multimeterReset.addEventListener('click', resetProbes);
+
+      // Mouse tracking for drag/draft wire preview line
+      document.getElementById('map-svg').addEventListener('mousemove', (e) => {
+        if (activeStartNode !== null) {
+          const svgRect = document.getElementById('map-svg').getBoundingClientRect();
+          // Map screen projection back into SVG user coordinate system (viewBox is 800 x 580)
+          const svgX = ((e.clientX - svgRect.left) / svgRect.width) * 800;
+          const svgY = ((e.clientY - svgRect.top) / svgRect.height) * 580;
+
+          previewWireLine.setAttribute('x2', svgX);
+          previewWireLine.setAttribute('y2', svgY);
+        }
+      });
+
+      // Setup Level 0 to start
+      selectLevel(0);
+    }
+
+    window.selectLevel = function(idx) {
+      playSound('click');
+      currentLevelIdx = idx;
+      levelCleared = false;
+      activeStartNode = null;
+      
+      // Update Level Selector styling
+      LEVELS.forEach((_, i) => {
+        const btn = document.getElementById(`level-btn-${i}`);
+        if (i === idx) {
+          btn.className = "py-2 text-xs font-bold rounded transition duration-150 border bg-indigo-600 text-white border-indigo-600 shadow-sm";
+        } else {
+          btn.className = "py-2 text-xs font-bold rounded transition duration-150 border bg-slate-50 text-slate-700 hover:bg-slate-100 border-slate-200";
+        }
+      });
+
+      const lvl = LEVELS[idx];
+      levelTitle.textContent = lvl.title;
+      levelDifficulty.textContent = lvl.difficulty;
+      levelDifficulty.className = `px-2 py-0.5 text-[9px] font-mono rounded-full font-bold uppercase tracking-wider ${
+        lvl.difficulty === "Easy" ? "bg-emerald-100 text-emerald-800" :
+        lvl.difficulty === "Medium" ? "bg-amber-100 text-amber-800" :
+        "bg-rose-100 text-rose-800"
+      }`;
+      levelStory.textContent = lvl.story;
+      levelGoal.textContent = lvl.educationalGoal;
+
+      // Update instructions list
+      hintsList.innerHTML = lvl.hints.map(h => `<li>${h}</li>`).join('');
+
+      // Setup starter connections
+      let starterConns = [];
+      if (lvl.id === 1) {
+        starterConns = [{ id: "start-1", from: 0, to: 2, type: "wire", state: {} }];
+      } else if (lvl.id === 2) {
+        starterConns = [
+          { id: "start-1", from: 0, to: 5, type: "wire", state: {} },
+          { id: "start-2", from: 1, to: 7, type: "wire", state: {} }
+        ];
+      } else if (lvl.id === 3) {
+        starterConns = [
+          { id: "start-1", from: 0, to: 8, type: "wire", state: {} },
+          { id: "start-2", from: 0, to: 6, type: "wire", state: {} }
+        ];
+      }
+
+      connections = starterConns;
+      blownBulbs.clear();
+      fuseBlown = false;
+      probeRed = null;
+      probeBlack = null;
+      hoveredConnection = null;
+
+      // Reset multimeter UI indicators
+      updateMultimeterUI();
+      solveMapCircuit();
+    };
+
+    function selectTool(tool) {
+      playSound('click');
+      selectedTool = tool;
+      activeStartNode = null;
+      previewWireLine.classList.add('hidden');
+
+      // Update Toolbar buttons selection
+      document.querySelectorAll('.tool-btn').forEach(btn => {
+        const id = btn.id.replace('tool-', '');
+        if (id === tool) {
+          btn.className = "tool-btn flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition bg-indigo-50 border-indigo-400 text-indigo-700 font-bold";
+        } else if (id === 'eraser') {
+          btn.className = "tool-btn col-span-2 flex items-center justify-center gap-2 p-2 rounded-xl border text-center transition bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100 font-bold text-xs";
+        } else {
+          btn.className = "tool-btn flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100";
+        }
+      });
+
+      // Resistor sub-config toggle
+      if (tool === 'resistor') {
+        resistorSubconfig.classList.remove('hidden');
+      } else {
+        resistorSubconfig.classList.add('hidden');
+      }
+    }
+
+    function selectResistanceVal(val) {
+      playSound('click');
+      selectedResistance = val;
+      document.querySelectorAll('.res-val-btn').forEach(btn => {
+        const rVal = parseInt(btn.getAttribute('data-res'));
+        if (rVal === val) {
+          btn.className = "res-val-btn flex-1 py-1 text-xs font-mono font-bold rounded border bg-indigo-600 text-white border-indigo-600";
+        } else {
+          btn.className = "res-val-btn flex-1 py-1 text-xs font-mono font-bold rounded border bg-slate-50 text-slate-600 hover:bg-slate-100";
+        }
+      });
+    }
+
+    function clearWorkspace() {
+      playSound('click');
+      connections = [];
+      blownBulbs.clear();
+      fuseBlown = false;
+      activeStartNode = null;
+      solveMapCircuit();
+    }
+
+    function repairFuseAndBulbs() {
+      playSound('success');
+      blownBulbs.clear();
+      fuseBlown = false;
+      solveMapCircuit();
+    }
+
+    // ==========================================
+    // MULTIMETER MANAGEMENT
+    // ==========================================
+    function toggleMultimeter() {
+      playSound('toggle');
+      multimeterActive = !multimeterActive;
+      activeStartNode = null; // drop wire selection
+      previewWireLine.classList.add('hidden');
+
+      if (multimeterActive) {
+        multimeterToggle.textContent = 'Equipped';
+        multimeterToggle.className = "px-2 py-0.5 text-[9px] font-bold rounded-full border transition uppercase bg-amber-500 text-white border-amber-500 shadow-sm";
+        multimeterModuleBody.classList.remove('hidden');
+        multimeterModulePlaceholder.classList.add('hidden');
+      } else {
+        multimeterToggle.textContent = 'Off';
+        multimeterToggle.className = "px-2 py-0.5 text-[9px] font-bold rounded-full border transition uppercase bg-slate-100 text-slate-500 border-slate-200";
+        multimeterModuleBody.classList.add('hidden');
+        multimeterModulePlaceholder.classList.remove('hidden');
+        probeRed = null;
+        probeBlack = null;
+      }
+      updateMultimeterUI();
+      renderMultimeterLeads();
+    }
+
+    function resetProbes() {
+      playSound('click');
+      probeRed = null;
+      probeBlack = null;
+      updateMultimeterUI();
+      renderMultimeterLeads();
+    }
+
+    function updateMultimeterUI() {
+      if (probeRed !== null || probeBlack !== null) {
+        let vRed = probeRed !== null ? solvedNodes[probeRed] : 0;
+        let vBlack = probeBlack !== null ? solvedNodes[probeBlack] : 0;
+        let diff = vRed - vBlack;
+        multimeterReadout.textContent = `${diff.toFixed(2)} V`;
+      } else {
+        multimeterReadout.textContent = '0.00 V';
+      }
+
+      const pRedNode = MAP_NODES.find(n => n.id === probeRed);
+      const pBlackNode = MAP_NODES.find(n => n.id === probeBlack);
+
+      probeRedText.textContent = pRedNode ? pRedNode.name : "Tap Lightpost";
+      probeRedText.className = pRedNode ? "text-rose-600 font-bold" : "";
+
+      probeBlackText.textContent = pBlackNode ? pBlackNode.name : "Tap Lightpost";
+      probeBlackText.className = pBlackNode ? "text-indigo-600 font-bold" : "";
+    }
+
+    function renderMultimeterLeads() {
+      if (!multimeterActive) {
+        multimeterLayer.innerHTML = '';
+        return;
+      }
+      let html = '';
+      if (probeRed !== null) {
+        const node = MAP_NODES.find(n => n.id === probeRed);
+        if (node) {
+          html += `<path d="M 680 320 Q 720 300, ${node.x} ${node.y}" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="4, 4" />`;
+        }
+      }
+      if (probeBlack !== null) {
+        const node = MAP_NODES.find(n => n.id === probeBlack);
+        if (node) {
+          html += `<path d="M 740 320 Q 760 300, ${node.x} ${node.y}" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="4, 4" />`;
+        }
+      }
+      multimeterLayer.innerHTML = html;
+    }
+
+    // ==========================================
+    // SOLVER & PHYSICS ENGINE
+    // ==========================================
+    function solveMapCircuit() {
+      const numNodes = 12;
+
+      // Union-Find setup for short circuits
+      let parent = Array.from({ length: numNodes }, (_, i) => i);
+      const find = (i) => {
+        if (parent[i] === i) return i;
+        return parent[i] = find(parent[i]);
+      };
+      const union = (i, j) => {
+        let rI = find(i);
+        let rJ = find(j);
+        if (rI !== rJ) parent[rI] = rJ;
+      };
+
+      connections.forEach(c => {
+        if (c.type === 'wire' || (c.type === 'switch' && !c.state.open)) {
+          union(c.from, c.to);
+        }
+      });
+
+      let roots = {};
+      let uniqueRoots = [];
+      let groundRoot = find(1); // Ground reference Node 1
+      roots[groundRoot] = 0;
+      uniqueRoots.push(groundRoot);
+
+      for (let i = 0; i < numNodes; i++) {
+        let r = find(i);
+        if (roots[r] === undefined) {
+          roots[r] = uniqueRoots.length;
+          uniqueRoots.push(r);
+        }
+      }
+
+      const numElectricalNodes = uniqueRoots.length;
+      let generatorShorted = (find(0) === find(1));
+      shortCircuit = generatorShorted;
+
+      if (generatorShorted) {
+        shortCircuitWarning.classList.remove('hidden');
+      } else {
+        shortCircuitWarning.classList.add('hidden');
+      }
+
+      let passives = [];
+      let batteries = [
+        { sp: roots[find(0)], sn: roots[find(1)], V: fuseBlown ? 0 : psuVoltage }
+      ];
+
+      connections.forEach(c => {
+        let R = 1e12;
+        if (c.type === 'bulb') {
+          let isBlown = blownBulbs.has(c.id);
+          let isUnscrewed = c.state.unscrewed || false;
+          R = (isBlown || isUnscrewed) ? 1e12 : 12;
+        } else if (c.type === 'resistor') {
+          R = c.state.resistance || 20;
+        } else if (c.type === 'switch' && c.state.open) {
+          R = 1e12;
+        } else if (c.type === 'wire' || c.type === 'switch') {
+          return; // Handled directly by nodal unions
+        }
+
+        let sa = roots[find(c.from)];
+        let sb = roots[find(c.to)];
+        if (sa !== sb) {
+          passives.push({ sa, sb, R, id: c.id });
+        }
+      });
+
+      const M = batteries.length;
+      const size = (numElectricalNodes - 1) + M;
+
+      if (size <= 0 || generatorShorted) {
+        resetSolvers();
+        renderMap();
+        validateLevelConstraints();
+        return;
+      }
+
+      // Linear System Setup A * X = B
+      let AMatrix = Array(size).fill(0).map(() => Array(size).fill(0));
+      let BVector = Array(size).fill(0);
+
+      // Avoid structural singularity with Ground leakage shunt
+      for (let i = 1; i < numElectricalNodes; i++) {
+        AMatrix[i - 1][i - 1] += 1e-9;
+      }
+
+      // Fill passives
+      passives.forEach(p => {
+        let g = 1.0 / p.R;
+        let nA = p.sa;
+        let nB = p.sb;
+
+        if (nA !== 0) {
+          AMatrix[nA - 1][nA - 1] += g;
+          if (nB !== 0) AMatrix[nA - 1][nB - 1] -= g;
+        }
+        if (nB !== 0) {
+          AMatrix[nB - 1][nB - 1] += g;
+          if (nA !== 0) AMatrix[nB - 1][nA - 1] -= g;
+        }
+      });
+
+      // Fill source nodes
+      batteries.forEach((bat, index) => {
+        let nP = bat.sp;
+        let nN = bat.sn;
+        let varIdx = (numElectricalNodes - 1) + index;
+
+        if (nP !== 0) AMatrix[varIdx][nP - 1] += 1;
+        if (nN !== 0) AMatrix[varIdx][nN - 1] -= 1;
+        BVector[varIdx] = bat.V;
+
+        if (nP !== 0) AMatrix[nP - 1][varIdx] += 1;
+        if (nN !== 0) AMatrix[nN - 1][varIdx] -= 1;
+      });
+
+      // Solve equations
+      let solution = solveLinearSystem(AMatrix, BVector);
+      if (!solution) {
+        resetSolvers();
+        renderMap();
+        validateLevelConstraints();
+        return;
+      }
+
+      // Map solutions to supernode potentials
+      let nodeVoltages = Array(numElectricalNodes).fill(0);
+      for (let i = 1; i < numElectricalNodes; i++) {
+        nodeVoltages[i] = solution[i - 1];
+      }
+
+      // Map potentials to standard nodes
+      for (let i = 0; i < numNodes; i++) {
+        let supernode = roots[find(i)];
+        solvedNodes[i] = nodeVoltages[supernode];
+      }
+
+      // Calculate branches
+      solvedEdges = connections.map(c => {
+        let vDrop = Math.abs(solvedNodes[c.from] - solvedNodes[c.to]);
+        let R = 1e12;
+        if (c.type === 'bulb') {
+          R = (blownBulbs.has(c.id) || c.state.unscrewed) ? 1e12 : 12;
+        } else if (c.type === 'resistor') {
+          R = c.state.resistance || 20;
+        } else if (c.type === 'wire' || (c.type === 'switch' && !c.state.open)) {
+          R = 1e-4; // wire model shunt
+        }
+
+        let current = vDrop / R;
+        let wattage = vDrop * current;
+
+        // Overvoltage burnout check
+        if (c.type === 'bulb' && vDrop > 6.5 && !blownBulbs.has(c.id) && !c.state.unscrewed) {
+          blownBulbs.add(c.id);
+          playSound('blow');
+          // Solve again to update surrounding paths
+          setTimeout(solveMapCircuit, 50);
+        }
+
+        return {
+          ...c,
+          solved: {
+            voltage: vDrop,
+            current: current,
+            wattage: wattage,
+            isOverloaded: c.type === 'bulb' && vDrop > 6.5
+          }
+        };
+      });
+
+      // Measure Generator current
+      let currentSourced = Math.abs(solution[solution.length - 1] || 0);
+      totalCurrent = currentSourced;
+
+      totalCurrentText.textContent = `${totalCurrent.toFixed(3)} A`;
+
+      // Central Fuse Overload check
+      if (currentSourced > 1.2 && !fuseBlown) {
+        fuseBlown = true;
+        playSound('blow');
+        setTimeout(solveMapCircuit, 50);
+      }
+
+      // Update Fuse UI state card
+      if (fuseBlown) {
+        fuseBadge.className = "flex items-center gap-2 px-3 py-1.5 rounded-xl border bg-rose-50 border-rose-200 text-rose-700 font-semibold";
+        fuseBadgeText.textContent = "FUSE BLOWN! (>1.2A)";
+        fuseIndicatorDot.className = "w-2.5 h-2.5 rounded-full bg-rose-600 animate-ping";
+        repairBtn.classList.remove('hidden');
+      } else {
+        fuseBadge.className = "flex items-center gap-2 px-3 py-1.5 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-700 font-semibold";
+        fuseBadgeText.textContent = "FUSE ACTIVE (1.2A Limit)";
+        fuseIndicatorDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500";
+        if (blownBulbs.size === 0) {
+          repairBtn.classList.add('hidden');
+        } else {
+          repairBtn.classList.remove('hidden');
+        }
+      }
+
+      // Render, update multimeter reading & inspector card details
+      updateMultimeterUI();
+      renderMap();
+      validateLevelConstraints();
+    }
+
+    function resetSolvers() {
+      solvedNodes = Array(12).fill(0);
+      solvedEdges = connections.map(c => ({
+        ...c,
+        solved: { voltage: 0, current: 0, wattage: 0 }
+      }));
+      totalCurrent = 0;
+      totalCurrentText.textContent = '0.000 A';
+    }
+
+    function solveLinearSystem(A, B) {
+      let n = A.length;
+      for (let i = 0; i < n; i++) {
+        let maxRow = i;
+        for (let k = i + 1; k < n; k++) {
+          if (Math.abs(A[k][i]) > Math.abs(A[maxRow][i])) maxRow = k;
+        }
+        let tempRow = A[i]; A[i] = A[maxRow]; A[maxRow] = tempRow;
+        let tempB = B[i]; B[i] = B[maxRow]; B[maxRow] = tempB;
+
+        if (Math.abs(A[i][i]) < 1e-15) return null; // Unsolvable
+
+        for (let k = i + 1; k < n; k++) {
+          let factor = A[k][i] / A[i][i];
+          for (let j = i; j < n; j++) {
+            A[k][j] -= factor * A[i][j];
+          }
+          B[k] -= factor * B[i];
+        }
+      }
+      let x = Array(n).fill(0);
+      for (let i = n - 1; i >= 0; i--) {
+        let sum = 0;
+        for (let j = i + 1; j < n; j++) {
+          sum += A[i][j] * x[j];
+        }
+        x[i] = (B[i] - sum) / A[i][i];
+      }
+      return x;
+    }
+
+    // ==========================================
+    // CONST CONSTRAINTS VERIFIER FOR EDUCATION
+    // ==========================================
+    function validateLevelConstraints() {
+      const lvl = LEVELS[currentLevelIdx];
+      let currentChecks = lvl.checks.map(c => ({ ...c }));
+      let isCleared = false;
+
+      const inZone = (sectorName) => {
+        return (solvedEdges || []).filter(c => {
+          let nodeFrom = MAP_NODES.find(n => n.id === c.from);
+          let nodeTo = MAP_NODES.find(n => n.id === c.to);
+          return nodeFrom && nodeTo && (nodeFrom.sector === sectorName || nodeTo.sector === sectorName);
+        });
+      };
+
+      if (lvl.id === 1) {
+        // Series Test
+        let carouselBulbs = inZone("carousel").filter(c => c.type === 'bulb');
+        let check1 = carouselBulbs.length >= 3;
+        currentChecks[0].status = check1;
+
+        let activeBulbs = carouselBulbs.filter(b => b.solved?.voltage >= 2.3 && b.solved?.voltage <= 4.7 && !blownBulbs.has(b.id) && !b.state.unscrewed);
+        let check2 = check1 && activeBulbs.length === carouselBulbs.length;
+        currentChecks[1].status = check2;
+
+        let check3 = false;
+        if (check2) {
+          let seriesVal = true;
+          carouselBulbs.forEach(target => {
+            let testVoltages = simulateCircuitWithUnscrewed(target.id);
+            carouselBulbs.forEach(other => {
+              if (other.id !== target.id) {
+                if (testVoltages[other.id] > 0.1) seriesVal = false;
+              }
+            });
+          });
+          check3 = seriesVal;
+        }
+        currentChecks[2].status = check3;
+        isCleared = check1 && check2 && check3;
+
+      } else if (lvl.id === 2) {
+        // Parallel Test
+        let coasterBulbs = inZone("coaster").filter(c => c.type === 'bulb');
+        let check1 = coasterBulbs.length >= 3;
+        currentChecks[0].status = check1;
+
+        let activeBulbs = coasterBulbs.filter(b => b.solved?.voltage >= 2.3 && b.solved?.voltage <= 4.7 && !blownBulbs.has(b.id) && !b.state.unscrewed);
+        let check2 = check1 && activeBulbs.length === coasterBulbs.length;
+        currentChecks[1].status = check2;
+
+        let check3 = false;
+        if (check2) {
+          let parallelVal = true;
+          coasterBulbs.forEach(target => {
+            let testVoltages = simulateCircuitWithUnscrewed(target.id);
+            coasterBulbs.forEach(other => {
+              if (other.id !== target.id) {
+                if (testVoltages[other.id] < 2.2) parallelVal = false;
+              }
+            });
+          });
+          check3 = parallelVal;
+        }
+        currentChecks[2].status = check3;
+        isCleared = check1 && check2 && check3;
+
+      } else if (lvl.id === 3) {
+        // Resistor mixed
+        let hauntedBulbs = inZone("haunted").filter(c => c.type === 'bulb');
+        let coasterBulbs = inZone("coaster").filter(c => c.type === 'bulb');
+
+        let hauntedDim = hauntedBulbs.find(b => b.solved?.voltage >= 0.8 && b.solved?.voltage <= 2.2 && !blownBulbs.has(b.id) && !b.state.unscrewed);
+        let coasterBright = coasterBulbs.find(b => b.solved?.voltage >= 4.5 && b.solved?.voltage <= 6.5 && !blownBulbs.has(b.id) && !b.state.unscrewed);
+
+        let check1 = !!hauntedDim;
+        let check2 = !!coasterBright;
+
+        currentChecks[0].status = check1;
+        currentChecks[1].status = check2;
+        isCleared = check1 && check2;
+
+      } else if (lvl.id === 4) {
+        // Grand Gala full load
+        let carouselBulbs = inZone("carousel").filter(c => c.type === 'bulb');
+        let coasterBulbs = inZone("coaster").filter(c => c.type === 'bulb');
+        let hauntedBulbs = inZone("haunted").filter(c => c.type === 'bulb');
+        let ferrisBulbs = inZone("ferris").filter(c => c.type === 'bulb');
+
+        let carOk = carouselBulbs.some(b => b.solved?.voltage >= 2.3 && b.solved?.voltage <= 4.7 && !blownBulbs.has(b.id));
+        let coasterOk = coasterBulbs.some(b => b.solved?.voltage >= 2.3 && b.solved?.voltage <= 6.5 && !blownBulbs.has(b.id));
+        let hauntedOk = hauntedBulbs.some(b => b.solved?.voltage >= 0.8 && b.solved?.voltage <= 2.2 && !blownBulbs.has(b.id));
+        let ferrisOk = ferrisBulbs.some(b => b.solved?.voltage >= 2.3 && b.solved?.voltage <= 4.7 && !blownBulbs.has(b.id));
+        let fuseOk = !fuseBlown && totalCurrent > 0.05 && totalCurrent <= 1.2;
+
+        currentChecks[0].status = carOk;
+        currentChecks[1].status = coasterOk;
+        currentChecks[2].status = hauntedOk;
+        currentChecks[3].status = ferrisOk;
+        currentChecks[4].status = fuseOk;
+
+        isCleared = carOk && coasterOk && hauntedOk && ferrisOk && fuseOk;
+      }
+
+      // Fanfare trigger once
+      if (isCleared && !levelCleared) {
+        levelCleared = true;
+        playSound('success');
+      }
+
+      // Display Checklist
+      checksContainer.innerHTML = currentChecks.map(check => `
+        <div class="flex items-start gap-2.5 text-xs text-slate-700">
+          <div class="mt-0.5 w-4.5 h-4.5 rounded-full flex items-center justify-center shrink-0 border ${
+            check.status 
+              ? 'bg-emerald-50 border-emerald-300 text-emerald-600' 
+              : 'bg-slate-100 border-slate-300 text-slate-400'
+          }">
+            ${check.status ? `
+              <svg class="w-3 h-3 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            ` : `
+              <div class="w-1.5 h-1.5 rounded-full bg-slate-400"></div>
+            `}
+          </div>
+          <span class="${check.status ? "text-slate-400 line-through" : "text-slate-800 font-medium"}">
+            ${check.text}
+          </span>
+        </div>
+      `).join('');
+
+      if (isCleared) {
+        successPanel.classList.remove('hidden');
+      } else {
+        successPanel.classList.add('hidden');
+      }
+    }
+
+    // Secondary virtual dry-run to test Series/Parallel boundaries
+    function simulateCircuitWithUnscrewed(unscrewedConnId) {
+      const numNodes = 12;
+      let parent = Array.from({ length: numNodes }, (_, i) => i);
+      const find = (i) => {
+        if (parent[i] === i) return i;
+        return parent[i] = find(parent[i]);
+      };
+      const union = (i, j) => {
+        let rI = find(i);
+        let rJ = find(j);
+        if (rI !== rJ) parent[rI] = rJ;
+      };
+
+      connections.forEach(c => {
+        if (c.id !== unscrewedConnId && (c.type === 'wire' || (c.type === 'switch' && !c.state.open))) {
+          union(c.from, c.to);
+        }
+      });
+
+      let roots = {};
+      let uniqueRoots = [];
+      let groundRoot = find(1);
+      roots[groundRoot] = 0;
+      uniqueRoots.push(groundRoot);
+
+      for (let i = 0; i < numNodes; i++) {
+        let r = find(i);
+        if (roots[r] === undefined) {
+          roots[r] = uniqueRoots.length;
+          uniqueRoots.push(r);
+        }
+      }
+
+      const numElectricalNodes = uniqueRoots.length;
+      let passives = [];
+      let batteries = [
+        { sp: roots[find(0)], sn: roots[find(1)], V: psuVoltage }
+      ];
+
+      connections.forEach(c => {
+        if (c.type === 'wire' || c.type === 'switch') return;
+        let R = 1e12;
+        if (c.id !== unscrewedConnId) {
+          if (c.type === 'bulb') R = (blownBulbs.has(c.id) || c.state.unscrewed) ? 1e12 : 12;
+          else if (c.type === 'resistor') R = c.state.resistance || 20;
+        }
+        let sa = roots[find(c.from)];
+        let sb = roots[find(c.to)];
+        if (sa !== sb) passives.push({ sa, sb, R, id: c.id });
+      });
+
+      const size = (numElectricalNodes - 1) + batteries.length;
+      if (size <= 0) return {};
+
+      let AMatrix = Array(size).fill(0).map(() => Array(size).fill(0));
+      let BVector = Array(size).fill(0);
+
+      for (let i = 1; i < numElectricalNodes; i++) AMatrix[i - 1][i - 1] += 1e-9;
+
+      passives.forEach(p => {
+        let g = 1.0 / p.R;
+        let nA = p.sa;
+        let nB = p.sb;
+        if (nA !== 0) {
+          AMatrix[nA - 1][nA - 1] += g;
+          if (nB !== 0) AMatrix[nA - 1][nB - 1] -= g;
+        }
+        if (nB !== 0) {
+          AMatrix[nB - 1][nB - 1] += g;
+          if (nA !== 0) AMatrix[nB - 1][nA - 1] -= g;
+        }
+      });
+
+      batteries.forEach((bat, index) => {
+        let nP = bat.sp;
+        let nN = bat.sn;
+        let varIdx = (numElectricalNodes - 1) + index;
+        if (nP !== 0) AMatrix[varIdx][nP - 1] += 1;
+        if (nN !== 0) AMatrix[varIdx][nN - 1] -= 1;
+        BVector[varIdx] = bat.V;
+        if (nP !== 0) AMatrix[nP - 1][varIdx] += 1;
+        if (nN !== 0) AMatrix[nN - 1][varIdx] -= 1;
+      });
+
+      let solution = solveLinearSystem(AMatrix, BVector);
+      if (!solution) return {};
+
+      let nodeVoltages = Array(numElectricalNodes).fill(0);
+      for (let i = 1; i < numElectricalNodes; i++) nodeVoltages[i] = solution[i - 1];
+
+      let finalDotVoltages = Array(numNodes).fill(0);
+      for (let i = 0; i < numNodes; i++) {
+        let supernode = roots[find(i)];
+        finalDotVoltages[i] = nodeVoltages[supernode];
+      }
+
+      let results = {};
+      connections.forEach(c => {
+        let vDrop = Math.abs(finalDotVoltages[c.from] - finalDotVoltages[c.to]);
+        results[c.id] = vDrop;
+      });
+      return results;
+    }
+
+    // ==========================================
+    // RENDERING FUNCTIONS
+    // ==========================================
+    function renderMap() {
+      // 1. Render Connections Layer
+      let connsHtml = '';
+      solvedEdges.forEach(c => {
+        const nodeFrom = MAP_NODES.find(n => n.id === c.from);
+        const nodeTo = MAP_NODES.find(n => n.id === c.to);
+        if (!nodeFrom || !nodeTo) return;
+
+        const isLit = c.solved?.voltage > 0.5 && !blownBulbs.has(c.id);
+        const isBlown = blownBulbs.has(c.id);
+        const isUnscrewed = c.state.unscrewed;
+
+        // Flow properties
+        const isReversed = solvedNodes[c.from] < solvedNodes[c.to];
+        const hasFlow = c.solved && c.solved.current > 0.01;
+        let flowStyle = '';
+
+        if (hasFlow) {
+          const absCurrent = c.solved.current;
+          const duration = Math.max(0.1, Math.min(3.0, 0.45 / absCurrent)).toFixed(2);
+          flowStyle = `stroke-dasharray: 4, 6; animation: flowAnim ${duration}s linear infinite; ${isReversed ? 'animation-direction: reverse;' : ''}`;
+        }
+
+        const mx = (nodeFrom.x + nodeTo.x) / 2;
+        const my = (nodeFrom.y + nodeTo.y) / 2;
+
+        connsHtml += `
+          <g>
+            <!-- Conduit Backing -->
+            <line
+              x1="${nodeFrom.x}" y1="${nodeFrom.y}"
+              x2="${nodeTo.x}" y2="${nodeTo.y}"
+              stroke="#475569"
+              stroke-width="3.5"
+              stroke-linecap="round"
+            />
+            
+            <!-- Flowing electrons overlay -->
+            ${hasFlow ? `
+              <line
+                x1="${nodeFrom.x}" y1="${nodeFrom.y}"
+                x2="${nodeTo.x}" y2="${nodeTo.y}"
+                stroke="#f59e0b"
+                stroke-width="4"
+                stroke-linecap="round"
+                style="${flowStyle}"
+              />
+            ` : ''}
+
+            <!-- Mid-connector Handle (tactile click) -->
+            <g
+              transform="translate(${mx}, ${my})"
+              class="cursor-pointer group"
+              onmouseenter="hoverConnection('${c.id}')"
+              onmouseleave="unhoverConnection()"
+              onclick="clickConnection('${c.id}')"
+            >
+              <circle cx="0" cy="0" r="16" fill="rgba(255,255,255,0.95)" stroke="${selectedTool === 'eraser' ? '#f43f5e' : '#cbd5e1'}" stroke-width="1.5" class="transition hover:scale-110" />
+              
+              ${c.type === 'wire' ? `
+                <circle cx="0" cy="0" r="5" fill="#475569" />
+              ` : ''}
+
+              ${c.type === 'bulb' ? `
+                <g>
+                  ${isLit ? `<circle cx="0" cy="0" r="12" fill="rgba(250,204,21,0.25)" class="animate-pulse" />` : ''}
+                  <circle cx="0" cy="0" r="8" fill="${isBlown ? "#f87171" : isUnscrewed ? "#cbd5e1" : isLit ? "#fef08a" : "#64748b"}" stroke="${isLit ? "#eab308" : "#475569"}" stroke-width="1.5" />
+                  ${(!isBlown && !isUnscrewed) ? `<path d="M-4,1 L0,-4 L4,1" fill="none" stroke="${isLit ? "#ca8a04" : "#e2e8f0"}" stroke-width="1.5" />` : ''}
+                </g>
+              ` : ''}
+
+              ${c.type === 'resistor' ? `
+                <g>
+                  <rect x="-10" y="-4" width="20" height="8" rx="2" fill="#d97706" />
+                  <line x1="-5" y1="-4" x2="-5" y2="4" stroke="#92400e" stroke-width="1.5" />
+                  <line x1="5" y1="-4" x2="5" y2="4" stroke="#f59e0b" stroke-width="1.5" />
+                  <text x="0" y="2.5" fill="#ffffff" font-size="6.5" font-weight="bold" text-anchor="middle" class="font-mono">${c.state.resistance}Ω</text>
+                </g>
+              ` : ''}
+
+              ${c.type === 'switch' ? `
+                <g>
+                  <circle cx="-6" cy="0" r="1.5" fill="#475569" />
+                  <circle cx="6" cy="0" r="1.5" fill="#475569" />
+                  ${c.state.open ? `
+                    <line x1="-6" y1="0" x2="3" y2="-7" stroke="#ef4444" stroke-width="2" stroke-linecap="round" />
+                  ` : `
+                    <line x1="-6" y1="0" x2="6" y2="0" stroke="#10b981" stroke-width="2" stroke-linecap="round" />
+                  `}
+                </g>
+              ` : ''}
+            </g>
+          </g>
+        `;
+      });
+      connectionsLayer.innerHTML = connsHtml;
+
+      // 2. Render Node Dots Layer
+      let nodesHtml = '';
+      MAP_NODES.forEach(node => {
+        const isActive = activeStartNode === node.id;
+        const isSelectedRed = probeRed === node.id;
+        const isSelectedBlack = probeBlack === node.id;
+        const potential = solvedNodes[node.id] || 0;
+
+        nodesHtml += `
+          <g onclick="clickNode(${node.id})" class="cursor-pointer group">
+            <!-- Node hot click zone -->
+            <circle cx="${node.x}" cy="${node.y}" r="22" fill="transparent" />
+
+            <!-- Active wire select ping -->
+            ${isActive ? `
+              <circle cx="${node.x}" cy="${node.y}" r="14" fill="none" stroke="#4f46e5" stroke-width="3" class="animate-ping" />
+            ` : ''}
+
+            <!-- Node Base Tower Structure -->
+            <rect x="${node.x - 4}" y="${node.y}" width="8" height="16" fill="#475569" rx="1" />
+            
+            <!-- Core dot -->
+            <circle
+              cx="${node.x}" cy="${node.y}"
+              r="8"
+              fill="${node.color || "#ffffff"}"
+              stroke="${isActive ? "#4f46e5" : isSelectedRed ? "#ef4444" : isSelectedBlack ? "#2563eb" : "#475569"}"
+              stroke-width="2.5"
+              class="transition group-hover:scale-110 filter drop-shadow-sm"
+            />
+            <circle cx="${node.x}" cy="${node.y}" r="3" fill="#1e293b" />
+
+            <!-- Hover Volt Tag -->
+            <g class="opacity-0 group-hover:opacity-100 transition pointer-events-none">
+              <rect x="${node.x - 22}" y="${node.y - 25}" width="44" height="15" rx="3" fill="#1e293b" />
+              <text x="${node.x}" y="${node.y - 15}" fill="#38bdf8" font-size="8" font-weight="bold" text-anchor="middle" class="font-mono">
+                ${potential.toFixed(1)}V
+              </text>
+            </g>
+          </g>
+        `;
+      });
+      nodesLayer.innerHTML = nodesHtml;
+    }
+
+    // ==========================================
+    // INTERACTION BRIDGES (GLOBALLY ACCESSIBLE)
+    // ==========================================
+    window.clickNode = function(id) {
+      playSound('click');
+
+      if (multimeterActive) {
+        if (probeRed === null) {
+          probeRed = id;
+        } else if (probeBlack === null) {
+          probeBlack = id;
+        } else {
+          probeRed = id;
+          probeBlack = null;
+        }
+        updateMultimeterUI();
+        renderMultimeterLeads();
+        return;
+      }
+
+      if (selectedTool === 'eraser') {
+        return; // handle element click directly instead
+      }
+
+      if (activeStartNode === null) {
+        activeStartNode = id;
+        const start = MAP_NODES.find(n => n.id === id);
+        previewWireLine.setAttribute('x1', start.x);
+        previewWireLine.setAttribute('y1', start.y);
+        previewWireLine.setAttribute('x2', start.x);
+        previewWireLine.setAttribute('y2', start.y);
+        previewWireLine.classList.remove('hidden');
+      } else {
+        if (activeStartNode === id) {
+          activeStartNode = null;
+          previewWireLine.classList.add('hidden');
+          return;
+        }
+
+        // Prevent duplicates
+        const duplicate = connections.some(c => 
+          (c.from === activeStartNode && c.to === id) || (c.from === id && c.to === activeStartNode)
+        );
+
+        if (duplicate) {
+          activeStartNode = null;
+          previewWireLine.classList.add('hidden');
+          return;
+        }
+
+        const newId = `conn-${Date.now()}`;
+        let defaultState = {};
+        if (selectedTool === 'bulb') {
+          defaultState = { unscrewed: false };
+        } else if (selectedTool === 'resistor') {
+          defaultState = { resistance: selectedResistance };
+        } else if (selectedTool === 'switch') {
+          defaultState = { open: true };
+        }
+
+        connections.push({
+          id: newId,
+          from: activeStartNode,
+          to: id,
+          type: selectedTool,
+          state: defaultState
+        });
+
+        activeStartNode = null;
+        previewWireLine.classList.add('hidden');
+        solveMapCircuit();
+      }
+    };
+
+    window.clickConnection = function(id) {
+      playSound('click');
+      const target = connections.find(c => c.id === id);
+      if (!target) return;
+
+      if (selectedTool === 'eraser') {
+        connections = connections.filter(c => c.id !== id);
+        blownBulbs.delete(id);
+        if (hoveredConnection && hoveredConnection.id === id) {
+          hoveredConnection = null;
+          unhoverConnection();
+        }
+        solveMapCircuit();
+        return;
+      }
+
+      // Action interactions on elements directly
+      if (target.type === 'switch') {
+        target.state.open = !target.state.open;
+        playSound('toggle');
+      } else if (target.type === 'bulb') {
+        target.state.unscrewed = !target.state.unscrewed;
+        playSound('toggle');
+      } else if (target.type === 'resistor') {
+        let rVal = target.state.resistance || 20;
+        target.state.resistance = rVal === 10 ? 20 : rVal === 20 ? 50 : 10;
+        playSound('toggle');
+      }
+
+      solveMapCircuit();
+    };
+
+    window.hoverConnection = function(id) {
+      const conn = solvedEdges.find(c => c.id === id);
+      if (!conn) return;
+
+      hoveredConnection = conn;
+      const isBlown = blownBulbs.has(conn.id);
+      const isUnscrewed = conn.state.unscrewed;
+
+      let statusText = 'Offline';
+      let colorClass = 'text-slate-400';
+
+      if (conn.type === 'bulb') {
+        if (isBlown) {
+          statusText = '💥 BLOWN! (&gt;6.5V)';
+          colorClass = 'text-rose-600 font-bold';
+        } else if (isUnscrewed) {
+          statusText = 'Unscrewed';
+          colorClass = 'text-slate-500 font-bold';
+        } else if (conn.solved.voltage > 4.7) {
+          statusText = '🔥 Too Bright';
+          colorClass = 'text-rose-500 font-bold';
+        } else if (conn.solved.voltage >= 2.3) {
+          statusText = '⭐ Perfect Glow';
+          colorClass = 'text-emerald-600 font-bold';
+        } else if (conn.solved.voltage >= 0.8) {
+          statusText = '🌙 Dim Glow';
+          colorClass = 'text-amber-600 font-bold';
+        }
+      } else if (conn.type === 'switch') {
+        statusText = conn.state.open ? 'OPEN LOOP' : 'CLOSED LINE';
+        colorClass = conn.state.open ? 'text-rose-500 font-bold' : 'text-emerald-600 font-bold';
+      } else {
+        statusText = 'Active Conductor';
+        colorClass = 'text-indigo-600 font-bold';
+      }
+
+      inspectorContent.innerHTML = `
+        <div class="space-y-2 font-mono text-[11px]">
+          <div class="flex items-center gap-1.5">
+            <span class="text-xs uppercase font-extrabold text-indigo-600">${conn.type}</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-1 font-mono text-[10px]">
+            <div class="text-slate-400">Voltage Drop:</div>
+            <div class="text-slate-800 text-right font-bold">${conn.solved?.voltage ? conn.solved.voltage.toFixed(2) : '0.00'} V</div>
+            
+            <div class="text-slate-400">Current Flow:</div>
+            <div class="text-slate-800 text-right font-bold">${conn.solved?.current ? conn.solved.current.toFixed(3) : '0.000'} A</div>
+
+            <div class="text-slate-400">Power Draw:</div>
+            <div class="text-slate-800 text-right font-bold">${conn.solved?.wattage ? conn.solved.wattage.toFixed(2) : '0.00'} W</div>
+          </div>
+
+          <div class="text-[10px] border-t border-slate-100 pt-1.5 font-sans leading-tight">
+            <span class="text-slate-400">Filament: </span>
+            <span class="${colorClass}">${statusText}</span>
+          </div>
+        </div>
+      `;
+    };
+
+    window.unhoverConnection = function() {
+      hoveredConnection = null;
+      inspectorContent.innerHTML = `
+        <p class="text-[10px] text-slate-400 leading-relaxed italic">Hover over any placed wire's circular icon to inspect real-time potential and current drops.</p>
+      `;
+    };
+
+    // Initialize layout when ready
+    window.onload = init;
+  </script>
+</body>
+</html>
