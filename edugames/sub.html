@@ -52,7 +52,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wider text-slate-900 flex items-center gap-2">
-                    ABYSS LAB <span class="text-xs bg-cyan-100 text-cyan-800 border border-cyan-200 px-2 py-0.5 rounded font-mono-tech uppercase">Buoyancy Simulator v2.4</span>
+                    ABYSS LAB <span class="text-xs bg-cyan-100 text-cyan-800 border border-cyan-200 px-2 py-0.5 rounded font-mono-tech uppercase">Buoyancy Simulator v2.5</span>
                 </h1>
                 <p class="text-[11px] text-slate-500">Hydrostatic Equilibrium & Cargo Mass Lab</p>
             </div>
@@ -134,6 +134,22 @@
                         <div class="flex justify-between text-[8px] text-slate-400 mt-1">
                             <span>0m (960 kg/m³)</span>
                             <span>100m (1040 kg/m³)</span>
+                        </div>
+                    </div>
+
+                    <!-- Integrated Collapsible Hydrostatic Advisor Panel -->
+                    <div id="equilibrium-tip" class="bg-indigo-50/70 p-2.5 rounded-lg border border-indigo-150">
+                        <div class="flex items-center justify-between text-[10px] text-indigo-700 font-bold mb-1 select-none">
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="brain-circuit" class="w-3.5 h-3.5 text-indigo-600"></i> HYDROSTATIC ADVISOR
+                            </span>
+                            <button onclick="toggleAdvisor()" class="text-indigo-400 hover:text-indigo-600 transition-colors" title="Collapse/Expand">
+                                <i id="advisor-chevron" data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                        <div id="advisor-body" class="text-[11px] text-slate-600 font-sans-modern leading-snug transition-all duration-150">
+                            To hover neutrally at <span id="tip-depth" class="font-bold text-indigo-800">15.0m</span>, your target ballast pumps must be set to: 
+                            <span id="tip-ballast" class="font-mono text-xs font-bold text-cyan-700 bg-white px-1.5 py-0.5 rounded border border-slate-200 block mt-1 text-center">50%</span>
                         </div>
                     </div>
 
@@ -279,12 +295,6 @@
                 <div id="game-alert" class="absolute top-4 left-1/2 -translate-x-1/2 bg-amber-50 border border-amber-300 text-amber-900 px-4 py-1.5 rounded-lg text-xs font-mono-tech shadow-md transition-all transform scale-0 z-20 flex items-center gap-2">
                     <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600 animate-bounce"></i>
                     <span id="game-alert-text">HULL STRESS WARNING</span>
-                </div>
-
-                <!-- Active Buoyancy Tip Bubble -->
-                <div id="equilibrium-tip" class="absolute bottom-4 left-4 bg-white/95 backdrop-blur border border-slate-200 p-2.5 rounded-lg text-xs shadow-md max-w-xs z-10">
-                    <span class="text-indigo-600 font-bold block mb-0.5">ℹ️ Buoyancy Equation:</span>
-                    To hover neutrally at <span id="tip-depth" class="font-bold">35m</span>, combined mass must match displaced volume weight. Ideal Ballast setting: <span id="tip-ballast" class="text-cyan-600 font-bold">50%</span>.
                 </div>
             </div>
         </section>
@@ -562,10 +572,11 @@
         let isGameOver = false;
         let isLevelComplete = false;
         let isPaused = false;         // Simulation Pause state indicator
+        let isAdvisorCollapsed = false; // Advisor panel open/close state
         let cruiseSpeed = 40;         // Default horizontal movement speed (pixels/second)
         let elapsedRealTime = 0;
         let cameraX = 0;
-        const subVisualX = 180; // Main vessel coordinate offset
+        let subVisualX = 180;         // Main vessel coordinate offset (dynamically scaled in resizeCanvas)
 
         // Core Environment Profiles: Extended level lengths (3600px total length) and distributed items
         const levelProfiles = [
@@ -676,6 +687,21 @@
                 cruiseSpeed = parseInt(e.target.value);
                 if (speedLabel) speedLabel.innerText = `${cruiseSpeed} m/s`;
             });
+        }
+
+        // Collapse / Expand Hydrostatic Advisor helper
+        function toggleAdvisor() {
+            isAdvisorCollapsed = !isAdvisorCollapsed;
+            const body = document.getElementById('advisor-body');
+            const chevron = document.getElementById('advisor-chevron');
+            if (isAdvisorCollapsed) {
+                body.classList.add('hidden');
+                chevron.setAttribute('data-lucide', 'chevron-up');
+            } else {
+                body.classList.remove('hidden');
+                chevron.setAttribute('data-lucide', 'chevron-down');
+            }
+            lucide.createIcons();
         }
 
         // Calculate exact neutral ballast ratio for a starting setup
@@ -827,7 +853,7 @@
             const idealBallastMass = (currentDensity * SUB_VOLUME) - DRY_MASS - currentCargoMass;
             const idealPercentage = (idealBallastMass / MAX_BALLAST_MASS) * 100;
             
-            document.getElementById('tip-depth').innerText = `${Math.round(currentSubDepth)}m`;
+            document.getElementById('tip-depth').innerText = `${currentSubDepth.toFixed(1)}m`;
             if (idealPercentage >= 0 && idealPercentage <= 100) {
                 document.getElementById('tip-ballast').innerText = `${Math.round(idealPercentage)}%`;
             } else {
@@ -1439,6 +1465,8 @@
             const bounds = canvas.getBoundingClientRect();
             canvas.width = bounds.width;
             canvas.height = bounds.height;
+            // Dynamically position the submarine in the left 22% of the viewport (left third zone)
+            subVisualX = canvas.width * 0.22;
         }
 
         window.addEventListener('resize', resizeCanvas);
