@@ -45,70 +45,76 @@
 <body class="bg-slate-100 text-slate-800 overflow-hidden h-screen w-screen flex flex-col lg:flex-row select-none">
 
   <!-- LEFT CONTROL PANEL - INSTRUCTIONS & OBJECTIVES -->
-  <div class="flex flex-col w-full lg:w-96 bg-white border-b lg:border-b-0 lg:border-r border-slate-200 shrink-0 overflow-y-auto shadow-sm z-10">
+  <div class="flex flex-col w-full lg:w-72 bg-white border-b lg:border-b-0 lg:border-r border-slate-200 shrink-0 overflow-y-auto shadow-sm z-10">
     
     <!-- Header -->
-    <div class="p-5 border-b border-slate-100 bg-slate-50/50 sticky top-0 backdrop-blur">
-      <div class="flex items-center gap-2 mb-1.5 text-indigo-600 font-mono text-xs uppercase tracking-wider font-bold">
-        <svg class="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+    <div class="p-4 border-b border-slate-100 bg-slate-50/50 sticky top-0 backdrop-blur">
+      <div class="flex items-center gap-1.5 mb-1 text-indigo-600 font-mono text-[10px] uppercase tracking-wider font-bold">
+        <svg class="w-3.5 h-3.5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
         Park Power Architect
       </div>
-      <h1 class="text-xl font-extrabold text-slate-950 tracking-tight">Theme Park Circuit Builder</h1>
+      <h1 class="text-lg font-extrabold text-slate-950 tracking-tight leading-none">Theme Park Circuit Builder</h1>
     </div>
 
     <!-- Level Chooser -->
-    <div class="p-5 space-y-4">
+    <div class="p-4 space-y-4">
       <div>
-        <label class="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-1.5">Select Park Sector Grid:</label>
-        <div id="level-grid-container" class="grid grid-cols-4 gap-1.5">
+        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Select Park Sector Grid:</label>
+        <div id="level-grid-container" class="grid grid-cols-4 gap-1">
           <!-- Dynamic level buttons inserted here -->
         </div>
       </div>
 
       <!-- Level Details Card -->
-      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60 shadow-inner">
-        <div class="flex justify-between items-start mb-2">
-          <h2 id="level-title" class="text-sm font-bold text-slate-900 leading-tight">Level Title</h2>
-          <span id="level-difficulty" class="px-2 py-0.5 text-[9px] font-mono rounded-full font-bold uppercase tracking-wider">Easy</span>
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/60 shadow-inner">
+        <div class="flex justify-between items-start mb-1.5">
+          <h2 id="level-title" class="text-xs font-bold text-slate-900 leading-tight">Level Title</h2>
+          <span id="level-difficulty" class="px-1.5 py-0.5 text-[8px] font-mono rounded-full font-bold uppercase tracking-wider">Easy</span>
         </div>
         
-        <p id="level-story" class="text-xs text-slate-600 leading-relaxed mb-3">
+        <p id="level-story" class="text-[11px] text-slate-600 leading-relaxed mb-2">
           Level story and narrative constraints...
         </p>
 
-        <div class="border-t border-slate-200 pt-3">
-          <h4 class="text-xs font-bold text-indigo-700 mb-1">Pedagogical Objective:</h4>
-          <p id="level-goal" class="text-xs text-slate-500 italic leading-normal">
+        <div class="border-t border-slate-200 pt-2">
+          <h4 class="text-[10px] font-bold text-indigo-700 mb-0.5">Pedagogical Objective:</h4>
+          <p id="level-goal" class="text-[10px] text-slate-500 italic leading-normal">
             Target science explanation...
           </p>
         </div>
       </div>
 
       <!-- Checks list -->
-      <div class="space-y-2">
-        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500">Wiring Constraints Checklist:</h3>
-        <div id="checks-container" class="space-y-1.5">
+      <div class="space-y-1.5">
+        <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Wiring Constraints Checklist:</h3>
+        
+        <!-- Interactive Power Hint Warning -->
+        <div id="power-feedback-hint" class="p-2 bg-amber-50 border border-amber-200 rounded-lg text-[10px] text-amber-800 leading-normal mb-1.5">
+          ⚡ <strong>Grid Power is OFF.</strong> Wire up components, then toggle the <strong>GRID POWER switch</strong> above to ON to test and verify your constraints.
+        </div>
+
+        <div id="checks-container" class="space-y-1">
           <!-- Dynamic checkboxes inserted here -->
         </div>
       </div>
 
       <!-- Level success celebrate panel -->
-      <div id="success-panel" class="hidden p-4 rounded-xl bg-emerald-50 border border-emerald-300 text-center animate-bounce">
-        <h3 class="text-emerald-800 font-bold text-sm mb-1">🎉 Grid Cleared & Authenticated!</h3>
-        <p class="text-xs text-emerald-600 mb-3">The sector lights up successfully.</p>
-        <button id="next-level-btn" class="w-full py-2 text-xs font-bold bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 transition shadow">
+      <div id="success-panel" class="hidden p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 text-center animate-bounce shadow-sm">
+        <h3 class="text-emerald-800 font-bold text-xs mb-0.5">🎉 Grid Cleared & Approved!</h3>
+        <p class="text-[10px] text-emerald-600 mb-2">The sector lights up successfully.</p>
+        <button id="next-level-btn" class="w-full py-1.5 text-xs font-bold bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 transition shadow">
           Move to Next Sector
         </button>
       </div>
 
       <!-- Blueprint Advice List -->
-      <div class="border-t border-slate-200 pt-4">
-        <h4 class="text-xs font-bold text-slate-800 mb-1.5 flex items-center gap-1">
+      <div class="border-t border-slate-200 pt-3">
+        <h4 class="text-[10px] font-bold text-slate-800 mb-1 flex items-center gap-1">
           💡 Construction Blueprint Notes:
         </h4>
-        <ul id="hints-list" class="list-disc pl-4 space-y-1 text-[11px] text-slate-500">
+        <ul id="hints-list" class="list-disc pl-3.5 space-y-1 text-[10px] text-slate-500">
           <!-- Dynamic hints inserted here -->
         </ul>
       </div>
@@ -119,12 +125,23 @@
   <div class="flex-1 flex flex-col h-full overflow-hidden bg-slate-50">
     
     <!-- Real-time Central Generator dashboard -->
-    <div class="flex flex-wrap items-center justify-between gap-4 p-4 border-b border-slate-200 bg-white shadow-sm z-10">
-      <div class="flex items-center gap-5">
+    <div class="flex flex-wrap items-center justify-between gap-3 p-4 border-b border-slate-200 bg-white shadow-sm z-10">
+      <div class="flex flex-wrap items-center gap-4">
         
+        <!-- MASTER ON/OFF POWER SWITCH -->
+        <div class="flex items-center gap-2 bg-slate-100 px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-inner">
+          <span class="text-[10px] font-mono text-slate-500 font-bold tracking-wider">GRID POWER:</span>
+          <button 
+            id="master-power-btn" 
+            class="px-4 py-1 text-xs font-extrabold rounded-lg transition-all duration-300 uppercase tracking-widest bg-rose-500 text-white shadow hover:bg-rose-600 active:scale-95 border-b-4 border-rose-700"
+          >
+            OFF
+          </button>
+        </div>
+
         <!-- Power generator dial -->
-        <div class="flex items-center gap-3 bg-slate-100/60 px-4 py-1.5 rounded-xl border border-slate-200">
-          <span class="text-xs font-mono text-slate-500 font-bold">POWER SUPPLY:</span>
+        <div class="flex items-center gap-2.5 bg-slate-100/60 px-3.5 py-1.5 rounded-xl border border-slate-200">
+          <span class="text-[10px] font-mono text-slate-500 font-bold">PSU VOLTS:</span>
           <input
             id="psu-voltage-slider"
             type="range"
@@ -132,36 +149,36 @@
             max="15.0"
             step="0.5"
             value="9.0"
-            class="w-24 accent-indigo-600 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+            class="w-20 accent-indigo-600 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer"
           />
-          <span id="psu-voltage-text" class="text-sm font-mono font-bold text-indigo-600 w-12 text-right">9.0V</span>
+          <span id="psu-voltage-text" class="text-xs font-mono font-bold text-indigo-600 w-10 text-right">9.0V</span>
         </div>
 
         <!-- Current Readout -->
-        <div class="flex items-center gap-3 bg-slate-100/60 px-4 py-1.5 rounded-xl border border-slate-200">
-          <span class="text-xs font-mono text-slate-500 font-bold">TOTAL DRAW:</span>
-          <span id="total-current-text" class="text-sm font-mono font-bold text-emerald-600">0.000 A</span>
+        <div class="flex items-center gap-2.5 bg-slate-100/60 px-3.5 py-1.5 rounded-xl border border-slate-200">
+          <span class="text-[10px] font-mono text-slate-500 font-bold">DRAW:</span>
+          <span id="total-current-text" class="text-xs font-mono font-bold text-slate-500">0.000 A</span>
         </div>
 
         <!-- FUSE State light -->
-        <div id="fuse-badge" class="flex items-center gap-2 px-3 py-1.5 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-700 font-semibold">
-          <div id="fuse-indicator-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500" /></div>
-          <span id="fuse-badge-text" class="text-xs font-mono uppercase tracking-wide">FUSE ACTIVE (1.2A Limit)</span>
+        <div id="fuse-badge" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border bg-slate-100 border-slate-200 text-slate-500 font-semibold">
+          <div id="fuse-indicator-dot" class="w-2 h-2 rounded-full bg-slate-400" /></div>
+          <span id="fuse-badge-text" class="text-[10px] font-mono uppercase tracking-wide">FUSE STANDBY</span>
         </div>
 
       </div>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1.5">
         <button
           id="repair-btn"
-          class="hidden px-3.5 py-1.5 text-xs font-bold bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition flex items-center gap-1 shadow-sm"
+          class="hidden px-3 py-1.5 text-xs font-bold bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition flex items-center gap-1 shadow-sm"
         >
           Reset Fuse & Bulbs
         </button>
 
         <button
           id="clear-btn"
-          class="px-3.5 py-1.5 text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 rounded-lg transition"
+          class="px-3 py-1.5 text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 rounded-lg transition"
         >
           Clear Grid
         </button>
@@ -169,16 +186,16 @@
     </div>
 
     <!-- WORKSPACE AREA -->
-    <div class="flex-1 flex flex-col md:flex-row p-6 gap-6 overflow-hidden">
+    <div class="flex-1 flex flex-col md:flex-row p-4 gap-4 overflow-hidden">
       
-      <!-- MAP CANVAS PANEL -->
-      <div class="flex-1 bg-white rounded-2xl border border-slate-200 flex flex-col items-center justify-center relative p-4 shadow-sm overflow-auto select-none">
+      <!-- MAP CANVAS PANEL (EXPANDED SIZE) -->
+      <div class="flex-1 bg-white rounded-2xl border border-slate-200 flex flex-col items-center justify-center relative p-2 shadow-sm overflow-auto select-none">
         
         <!-- Interactive map visualization canvas -->
         <svg
           id="map-svg"
           viewBox="0 0 800 580"
-          class="w-full max-w-3xl h-auto"
+          class="w-full max-w-5xl h-auto"
         >
           <!-- Background and Decorative Pathways -->
           <rect x="0" y="0" width="800" height="580" fill="#f8fafc" rx="16" />
@@ -194,28 +211,28 @@
           <!-- SECTOR GRAPHIC BOUNDARIES -->
           <!-- Carousel -->
           <g>
-            <rect x="100" y="40" width="180" height="200" fill="rgba(244,63,94,0.02)" rx="16" />
+            <rect x="100" y="40" width="180" height="200" fill="rgba(244,63,94,0.01)" rx="16" />
             <rect x="100" y="40" width="180" height="200" fill="none" stroke="rgba(244,63,94,0.18)" stroke-width="2" class="map-sector-boundary" />
             <text x="190" y="30" fill="rgba(244,63,94,0.7)" font-size="10" font-weight="bold" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎪 Carousel Garden</text>
           </g>
 
           <!-- Rollercoaster -->
           <g>
-            <rect x="520" y="40" width="180" height="200" fill="rgba(34,211,238,0.02)" rx="16" />
+            <rect x="520" y="40" width="180" height="200" fill="rgba(34,211,238,0.01)" rx="16" />
             <rect x="520" y="40" width="180" height="200" fill="none" stroke="rgba(34,211,238,0.18)" stroke-width="2" class="map-sector-boundary" />
             <text x="610" y="30" fill="rgba(34,211,238,0.7)" font-size="10" font-weight="bold" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎢 Coaster Plaza</text>
           </g>
 
           <!-- Haunted Shadows -->
           <g>
-            <rect x="100" y="340" width="220" height="170" fill="rgba(168,85,247,0.02)" rx="16" />
+            <rect x="100" y="340" width="220" height="170" fill="rgba(168,85,247,0.01)" rx="16" />
             <rect x="100" y="340" width="220" height="170" fill="none" stroke="rgba(168,85,247,0.18)" stroke-width="2" class="map-sector-boundary" />
             <text x="210" y="530" fill="rgba(168,85,247,0.7)" font-size="10" font-weight="bold" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">👻 Haunted Shadows</text>
           </g>
 
           <!-- Ferris Wheel -->
           <g>
-            <rect x="480" y="340" width="220" height="170" fill="rgba(245,158,11,0.02)" rx="16" />
+            <rect x="480" y="340" width="220" height="170" fill="rgba(245,158,11,0.01)" rx="16" />
             <rect x="480" y="340" width="220" height="170" fill="none" stroke="rgba(245,158,11,0.18)" stroke-width="2" class="map-sector-boundary" />
             <text x="590" y="530" fill="rgba(245,158,11,0.7)" font-size="10" font-weight="bold" text-anchor="middle" letter-spacing="1" class="font-mono uppercase">🎡 Ferris Wheel Plaza</text>
           </g>
@@ -243,66 +260,66 @@
         </svg>
 
         <!-- Float warnings -->
-        <div id="short-circuit-warning" class="hidden absolute top-4 left-4 right-4 bg-rose-50 border border-rose-300 p-2.5 rounded-xl text-center shadow">
+        <div id="short-circuit-warning" class="hidden absolute top-4 left-4 right-4 bg-rose-50 border border-rose-300 p-2.5 rounded-xl text-center shadow z-20">
           <p class="text-xs font-mono text-rose-700 font-bold uppercase tracking-wider animate-pulse">
             ⚠ SHORT CIRCUIT DETECTED! POWER BYPASSED!
           </p>
         </div>
       </div>
 
-      <!-- THE PHYSICAL TOOLBOX & MULTIMETER MODULES -->
-      <div class="w-full md:w-64 space-y-4 shrink-0 flex flex-col justify-start">
+      <!-- THE PHYSICAL TOOLBOX & MULTIMETER MODULES (COMPACT WIDTH) -->
+      <div class="w-full md:w-52 space-y-4 shrink-0 flex flex-col justify-start">
         
         <!-- The Box of Components (Inventory Theme) -->
-        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm space-y-3">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Box of Components:</h3>
+        <div class="bg-white border border-slate-200 p-3.5 rounded-2xl shadow-sm space-y-3">
+          <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Box of Components:</h3>
           
-          <div class="grid grid-cols-2 gap-2">
+          <div class="grid grid-cols-2 gap-1.5">
             <button
               id="tool-wire"
-              class="tool-btn flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition bg-indigo-50 border-indigo-400 text-indigo-700 font-bold"
+              class="tool-btn flex flex-col items-center justify-center p-2 rounded-xl border text-center transition bg-indigo-50 border-indigo-400 text-indigo-700 font-bold"
             >
-              <div class="w-8 h-8 rounded-full border-2 border-indigo-500 flex items-center justify-center mb-1 bg-indigo-50">
-                <div class="w-4 h-0.5 bg-indigo-500 rotate-45"></div>
+              <div class="w-6 h-6 rounded-full border-2 border-indigo-500 flex items-center justify-center mb-0.5 bg-indigo-50">
+                <div class="w-3.5 h-0.5 bg-indigo-500 rotate-45"></div>
               </div>
-              <span class="text-[10px]">Wire Coil</span>
+              <span class="text-[9px]">Wire Coil</span>
             </button>
 
             <button
               id="tool-bulb"
-              class="tool-btn flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+              class="tool-btn flex flex-col items-center justify-center p-2 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
             >
-              <div class="w-8 h-8 rounded-full border-2 border-amber-500 flex items-center justify-center mb-1 bg-amber-50">
-                <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+              <div class="w-6 h-6 rounded-full border-2 border-amber-500 flex items-center justify-center mb-0.5 bg-amber-50">
+                <div class="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
               </div>
-              <span class="text-[10px]">Light Bulb</span>
+              <span class="text-[9px]">Light Bulb</span>
             </button>
 
             <button
               id="tool-resistor"
-              class="tool-btn flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+              class="tool-btn flex flex-col items-center justify-center p-2 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
             >
-              <div class="w-8 h-8 rounded-full border-2 border-amber-600 flex items-center justify-center mb-1 bg-amber-50">
-                <div class="w-4 h-2 bg-amber-700 rounded-sm"></div>
+              <div class="w-6 h-6 rounded-full border-2 border-amber-600 flex items-center justify-center mb-0.5 bg-amber-50">
+                <div class="w-3.5 h-1.5 bg-amber-700 rounded-sm"></div>
               </div>
-              <span class="text-[10px]">Resistor</span>
+              <span class="text-[9px]">Resistor</span>
             </button>
 
             <button
               id="tool-switch"
-              class="tool-btn flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+              class="tool-btn flex flex-col items-center justify-center p-2 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
             >
-              <div class="w-8 h-8 rounded-full border-2 border-emerald-500 flex items-center justify-center mb-1 bg-emerald-50">
-                <div class="w-4 h-0.5 bg-emerald-500 origin-left -rotate-45"></div>
+              <div class="w-6 h-6 rounded-full border-2 border-emerald-500 flex items-center justify-center mb-0.5 bg-emerald-50">
+                <div class="w-3.5 h-0.5 bg-emerald-500 origin-left -rotate-45"></div>
               </div>
-              <span class="text-[10px]">Knife Switch</span>
+              <span class="text-[9px]">Knife Switch</span>
             </button>
 
             <button
               id="tool-eraser"
-              class="tool-btn col-span-2 flex items-center justify-center gap-2 p-2 rounded-xl border text-center transition bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100 font-bold text-xs"
+              class="tool-btn col-span-2 flex items-center justify-center gap-1.5 p-1.5 rounded-xl border text-center transition bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100 font-bold text-[10px]"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7" />
               </svg>
               Wire Cutter / Eraser
@@ -310,69 +327,69 @@
           </div>
 
           <!-- Resistor resistance selector sub-config -->
-          <div id="resistor-subconfig" class="hidden border-t border-slate-100 pt-2.5 space-y-1">
-            <span class="text-[9px] font-semibold text-slate-400 uppercase block">Resistance value to place:</span>
+          <div id="resistor-subconfig" class="hidden border-t border-slate-100 pt-2 space-y-1">
+            <span class="text-[8px] font-semibold text-slate-400 uppercase block">Resistance:</span>
             <div class="flex gap-1">
-              <button data-res="10" class="res-val-btn flex-1 py-1 text-xs font-mono font-bold rounded border bg-slate-50 text-slate-600 hover:bg-slate-100">10Ω</button>
-              <button data-res="20" class="res-val-btn flex-1 py-1 text-xs font-mono font-bold rounded border bg-indigo-600 text-white border-indigo-600">20Ω</button>
-              <button data-res="50" class="res-val-btn flex-1 py-1 text-xs font-mono font-bold rounded border bg-slate-50 text-slate-600 hover:bg-slate-100">50Ω</button>
+              <button data-res="10" class="res-val-btn flex-1 py-0.5 text-[10px] font-mono font-bold rounded border bg-slate-50 text-slate-600 hover:bg-slate-100">10Ω</button>
+              <button data-res="20" class="res-val-btn flex-1 py-0.5 text-[10px] font-mono font-bold rounded border bg-indigo-600 text-white border-indigo-600">20Ω</button>
+              <button data-res="50" class="res-val-btn flex-1 py-0.5 text-[10px] font-mono font-bold rounded border bg-slate-50 text-slate-600 hover:bg-slate-100">50Ω</button>
             </div>
           </div>
         </div>
 
         <!-- Benchtop Multimeter Module -->
-        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm space-y-3">
+        <div class="bg-white border border-slate-200 p-3.5 rounded-2xl shadow-sm space-y-2.5">
           <div class="flex items-center justify-between">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Digital Multimeter:</h3>
+            <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Digital Multimeter:</h3>
             <button
               id="multimeter-toggle"
-              class="px-2 py-0.5 text-[9px] font-bold rounded-full border transition uppercase bg-slate-100 text-slate-500 border-slate-200"
+              class="px-2 py-0.5 text-[8px] font-bold rounded-full border transition uppercase bg-slate-100 text-slate-500 border-slate-200"
             >
               Off
             </button>
           </div>
 
-          <div id="multimeter-module-body" class="space-y-3 hidden">
-            <div class="bg-slate-900 text-amber-400 p-3 rounded-xl text-center font-mono relative shadow-inner">
+          <div id="multimeter-module-body" class="space-y-2.5 hidden">
+            <div class="bg-slate-900 text-amber-400 p-2 rounded-xl text-center font-mono relative shadow-inner">
               <span class="text-[8px] text-slate-500 uppercase absolute top-1 left-2">VOLTS DC</span>
-              <div id="multimeter-readout" class="text-xl font-bold tracking-widest mt-1">0.00 V</div>
+              <div id="multimeter-readout" class="text-lg font-bold tracking-widest mt-1">0.00 V</div>
             </div>
 
-            <div class="space-y-1 text-[10px] text-slate-500">
+            <div class="space-y-1 text-[9px] text-slate-500">
               <div class="flex justify-between">
-                <span>V+ (Red Probe):</span>
-                <span id="probe-red-text" class="">Tap Lightpost</span>
+                <span>V+ (Red):</span>
+                <span id="probe-red-text" class="">Tap Post</span>
               </div>
               <div class="flex justify-between">
-                <span>COM (Black Probe):</span>
-                <span id="probe-black-text" class="">Tap Lightpost</span>
+                <span>COM (Black):</span>
+                <span id="probe-black-text" class="">Tap Post</span>
               </div>
             </div>
 
             <button
               id="multimeter-reset"
-              class="w-full py-1 text-[9px] bg-slate-50 border border-slate-200 rounded-lg font-bold hover:bg-slate-100 text-slate-500"
+              class="w-full py-0.5 text-[8px] bg-slate-50 border border-slate-200 rounded-lg font-bold hover:bg-slate-100 text-slate-500"
             >
               Reset Probes
             </button>
           </div>
           
-          <div id="multimeter-module-placeholder" class="text-[10px] text-slate-400 leading-relaxed italic">
-            Equip the multimeter, then tap any two lightpost terminals to analyze electrical potential drop.
+          <div id="multimeter-module-placeholder" class="text-[9px] text-slate-400 leading-relaxed italic">
+            Equip probes, then tap two terminal posts to analyze electric potential.
           </div>
         </div>
 
         <!-- Selected Component Inspection Card -->
-        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm flex-1 min-h-[140px] flex flex-col justify-between">
+        <div class="bg-white border border-slate-200 p-3.5 rounded-2xl shadow-sm flex-1 min-h-[120px] flex flex-col justify-between">
           <div id="inspector-body">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Component Inspector:</h3>
+            <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Component Inspector:</h3>
             <div id="inspector-content">
-              <p class="text-[10px] text-slate-400 leading-relaxed italic">Hover over any placed wire's circular icon to inspect real-time potential and current drops.</p>
+              <p class="text-[9px] text-slate-400 leading-relaxed italic">Hover over any placed connection's node handle to inspect live current, potential drop, and power draw metrics.</p>
             </div>
           </div>
 
           <!-- Physical formulas helper -->
-          <div class="border-t border-slate-100 pt-2 mt-2 text-[9px] text-slate-400 font-mono flex justify-around">
+          <div class="border-t border-slate-100 pt-2 mt-2 text-[8px] text-slate-400 font-mono flex justify-around">
             <span>V = I × R</span>
             <span>•</span>
             <span>P = V × I</span>
@@ -385,7 +402,7 @@
 
   </div>
 
-  <!-- Vanila JS App Controllers logic -->
+  <!-- Vanilla JS App Controllers logic -->
   <script>
     // ==========================================
     // AUDIO ENGINE
@@ -437,7 +454,7 @@
           });
         }
       } catch (e) {
-        // Suppress audio context browser security alerts
+        // Suppress audio context warnings
       }
     };
 
@@ -455,7 +472,7 @@
           "Select Wire from the box, connect the Power Hub (+) terminal to Carousel Post A.",
           "Select Bulb, connect Carousel Post A to B, and B to C.",
           "Use Wire to link Carousel Post C back to the Power Hub (-) terminal.",
-          "Adjust the PSU Voltage until the bulbs shine inside their green 'Ideal' zone (2.3V - 4.7V)."
+          "Set GRID POWER switch to ON, and adjust PSU Voltage until the bulbs shine inside their green 'Ideal' zone (2.3V - 4.7V)."
         ],
         checks: [
           { text: "At least 3 bulbs active in the Carousel Garden", status: false },
@@ -472,7 +489,7 @@
         hints: [
           "Run main power lines (wires) from the Power Hub to Coaster Post A and Coaster Post B.",
           "Install three parallel light bulbs across the hot and return rails.",
-          "Verify by clicking any bulb to unscrew it; the others should remain glowing!"
+          "Turn GRID POWER switch to ON, then click any bulb to unscrew it; the others should remain glowing!"
         ],
         checks: [
           { text: "At least 3 bulbs active in the Coaster Plaza", status: false },
@@ -489,7 +506,7 @@
         hints: [
           "Connect a bulb between the Haunted Posts. Put a Resistor (e.g., 20Ω or 50Ω) in series to limit its voltage drop.",
           "Connect another bulb directly to the Rollercoaster posts to maximize its brightness.",
-          "Adjust the generator voltage to perfect the balance!"
+          "Toggle GRID POWER to ON and adjust the generator voltage to perfect the balance!"
         ],
         checks: [
           { text: "Haunted Post bulb is glowing Dim (0.9V - 2.2V)", status: false },
@@ -505,7 +522,7 @@
         hints: [
           "Place at least 1 bulb in each of the 4 zones on the map.",
           "Use resistors strategically in series with some lines to limit total current draw.",
-          "Keep total current under 1.2 Amps so the central fuse doesn't blow!"
+          "Toggle GRID POWER to ON. Keep total current under 1.2 Amps so the central fuse doesn't blow!"
         ],
         checks: [
           { text: "Active bulb in Carousel Garden (Ideal)", status: false },
@@ -543,6 +560,7 @@
     let selectedTool = 'wire';
     let psuVoltage = 9.0;
     let selectedResistance = 20;
+    let gridPowerOn = false; // "ON/OFF" master switch state
 
     let connections = [];
     let activeStartNode = null;
@@ -575,6 +593,8 @@
     const successPanel = document.getElementById('success-panel');
     const nextLevelBtn = document.getElementById('next-level-btn');
 
+    const masterPowerBtn = document.getElementById('master-power-btn');
+    const powerFeedbackHint = document.getElementById('power-feedback-hint');
     const psuVoltageSlider = document.getElementById('psu-voltage-slider');
     const psuVoltageText = document.getElementById('psu-voltage-text');
     const totalCurrentText = document.getElementById('total-current-text');
@@ -610,7 +630,7 @@
         <button
           onclick="selectLevel(${index})"
           id="level-btn-${index}"
-          class="py-2 text-xs font-bold rounded transition duration-150 border bg-slate-50 text-slate-700 hover:bg-slate-100 border-slate-200"
+          class="py-1 text-[10px] font-bold rounded transition duration-150 border bg-slate-50 text-slate-700 hover:bg-slate-100 border-slate-200"
         >
           Zone ${lvl.id}
         </button>
@@ -648,6 +668,9 @@
         }
       });
 
+      // Master Switch power toggle binding
+      masterPowerBtn.addEventListener('click', toggleMasterPower);
+
       // Multimeter Bindings
       multimeterToggle.addEventListener('click', toggleMultimeter);
       multimeterReset.addEventListener('click', resetProbes);
@@ -656,7 +679,6 @@
       document.getElementById('map-svg').addEventListener('mousemove', (e) => {
         if (activeStartNode !== null) {
           const svgRect = document.getElementById('map-svg').getBoundingClientRect();
-          // Map screen projection back into SVG user coordinate system (viewBox is 800 x 580)
           const svgX = ((e.clientX - svgRect.left) / svgRect.width) * 800;
           const svgY = ((e.clientY - svgRect.top) / svgRect.height) * 580;
 
@@ -674,21 +696,23 @@
       currentLevelIdx = idx;
       levelCleared = false;
       activeStartNode = null;
+      gridPowerOn = false; // Always start Powered Off on a new level
+      updateMasterPowerButtonUI();
       
       // Update Level Selector styling
       LEVELS.forEach((_, i) => {
         const btn = document.getElementById(`level-btn-${i}`);
         if (i === idx) {
-          btn.className = "py-2 text-xs font-bold rounded transition duration-150 border bg-indigo-600 text-white border-indigo-600 shadow-sm";
+          btn.className = "py-1 text-[10px] font-bold rounded transition duration-150 border bg-indigo-600 text-white border-indigo-600 shadow-sm";
         } else {
-          btn.className = "py-2 text-xs font-bold rounded transition duration-150 border bg-slate-50 text-slate-700 hover:bg-slate-100 border-slate-200";
+          btn.className = "py-1 text-[10px] font-bold rounded transition duration-150 border bg-slate-50 text-slate-700 hover:bg-slate-100 border-slate-200";
         }
       });
 
       const lvl = LEVELS[idx];
       levelTitle.textContent = lvl.title;
       levelDifficulty.textContent = lvl.difficulty;
-      levelDifficulty.className = `px-2 py-0.5 text-[9px] font-mono rounded-full font-bold uppercase tracking-wider ${
+      levelDifficulty.className = `px-1.5 py-0.5 text-[8px] font-mono rounded-full font-bold uppercase tracking-wider ${
         lvl.difficulty === "Easy" ? "bg-emerald-100 text-emerald-800" :
         lvl.difficulty === "Medium" ? "bg-amber-100 text-amber-800" :
         "bg-rose-100 text-rose-800"
@@ -727,6 +751,25 @@
       solveMapCircuit();
     };
 
+    function toggleMasterPower() {
+      playSound('toggle');
+      gridPowerOn = !gridPowerOn;
+      updateMasterPowerButtonUI();
+      solveMapCircuit();
+    }
+
+    function updateMasterPowerButtonUI() {
+      if (gridPowerOn) {
+        masterPowerBtn.textContent = "ON";
+        masterPowerBtn.className = "px-4 py-1 text-xs font-extrabold rounded-lg transition-all duration-300 uppercase tracking-widest bg-emerald-500 text-white shadow hover:bg-emerald-600 active:scale-95 border-b-4 border-emerald-700";
+        powerFeedbackHint.classList.add('hidden');
+      } else {
+        masterPowerBtn.textContent = "OFF";
+        masterPowerBtn.className = "px-4 py-1 text-xs font-extrabold rounded-lg transition-all duration-300 uppercase tracking-widest bg-rose-500 text-white shadow hover:bg-rose-600 active:scale-95 border-b-4 border-rose-700";
+        powerFeedbackHint.classList.remove('hidden');
+      }
+    }
+
     function selectTool(tool) {
       playSound('click');
       selectedTool = tool;
@@ -737,11 +780,11 @@
       document.querySelectorAll('.tool-btn').forEach(btn => {
         const id = btn.id.replace('tool-', '');
         if (id === tool) {
-          btn.className = "tool-btn flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition bg-indigo-50 border-indigo-400 text-indigo-700 font-bold";
+          btn.className = "tool-btn flex flex-col items-center justify-center p-2 rounded-xl border text-center transition bg-indigo-50 border-indigo-400 text-indigo-700 font-bold";
         } else if (id === 'eraser') {
-          btn.className = "tool-btn col-span-2 flex items-center justify-center gap-2 p-2 rounded-xl border text-center transition bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100 font-bold text-xs";
+          btn.className = "tool-btn col-span-2 flex items-center justify-center gap-1.5 p-1.5 rounded-xl border text-center transition bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100 font-bold text-[10px]";
         } else {
-          btn.className = "tool-btn flex flex-col items-center justify-center p-2.5 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100";
+          btn.className = "tool-btn flex flex-col items-center justify-center p-2 rounded-xl border text-center transition bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100";
         }
       });
 
@@ -759,9 +802,9 @@
       document.querySelectorAll('.res-val-btn').forEach(btn => {
         const rVal = parseInt(btn.getAttribute('data-res'));
         if (rVal === val) {
-          btn.className = "res-val-btn flex-1 py-1 text-xs font-mono font-bold rounded border bg-indigo-600 text-white border-indigo-600";
+          btn.className = "res-val-btn flex-1 py-0.5 text-[10px] font-mono font-bold rounded border bg-indigo-600 text-white border-indigo-600";
         } else {
-          btn.className = "res-val-btn flex-1 py-1 text-xs font-mono font-bold rounded border bg-slate-50 text-slate-600 hover:bg-slate-100";
+          btn.className = "res-val-btn flex-1 py-0.5 text-[10px] font-mono font-bold rounded border bg-slate-50 text-slate-600 hover:bg-slate-100";
         }
       });
     }
@@ -817,7 +860,8 @@
     }
 
     function updateMultimeterUI() {
-      if (probeRed !== null || probeBlack !== null) {
+      // Multimeter displays live voltages if power is ON, otherwise 0
+      if ((probeRed !== null || probeBlack !== null) && gridPowerOn) {
         let vRed = probeRed !== null ? solvedNodes[probeRed] : 0;
         let vBlack = probeBlack !== null ? solvedNodes[probeBlack] : 0;
         let diff = vRed - vBlack;
@@ -829,10 +873,10 @@
       const pRedNode = MAP_NODES.find(n => n.id === probeRed);
       const pBlackNode = MAP_NODES.find(n => n.id === probeBlack);
 
-      probeRedText.textContent = pRedNode ? pRedNode.name : "Tap Lightpost";
+      probeRedText.textContent = pRedNode ? pRedNode.name : "Tap Post";
       probeRedText.className = pRedNode ? "text-rose-600 font-bold" : "";
 
-      probeBlackText.textContent = pBlackNode ? pBlackNode.name : "Tap Lightpost";
+      probeBlackText.textContent = pBlackNode ? pBlackNode.name : "Tap Post";
       probeBlackText.className = pBlackNode ? "text-indigo-600 font-bold" : "";
     }
 
@@ -899,15 +943,19 @@
       let generatorShorted = (find(0) === find(1));
       shortCircuit = generatorShorted;
 
-      if (generatorShorted) {
+      if (generatorShorted && gridPowerOn) {
         shortCircuitWarning.classList.remove('hidden');
       } else {
         shortCircuitWarning.classList.add('hidden');
       }
 
       let passives = [];
+      
+      // If the Master Power Switch is OFF, the source voltage is evaluated at 0V
+      const activeSourceVoltage = (gridPowerOn && !fuseBlown) ? psuVoltage : 0;
+
       let batteries = [
-        { sp: roots[find(0)], sn: roots[find(1)], V: fuseBlown ? 0 : psuVoltage }
+        { sp: roots[find(0)], sn: roots[find(1)], V: activeSourceVoltage }
       ];
 
       connections.forEach(c => {
@@ -934,7 +982,7 @@
       const M = batteries.length;
       const size = (numElectricalNodes - 1) + M;
 
-      if (size <= 0 || generatorShorted) {
+      if (size <= 0 || (generatorShorted && gridPowerOn)) {
         resetSolvers();
         renderMap();
         validateLevelConstraints();
@@ -1016,11 +1064,10 @@
         let current = vDrop / R;
         let wattage = vDrop * current;
 
-        // Overvoltage burnout check
-        if (c.type === 'bulb' && vDrop > 6.5 && !blownBulbs.has(c.id) && !c.state.unscrewed) {
+        // Overvoltage burnout check (only when powered ON)
+        if (gridPowerOn && c.type === 'bulb' && vDrop > 6.5 && !blownBulbs.has(c.id) && !c.state.unscrewed) {
           blownBulbs.add(c.id);
           playSound('blow');
-          // Solve again to update surrounding paths
           setTimeout(solveMapCircuit, 50);
         }
 
@@ -1036,13 +1083,13 @@
       });
 
       // Measure Generator current
-      let currentSourced = Math.abs(solution[solution.length - 1] || 0);
+      let currentSourced = gridPowerOn ? Math.abs(solution[solution.length - 1] || 0) : 0;
       totalCurrent = currentSourced;
 
       totalCurrentText.textContent = `${totalCurrent.toFixed(3)} A`;
 
-      // Central Fuse Overload check
-      if (currentSourced > 1.2 && !fuseBlown) {
+      // Central Fuse Overload check (only when powered ON)
+      if (gridPowerOn && currentSourced > 1.2 && !fuseBlown) {
         fuseBlown = true;
         playSound('blow');
         setTimeout(solveMapCircuit, 50);
@@ -1050,14 +1097,19 @@
 
       // Update Fuse UI state card
       if (fuseBlown) {
-        fuseBadge.className = "flex items-center gap-2 px-3 py-1.5 rounded-xl border bg-rose-50 border-rose-200 text-rose-700 font-semibold";
+        fuseBadge.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border bg-rose-50 border-rose-200 text-rose-700 font-semibold";
         fuseBadgeText.textContent = "FUSE BLOWN! (>1.2A)";
-        fuseIndicatorDot.className = "w-2.5 h-2.5 rounded-full bg-rose-600 animate-ping";
+        fuseIndicatorDot.className = "w-2 h-2 rounded-full bg-rose-600 animate-ping";
         repairBtn.classList.remove('hidden');
+      } else if (!gridPowerOn) {
+        fuseBadge.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border bg-slate-100 border-slate-200 text-slate-500 font-semibold";
+        fuseBadgeText.textContent = "FUSE STANDBY";
+        fuseIndicatorDot.className = "w-2 h-2 rounded-full bg-slate-400";
+        repairBtn.classList.add('hidden');
       } else {
-        fuseBadge.className = "flex items-center gap-2 px-3 py-1.5 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-700 font-semibold";
-        fuseBadgeText.textContent = "FUSE ACTIVE (1.2A Limit)";
-        fuseIndicatorDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500";
+        fuseBadge.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-700 font-semibold";
+        fuseBadgeText.textContent = "FUSE ACTIVE";
+        fuseIndicatorDot.className = "w-2 h-2 rounded-full bg-emerald-500";
         if (blownBulbs.size === 0) {
           repairBtn.classList.add('hidden');
         } else {
@@ -1113,12 +1165,26 @@
     }
 
     // ==========================================
-    // CONST CONSTRAINTS VERIFIER FOR EDUCATION
+    // CONSTRAINTS VERIFIER FOR EDUCATION
     // ==========================================
     function validateLevelConstraints() {
       const lvl = LEVELS[currentLevelIdx];
       let currentChecks = lvl.checks.map(c => ({ ...c }));
       let isCleared = false;
+
+      // If the power switch is OFF, checks are kept unverified
+      if (!gridPowerOn) {
+        checksContainer.innerHTML = currentChecks.map(check => `
+          <div class="flex items-start gap-2 text-xs text-slate-400">
+            <div class="mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 border border-slate-200 bg-slate-50">
+              <div class="w-1.5 h-1.5 rounded-full bg-slate-300"></div>
+            </div>
+            <span>${check.text}</span>
+          </div>
+        `).join('');
+        successPanel.classList.add('hidden');
+        return;
+      }
 
       const inZone = (sectorName) => {
         return (solvedEdges || []).filter(c => {
@@ -1225,21 +1291,21 @@
 
       // Display Checklist
       checksContainer.innerHTML = currentChecks.map(check => `
-        <div class="flex items-start gap-2.5 text-xs text-slate-700">
-          <div class="mt-0.5 w-4.5 h-4.5 rounded-full flex items-center justify-center shrink-0 border ${
+        <div class="flex items-start gap-2 text-xs text-slate-700">
+          <div class="mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 border ${
             check.status 
               ? 'bg-emerald-50 border-emerald-300 text-emerald-600' 
               : 'bg-slate-100 border-slate-300 text-slate-400'
           }">
             ${check.status ? `
-              <svg class="w-3 h-3 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-2.5 h-2.5 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             ` : `
               <div class="w-1.5 h-1.5 rounded-full bg-slate-400"></div>
             `}
           </div>
-          <span class="${check.status ? "text-slate-400 line-through" : "text-slate-800 font-medium"}">
+          <span class="${check.status ? "text-slate-400 line-through font-normal" : "text-slate-800 font-medium"}">
             ${check.text}
           </span>
         </div>
@@ -1252,7 +1318,6 @@
       }
     }
 
-    // Secondary virtual dry-run to test Series/Parallel boundaries
     function simulateCircuitWithUnscrewed(unscrewedConnId) {
       const numNodes = 12;
       let parent = Array.from({ length: numNodes }, (_, i) => i);
@@ -1368,13 +1433,14 @@
         const nodeTo = MAP_NODES.find(n => n.id === c.to);
         if (!nodeFrom || !nodeTo) return;
 
-        const isLit = c.solved?.voltage > 0.5 && !blownBulbs.has(c.id);
+        // If Grid Power is OFF, bulbs are unlit and no currents flow.
+        const isLit = gridPowerOn && c.solved?.voltage > 0.5 && !blownBulbs.has(c.id);
         const isBlown = blownBulbs.has(c.id);
         const isUnscrewed = c.state.unscrewed;
 
         // Flow properties
         const isReversed = solvedNodes[c.from] < solvedNodes[c.to];
-        const hasFlow = c.solved && c.solved.current > 0.01;
+        const hasFlow = gridPowerOn && c.solved && c.solved.current > 0.01;
         let flowStyle = '';
 
         if (hasFlow) {
@@ -1463,7 +1529,7 @@
         const isActive = activeStartNode === node.id;
         const isSelectedRed = probeRed === node.id;
         const isSelectedBlack = probeBlack === node.id;
-        const potential = solvedNodes[node.id] || 0;
+        const potential = gridPowerOn ? (solvedNodes[node.id] || 0) : 0;
 
         nodesHtml += `
           <g onclick="clickNode(${node.id})" class="cursor-pointer group">
@@ -1619,6 +1685,11 @@
       let statusText = 'Offline';
       let colorClass = 'text-slate-400';
 
+      // Always show offline details if power is OFF, but show component ratings
+      const activeVoltage = gridPowerOn ? (conn.solved?.voltage || 0) : 0;
+      const activeCurrent = gridPowerOn ? (conn.solved?.current || 0) : 0;
+      const activePower = gridPowerOn ? (conn.solved?.wattage || 0) : 0;
+
       if (conn.type === 'bulb') {
         if (isBlown) {
           statusText = '💥 BLOWN! (&gt;6.5V)';
@@ -1626,6 +1697,9 @@
         } else if (isUnscrewed) {
           statusText = 'Unscrewed';
           colorClass = 'text-slate-500 font-bold';
+        } else if (!gridPowerOn) {
+          statusText = 'Grid Offline';
+          colorClass = 'text-slate-400 font-bold';
         } else if (conn.solved.voltage > 4.7) {
           statusText = '🔥 Too Bright';
           colorClass = 'text-rose-500 font-bold';
@@ -1640,8 +1714,8 @@
         statusText = conn.state.open ? 'OPEN LOOP' : 'CLOSED LINE';
         colorClass = conn.state.open ? 'text-rose-500 font-bold' : 'text-emerald-600 font-bold';
       } else {
-        statusText = 'Active Conductor';
-        colorClass = 'text-indigo-600 font-bold';
+        statusText = gridPowerOn ? 'Active Conductor' : 'Conductor Standby';
+        colorClass = gridPowerOn ? 'text-indigo-600 font-bold' : 'text-slate-400';
       }
 
       inspectorContent.innerHTML = `
@@ -1652,17 +1726,17 @@
 
           <div class="grid grid-cols-2 gap-1 font-mono text-[10px]">
             <div class="text-slate-400">Voltage Drop:</div>
-            <div class="text-slate-800 text-right font-bold">${conn.solved?.voltage ? conn.solved.voltage.toFixed(2) : '0.00'} V</div>
+            <div class="text-slate-800 text-right font-bold">${activeVoltage.toFixed(2)} V</div>
             
             <div class="text-slate-400">Current Flow:</div>
-            <div class="text-slate-800 text-right font-bold">${conn.solved?.current ? conn.solved.current.toFixed(3) : '0.000'} A</div>
+            <div class="text-slate-800 text-right font-bold">${activeCurrent.toFixed(3)} A</div>
 
             <div class="text-slate-400">Power Draw:</div>
-            <div class="text-slate-800 text-right font-bold">${conn.solved?.wattage ? conn.solved.wattage.toFixed(2) : '0.00'} W</div>
+            <div class="text-slate-800 text-right font-bold">${activePower.toFixed(2)} W</div>
           </div>
 
           <div class="text-[10px] border-t border-slate-100 pt-1.5 font-sans leading-tight">
-            <span class="text-slate-400">Filament: </span>
+            <span class="text-slate-400">Status: </span>
             <span class="${colorClass}">${statusText}</span>
           </div>
         </div>
@@ -1672,7 +1746,7 @@
     window.unhoverConnection = function() {
       hoveredConnection = null;
       inspectorContent.innerHTML = `
-        <p class="text-[10px] text-slate-400 leading-relaxed italic">Hover over any placed wire's circular icon to inspect real-time potential and current drops.</p>
+        <p class="text-[9px] text-slate-400 leading-relaxed italic">Hover over any placed connection's node handle to inspect live current, potential drop, and power draw metrics.</p>
       `;
     };
 
