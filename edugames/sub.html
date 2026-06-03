@@ -52,7 +52,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wider text-slate-900 flex items-center gap-2">
-                    ABYSS LAB <span class="text-xs bg-cyan-100 text-cyan-800 border border-cyan-200 px-2 py-0.5 rounded font-mono-tech uppercase">Buoyancy Simulator v2.1</span>
+                    ABYSS LAB <span class="text-xs bg-cyan-100 text-cyan-800 border border-cyan-200 px-2 py-0.5 rounded font-mono-tech uppercase">Buoyancy Simulator v2.2</span>
                 </h1>
                 <p class="text-[11px] text-slate-500">Hydrostatic Equilibrium & Cargo Mass Lab</p>
             </div>
@@ -536,11 +536,12 @@
         const MAX_BALLAST_MASS = 4000; // Capacity of ballast tanks (kg of water)
         const CARGO_UNIT_MASS = 800; // Weight of each salvaged scientific pod (kg)
         const PUMP_RATE = 1500;      // Performance speed of pumps (kg of water transiting per second)
-        const DRAG_COEFF = 3800;     // Fluid resistance coefficient
+        const DRAG_COEFF = 3800;     // Quadratic drag fluid resistance coefficient
+        const LINEAR_DRAG = 20000;   // Linear damping coefficient to stabilize small oscillations
 
         // Simulator State Model
         let sub = {
-            depth: 20.0,             // Current simulation depth (0 - 100 meters)
+            depth: 15.0,             // Current simulation depth (0 - 100 meters)
             velocityY: 0.0,          // Vertical speed vector (m/s)
             accelY: 0.0,             // Vertical acceleration rate (m/s^2)
             massBallast: 2000,       // Active water load inside tanks (kg)
@@ -655,6 +656,17 @@
             });
         }
 
+        // Calculate exact neutral ballast ratio for a starting setup
+        function getNeutralBallastRatio(depth, cargoCount, levelIndex) {
+            const level = levelProfiles[levelIndex];
+            const density = level.densityProfile(depth);
+            const cargoMass = cargoCount * CARGO_UNIT_MASS;
+            // Neutral equation: (DRY_MASS + massBallast + cargoMass) = density * SUB_VOLUME
+            const idealBallastMass = (density * SUB_VOLUME) - DRY_MASS - cargoMass;
+            const ratio = idealBallastMass / MAX_BALLAST_MASS;
+            return Math.max(0, Math.min(1, ratio));
+        }
+
         // Toggle Simulation Play / Pause state
         function togglePause() {
             if (isGameOver) return;
@@ -679,17 +691,21 @@
             isPaused = false;
             cameraX = 0;
             
-            // Re-zero submarine state variables
-            sub.depth = 15.0;
+            // Re-zero submarine spatial variables
+            sub.depth = 15.0; // Start at 15 meters
             sub.velocityY = 0.0;
             sub.accelY = 0.0;
             sub.hullIntegrity = 100;
             sub.cargoCount = 0;
-            sub.massBallast = 2000;
-            currentBallastRatio = 0.5;
-            targetBallastRatio = 0.5;
-            slider.value = 50;
-            sliderLabel.innerText = "50%";
+
+            // Establish physical startup neutral equilibrium
+            const initialRatio = getNeutralBallastRatio(15.0, 0, index);
+            currentBallastRatio = initialRatio;
+            targetBallastRatio = initialRatio;
+            sub.massBallast = initialRatio * MAX_BALLAST_MASS;
+            
+            slider.value = Math.round(initialRatio * 100);
+            sliderLabel.innerText = `${Math.round(initialRatio * 100)}%`;
             
             // Reset Cruise Speed controls
             cruiseSpeed = 40;
@@ -837,10 +853,15 @@
             // 3. Compute forces
             const forceGravity = totalMass * G;                            // Downward pull
             const forceBuoyant = SUB_VOLUME * waterDensity * G;            // Upward displacement push
-            const dragForce = -DRAG_COEFF * sub.velocityY * Math.abs(sub.velocityY); // Viscous resistance
+            
+            // DAMPING CALCULATIONS:
+            // Combines quadratic drag (for high speed) with linear drag (for precise hovering stability)
+            // Viscous resistance opposes velocity, hence the negative signs.
+            const dragForce = (-DRAG_COEFF * sub.velocityY * Math.abs(sub.velocityY)) - (LINEAR_DRAG * sub.velocityY); 
             
             // Depth increases downwards, so net positive force accelerates downwards
-            const netForceY = forceGravity - forceBuoyant - dragForce;
+            // dragForce is already negative when moving downwards, so we add it directly
+            const netForceY = forceGravity - forceBuoyant + dragForce;
             sub.accelY = netForceY / totalMass;
 
             // 4. Numerical integration
@@ -999,18 +1020,18 @@
             // Force vectors calculations
             const gravityForceKN = (totalMass * G) / 1000;
             const buoyantForceKN = (SUB_VOLUME * density * G) / 1000;
-            const dragForceKN = (DRAG_COEFF * sub.velocityY * Math.abs(sub.velocityY)) / 1000;
+            const dragForceKN = (Math.abs((-DRAG_COEFF * sub.velocityY * Math.abs(sub.velocityY)) - (LINEAR_DRAG * sub.velocityY))) / 1000;
             
             document.getElementById('telemetry-fg').innerText = `${gravityForceKN.toFixed(1)} kN`;
             document.getElementById('telemetry-fb').innerText = `${buoyantForceKN.toFixed(1)} kN`;
             document.getElementById('telemetry-fd').innerText = `${dragForceKN.toFixed(1)} kN`;
 
-            const netForceKN = gravityForceKN - buoyantForceKN - dragForceKN;
+            const netForceKN = gravityForceKN - buoyantForceKN + (sub.velocityY > 0 ? -dragForceKN : dragForceKN);
             const netDisplay = document.getElementById('telemetry-fnet');
             const netContainer = document.getElementById('net-force-container');
             
             netDisplay.innerText = `${Math.abs(netForceKN).toFixed(1)} kN`;
-            if (Math.abs(netForceKN) < 1.0) {
+            if (Math.abs(netForceKN) < 0.5) {
                 netDisplay.innerText += " (EQUILIBRIUM)";
                 netContainer.className = "flex justify-between items-center border-t border-slate-200 pt-1.5 text-xs font-bold text-emerald-600";
             } else if (netForceKN > 0) {
