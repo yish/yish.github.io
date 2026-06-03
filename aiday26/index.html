@@ -8,6 +8,7 @@
 </head>
 <body>
 
+    <!-- Fixed Video Background Layer -->
     <div class="video-bg-container">
         <video autoplay muted loop playsinline class="video-bg" poster="zohar.jpg">
             <source src="robot_nursery_q.mp4" type="video/mp4">
@@ -15,6 +16,7 @@
         <div class="video-overlay"></div>
     </div>
 
+    <!-- Main Fluid Layout Container -->
     <div class="app-container">
         <header class="main-header glass">
             <div class="controls-widget">
@@ -45,6 +47,7 @@
             </div>
         </header>
 
+        <!-- Top Section Split Row: 70% Keynote / 30% Schedule Alongside Each Other -->
         <div class="split-hero-row">
             <section class="card profile-card glass keynote-box">
                 <h2 data-i18n="keynoteHeading">הרצאת פתיחה</h2>
@@ -64,6 +67,7 @@
             </aside>
         </div>
 
+        <!-- Workshops Carousel Wrapper Section -->
         <section class="card glass carousel-section">
             <div class="carousel-header">
                 <h2 data-i18n="workshopsHeading">סדנאות לבחירה (15:30)</h2>
@@ -77,6 +81,7 @@
             </div>
         </section>
         
+        <!-- Practice Groups Section -->
         <section class="card glass">
             <h2 data-i18n="groupsHeading">קבוצות הדרכה והתנסות (17:00)</h2>
             <div class="table-wrapper">
@@ -94,6 +99,7 @@
         </section>
     </div>
 
+    <!-- Registration Popup/Modal -->
     <div class="modal-overlay" id="register-modal">
         <div class="modal-box glass">
             <button class="close-modal-btn" id="close-register-btn">&times;</button>
