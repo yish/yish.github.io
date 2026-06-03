@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(res => { if (!res.ok) throw new Error("Could not load payload data map."); return res.json(); })
         .then(data => {
             loadedData = data;
-            renderView("he"); // Default initialization inside Hebrew view
+            renderView("he"); // Initial run
         })
         .catch(err => {
             console.error(err);
@@ -89,43 +89,44 @@ document.addEventListener("DOMContentLoaded", () => {
             if (i18n[lang][token]) element.textContent = i18n[lang][token];
         });
 
-        // Set global text components
-        mainTitle.textContent = (lang === "he") ? loadedData.eventTitle : (lang === "ar" ? "يوم الذكاء الاصطناعي - المسار فوق الابتدائي والمعهد الأكاديمي العربي" : "AI Seminar - Secondary Track & Arab Educational Institute");
+        // Title and Date adjustments
+        if (lang === "he") {
+            mainTitle.textContent = loadedData.eventTitle;
+            eventBlurbNode.textContent = loadedData.eventBlurb;
+        } else if (lang === "ar") {
+            mainTitle.textContent = "يوم الذكاء الاصطناعي، مسار فوق الابتدائي في كلية التربية، السنة الأولى في المعهد الأكاديمي العربي للتربية";
+            eventBlurbNode.textContent = "توسيع آفاق البيداغوجيا في عصر الذكاء الاصطناعي > ندعوكم للمشاركة في يوم دراسي ملهم يربط بين الابتكار التكنولوجي والممارسة التربوية في الميدان. سنكتشف معًا آفاق التدريس والتعلم، ونستمع إلى كبار الخبراء، ونخوض تجارب تطبيقية مع أدوات ذكاء اصطناعي ستغير وجه العملية التعليمية في صفوفكم غدًا.";
+        } else {
+            mainTitle.textContent = "AI Day, Post-Primary Track in the Faculty of Education, 1st Year in the Arab Academic Institute for Education";
+            eventBlurbNode.textContent = "Expanding Pedagogical Horizons in the AI Era > We invite you to an engaging seminar where technological advancement meets educational field practice. Together, we will examine the future of pedagogy, learn from prominent researchers, and gain hands-on proficiency with AI agents set to revolutionize your classroom experience in the very near future.";
+        }
+
         eventDate.textContent = `${i18n[lang].datePrefix} ${loadedData.eventDate}`;
         mainZoomBtn.href = loadedData.mainPlenaryZoom;
         regIframe.src = loadedData.registrationLink;
 
-        // Blurb Localization Logic
-        if (lang === "he") {
-            eventBlurbNode.textContent = loadedData.eventBlurb || "פריצת גבולות המעשה הפדגוגי בעידן הבינה המלאכותית > הנכן מוזמנות ליום עיון מעורר השראה המחבר בין חדשנות טכנולוגית לפרקטיקה החינוכית בשדה.";
-        } else if (lang === "ar") {
-            eventBlurbNode.textContent = "توسيع آفاق البيداغوجيا في عصر الذكاء الاصطناعي > ندعوكم للمشاركة في يوم دراسي ملهم يربط بين الابتكار التكنولوجي والممارسة التربوية في الميدان.";
-        } else {
-            eventBlurbNode.textContent = "Expanding Pedagogical Horizons in the AI Era > We invite you to an engaging seminar where technological advancement meets educational field practice.";
-        }
-
-        // Keynote Presenter Information Mapping
+        // Speaker Bio updates
         speakerName.textContent = loadedData.keynote.speaker;
         speakerInst.textContent = (lang === "en") ? "Haifa University" : (lang === "ar" ? "جامعة حيفا" : loadedData.keynote.institution);
-        speakerBio.textContent = (lang === "he") ? loadedData.keynote.bio : (lang === "ar" ? "خبير وباحث بارز في مجال الذكاء الاصطناعي التوليدي والدمج بين التكنولوجيا والتعليم." : "Leading Israeli researcher specializing in Generative AI (GenAI), educational psychology, and hybrid interactive software design inside school systems.");
+        speakerBio.textContent = loadedData.keynote.bio;
 
-        // Timeline Builder Engine
+        // Timeline Schedule Builder
         timelineContainer.innerHTML = loadedData.schedule.map(item => {
             let activityStr = item.activity;
             if (lang === "en") {
                 if(item.activity.includes("פתיחה")) activityStr = "Greetings & Welcome Address";
                 else if(item.activity.includes("הרצאת מפתח")) activityStr = "Keynote Address: Prof. Zohar Elyoseph";
-                else if(item.activity.includes("הפסקה")) activityStr = "Intermission Coffee Break";
-                else if(item.activity.includes("סדנאות")) activityStr = "Parallel Elective Workshops";
-                else if(item.activity.includes("התכנסות")) activityStr = "Practice Reflection Clusters";
-                else if(item.activity.includes("מליאת")) activityStr = "Closing Synthesis Plenary Session";
+                else if(item.activity.includes("הפסקה")) activityStr = "Intermission Break";
+                else if(item.activity.includes("סדנאות")) activityStr = "Workshops";
+                else if(item.activity.includes("התכנסות")) activityStr = "Practice Reflection Clusters & Knowledge Synthesis";
+                else if(item.activity.includes("מליאת")) activityStr = "Closing Synthesis Plenary";
                 else if(item.activity.includes("פיזור")) activityStr = "Adjournment & Departure";
             } else if (lang === "ar") {
                 if(item.activity.includes("פתיחה")) activityStr = "الافتتاح والترحيب";
                 else if(item.activity.includes("הרצאת מפתח")) activityStr = "الكاملة الرئيسية: البروفيسور زوهر أليوسيف";
-                else if(item.activity.includes("הפסקה")) activityStr = "استراحة קצירה";
-                else if(item.activity.includes("סדנאות")) activityStr = "ورش عمل اختيارية";
-                else if(item.activity.includes("התכנסות")) activityStr = "التجمع في مجموعات تجريبية";
+                else if(item.activity.includes("הפסקה")) activityStr = "استراحة";
+                else if(item.activity.includes("סדנאות")) activityStr = "ورش عمل";
+                else if(item.activity.includes("התכנסות")) activityStr = "التجمع في مجموعات تجريبية وتلخيص الأفكار";
                 else if(item.activity.includes("מליאת")) activityStr = "الجلسة الختامية";
                 else if(item.activity.includes("פיזור")) activityStr = "مغادرة";
             }
@@ -137,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         }).join('');
 
-        // Workshops rendering pipeline (Only generate if carousel elements haven't structural duplicates yet)
+        // Carousel Workshops track engine build trigger
         if (!carouselInitialized) {
             workshopsContainer.innerHTML = loadedData.workshops.map(shop => `
                 <div class="workshop-block">
@@ -152,22 +153,16 @@ document.addEventListener("DOMContentLoaded", () => {
             
             initInfiniteCarousel(lang);
         } else {
-            // If already initialized, update text components of visible buttons inside carousel tracks
-            const actionButtons = workshopsContainer.querySelectorAll(".workshop-block .btn-secondary");
-            actionButtons.forEach(btn => {
-                btn.textContent = i18n[lang].joinWorkshop;
-            });
-            
-            const hostLabels = workshopsContainer.querySelectorAll(".workshop-block .workshop-host");
+            workshopsContainer.querySelectorAll(".workshop-block .btn-secondary").forEach(btn => btn.textContent = i18n[lang].joinWorkshop);
             let hostIdx = 0;
-            hostLabels.forEach(label => {
+            workshopsContainer.querySelectorAll(".workshop-block .workshop-host").forEach(label => {
                 const shop = loadedData.workshops[hostIdx % loadedData.workshops.length];
                 label.textContent = `${i18n[lang].thHost}: ${shop.host}`;
                 hostIdx++;
             });
         }
 
-        // Groups rendering pipeline
+        // Reflection/Mentorship Groups Track Table population
         groupsTableBody.innerHTML = loadedData.groups.map(group => `
             <tr>
                 <td><strong>${group.host}</strong></td>
@@ -177,28 +172,22 @@ document.addEventListener("DOMContentLoaded", () => {
         `).join('');
     }
 
-    // --- INFINITE LOOPING & AUTOROTATE TRACK SYSTEMS ---
     function initInfiniteCarousel(currentLang) {
         const originalCards = Array.from(workshopsContainer.children);
         if (originalCards.length === 0) return;
 
-        // Clone nodes to both ends to enable infinite loop tracks
         originalCards.forEach(card => {
-            const cloneAfter = card.cloneNode(true);
-            const cloneBefore = card.cloneNode(true);
-            workshopsContainer.appendChild(cloneAfter);
-            workshopsContainer.insertBefore(cloneBefore, workshopsContainer.firstChild);
+            workshopsContainer.appendChild(card.cloneNode(true));
+            workshopsContainer.insertBefore(card.cloneNode(true), workshopsContainer.firstChild);
         });
 
         carouselInitialized = true;
 
-        // Position initial viewport scroll bounds over middle active nodes segment
         setTimeout(() => {
             const initialOffset = originalCards.length * scrollStep;
             carouselViewport.scrollLeft = (currentLang === "he" || currentLang === "ar") ? -initialOffset : initialOffset;
         }, 50);
 
-        // Frame wrapper boundary check logic loop appender
         carouselViewport.addEventListener("scroll", () => {
             const currentScroll = Math.abs(carouselViewport.scrollLeft);
             const totalWidth = originalCards.length * scrollStep;
@@ -212,8 +201,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         startAutoRotation();
-
-        // Pause rotation on pointer engagement loops
         carouselViewport.addEventListener("mouseenter", stopAutoRotation);
         carouselViewport.addEventListener("mouseleave", startAutoRotation);
     }
@@ -223,21 +210,10 @@ document.addEventListener("DOMContentLoaded", () => {
         carouselViewport.scrollBy({ left: scrollStep * directionFactor, behavior: "smooth" });
     }
 
-    function startAutoRotation() {
-        stopAutoRotation();
-        autoRotateTimer = setInterval(rotateCarouselNext, 10000);
-    }
+    function startAutoRotation() { stopAutoRotation(); autoRotateTimer = setInterval(rotateCarouselNext, 10000); }
+    function stopAutoRotation() { if (autoRotateTimer) clearInterval(autoRotateTimer); }
 
-    function stopAutoRotation() {
-        if (autoRotateTimer) clearInterval(autoRotateTimer);
-    }
-
-    // Controls Events
-    nextBtn.addEventListener("click", () => {
-        rotateCarouselNext();
-        startAutoRotation();
-    });
-
+    nextBtn.addEventListener("click", () => { rotateCarouselNext(); startAutoRotation(); });
     prevBtn.addEventListener("click", () => {
         const directionFactor = htmlNode.getAttribute("dir") === "rtl" ? 1 : -1;
         carouselViewport.scrollBy({ left: scrollStep * directionFactor, behavior: "smooth" });
@@ -246,14 +222,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     langSelect.addEventListener("change", (e) => {
         renderView(e.target.value);
-        const totalCardsCount = loadedData.workshops.length;
-        const offsetWidthValue = totalCardsCount * scrollStep;
+        const offsetWidthValue = loadedData.workshops.length * scrollStep;
         carouselViewport.scrollLeft = e.target.value === "en" ? offsetWidthValue : -offsetWidthValue;
     });
 
     themeSelect.addEventListener("change", (e) => htmlNode.setAttribute("data-theme", e.target.value));
 
-    // Modal Operations
     openRegisterBtn.addEventListener("click", () => registerModal.classList.add("active"));
     closeRegisterBtn.addEventListener("click", () => registerModal.classList.remove("active"));
     window.addEventListener("click", (e) => { if (e.target === registerModal) registerModal.classList.remove("active"); });
