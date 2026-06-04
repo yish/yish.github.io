@@ -1,1 +1,1403 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Barnaby's Probability Bazaar</title>
+    
+    <!-- Tailwind CSS for modern, adaptive layout and rich styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        parchment: {
+                            light: '#F5ebd5',
+                            DEFAULT: '#E6D3B0',
+                            dark: '#C8B084',
+                        },
+                        medieval: {
+                            gold: '#FFD700',
+                            wood: '#2E1A08',
+                            velvet: '#144c2a', // Deep green velvet felt table
+                            mahogany: '#3D1C02'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Vue.js 3 (Global Build) for single-file reactive state -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- KaTeX for gorgeous LaTeX formula typesetting inside the review ledger -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=MedievalSharp&family=Metamorphic&display=swap');
+        
+        .medieval-font {
+            font-family: 'MedievalSharp', 'Cinzel', 'Georgia', serif;
+        }
+        .cinzel-font {
+            font-family: 'Cinzel', 'Georgia', serif;
+        }
+        /* Custom scrollbar to keep theme styling intact */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #12100e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c8b084;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ffd700;
+        }
+        /* Pulse animations for gold coins change */
+        @keyframes pulse-gold {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); filter: brightness(1.2); }
+        }
+        .pulse-gold-anim {
+            animation: pulse-gold 0.6s ease-in-out;
+        }
+        /* Flickering candle ambiance */
+        @keyframes flicker {
+            0%, 100% { opacity: 0.85; transform: scale(1); filter: blur(0.5px); }
+            50% { opacity: 1; transform: scale(1.03) translateY(-1px); filter: blur(0px); }
+        }
+        .candle-flicker {
+            animation: flicker 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-[#0f0c08] text-stone-100 min-h-screen overflow-x-hidden font-sans select-none">
+
+<div id="app" class="relative min-h-screen flex flex-col justify-between" v-cloak>
+    
+    <!-- HEADER BAR -->
+    <header class="bg-stone-900 border-b border-amber-950/55 p-4 shadow-xl z-10">
+        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🎪</span>
+                <div>
+                    <h1 class="medieval-font text-2xl md:text-3xl text-amber-500 tracking-wide font-bold">
+                        Barnaby's Gambling Stall
+                    </h1>
+                    <p class="text-[10px] uppercase tracking-wider text-amber-200/50 font-serif">Concepts in Expected Value & Probability</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <!-- Stat display -->
+                <div class="flex items-center bg-stone-950 px-4 py-1.5 rounded-lg border border-amber-800/30 shadow-inner">
+                    <span class="text-stone-400 font-serif mr-2 text-xs">Level:</span>
+                    <span class="medieval-font text-amber-500 font-bold mr-4">{{ currentLevelIndex + 1 }}/3</span>
+                    <span class="text-stone-400 font-serif mr-2 text-xs">Round:</span>
+                    <span class="medieval-font text-amber-500 font-bold mr-4">{{ currentRoundIndex + 1 }}/5</span>
+                    <div class="flex items-center gap-1.5" :class="{ 'pulse-gold-anim': goldPulse }">
+                        <span class="text-xl">🪙</span>
+                        <span class="medieval-font text-yellow-400 font-bold text-lg">{{ gold }}g</span>
+                    </div>
+                </div>
+
+                <!-- Volume Toggle Button -->
+                <button @click="toggleMute" class="p-2 rounded bg-stone-800 border border-amber-850/30 text-stone-300 hover:text-yellow-400 transition" title="Toggle Sound Effects">
+                    <span v-if="muted">🔇</span>
+                    <span v-else>🔊</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow flex items-center justify-center p-2 md:p-4 relative z-0">
+        <!-- Ambiance background candles -->
+        <div class="absolute left-4 top-24 hidden lg:block opacity-20 candle-flicker">
+            <svg width="40" height="120" viewBox="0 0 40 120">
+                <rect x="15" y="40" width="10" height="80" fill="#eed9b3" rx="2" />
+                <path d="M20,15 C25,25 20,35 20,35 C20,35 15,25 20,15 Z" fill="#ff7700" />
+                <path d="M20,20 C23,26 20,32 20,32 C20,32 17,26 20,20 Z" fill="#ffcc00" />
+            </svg>
+        </div>
+        <div class="absolute right-4 top-24 hidden lg:block opacity-20 candle-flicker" style="animation-delay: 0.7s;">
+            <svg width="40" height="120" viewBox="0 0 40 120">
+                <rect x="15" y="40" width="10" height="80" fill="#eed9b3" rx="2" />
+                <path d="M20,15 C25,25 20,35 20,35 C20,35 15,25 20,15 Z" fill="#ff7700" />
+                <path d="M20,20 C23,26 20,32 20,32 C20,32 17,26 20,20 Z" fill="#ffcc00" />
+            </svg>
+        </div>
+
+        <div class="w-full max-w-6xl">
+            
+            <!-- INTRO SCREEN / CHOOSE LEVEL -->
+            <div v-if="gameState === 'intro'" class="bg-stone-900 border border-amber-950/40 rounded-2xl p-6 md:p-10 shadow-2xl max-w-2xl mx-auto border-double border-4">
+                <div class="text-center mb-8">
+                    <span class="text-6xl block mb-4">🎪</span>
+                    <h2 class="medieval-font text-3xl md:text-4xl text-amber-500 mb-2 font-bold">Barnaby's Gambling Stall</h2>
+                    <p class="font-serif italic text-stone-400">"Only the mathematically clever walk away richer!"</p>
+                </div>
+                
+                <div class="prose prose-invert max-w-none text-stone-300 font-serif text-sm md:text-base space-y-4 mb-8">
+                    <p>
+                        Welcome, traveler! You stand before the wooden gaming counter of <strong>Lucky Barnaby</strong>. 
+                        He spreads three wagering cards face-up in each deal.
+                    </p>
+                    <p class="border-l-4 border-amber-600 pl-4 bg-stone-950/40 p-3 rounded text-amber-200">
+                        <strong>Your Objective:</strong> Estimate the probability of each card based on the icons and rewards. 
+                        <strong>Exactly ONE bet in each round has a positive expected utility</strong> ($E(\text{Net}) > 0$). 
+                        The other two options are subtle traps designed to slowly drain your purse!
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button @click="startLevel(0)" class="p-4 rounded-xl bg-stone-800 hover:bg-stone-700/80 border border-emerald-800/40 hover:border-emerald-500/80 transition flex flex-col items-center">
+                        <span class="text-2xl mb-1">🪵</span>
+                        <span class="medieval-font text-lg text-emerald-400">Level 1: Market Square</span>
+                        <span class="text-[10px] text-stone-400 mt-2 text-center">Single events, basic dice & simple coin tosses</span>
+                    </button>
+                    <button @click="startLevel(1)" class="p-4 rounded-xl bg-stone-800 hover:bg-stone-700/80 border border-amber-850/40 hover:border-amber-500/80 transition flex flex-col items-center">
+                        <span class="text-2xl mb-1">🍺</span>
+                        <span class="medieval-font text-lg text-amber-400">Level 2: Cozy Tavern</span>
+                        <span class="text-[10px] text-stone-400 mt-2 text-center">Joint probabilities, combinations, gem pouch extraction</span>
+                    </button>
+                    <button @click="startLevel(2)" class="p-4 rounded-xl bg-stone-800 hover:bg-stone-700/80 border border-red-850/40 hover:border-red-500/80 transition flex flex-col items-center">
+                        <span class="text-2xl mb-1">🏺</span>
+                        <span class="medieval-font text-lg text-red-400">Level 3: Backroom Parlor</span>
+                        <span class="text-[10px] text-stone-400 mt-2 text-center">Conditional probability, dependent events, game choices</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- IMMERSIVE VISUAL GAME BOARD -->
+            <div v-if="gameState === 'play'" class="flex flex-col gap-6">
+                
+                <!-- STALL VIEW (Dealer behind counter overlooking Velvet table) -->
+                <div class="bg-stone-900 border-4 border-amber-950/60 rounded-2xl p-4 md:p-6 shadow-2xl relative overflow-hidden flex flex-col items-center">
+                    
+                    <!-- Barnaby behind counter -->
+                    <div class="w-full flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-amber-900/20">
+                        
+                        <!-- Mini stall banners -->
+                        <div class="hidden md:flex flex-col items-center bg-stone-950/40 border border-amber-900/20 p-2 rounded text-center max-w-xs">
+                            <span class="text-xs uppercase tracking-wider text-amber-500 medieval-font">Current Stall</span>
+                            <span class="font-serif text-[11px] text-stone-400 mt-1">Level {{ currentLevelIndex + 1 }}: {{ currentLevelName }}</span>
+                        </div>
+
+                        <!-- Barnaby Character Portrait & Dialogue Bubble -->
+                        <div class="flex items-center gap-4 flex-grow justify-center max-w-2xl">
+                            <div class="w-20 h-20 shrink-0 relative bg-stone-950/80 rounded-full border border-amber-900/30 p-1 flex items-center justify-center">
+                                <svg viewBox="0 0 100 100" class="w-full h-full">
+                                    <!-- Hat -->
+                                    <path d="M20,35 Q50,25 80,35 L75,20 Q50,15 25,20 Z" fill="#2d1a08" stroke="#100700" stroke-width="1.5" />
+                                    <path d="M12,35 Q50,28 88,35 C88,35 84,38 78,38 Q50,30 22,38 C16,38 12,35 12,35 Z" fill="#1b1005" />
+                                    <rect x="35" y="27" width="30" height="4" fill="#ffd700" transform="rotate(-6 50 27)" />
+                                    <!-- Face -->
+                                    <circle cx="50" cy="55" r="23" fill="#f5d3b3" stroke="#2d1a08" stroke-width="1.5" />
+                                    <!-- Eyes (Mood-based) -->
+                                    <g v-if="barnabyMood === 'smug'">
+                                        <path d="M38,50 Q43,46 45,52" fill="none" stroke="#2d1a08" stroke-width="2.5" />
+                                        <path d="M62,50 Q57,46 55,52" fill="none" stroke="#2d1a08" stroke-width="2.5" />
+                                    </g>
+                                    <g v-else-if="barnabyMood === 'shocked'">
+                                        <circle cx="42" cy="51" r="5" fill="#ffffff" stroke="#2d1a08" />
+                                        <circle cx="42" cy="51" r="2" fill="#000000" />
+                                        <circle cx="58" cy="51" r="5" fill="#ffffff" stroke="#2d1a08" />
+                                        <circle cx="58" cy="51" r="2" fill="#000000" />
+                                    </g>
+                                    <g v-else>
+                                        <circle cx="42" cy="52" r="3.5" fill="#ffffff" stroke="#2d1a08" />
+                                        <circle cx="42" cy="52" r="1.5" fill="#3e2723" />
+                                        <circle cx="58" cy="52" r="3.5" fill="#ffffff" stroke="#2d1a08" />
+                                        <circle cx="58" cy="52" r="1.5" fill="#3e2723" />
+                                    </g>
+                                    <!-- Mustache & Mouth -->
+                                    <path d="M50,54 L47,59 L53,59 Z" fill="#e0a97c" stroke="#2d1a08" />
+                                    <path d="M38,62 Q50,58 62,62 Q66,66 61,64 Q50,61 39,64 Q34,66 38,62 Z" fill="#3a220a" stroke="#1c1004" />
+                                    <path v-if="barnabyMood === 'smug'" d="M43,68 Q53,74 58,67" fill="none" stroke="#2d1a08" stroke-width="2" />
+                                    <path v-else d="M44,67 Q50,72 56,67" fill="none" stroke="#2d1a08" stroke-width="1.5" />
+                                </svg>
+                            </div>
+                            
+                            <!-- Dialogue bubble -->
+                            <div class="bg-stone-950 border border-amber-900/40 rounded-xl p-3 flex-grow relative shadow-lg">
+                                <div class="absolute w-2 h-2 bg-stone-950 border-l border-t border-amber-900/40 rotate-45 -left-1 top-8"></div>
+                                <p class="font-serif italic text-amber-100 text-xs md:text-sm leading-relaxed">
+                                    "{{ speechBubble }}"
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="text-right text-xs font-serif text-stone-400 bg-stone-950/40 p-2 rounded border border-amber-900/20 max-w-xs">
+                            <span class="text-stone-500 uppercase tracking-wider font-sans font-bold block text-[10px]">Stall Scenario</span>
+                            {{ currentRoundData.title }}
+                        </div>
+                    </div>
+
+                    <!-- THE VELVET ROLL TABLE (The canvas/felt where items roll/flip) -->
+                    <div class="w-full mt-6 bg-emerald-950/80 rounded-xl p-6 relative border-4 border-[#3D1C02] shadow-inner flex flex-col items-center justify-center min-h-[170px]">
+                        <span class="absolute top-2 left-2 text-[9px] uppercase font-bold tracking-widest text-emerald-400/60 font-sans">Velvet Roll Felt</span>
+                        
+                        <!-- Prompt before wagers are set -->
+                        <div v-if="subRoundState === 'choose'" class="text-center font-serif text-stone-400">
+                            <span class="text-3xl block mb-2 opacity-50">♟️</span>
+                            <p class="text-sm">Click one of the three betting cards below on the counter to choose your stake, then roll.</p>
+                            <p class="text-xs text-amber-500/70 mt-1">Select wisely. Only one card contains a positive expected coin yield!</p>
+                        </div>
+
+                        <!-- ROLLING ANIMATION STATE -->
+                        <div v-if="subRoundState === 'rolling'" class="flex gap-4 items-center justify-center animate-bounce">
+                            <!-- Visual Animated Dice -->
+                            <div v-if="currentVisuals === 'dice' || currentVisuals === 'double_dice' || currentVisuals === 'triple_dice' || currentVisuals === 'conditional_dice'" class="flex gap-3">
+                                <div v-for="d in activeDiceCount" :key="d" class="w-10 h-10 bg-amber-500 border border-amber-700 rounded-lg flex items-center justify-center text-stone-950 font-extrabold text-xl shadow-lg transform rotate-12 transition">
+                                    {{ Math.floor(Math.random() * 6) + 1 }}
+                                </div>
+                            </div>
+                            <!-- Visual Animated Coins -->
+                            <div v-if="currentVisuals === 'coin' || currentVisuals === 'double_coin' || currentVisuals === 'triple_coin'" class="flex gap-3">
+                                <div v-for="c in activeCoinCount" :key="c" class="w-10 h-10 bg-yellow-500 border border-yellow-700 rounded-full flex items-center justify-center text-stone-950 font-extrabold text-lg shadow-lg animate-spin">
+                                    🪙
+                                </div>
+                            </div>
+                            <!-- Velvet Pouch extraction -->
+                            <div v-if="currentVisuals === 'gems'" class="flex flex-col items-center">
+                                <div class="text-4xl animate-pulse">👜</div>
+                                <span class="text-xs text-stone-400 mt-2">Barnaby draws from the satchel...</span>
+                            </div>
+                            <!-- Spinner dial -->
+                            <div v-if="currentVisuals === 'spinner'" class="flex flex-col items-center">
+                                <div class="text-4xl animate-spin text-amber-500">🎡</div>
+                                <span class="text-xs text-stone-400 mt-2">Spinning the dial...</span>
+                            </div>
+                        </div>
+
+                        <!-- SHOWING ACTUAL ROLL OUTCOME ON FELT -->
+                        <div v-if="subRoundState === 'showOutcome'" class="flex flex-col items-center justify-center w-full">
+                            <div class="flex gap-4 items-center justify-center mb-4">
+                                
+                                <!-- Render Dice outcomes -->
+                                <template v-if="currentVisuals === 'dice' || currentVisuals === 'double_dice' || currentVisuals === 'triple_dice' || currentVisuals === 'conditional_dice'">
+                                    <div v-for="(val, idx) in rolledValues" :key="idx" class="w-14 h-14 bg-amber-600 border-2 border-amber-800 rounded-xl flex flex-col items-center justify-center text-white font-extrabold text-2xl shadow-lg relative transform rotate-3">
+                                        {{ val }}
+                                        <span class="text-[8px] text-amber-200/60 font-sans uppercase font-bold absolute bottom-0.5">Die</span>
+                                    </div>
+                                </template>
+
+                                <!-- Render Coin outcomes -->
+                                <template v-if="currentVisuals === 'coin' || currentVisuals === 'double_coin' || currentVisuals === 'triple_coin'">
+                                    <div v-for="(val, idx) in rolledValues" :key="idx" class="w-14 h-14 bg-yellow-500 border-2 border-yellow-700 rounded-full flex flex-col items-center justify-center text-amber-950 font-extrabold text-xl shadow-lg relative">
+                                        {{ val }}
+                                        <span class="text-[8px] text-amber-900/60 font-sans uppercase font-bold absolute bottom-1.5">Coin</span>
+                                    </div>
+                                </template>
+
+                                <!-- Render Gemstone outcomes -->
+                                <template v-if="currentVisuals === 'gems'">
+                                    <div v-for="(val, idx) in rolledValues" :key="idx" class="px-4 py-2.5 bg-stone-900 border border-stone-800 rounded-lg flex items-center gap-1.5 shadow-inner">
+                                        <span class="text-xl">{{ val === 'Ruby' ? '🔴' : (val === 'Sapphire' ? '🔵' : '🟢') }}</span>
+                                        <span class="font-serif text-sm font-bold" :class="{'text-red-400': val === 'Ruby', 'text-blue-400': val === 'Sapphire', 'text-green-400': val === 'Emerald'}">{{ val }}</span>
+                                    </div>
+                                </template>
+
+                                <!-- Special Spinner Multi-stage states -->
+                                <template v-if="currentVisuals === 'spinner'">
+                                    <div class="flex flex-col items-center bg-stone-950/70 p-3 rounded-lg border border-amber-900/30">
+                                        <div class="flex items-center gap-4">
+                                            <div class="px-3 py-1.5 bg-amber-800 text-amber-100 rounded text-center">
+                                                <div class="text-[9px] text-amber-300">Dial Spin</div>
+                                                <div class="text-lg font-bold">{{ rolledValues[0] }}</div>
+                                            </div>
+                                            <div v-if="rolledValues.length > 1" class="px-3 py-1.5 bg-yellow-600 text-yellow-950 rounded text-center">
+                                                <div class="text-[9px] text-yellow-900">Coin Toss</div>
+                                                <div class="text-lg font-bold">{{ rolledValues[1] }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                            </div>
+
+                            <!-- Game outcome evaluation label -->
+                            <div class="text-center">
+                                <h4 class="text-2xl font-bold medieval-font tracking-wide" :class="{'text-emerald-400': roundWon, 'text-red-500': !roundWon}">
+                                    {{ roundWon ? '🏆 YOU WIN!' : '💸 YOU LOSE!' }}
+                                </h4>
+                                <p class="text-xs text-stone-300 mt-2 font-serif max-w-md mx-auto">
+                                    {{ activeRoundDescription }}
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- CARD DRAWER BAR / WOODEN COUNTER -->
+                    <div class="w-full mt-6 bg-[#211409] p-4 md:p-6 rounded-xl border-4 border-[#3D1C02] shadow-2xl">
+                        <div class="flex justify-between items-center mb-4 px-2 border-b border-amber-950/40 pb-2">
+                            <span class="text-xs uppercase tracking-widest text-stone-400 font-bold medieval-font">Barnaby's Wagers Counter</span>
+                            <span class="text-xs font-serif text-amber-500/80">Exactly one card has positive Expected Value!</span>
+                        </div>
+
+                        <!-- 3 CARD CONTAINERS -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div v-for="(opt, idx) in currentRoundData.options" :key="idx"
+                                 @click="selectOption(idx)"
+                                 :class="[
+                                     'bg-[#f4ebd4] rounded-xl border-4 p-4 text-stone-950 shadow-2xl flex flex-col justify-between cursor-pointer transform hover:-translate-y-2 hover:rotate-1 transition duration-300 relative select-none',
+                                     selectedOptionIndex === idx 
+                                        ? 'border-yellow-500 ring-4 ring-yellow-400/40' 
+                                        : 'border-stone-400 hover:border-yellow-600'
+                                 ]">
+                                
+                                <!-- Card Header details -->
+                                <div class="flex justify-between items-center border-b border-stone-800/20 pb-2 mb-3">
+                                    <span class="cinzel-font font-black tracking-wider text-stone-700 text-xs">WAGER {{ String.fromCharCode(65 + idx) }}</span>
+                                    <div class="w-3 h-3 rounded-full border border-stone-600 flex items-center justify-center"
+                                         :class="{'bg-yellow-500': selectedOptionIndex === idx}">
+                                    </div>
+                                </div>
+
+                                <!-- Card Shorthand / Event Type -->
+                                <div class="text-center py-2 flex-grow flex flex-col justify-center items-center">
+                                    <span class="medieval-font font-bold text-xl text-stone-900 tracking-wide uppercase leading-tight min-h-[3rem] flex items-center justify-center">
+                                        {{ getShorthand(opt.desc) }}
+                                    </span>
+
+                                    <!-- INLINE VISUAL ASSET ICONS -->
+                                    <div class="flex gap-1.5 items-center justify-center mt-3 h-10">
+                                        <!-- Dice Icons -->
+                                        <template v-if="currentVisuals === 'dice' || currentVisuals === 'double_dice' || currentVisuals === 'triple_dice' || currentVisuals === 'conditional_dice'">
+                                            <div v-for="n in getAssetCount(idx)" :key="n" class="w-6 h-6 bg-amber-800 rounded flex items-center justify-center text-white text-[11px] font-bold shadow shadow-stone-800/50">
+                                                🎲
+                                            </div>
+                                        </template>
+
+                                        <!-- Coin Icons -->
+                                        <template v-else-if="currentVisuals === 'coin' || currentVisuals === 'double_coin' || currentVisuals === 'triple_coin'">
+                                            <div v-for="n in getAssetCount(idx)" :key="n" class="w-6 h-6 bg-yellow-600 rounded-full flex items-center justify-center text-amber-100 text-[11px] font-extrabold shadow shadow-stone-800/50">
+                                                🪙
+                                            </div>
+                                        </template>
+
+                                        <!-- Gemstones icons -->
+                                        <template v-else-if="currentVisuals === 'gems'">
+                                            <span class="text-2xl">👜</span>
+                                        </template>
+
+                                        <!-- Dial / Spinner icon -->
+                                        <template v-else-if="currentVisuals === 'spinner'">
+                                            <span class="text-2xl">🎡</span>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Card Stats Footer -->
+                                <div class="border-t border-stone-800/20 pt-3 mt-4">
+                                    <div class="grid grid-cols-2 text-center text-xs font-serif font-semibold divide-x divide-stone-800/10">
+                                        <div>
+                                            <span class="text-[10px] text-stone-500 block uppercase font-bold tracking-wider mb-0.5">COST</span>
+                                            <span class="text-red-700 text-sm font-bold">{{ opt.cost }}g</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-[10px] text-stone-500 block uppercase font-bold tracking-wider mb-0.5">REWARD</span>
+                                            <span class="text-emerald-700 text-sm font-bold">{{ opt.reward }}g</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- BOTTOM BOARD CONTROL BAR -->
+                    <div class="w-full mt-6 pt-4 border-t border-stone-800/40 flex flex-col md:flex-row gap-4 items-center justify-between">
+                        <div>
+                            <p v-if="selectedOptionIndex === null" class="text-xs text-amber-500 italic font-serif">
+                                👈 Choose a betting card on the wooden counter to place your stake.
+                            </p>
+                            <p v-else class="text-xs text-stone-300 font-serif">
+                                You have committed to card <strong class="text-yellow-400 font-bold">Wager {{ String.fromCharCode(65 + selectedOptionIndex) }}</strong>. Stake: <strong class="text-red-400 font-bold">{{ currentRoundData.options[selectedOptionIndex].cost }}g</strong>. Possible payout: <strong class="text-emerald-400 font-bold">{{ currentRoundData.options[selectedOptionIndex].reward }}g</strong>.
+                            </p>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <!-- PLAY ROUND -->
+                            <button v-if="subRoundState === 'choose'" 
+                                    @click="rollWager" 
+                                    :disabled="selectedOptionIndex === null || gold < currentRoundData.options[selectedOptionIndex].cost"
+                                    class="px-8 py-3 rounded-lg medieval-font font-bold text-stone-950 bg-amber-500 hover:bg-yellow-400 disabled:opacity-50 disabled:pointer-events-none transition duration-150 shadow-lg tracking-wider text-sm">
+                                🎲 Roll Destiny
+                            </button>
+
+                            <!-- LOAN RESCUE IF OUT OF GOLD -->
+                            <button v-if="gold <= 0 && selectedOptionIndex !== null && gold < currentRoundData.options[selectedOptionIndex].cost" 
+                                    @click="requestLoan" 
+                                    class="px-8 py-3 rounded-lg medieval-font font-bold text-stone-950 bg-red-600 hover:bg-red-500 transition shadow-lg tracking-wider text-sm">
+                                🛡️ Beg for Loan (30g)
+                            </button>
+
+                            <!-- PROCEED TO NEXT ROUND -->
+                            <button v-if="subRoundState === 'showOutcome'" 
+                                    @click="advanceRound" 
+                                    class="px-8 py-3 rounded-lg medieval-font font-bold text-stone-950 bg-emerald-500 hover:bg-emerald-400 transition shadow-lg tracking-wider text-sm">
+                                Next Deal ➔
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SCRIBE'S LEDGER (END OF LEVEL REVIEW) -->
+            <div v-if="gameState === 'ledger'" class="bg-parchment border-8 border-medieval-mahogany rounded-xl p-4 md:p-8 text-amber-950 shadow-2xl relative">
+                
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/5 pointer-events-none"></div>
+
+                <div class="text-center mb-8 border-b-2 border-amber-950/30 pb-4">
+                    <span class="text-4xl">📜</span>
+                    <h2 class="medieval-font text-3xl md:text-4xl font-extrabold tracking-wide mt-2">The Ledger of Barnaby's Stall</h2>
+                    <p class="font-serif italic text-amber-900 mt-1">"Behold, probability calculations for Level {{ currentLevelIndex + 1 }} - Where Truth and Fortune Clash!"</p>
+                </div>
+
+                <div class="space-y-6 max-h-[450px] overflow-y-auto pr-2 mb-8">
+                    <div v-for="(rec, idx) in levelHistory" :key="idx" class="border-b border-amber-950/20 pb-6">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <h4 class="medieval-font text-lg font-bold text-amber-950">
+                                Round {{ idx + 1 }}: {{ rec.roundTitle }}
+                            </h4>
+                            <span class="px-3 py-1 rounded text-xs font-bold medieval-font tracking-wide uppercase"
+                                  :class="[
+                                      rec.pickedBest 
+                                        ? 'bg-emerald-900 text-emerald-100' 
+                                        : 'bg-red-950 text-red-100'
+                                  ]">
+                                {{ rec.pickedBest ? '✓ Mathematical Best Bet!' : '✗ Fledgling Bet!' }}
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-stretch mb-4">
+                            <!-- Left: Recap -->
+                            <div class="md:col-span-5 bg-black/5 p-3 rounded font-serif text-sm space-y-1">
+                                <div><strong>Your Selection:</strong> Wager {{ String.fromCharCode(65 + rec.choiceIndex) }}</div>
+                                <div><strong>Outcome:</strong> <span class="font-bold" :class="[rec.actualResult === 'win' ? 'text-emerald-700' : 'text-red-700']">{{ rec.actualResult.toUpperCase() }}</span></div>
+                                <div><strong>Gold Impact:</strong> <span class="font-bold" :class="[rec.goldDelta >= 0 ? 'text-emerald-700' : 'text-red-700']">{{ rec.goldDelta >= 0 ? '+' : '' }}{{ rec.goldDelta }}g</span></div>
+                            </div>
+                            
+                            <!-- Right: Explanation and Math formulas -->
+                            <div class="md:col-span-7 bg-white/40 p-4 rounded font-serif text-xs md:text-sm shadow-inner space-y-3 border border-amber-950/10">
+                                <div class="font-semibold text-amber-950">Mathematical Analysis:</div>
+                                <p class="leading-relaxed text-stone-850">{{ rec.explanationText }}</p>
+                                
+                                <div class="bg-amber-950/5 p-2.5 rounded overflow-x-auto text-xs font-serif leading-relaxed">
+                                    <div class="font-bold text-[10px] text-amber-900 uppercase tracking-wider mb-1">Expected Utility Equations</div>
+                                    <!-- Render dynamic katex elements -->
+                                    <div v-html="renderLaTeX(rec.latex)" class="my-2 text-center text-sm"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Level progress outcomes -->
+                <div class="flex flex-col md:flex-row gap-4 items-center justify-between border-t-2 border-amber-950/30 pt-6">
+                    <div class="font-serif text-center md:text-left">
+                        <p class="text-sm">Strategic choices made: <strong class="text-lg text-emerald-800">{{ wiseBetsCount }} of 5</strong></p>
+                        <p class="text-xs text-amber-900/80">Choosing the positive expected value maximizes long-term wealth.</p>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <!-- Retry Level -->
+                        <button @click="retryLevel" class="px-5 py-3 rounded-lg border border-amber-950 text-amber-950 bg-transparent hover:bg-amber-950/10 transition font-bold medieval-font text-xs">
+                            🔄 Replay Level
+                        </button>
+                        <!-- Proceed next / End game -->
+                        <button v-if="currentLevelIndex < 2" @click="advanceLevel" class="px-5 py-3 rounded-lg bg-amber-950 hover:bg-stone-900 text-parchment font-bold medieval-font transition shadow-md text-xs">
+                            Onward to Level {{ currentLevelIndex + 2 }} ➔
+                        </button>
+                        <button v-else @click="finishGame" class="px-5 py-3 rounded-lg bg-amber-950 hover:bg-stone-900 text-parchment font-bold medieval-font transition shadow-md text-xs">
+                            🏆 Claim Victory!
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SANDBOX PANEL -->
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                
+                <!-- EMPIRICAL PROBABILITY SIMULATOR -->
+                <div class="bg-stone-900 border border-amber-950/40 rounded-xl p-5 shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-2xl">🧪</span>
+                            <h4 class="medieval-font text-base text-amber-400 font-bold">Empirical Probability Sandbox</h4>
+                        </div>
+                        <p class="font-serif text-stone-400 text-xs leading-relaxed mb-4">
+                            Demonstrate the <strong>Law of Large Numbers</strong>. Run automated trials of a simulated dice roll sequence instantly to see if empirical outcomes approach theoretical probability!
+                        </p>
+
+                        <!-- Sandbox configuration -->
+                        <div class="grid grid-cols-2 gap-3 mb-4 text-xs font-serif">
+                            <div>
+                                <label class="text-stone-400 block mb-1">Choose Setup:</label>
+                                <select v-model="sandboxConfig.target" class="w-full bg-stone-950 border border-stone-800 p-2 rounded text-stone-200">
+                                    <option value="even">Roll 1 Die: Even</option>
+                                    <option value="six">Roll 1 Die: Exactly 6</option>
+                                    <option value="double6">Roll 2 Dice: Doubles</option>
+                                    <option value="sum7">Roll 2 Dice: Sum is 7</option>
+                                    <option value="prime10">Roll 10-sided Die: Prime</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-stone-400 block mb-1">Simulate Trials:</label>
+                                <select v-model.number="sandboxConfig.trials" class="w-full bg-stone-950 border border-stone-800 p-2 rounded text-stone-200">
+                                    <option :value="10">10 trials</option>
+                                    <option :value="100">100 trials</option>
+                                    <option :value="1000">1,000 trials</option>
+                                    <option :value="10000">10,000 trials</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Simulator Trigger & Results -->
+                    <div class="border-t border-stone-800/60 pt-4">
+                        <button @click="runSandboxSimulation" class="w-full py-2 bg-stone-850 hover:bg-stone-800 text-amber-400 font-bold text-xs medieval-font rounded border border-amber-900/20 transition uppercase tracking-wider">
+                            ⚔️ Execute Simulation Run
+                        </button>
+
+                        <div v-if="sandboxResult" class="mt-4 bg-stone-950 p-3 rounded border border-stone-850 text-xs font-serif">
+                            <div class="flex justify-between border-b border-stone-800 pb-1 mb-1 font-bold text-amber-500">
+                                <span>Simulated Run Complete!</span>
+                                <span>N = {{ sandboxResult.trials }}</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2 mt-2">
+                                <div class="text-center">
+                                    <div class="text-[10px] text-stone-500 uppercase">Wins</div>
+                                    <div class="text-sm font-bold text-stone-200">{{ sandboxResult.wins }}</div>
+                                </div>
+                                <div class="text-center border-x border-stone-800">
+                                    <div class="text-[10px] text-stone-500 uppercase">Empirical %</div>
+                                    <div class="text-sm font-bold text-amber-400">{{ sandboxResult.empiricalPercent }}%</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-[10px] text-stone-500 uppercase">Theoretical %</div>
+                                    <div class="text-sm font-bold text-blue-400">{{ sandboxResult.theoreticalPercent }}%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STUDY COMPANION -->
+                <div class="bg-stone-900 border border-amber-950/40 rounded-xl p-5 shadow-lg flex flex-col justify-between font-serif text-stone-300">
+                    <div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-2xl">📖</span>
+                            <h4 class="medieval-font text-base text-amber-400 font-bold">OpenStax Mathematics Guide</h4>
+                        </div>
+                        <p class="text-stone-400 text-xs leading-relaxed mb-4">
+                            Review these core principles of probability from Section 7.5 to make calculated decisions.
+                        </p>
+
+                        <div class="space-y-3 text-xs">
+                            <div class="p-2.5 bg-stone-950/60 rounded border border-stone-850">
+                                <strong class="text-amber-500">Theoretical Probability:</strong>
+                                <p class="text-stone-300 mt-0.5">Calculated based on sample space size: $P(E) = \frac{n(E)}{n(S)}$, where $n(S)$ is the total outcomes.</p>
+                            </div>
+                            <div class="p-2.5 bg-stone-950/60 rounded border border-stone-850">
+                                <strong class="text-amber-500">Expected Value:</strong>
+                                <p class="text-stone-300 mt-0.5">Average outcome: $E(\text{Net}) = P(\text{win}) \times (\text{Reward} - \text{Cost}) + P(\text{lose}) \times (-\text{Cost})$. Which simplifies directly to: $E(\text{Net}) = [P(\text{win}) \times \text{Reward}] - \text{Cost}$.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-stone-950 border-t border-amber-950/30 p-4 text-center text-[11px] text-stone-500 font-serif">
+        <p>© 2026 Interactive Probability Sandbox & Gambling Stall. Aligned with OpenStax Contemporary Mathematics Curriculum.</p>
+    </footer>
+
+</div>
+
+<!-- Vue Core Application Logic -->
+<script>
+    // Synthesized Sound Effects via Web Audio API
+    const Soundboard = {
+        ctx: null,
+        init() {
+            if (!this.ctx) {
+                this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        },
+        playCoin() {
+            this.init();
+            if (!this.ctx) return;
+            let now = this.ctx.currentTime;
+            let osc = this.ctx.createOscillator();
+            let gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, now);
+            osc.frequency.exponentialRampToValueAtTime(1500, now + 0.08);
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.15);
+        },
+        playDice() {
+            this.init();
+            if (!this.ctx) return;
+            let now = this.ctx.currentTime;
+            for (let i = 0; i < 6; i++) {
+                let delay = i * 0.08;
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(120 + Math.random() * 90, now + delay);
+                gain.gain.setValueAtTime(0.12, now + delay);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.06);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now + delay);
+                osc.stop(now + delay + 0.06);
+            }
+        },
+        playSuccess() {
+            this.init();
+            if (!this.ctx) return;
+            let now = this.ctx.currentTime;
+            let notes = [261.63, 329.63, 392.00, 523.25]; // C major chord arpeggio
+            notes.forEach((freq, idx) => {
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                gain.gain.setValueAtTime(0.06, now + idx * 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now + idx * 0.08);
+                osc.stop(now + idx * 0.08 + 0.45);
+            });
+        },
+        playFailure() {
+            this.init();
+            if (!this.ctx) return;
+            let now = this.ctx.currentTime;
+            let notes = [293.66, 277.18, 261.63]; // Diminished sliding down
+            notes.forEach((freq, idx) => {
+                let osc = this.ctx.createOscillator();
+                let gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+                gain.gain.setValueAtTime(0.04, now + idx * 0.12);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.3);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now + idx * 0.12);
+                osc.stop(now + idx * 0.12 + 0.35);
+            });
+        }
+    };
+
+    const levelsData = [
+        {
+            levelName: "Market Square",
+            rounds: [
+                {
+                    title: "Barnaby's Red Die",
+                    question: "Choose your wager on a standard 6-sided die roll.",
+                    options: [
+                        { desc: "Roll a 5 or a 6", cost: 10, reward: 25, best: false },
+                        { desc: "Roll any even number", cost: 15, reward: 35, best: true }, // EV = (0.5 * 35) - 15 = +2.5
+                        { desc: "Roll exactly a 1", cost: 5, reward: 25, best: false }
+                    ],
+                    visualType: "dice",
+                    rollCount: 1,
+                    explanation: "Wager B offers P(Even) = 3/6 = 0.50. Expected Value calculations show: E(B) = (0.50 * 35) - 15 = +2.50g (The only positive expected value). Wager A and C represent loss models.",
+                    latex: "E(\\text{Net}_A) = \\frac{2}{6}(25) - 10 = -1.67\\text{g} \\\\ E(\\text{Net}_B) = \\frac{3}{6}(35) - 15 = +2.50\\text{g} \\\\ E(\\text{Net}_C) = \\frac{1}{6}(25) - 5 = -0.83\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        const val = rollVals[0];
+                        if (idx === 0) return (val === 5 || val === 6);
+                        if (idx === 1) return (val % 2 === 0);
+                        if (idx === 2) return (val === 1);
+                        return false;
+                    }
+                },
+                {
+                    title: "The Royal Coins",
+                    question: "Lucky Barnaby pulls out standard copper coins.",
+                    options: [
+                        { desc: "Get Heads on a single coin flip", cost: 10, reward: 22, best: true }, // EV = (0.5 * 22) - 10 = +1.0
+                        { desc: "Get Two Heads on two coin flips", cost: 15, reward: 50, best: false },
+                        { desc: "Get at least one Tails on two flips", cost: 20, reward: 25, best: false }
+                    ],
+                    visualType: "coin",
+                    rollCount: 2,
+                    explanation: "The sample space of flipping two coins is {HH, HT, TH, TT}. Wager A gives a clean 50% win chance: E(A) = (0.50 * 22) - 10 = +1.00g. Others result in negative values over time.",
+                    latex: "E(\\text{Net}_A) = \\frac{1}{2}(22) - 10 = +1.00\\text{g} \\\\ E(\\text{Net}_B) = \\frac{1}{4}(50) - 15 = -2.50\\text{g} \\\\ E(\\text{Net}_C) = \\frac{3}{4}(25) - 20 = -1.25\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        if (idx === 0) return (rollVals[0] === 'H');
+                        if (idx === 1) return (rollVals[0] === 'H' && rollVals[1] === 'H');
+                        if (idx === 2) return (rollVals[0] === 'T' || rollVals[1] === 'T');
+                        return false;
+                    }
+                },
+                {
+                    title: "Barnaby's Lucky Roll",
+                    question: "One single roll of the 6-sided die.",
+                    options: [
+                        { desc: "Roll a 6", cost: 8, reward: 50, best: true }, // EV = (1/6 * 50) - 8 = +0.33
+                        { desc: "Roll a 1, 2, or 3", cost: 12, reward: 22, best: false },
+                        { desc: "Roll a 4 or 5", cost: 10, reward: 24, best: false }
+                    ],
+                    visualType: "dice",
+                    rollCount: 1,
+                    explanation: "The chances of rolling a 6 are low (P = 1/6), but the premium reward of 50g makes it mathematical optimal. E(A) = 50/6 - 8 = +0.33g.",
+                    latex: "E(\\text{Net}_A) = \\frac{1}{6}(50) - 8 = +0.33\\text{g} \\\\ E(\\text{Net}_B) = \\frac{3}{6}(22) - 12 = -1.00\\text{g} \\\\ E(\\text{Net}_C) = \\frac{2}{6}(24) - 10 = -2.00\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        const val = rollVals[0];
+                        if (idx === 0) return (val === 6);
+                        if (idx === 1) return (val >= 1 && val <= 3);
+                        if (idx === 2) return (val === 4 || val === 5);
+                        return false;
+                    }
+                },
+                {
+                    title: "Double Thud",
+                    question: "Barnaby rattles two dice inside a wooden cup. Sum the values of both faces.",
+                    options: [
+                        { desc: "Sum is 10 or higher", cost: 15, reward: 70, best: false },
+                        { desc: "Sum is exactly 7", cost: 10, reward: 66, best: true }, // EV = (6/36 * 66) - 10 = +1.0
+                        { desc: "Sum is an odd number", cost: 12, reward: 22, best: false }
+                    ],
+                    visualType: "double_dice",
+                    rollCount: 2,
+                    explanation: "A sum of 7 has 6 winning outcomes out of 36: {(1,6), (2,5), (3,4), (4,3), (5,2), (6,1)}. P(7) = 6/36 = 1/6. Expected value: E(B) = (1/6 * 66) - 10 = +1.00g.",
+                    latex: "E(\\text{Net}_A) = \\frac{6}{36}(70) - 15 = -3.33\\text{g} \\\\ E(\\text{Net}_B) = \\frac{6}{36}(66) - 10 = +1.00\\text{g} \\\\ E(\\text{Net}_C) = \\frac{18}{36}(22) - 12 = -1.00\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        const sum = rollVals[0] + rollVals[1];
+                        if (idx === 0) return (sum >= 10);
+                        if (idx === 1) return (sum === 7);
+                        if (idx === 2) return (sum % 2 !== 0);
+                        return false;
+                    }
+                },
+                {
+                    title: "Safe Play & Complements",
+                    question: "We roll a single 6-sided die. Apply the complement rule.",
+                    options: [
+                        { desc: "Roll NOT a 1", cost: 18, reward: 22, best: true }, // EV = (5/6 * 22) - 18 = +0.33
+                        { desc: "Roll NOT a 5 or 6", cost: 12, reward: 16, best: false },
+                        { desc: "Roll NOT an even number", cost: 10, reward: 18, best: false }
+                    ],
+                    visualType: "dice",
+                    rollCount: 1,
+                    explanation: "By the complement rule: P(NOT 1) = 1 - P(1) = 1 - 1/6 = 5/6. Expectation: E(A) = (5/6 * 22) - 18 = +0.33g.",
+                    latex: "E(\\text{Net}_A) = \\frac{5}{6}(22) - 18 = +0.33\\text{g} \\\\ E(\\text{Net}_B) = \\frac{4}{6}(16) - 12 = -1.33\\text{g} \\\\ E(\\text{Net}_C) = \\frac{3}{6}(18) - 10 = -1.00\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        const val = rollVals[0];
+                        if (idx === 0) return (val !== 1);
+                        if (idx === 1) return (val !== 5 && val !== 6);
+                        if (idx === 2) return (val % 2 !== 0);
+                        return false;
+                    }
+                }
+            ]
+        },
+        {
+            levelName: "Cozy Tavern",
+            rounds: [
+                {
+                    title: "Identical Fates",
+                    question: "Roll two standard 6-sided dice. Calculate compound combinations and duplicates.",
+                    options: [
+                        { desc: "Both dice show the same value", cost: 8, reward: 54, best: true }, // EV = (6/36 * 54) - 8 = +1.0
+                        { desc: "Both dice show different values", cost: 20, reward: 22, best: false },
+                        { desc: "Both dice show odd numbers", cost: 10, reward: 36, best: false }
+                    ],
+                    visualType: "double_dice",
+                    rollCount: 2,
+                    explanation: "Doubles have 6 outcomes out of 36. Win probability P = 6/36 = 1/6. Expected utility is: E(A) = (1/6 * 54) - 8 = +1.00g.",
+                    latex: "E(\\text{Net}_A) = \\frac{6}{36}(54) - 8 = +1.00\\text{g} \\\\ E(\\text{Net}_B) = \\frac{30}{36}(22) - 20 = -1.67\\text{g} \\\\ E(\\text{Net}_C) = \\frac{9}{36}(36) - 10 = -1.00\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        if (idx === 0) return (rollVals[0] === rollVals[1]);
+                        if (idx === 1) return (rollVals[0] !== rollVals[1]);
+                        if (idx === 2) return (rollVals[0] % 2 !== 0 && rollVals[1] % 2 !== 0);
+                        return false;
+                    }
+                },
+                {
+                    title: "Golden Flips",
+                    question: "We flip three separate gold coins. Independent trial combinations.",
+                    options: [
+                        { desc: "Get exactly two Heads", cost: 10, reward: 24, best: false },
+                        { desc: "All three coins show the identical side", cost: 8, reward: 36, best: true }, // EV = (2/8 * 36) - 8 = +1.0
+                        { desc: "Get at least two Heads", cost: 15, reward: 28, best: false }
+                    ],
+                    visualType: "triple_coin",
+                    rollCount: 3,
+                    explanation: "Sample space of 3 flips = {HHH, HHT, HTH, HTT, THH, THT, TTH, TTT}. Matching outcomes: {HHH, TTT}. P(Win) = 2/8 = 1/4 = 0.25. Expected Value: E(B) = (0.25 * 36) - 8 = +1.00g.",
+                    latex: "E(\\text{Net}_A) = \\frac{3}{8}(24) - 10 = -1.00\\text{g} \\\\ E(\\text{Net}_B) = \\frac{2}{8}(36) - 8 = +1.00\\text{g} \\\\ E(\\text{Net}_C) = \\frac{4}{8}(28) - 15 = -1.00\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        const hCount = rollVals.filter(v => v === 'H').length;
+                        if (idx === 0) return (hCount === 2);
+                        if (idx === 1) return (hCount === 3 || hCount === 0);
+                        if (idx === 2) return (hCount >= 2);
+                        return false;
+                    }
+                },
+                {
+                    title: "Sequential Chases",
+                    question: "Roll a single 6-sided die, then roll it again. Sequential joint distributions.",
+                    options: [
+                        { desc: "First roll is strictly greater than the second", cost: 10, reward: 22, best: false },
+                        { desc: "The sum of both rolls is exactly 8", cost: 12, reward: 90, best: true }, // EV = (5/36 * 90) - 12 = +0.5
+                        { desc: "Both rolls are 4 or higher", cost: 15, reward: 54, best: false }
+                    ],
+                    visualType: "double_dice",
+                    rollCount: 2,
+                    explanation: "Sum of 8 has 5 configurations: {(2,6), (3,5), (4,4), (5,3), (6,2)}. Win probability P = 5/36. E(B) = (5/36 * 90) - 12 = +0.50g.",
+                    latex: "E(\\text{Net}_A) = \\frac{15}{36}(22) - 10 = -0.83\\text{g} \\\\ E(\\text{Net}_B) = \\frac{5}{36}(90) - 12 = +0.50\\text{g} \\\\ E(\\text{Net}_C) = \\frac{9}{36}(54) - 15 = -1.50\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        if (idx === 0) return (rollVals[0] > rollVals[1]);
+                        if (idx === 1) return (rollVals[0] + rollVals[1] === 8);
+                        if (idx === 2) return (rollVals[0] >= 4 && rollVals[1] >= 4);
+                        return false;
+                    }
+                },
+                {
+                    title: "The Velvet Gem Bag",
+                    question: "A pouch containing 5 Ruby, 3 Sapphire, and 2 Emeralds. Draw two gems WITHOUT replacement.",
+                    options: [
+                        { desc: "Both drawn gems are Sapphire", cost: 5, reward: 80, best: true }, // EV = (6/90 * 80) - 5 = +0.33
+                        { desc: "At least one drawn gem is an Emerald", cost: 10, reward: 24, best: false },
+                        { desc: "Draw exactly one Ruby and one Emerald", cost: 10, reward: 40, best: false }
+                    ],
+                    visualType: "gems",
+                    rollCount: 2,
+                    explanation: "No replacement means dependent events: P(both Sapphire) = (3/10) * (2/9) = 6/90 = 1/15. Expected Net value: E(A) = (1/15 * 80) - 5 = +0.33g.",
+                    latex: "E(\\text{Net}_A) = \\frac{6}{90}(80) - 5 = +0.33\\text{g} \\\\ E(\\text{Net}_B) = \\frac{34}{90}(24) - 10 = -0.93\\text{g} \\\\ E(\\text{Net}_C) = \\frac{20}{90}(40) - 10 = -1.11\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        if (idx === 0) return (rollVals[0] === 'Sapphire' && rollVals[1] === 'Sapphire');
+                        if (idx === 1) return (rollVals[0] === 'Emerald' || rollVals[1] === 'Emerald');
+                        if (idx === 2) {
+                            const rCount = rollVals.filter(v => v === 'Ruby').length;
+                            const eCount = rollVals.filter(v => v === 'Emerald').length;
+                            return (rCount === 1 && eCount === 1);
+                        }
+                        return false;
+                    }
+                },
+                {
+                    title: "Barnaby's Decahedron",
+                    question: "A rare balanced 10-sided die (faces 1 to 10) is rolled.",
+                    options: [
+                        { desc: "Roll a prime number", cost: 15, reward: 40, best: true }, // EV = (0.4 * 40) - 15 = +1.0
+                        { desc: "Roll a multiple of 3", cost: 10, reward: 30, best: false },
+                        { desc: "Roll a perfect square", cost: 12, reward: 36, best: false }
+                    ],
+                    visualType: "dice",
+                    rollCount: 1,
+                    explanation: "Primes: {2, 3, 5, 7} (P = 4/10 = 0.40). Expected utility: E(A) = (0.40 * 40) - 15 = +1.00g.",
+                    latex: "E(\\text{Net}_A) = \\frac{4}{10}(40) - 15 = +1.00\\text{g} \\\\ E(\\text{Net}_B) = \\frac{3}{10}(30) - 10 = -1.00\\text{g} \\\\ E(\\text{Net}_C) = \\frac{3}{10}(36) - 12 = -1.20\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        const val = rollVals[0];
+                        if (idx === 0) return ([2, 3, 5, 7].includes(val));
+                        if (idx === 1) return ([3, 6, 9].includes(val));
+                        if (idx === 2) return ([1, 4, 9].includes(val));
+                        return false;
+                    }
+                }
+            ]
+        },
+        {
+            levelName: "Backroom Parlor",
+            rounds: [
+                {
+                    title: "The Conditional Squeeze",
+                    question: "Roll two standard dice. Barnaby asserts: 'At least one of the dice shows a 6'. What is your conditional play?",
+                    options: [
+                        { desc: "The sum of both is 10 or more", cost: 20, reward: 46, best: true }, // EV = (5/11 * 46) - 20 = +0.91
+                        { desc: "The sum of both is exactly 12", cost: 5, reward: 50, best: false },
+                        { desc: "The sum of both is 8 or less", cost: 15, reward: 40, best: false }
+                    ],
+                    visualType: "conditional_dice",
+                    rollCount: 2,
+                    explanation: "Conditional space given at least one 6 has 11 outcomes: {(1,6), (2,6), (3,6), (4,6), (5,6), (6,6), (6,5), (6,4), (6,3), (6,2), (6,1)}. Sums >= 10 are 5 outcomes: {(4,6), (5,6), (6,6), (6,5), (6,4)}. P(Sum >= 10 | at least one 6) = 5/11. E(A) = (5/11 * 46) - 20 = +0.91g.",
+                    latex: "E(\\text{Net}_A) = \\frac{5}{11}(46) - 20 = +0.91\\text{g} \\\\ E(\\text{Net}_B) = \\frac{1}{11}(50) - 5 = -0.45\\text{g} \\\\ E(\\text{Net}_C) = \\frac{4}{11}(40) - 15 = -0.45\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        const sum = rollVals[0] + rollVals[1];
+                        if (idx === 0) return (sum >= 10);
+                        if (idx === 1) return (sum === 12);
+                        if (idx === 2) return (sum <= 8);
+                        return false;
+                    }
+                },
+                {
+                    title: "Triple Die Conundrum",
+                    question: "Roll three standard 6-sided dice. Analyze the complete sample space of 216 outcomes.",
+                    options: [
+                        { desc: "The sum of all three dice is exactly 10", cost: 10, reward: 90, best: true }, // EV = (27/216 * 90) - 10 = +1.25
+                        { desc: "The sum of all three dice is exactly 9", cost: 10, reward: 85, best: false },
+                        { desc: "The sum of all three dice is 5 or less", cost: 5, reward: 100, best: false }
+                    ],
+                    visualType: "triple_dice",
+                    rollCount: 3,
+                    explanation: "Sum of 10 yield 27 unique arrangements out of 216. Win probability P = 27/216 = 1/8 = 0.125. Expected Net value: E(A) = (0.125 * 90) - 10 = +1.25g.",
+                    latex: "E(\\text{Net}_A) = \\frac{27}{216}(90) - 10 = +1.25\\text{g} \\\\ E(\\text{Net}_B) = \\frac{25}{216}(85) - 10 = -0.16\\text{g} \\\\ E(\\text{Net}_C) = \\frac{10}{216}(100) - 5 = -0.37\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        const sum = rollVals[0] + rollVals[1] + rollVals[2];
+                        if (idx === 0) return (sum === 10);
+                        if (idx === 1) return (sum === 9);
+                        if (idx === 2) return (sum <= 5);
+                        return false;
+                    }
+                },
+                {
+                    title: "The Shuffled Satchels",
+                    question: "Bag X has 4 Gold and 1 Lead. Bag Y has 1 Gold and 4 Lead. Barnaby selects one at random, draws a Gold coin. Evaluate using Bayes' Theorem:",
+                    options: [
+                        { desc: "The selected bag is indeed Bag X", cost: 20, reward: 26, best: true }, // EV = (0.8 * 26) - 20 = +0.80
+                        { desc: "The selected bag is Bag Y", cost: 10, reward: 40, best: false },
+                        { desc: "The next draw from this bag is Gold", cost: 15, reward: 24, best: false }
+                    ],
+                    visualType: "coin",
+                    rollCount: 1,
+                    explanation: "By Bayes' Theorem, posterior probability P(X | Gold) = 0.80. Expected utility: E(A) = (0.80 * 26) - 20 = +0.80g. Option C has probability 0.60, leading to a negative expected return.",
+                    latex: "P(X|G) = \\frac{P(G|X)P(X)}{P(G)} = \\frac{0.8 \\times 0.5}{0.5} = 0.80 \\\\ E(\\text{Net}_A) = 0.80(26) - 20 = +0.80\\text{g} \\\\ E(\\text{Net}_B) = 0.20(40) - 10 = -2.00\\text{g} \\\\ E(\\text{Net}_C) = 0.60(24) - 15 = -0.60\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        const isBagX = Math.random() < 0.8;
+                        rollVals[0] = isBagX ? 'Bag X' : 'Bag Y';
+                        if (idx === 0) return isBagX;
+                        if (idx === 1) return !isBagX;
+                        if (idx === 2) {
+                            const pNextGold = isBagX ? 0.75 : 0;
+                            return Math.random() < pNextGold;
+                        }
+                        return false;
+                    }
+                },
+                {
+                    title: "The Double-Take Risk",
+                    question: "Roll a die. Reroll if 1st is <4, keeping the second. Target: get a score >= 4.",
+                    options: [
+                        { desc: "Succeed using this optimal strategy", cost: 15, reward: 21, best: true }, // EV = (0.75 * 21) - 15 = +0.75
+                        { desc: "Succeed but ALWAYS take the 2nd roll", cost: 10, reward: 18, best: false },
+                        { desc: "Succeed but NEVER take a second roll", cost: 12, reward: 22, best: false }
+                    ],
+                    visualType: "dice",
+                    rollCount: 2,
+                    explanation: "Under the optimal strategy, your total success probability P = 1/2 + 1/4 = 3/4. Expected utility is: E(A) = (0.75 * 21) - 15 = +0.75g.",
+                    latex: "E(\\text{Net}_A) = \\frac{3}{4}(21) - 15 = +0.75\\text{g} \\\\ E(\\text{Net}_B) = \\frac{1}{2}(18) - 10 = -1.00\\text{g} \\\\ E(\\text{Net}_C) = \\frac{1}{2}(22) - 12 = -1.00\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        const r1 = rollVals[0];
+                        const r2 = rollVals[1];
+                        if (idx === 0) {
+                            const finalScore = r1 >= 4 ? r1 : r2;
+                            return finalScore >= 4;
+                        }
+                        if (idx === 1) return r2 >= 4;
+                        if (idx === 2) return r1 >= 4;
+                        return false;
+                    }
+                },
+                {
+                    title: "The Grand Carousel",
+                    question: "Spin a 6-sided dial. If 3, 4, 5, or 6, flip a silver coin. Win if you survive dial and toss Heads.",
+                    options: [
+                        { desc: "Survive this sequence and get Heads", cost: 10, reward: 33, best: true }, // EV = (1/3 * 33) - 10 = +1.0
+                        { desc: "Win only if dial lands on 6 and Heads", cost: 5, reward: 54, best: false },
+                        { desc: "Toss two coins instead; get exactly one Heads", cost: 15, reward: 28, best: false }
+                    ],
+                    visualType: "spinner",
+                    rollCount: 2,
+                    explanation: "Survival sequence probability: P(Survival) * P(Heads) = 4/6 * 1/2 = 4/12 = 1/3. Expected Net Value: E(A) = (1/3 * 33) - 10 = +1.00g.",
+                    latex: "E(\\text{Net}_A) = \\frac{4}{12}(33) - 10 = +1.00\\text{g} \\\\ E(\\text{Net}_B) = \\frac{1}{12}(54) - 5 = -0.50\\text{g} \\\\ E(\\text{Net}_C) = \\frac{2}{4}(28) - 15 = -1.00\\text{g}",
+                    evaluate: (rollVals, idx) => {
+                        const dial = rollVals[0];
+                        const coin = rollVals[1];
+                        if (idx === 0) return (dial >= 3 && coin === 'H');
+                        if (idx === 1) return (dial === 6 && coin === 'H');
+                        if (idx === 2) {
+                            const c1 = Math.random() < 0.5 ? 'H' : 'T';
+                            const c2 = Math.random() < 0.5 ? 'H' : 'T';
+                            const hCount = (c1 === 'H' ? 1 : 0) + (c2 === 'H' ? 1 : 0);
+                            return hCount === 1;
+                        }
+                        return false;
+                    }
+                }
+            ]
+        }
+    ];
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                gameState: 'intro',
+                currentLevelIndex: 0,
+                currentRoundIndex: 0,
+                gold: 50,
+                selectedOptionIndex: null,
+                subRoundState: 'choose',
+                rolledValues: [],
+                roundWon: false,
+                levelHistory: [],
+                speechBubble: "Step closer! Study the options on my counter. Only one is worth your gold!",
+                barnabyMood: 'friendly',
+                goldPulse: false,
+                muted: false,
+                
+                // Sandbox state
+                sandboxConfig: {
+                    target: 'even',
+                    trials: 1000
+                },
+                sandboxResult: null
+            }
+        },
+        computed: {
+            currentRoundData() {
+                return levelsData[this.currentLevelIndex].rounds[this.currentRoundIndex];
+            },
+            currentLevelName() {
+                return levelsData[this.currentLevelIndex].levelName;
+            },
+            wiseBetsCount() {
+                return this.levelHistory.filter(r => r.pickedBest).length;
+            },
+            activeDiceCount() {
+                const type = this.currentRoundData.visualType;
+                if (type === 'dice' || type === 'conditional_dice') return 1;
+                if (type === 'double_dice') return 2;
+                if (type === 'triple_dice') return 3;
+                return 1;
+            },
+            activeCoinCount() {
+                const type = this.currentRoundData.visualType;
+                if (type === 'coin') return 1;
+                if (type === 'double_coin') return 2;
+                if (type === 'triple_coin') return 3;
+                return 1;
+            },
+            currentVisuals() {
+                return this.currentRoundData.visualType;
+            },
+            activeRoundDescription() {
+                if (this.subRoundState !== 'showOutcome') return '';
+                const choice = String.fromCharCode(65 + this.selectedOptionIndex);
+                return `You selected Wager ${choice} (${this.getShorthand(this.currentRoundData.options[this.selectedOptionIndex].desc)}). Given the outcome [ ${this.rolledValues.join(', ')} ], you ${this.roundWon ? 'secured the reward!' : 'lost your stake.'}`;
+            }
+        },
+        methods: {
+            toggleMute() {
+                this.muted = !this.muted;
+            },
+            startLevel(idx) {
+                this.currentLevelIndex = idx;
+                this.currentRoundIndex = 0;
+                this.gold = 50;
+                this.levelHistory = [];
+                this.gameState = 'play';
+                this.resetRoundState();
+                this.sayGreeting();
+            },
+            resetRoundState() {
+                this.selectedOptionIndex = null;
+                this.subRoundState = 'choose';
+                this.rolledValues = [];
+                this.roundWon = false;
+                this.barnabyMood = 'friendly';
+            },
+            sayGreeting() {
+                const greetings = [
+                    "Wager with wisdom, traveler! The dice are warm...",
+                    "A lively room! Let's see your probability calculations here.",
+                    "Ah, the backroom. Things get tricky now. No room for guessing!"
+                ];
+                this.speechBubble = greetings[this.currentLevelIndex];
+            },
+            
+            // Helper to generate visual clean medieval shorthand texts on cards
+            getShorthand(desc) {
+                // Strip complex text or return uppercase clean phrases
+                if (desc.toLowerCase().includes("not a 1")) return "Roll NOT 1";
+                if (desc.toLowerCase().includes("not a 5 or 6")) return "NOT 5 or 6";
+                if (desc.toLowerCase().includes("not an even")) return "NOT Even";
+                if (desc.toLowerCase().includes("even number")) return "Even Score";
+                if (desc.toLowerCase().includes("5 or a 6")) return "Score 5 or 6";
+                if (desc.toLowerCase().includes("exactly a 1")) return "Exactly 1";
+                if (desc.toLowerCase().includes("heads on a single")) return "Single Heads";
+                if (desc.toLowerCase().includes("two heads on two")) return "Double Heads";
+                if (desc.toLowerCase().includes("at least one tails")) return "At Least 1 Tails";
+                if (desc.toLowerCase().includes("roll a 6")) return "Roll a 6";
+                if (desc.toLowerCase().includes("1, 2, or 3")) return "Roll 1, 2, or 3";
+                if (desc.toLowerCase().includes("4 or 5")) return "Roll 4 or 5";
+                if (desc.toLowerCase().includes("sum is 10 or higher")) return "Sum ≥ 10";
+                if (desc.toLowerCase().includes("sum is exactly 7")) return "Sum = 7";
+                if (desc.toLowerCase().includes("sum is an odd")) return "Odd Sum";
+                
+                if (desc.toLowerCase().includes("both dice show the same")) return "Doubles";
+                if (desc.toLowerCase().includes("different values")) return "No Doubles";
+                if (desc.toLowerCase().includes("both dice show odd")) return "Both Odd";
+                if (desc.toLowerCase().includes("exactly two heads")) return "Exactly 2 Heads";
+                if (desc.toLowerCase().includes("all three coins show")) return "All Same Side";
+                if (desc.toLowerCase().includes("at least two heads")) return "≥ 2 Heads";
+                if (desc.toLowerCase().includes("greater than the second")) return "First > Second";
+                if (desc.toLowerCase().includes("sum of both rolls is exactly 8")) return "Sum = 8";
+                if (desc.toLowerCase().includes("both rolls are 4")) return "Both ≥ 4";
+                if (desc.toLowerCase().includes("both drawn gems are sapphire")) return "Double Sapphire";
+                if (desc.toLowerCase().includes("at least one drawn gem is an emerald")) return "≥ 1 Emerald";
+                if (desc.toLowerCase().includes("draw exactly one ruby")) return "1 Ruby & 1 Emerald";
+                if (desc.toLowerCase().includes("prime number")) return "Prime Score";
+                if (desc.toLowerCase().includes("multiple of 3")) return "Multiple of 3";
+                if (desc.toLowerCase().includes("perfect square")) return "Perfect Square";
+
+                if (desc.toLowerCase().includes("sum of both is 10 or more")) return "Sum ≥ 10";
+                if (desc.toLowerCase().includes("sum of both is exactly 12")) return "Sum = 12";
+                if (desc.toLowerCase().includes("sum of both is 8 or less")) return "Sum ≤ 8";
+                if (desc.toLowerCase().includes("all three dice is exactly 10")) return "Three-Sum = 10";
+                if (desc.toLowerCase().includes("all three dice is exactly 9")) return "Three-Sum = 9";
+                if (desc.toLowerCase().includes("all three dice is 5 or less")) return "Three-Sum ≤ 5";
+                if (desc.toLowerCase().includes("indeed bag x")) return "Bag X Choice";
+                if (desc.toLowerCase().includes("bag y")) return "Bag Y Choice";
+                if (desc.toLowerCase().includes("next draw from this bag")) return "Dependent Gold";
+                if (desc.toLowerCase().includes("optimal strategy")) return "Optimal Path";
+                if (desc.toLowerCase().includes("always take the 2nd")) return "Force Reroll";
+                if (desc.toLowerCase().includes("never take a second")) return "Stand Pat";
+                if (desc.toLowerCase().includes("survive this sequence")) return "Survive & Heads";
+                if (desc.toLowerCase().includes("dial lands on 6")) return "Dial 6 & Heads";
+                if (desc.toLowerCase().includes("toss two independent")) return "Exactly 1 Heads";
+
+                return desc;
+            },
+
+            // Dynamic Asset icon count helper for rendering
+            getAssetCount(idx) {
+                const type = this.currentRoundData.visualType;
+                // If it is Level 3 Bag wagers, we customize
+                if (this.currentRoundData.title === "The Shuffled Satchels") {
+                    return 1;
+                }
+                if (type.includes("double")) return 2;
+                if (type.includes("triple")) return 3;
+                return 1;
+            },
+
+            selectOption(idx) {
+                if (this.subRoundState !== 'choose') return;
+                this.selectedOptionIndex = idx;
+                if (!this.muted) Soundboard.playCoin();
+                
+                const isBest = this.currentRoundData.options[idx].best;
+                if (isBest) {
+                    this.speechBubble = "Hmph. Confident choice. Roll to see if destiny favors your logic!";
+                    this.barnabyMood = 'friendly';
+                } else {
+                    this.speechBubble = "Ah, a bold stake! Let's shake the bones and find out!";
+                    this.barnabyMood = 'smug';
+                }
+            },
+            rollWager() {
+                if (this.selectedOptionIndex === null) return;
+                const cost = this.currentRoundData.options[this.selectedOptionIndex].cost;
+                
+                if (this.gold < cost) {
+                    this.speechBubble = "You have insufficient copper! Ask for a loan to keep playing.";
+                    this.barnabyMood = 'smug';
+                    return;
+                }
+
+                this.gold -= cost;
+                this.triggerGoldPulse();
+                
+                this.subRoundState = 'rolling';
+                if (!this.muted) Soundboard.playDice();
+
+                setTimeout(() => {
+                    this.executeRealRoll();
+                }, 1200);
+            },
+            executeRealRoll() {
+                const type = this.currentRoundData.visualType;
+                let rolled = [];
+
+                if (type === 'dice' || type === 'double_dice' || type === 'triple_dice') {
+                    const count = this.activeDiceCount;
+                    for (let i = 0; i < count; i++) {
+                        rolled.push(Math.floor(Math.random() * 6) + 1);
+                    }
+                } else if (type === 'coin' || type === 'double_coin' || type === 'triple_coin') {
+                    const count = this.activeCoinCount;
+                    for (let i = 0; i < count; i++) {
+                        rolled.push(Math.random() < 0.5 ? 'H' : 'T');
+                    }
+                } else if (type === 'gems') {
+                    const originalBag = [
+                        'Ruby', 'Ruby', 'Ruby', 'Ruby', 'Ruby',
+                        'Sapphire', 'Sapphire', 'Sapphire',
+                        'Emerald', 'Emerald'
+                    ];
+                    const firstIdx = Math.floor(Math.random() * originalBag.length);
+                    const firstDraw = originalBag.splice(firstIdx, 1)[0];
+                    const secondIdx = Math.floor(Math.random() * originalBag.length);
+                    const secondDraw = originalBag[secondIdx];
+                    rolled = [firstDraw, secondDraw];
+                } else if (type === 'conditional_dice') {
+                    let r1 = 0, r2 = 0;
+                    while (r1 !== 6 && r2 !== 6) {
+                        r1 = Math.floor(Math.random() * 6) + 1;
+                        r2 = Math.floor(Math.random() * 6) + 1;
+                    }
+                    rolled = [r1, r2];
+                } else if (type === 'spinner') {
+                    const dial = Math.floor(Math.random() * 6) + 1;
+                    rolled.push(dial);
+                    if (dial >= 3) {
+                        rolled.push(Math.random() < 0.5 ? 'H' : 'T');
+                    }
+                }
+
+                if (this.currentRoundData.title === "Barnaby's Decahedron") {
+                    rolled = [Math.floor(Math.random() * 10) + 1];
+                }
+
+                this.rolledValues = rolled;
+                const chosenOption = this.currentRoundData.options[this.selectedOptionIndex];
+                this.roundWon = this.currentRoundData.evaluate(rolled, this.selectedOptionIndex);
+
+                let winnings = 0;
+                if (this.roundWon) {
+                    winnings = chosenOption.reward;
+                    this.gold += winnings;
+                    this.triggerGoldPulse();
+                    this.barnabyMood = 'shocked';
+                    this.speechBubble = "Incredible! The fortune was computed accurately. Take your copper.";
+                    if (!this.muted) Soundboard.playSuccess();
+                } else {
+                    this.barnabyMood = 'smug';
+                    this.speechBubble = "The layout is cruel, scholar! My stall keeps the gold this time.";
+                    if (!this.muted) Soundboard.playFailure();
+                }
+
+                this.levelHistory.push({
+                    roundTitle: this.currentRoundData.title,
+                    choiceIndex: this.selectedOptionIndex,
+                    pickedBest: chosenOption.best,
+                    actualResult: this.roundWon ? 'win' : 'lose',
+                    goldDelta: this.roundWon ? (winnings - chosenOption.cost) : -chosenOption.cost,
+                    explanationText: this.currentRoundData.explanation,
+                    latex: this.currentRoundData.latex
+                });
+
+                this.subRoundState = 'showOutcome';
+            },
+            advanceRound() {
+                if (this.currentRoundIndex < 4) {
+                    this.currentRoundIndex++;
+                    this.resetRoundState();
+                } else {
+                    this.gameState = 'ledger';
+                }
+            },
+            retryLevel() {
+                this.startLevel(this.currentLevelIndex);
+            },
+            advanceLevel() {
+                this.currentLevelIndex++;
+                this.startLevel(this.currentLevelIndex);
+            },
+            finishGame() {
+                this.gameState = 'intro';
+                this.speechBubble = "Incredible demonstration of probability principles! You cleared my stall.";
+            },
+            requestLoan() {
+                this.gold = 30;
+                this.speechBubble = "Flat broke? Here is 30g from my private purse. Manage the risk better!";
+                this.barnabyMood = 'smug';
+                this.triggerGoldPulse();
+                if (!this.muted) Soundboard.playCoin();
+            },
+            triggerGoldPulse() {
+                this.goldPulse = true;
+                setTimeout(() => {
+                    this.goldPulse = false;
+                }, 600);
+            },
+            renderLaTeX(latexString) {
+                try {
+                    return katex.renderToString(latexString, { displayMode: true, throwOnError: false });
+                } catch (e) {
+                    return latexString;
+                }
+            },
+            runSandboxSimulation() {
+                const target = this.sandboxConfig.target;
+                const trials = this.sandboxConfig.trials;
+                let wins = 0;
+                let theoretical = 0.0;
+
+                if (target === 'even') {
+                    theoretical = 50.0;
+                    for (let i = 0; i < trials; i++) {
+                        const roll = Math.floor(Math.random() * 6) + 1;
+                        if (roll % 2 === 0) wins++;
+                    }
+                } else if (target === 'six') {
+                    theoretical = 16.67;
+                    for (let i = 0; i < trials; i++) {
+                        const roll = Math.floor(Math.random() * 6) + 1;
+                        if (roll === 6) wins++;
+                    }
+                } else if (target === 'double6') {
+                    theoretical = 16.67;
+                    for (let i = 0; i < trials; i++) {
+                        const r1 = Math.floor(Math.random() * 6) + 1;
+                        const r2 = Math.floor(Math.random() * 6) + 1;
+                        if (r1 === r2) wins++;
+                    }
+                } else if (target === 'sum7') {
+                    theoretical = 16.67;
+                    for (let i = 0; i < trials; i++) {
+                        const r1 = Math.floor(Math.random() * 6) + 1;
+                        const r2 = Math.floor(Math.random() * 6) + 1;
+                        if (r1 + r2 === 7) wins++;
+                    }
+                } else if (target === 'prime10') {
+                    theoretical = 40.0;
+                    for (let i = 0; i < trials; i++) {
+                        const roll = Math.floor(Math.random() * 10) + 1;
+                        if ([2, 3, 5, 7].includes(roll)) wins++;
+                    }
+                }
+
+                const empiricalPercent = ((wins / trials) * 100).toFixed(2);
+                this.sandboxResult = {
+                    trials,
+                    wins,
+                    empiricalPercent,
+                    theoreticalPercent: theoretical
+                };
+            }
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>
