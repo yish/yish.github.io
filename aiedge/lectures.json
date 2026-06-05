@@ -35,4 +35,61 @@
     "image": "sayag.jpg",
     "video": "https://www.youtube.com/embed/WgRR6LWhkaA",
     "speaker": { "he": "מעיין סייג", "en": "Maayan Sayag", "ar": "معيان سياغ" },
-    "title": { "he": "הטמעה אתית ומקצועית של AI בחינוך", "en": "Ethical and Professional Implementation of AI", "ar
+    "title": { "he": "הטמעה אתית ומקצועית של AI בחינוך", "en": "Ethical and Professional Implementation of AI", "ar": "التنفيذ الأخلاقي والمهني للذكاء الاصطناعي" },
+    "abstract": { "he": "דיון על גישור בין האקדמיה לשטח לקידום מודלים פדגוגיים מבוססי בינה מלאכותית דוגמת <a href=\"https://sites.google.com/view/navon2tovana\" target=\"_blank\" class=\"text-indigo-600 hover:text-indigo-800 hover:underline font-medium\">מודל תובנה (נבו\"ן)</a>.", "en": "Discussion on bridging academia and the field to promote AI-based pedagogical models.", "ar": "مناقشة حول سد الفجوة بين الأوساط الأكاديمية والميدان لتعزيز النماذج التربوية." },
+    "bio": { "he": "מעיין סייג היא מובילת מו\"פ במכון למחקר יישומי של בינה מלאכותית בחינוך וחוקרת באוניברסיטה הפתוחה. עומדת בראש קהילת \"בינה מלאכותית בחינוך\" ומנחה את קהילת \"סוכני שינוי\" במכללת בית ברל." }
+  },
+  {
+    "id": 5,
+    "date": "26.5.2026",
+    "image": "leibovitz.jpg",
+    "video": "https://www.youtube.com/embed/zysHfTO_hgk",
+    "speaker": { "he": "לימור ליבוביץ", "en": "Limor Leibovich", "ar": "ليمور ليبوفيتش" },
+    "title": { "he": "קוד יפן: אנושיות ואנטי-שבירות בעידן ה-AI", "en": "Japan Code: Humanity and Anti-fragility in the AI Era", "ar": "رمز اليابان: الإنسانية ومكافحة الهشاشة في عصر الذكاء الاصطناعي" },
+    "abstract": { "he": "איך בונים חברה חסינה בעולם של בינה מלאכותית? מסע ויזואלי מרתק מטוקיו אל שאלות הממוקדות בעתיד החינוך והחברה בארץ ובעולם. בהרצאה נכיר את מודל האנטי-שבירות.", "en": "How do we build a resilient society in an AI world? A visual journey from Tokyo exploring the future of education and society.", "ar": "كيف نبني مجتمعاً مرناً في عالم الذكاء الاصطناعي؟ رحلة بصرية من طوكيو تستكشف مستقبل التعليم والمجتمع." },
+    "bio": { "he": "חוקרת חברה ועתיד החינוך, מפתחת מודל האנטי-שבירות מתוך הספר \"דור ה-AI\". מומחית לחינוך יצירתי, חדשנות פדגוגית ובינה מלאכותית בחינוך. בעשור האחרון פיתחתי קורסים דיגיטליים, ליוויתי מאות מורות ומורים, יזמתי תוכניות חינוכיות, כתבתי ספר, הרציתי בכנסים רבים, והובלתי בתי ספר בתהליכי שינוי עם מגוון מתודות של חדשנות, יזמות ויצירתיות." }
+  },
+  {
+    "id": 6,
+    "date": "2.6.2026",
+    "image": "filo.jpg",
+    "video": "https://www.youtube.com/embed/DFrDvBlmd_g",
+    "speaker": { "he": "יפעת פילו", "en": "Yifat Filo", "ar": "يفعات فيلو" },
+    "title": { "he": "מודל כשירויות הבינה המלאכותית", "en": "The AI Competency Model", "ar": "نموذج كفاءات الذكاء الاصطناعي" },
+    "abstract": { "he": "סקירת מודל הכשירויות המהווה תשתית מקצועית להטמעת טכנולוגיות קצה במערכת החינוך.<br><br><b>קישורים שימושיים:</b><br>• <a href=\"https://ai.education.gov.il/qualification/\" target=\"_blank\" class=\"text-indigo-600 hover:text-indigo-800 hover:underline font-medium\">אתר הכשירויות</a><br>• <a href=\"https://pop.education.gov.il/teaching-tools/ai-education/pedagogy-ai/\" target=\"_blank\" class=\"text-indigo-600 hover:text-indigo-800 hover:underline font-medium\">ערכה למורים</a>", "en": "Review of the competency model serving as professional infrastructure for adopting edge technologies.", "ar": "مراجعة لنموذج الكفاءات الذي يشكل بنية تحتية مهنية لتبني التقنيات المتقدمة." },
+    "bio": { "he": "יפעת פילו היא מדריכה פדגוגית במרכז הפסג\"ה ראש העין וחוקרת בינה מלאכותית באגף מו\"פ במשרד החינוך. מובילה את פיתוח מודל כשירויות הבינה המלאכותית של משרד החינוך." }
+  },
+  {
+    "id": 7,
+    "date": "9.6.2026",
+    "image": "meroz.jpg",
+    "speaker": { "he": "נעמה מרוז", "en": "Naama Meroz", "ar": "نعمة ميروز" },
+    "title": {
+      "he": "מהנדס 10X- הטמעת בינה מלאכותית במקצועות STEM",
+      "en": "10X Engineer - Implementing AI in STEM Subjects",
+      "ar": "مهندس 10X - دمج الذكاء الاصطناعي في مواد العلوم والتكنولوجيا والهندسة والرياضيات (STEM)"
+    },
+    "abstract": {
+      "he": [
+        "מה ההבדל בין הטמעת כשירות בינה מלאכותית בחינוך לבין הטמעת בינה מלאכותית במקצועות STEM?",
+        "איך נראה אירוע הערכה משולב בינה מלאכותית במקצועות STEM שמשנה את פני המקצוע כולו?",
+        "איך משתנה דמות הבוגר.ת?"
+      ],
+      "en": [
+        "What is the difference between implementing AI competency in education and implementing AI in STEM subjects?",
+        "What does an AI-integrated assessment event in STEM look like, one that changes the face of the entire profession?",
+        "How does the graduate's profile change?"
+      ],
+      "ar": [
+        "ما الفرق بين دمج كفاءة الذكاء الاصطناعي في التعليم ودمج الذكاء الاصطناعي في مواد العلوم والتكنولوجيا والهندسة والرياضيات (STEM)؟",
+        "كيف يبدو حدث التقييم المدمج بالذكاء الاصطناعي في مواد STEM والذي يغير وجه المهنة بأكملها؟",
+        "كيف يتغير ملف تعريف الخريج/ة؟"
+      ]
+    },
+    "bio": {
+      "he": "מובילת תחום בינה מלאכותית במינהל חדשנות וטכנולוגיה במשרד החינוך. אחראית על הטמעת בינה מלאכותית במגמות STEM ומנהלת התוכנית להקמת מגמת מדעי בינה מלאכותית.",
+      "en": "AI Lead at the Innovation and Technology Administration in the Ministry of Education. Responsible for implementing AI in STEM tracks and managing the program to establish the AI Sciences track.",
+      "ar": "رائدة مجال الذكاء الاصطناعي في إدارة الابتكار والتكنولوجيا بوزارة التربية والتعليم. مسؤولة عن دمج الذكاء الاصطناعي في تخصصات STEM وإدارة برنامج إنشاء تخصص علوم الذكاء الاصطناعي."
+    }
+  }
+]
