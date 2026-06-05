@@ -53,6 +53,7 @@
     "id": 6,
     "date": "2.6.2026",
     "image": "filo.jpg",
+    "video": "https://www.youtube.com/embed/DFrDvBlmd_g",
     "speaker": { "he": "יפעת פילו", "en": "Yifat Filo", "ar": "يفعات فيلو" },
     "title": { "he": "מודל כשירויות הבינה המלאכותית", "en": "The AI Competency Model", "ar": "نموذج كفاءات الذكاء الاصطناعي" },
     "abstract": { "he": "סקירת מודל הכשירויות המהווה תשתית מקצועית להטמעת טכנולוגיות קצה במערכת החינוך.", "en": "Review of the competency model serving as professional infrastructure for adopting edge technologies.", "ar": "مراجعة لنموذج الكفاءات الذي يشكل بنية تحتية مهنية لتبني التقنيات المتقدمة." },
