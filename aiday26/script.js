@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
             selectLang: "اللغة / Language:", selectTheme: "عرض الوضع:",
             registerBtn: "التسجيل في الفعالية", mainZoomBtn: "دخول الجلسة العامة (Zoom)",
             keynoteHeading: "المحاضرة الافتتاحية", workshopsHeading: "ورش العمل الاختيارية (15:30)",
-            groupsHeading: "مجموعات التوجيه والتدريب (17:00)", thHost: "الميسر",
+            groupsHeading: "مجموعات التوجيه والتدريب (17:00)", thHost: "مُوجِّه", // התיקון עודכן כאן
             thGroup: "المسار / المجموعة", thAction: "الرابط والاجتماع",
             modalTitle: "نموذج التسجيل لندوة الذكاء الاصطناعي", modalSub: "يرجى ملء تفاصيل التسجيل في النموذج أدناه:",
             visitZoom: "الانضمام إلى الغرفة &larr;", joinWorkshop: "الانضمام إلى زوم الورشة", datePrefix: "تاريخ الفعالية:"
