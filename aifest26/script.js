@@ -26,12 +26,18 @@ async function initSite() {
     }
 }
 
-// רינדור אזור הכותרת (Hero)
+// רינדור אזור הכותרת (Hero) והבלרב (אודות)
 function renderHero(eventData) {
     if (!eventData) return;
     document.getElementById('event-title').textContent = eventData.title || '';
     document.getElementById('event-date').textContent = eventData.date || '';
     document.getElementById('event-location').textContent = eventData.location || '';
+    
+    // תיקון: הזרקת הבלרב אל תוך כרטיס האודות בעמוד
+    const blurbContainer = document.getElementById('event-blurb');
+    if (blurbContainer) {
+        blurbContainer.innerHTML = eventData.blurb || '';
+    }
 }
 
 // רינדור הלו"ז (תוכנית האירוע) בסרגל הצדי
@@ -79,11 +85,15 @@ function renderCarousel() {
     projectsData.forEach(project => {
         const slide = document.createElement('div');
         slide.className = 'project-slide';
+        
+        // שליפת שם המרצה גם אם נשמר תחת מפתח עם שגיאת כתיב מהמקור במרוכז
+        const lecturerName = project.lecturer || project["נשם המרצה"] || 'חבר.ת קהילה';
+        
         slide.innerHTML = `
             <div>
-                <h3>${project.lecturer || project["נשם המרצה"] || 'מרצה'}</h3>
-                <div class="project-course">${project.course}</div>
-                <p class="project-brief">${project.brief}</p>
+                <h3>${lecturerName}</h3>
+                <div class="project-course">${project.course || ''}</div>
+                <p class="project-brief">${project.brief || ''}</p>
             </div>
             <span class="project-link" onclick="openProjectModal(${project.id})">קראו עוד קורסים פדגוגיים ←</span>
         `;
@@ -138,11 +148,13 @@ function openProjectModal(projectId) {
     const project = projectsData.find(p => p.id === projectId);
     if (!project) return;
     
+    const lecturerName = project.lecturer || project["נשם המרצה"] || 'חבר.ת קהילה';
+    
     const content = `
-        <h2>${project.lecturer || project["נשם המרצה"] || 'מרצה'}</h2>
-        <p style="color: #5f6368; margin-bottom: 15px;"><strong>קורס אקדמי:</strong> ${project.course}</p>
+        <h2>${lecturerName}</h2>
+        <p style="color: #5f6368; margin-bottom: 15px;"><strong>קורס אקדמי:</strong> ${project.course || ''}</p>
         <div style="line-height: 1.7; font-size: 1.1rem;">
-            ${project.full}
+            ${project.full || project.brief || ''}
         </div>
     `;
     openModal(content);
