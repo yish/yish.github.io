@@ -1,431 +1,174 @@
-:root {
-    --primary-color: #1a73e8;
-    --secondary-color: #34a853;
-    --dark-neutral: #202124;
-    --light-neutral: #f8f9fa;
-    --white: #ffffff;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --transition: all 0.3s ease;
-}
+// משתנים גלובליים לניהול הקרוסלה
+let currentSlide = 0;
+let projectsData = [];
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+// פונקציה ראשית להבאת הנתונים מקובץ ה-JSON
+async function initSite() {
+    try {
+        const response = await fetch('data.json');
+        if (!response.ok) {
+            throw new Error(`שגיאה בטעינת הקובץ: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        // שמירת פרויקטים למשתנה גלובלי
+        projectsData = data.projects || [];
 
-body {
-    font-family: 'Assistant', sans-serif;
-    background-color: #f1f3f4;
-    color: var(--dark-neutral);
-    line-height: 1.6;
-}
+        // רינדור רכיבי האתר
+        renderHero(data.event);
+        renderSchedule(data.schedule);
+        renderCommunity(data.community);
+        renderCarousel();
+        setupModalEvents();
 
-.container {
-    width: 95%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* Hero Section Layout with Inline Partners */
-.hero-section {
-    background: linear-gradient(135deg, #121824 0%, #1a233a 100%);
-    color: var(--white);
-    padding: 35px 0;
-    border-bottom: 4px solid var(--primary-color);
-    margin-bottom: 30px;
-}
-
-.hero-flex-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 30px;
-}
-
-.hero-text-area {
-    text-align: right;
-    flex: 1;
-}
-
-.hero-section h1 {
-    font-size: 2.1rem;
-    font-weight: 800;
-    margin-bottom: 8px;
-}
-
-.event-meta {
-    font-size: 1.05rem;
-    opacity: 0.9;
-}
-
-/* Redesigned Sponsors Box */
-.hero-partners-box {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 12px 20px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.partners-label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #dadce0;
-    opacity: 0.85;
-}
-
-.hero-logos-row {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.partner-link {
-    display: block;
-    transition: var(--transition);
-}
-
-/* Thin border divider inside the links, except for the last child */
-.hero-logos-row .partner-link:not(:last-child) {
-    padding-left: 15px;
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.partner-link:hover {
-    transform: translateY(-1px);
-    opacity: 0.9;
-}
-
-.partner-logo {
-    height: 32px; /* גובה אלגנטי וקומפקטי במיוחד */
-    width: auto;
-    max-width: 110px;
-    object-fit: contain;
-    display: block;
-}
-
-/* פילטר בהירות קל עבור לוגו צבעוני על רקע כהה במידת הצורך */
-.logo-brightness {
-    filter: drop-shadow(0px 1px 2px rgba(255,255,255,0.2));
-}
-
-/* Two-Column Layout (Blurb & Sidebar) */
-.main-content-layout {
-    display: flex;
-    gap: 25px;
-    margin-bottom: 30px;
-    align-items: flex-start;
-}
-
-.content-primary {
-    flex: 0 0 70%;
-    width: 70%;
-}
-
-.sidebar-schedule {
-    flex: 0 0 30%;
-    width: 30%;
-    position: sticky;
-    top: 20px;
-}
-
-/* Cards & Structural Boxes */
-.card {
-    background: var(--white);
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-    margin-bottom: 25px;
-}
-
-.blurb-card {
-    border-right: 6px solid var(--primary-color);
-}
-
-.community-box {
-    background: linear-gradient(to left, #e8f0fe, var(--white));
-    border: 1px solid #d2e3fc;
-}
-
-.community-box h2 {
-    color: var(--primary-color);
-    margin-bottom: 10px;
-}
-
-.schedule-card {
-    padding: 20px;
-}
-
-.btn {
-    background-color: var(--primary-color);
-    color: var(--white);
-    border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: var(--transition);
-}
-
-.btn:hover {
-    background-color: #1557b0;
-}
-
-/* Timeline / Sidebar Schedule */
-h2 {
-    margin-bottom: 15px;
-    font-weight: 800;
-    font-size: 1.5rem;
-}
-
-.timeline {
-    position: relative;
-    padding: 10px 0;
-}
-
-.timeline::before {
-    content: '';
-    position: absolute;
-    right: 10px;
-    top: 0;
-    width: 2px;
-    height: 100%;
-    background-color: #dadce0;
-}
-
-.timeline-item {
-    position: relative;
-    margin-bottom: 20px;
-    padding-right: 25px;
-}
-
-.timeline-dot {
-    position: absolute;
-    right: 4px;
-    top: 6px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background-color: var(--secondary-color);
-    border: 3px solid var(--white);
-    box-shadow: 0 0 0 2px rgba(52, 168, 83, 0.2);
-}
-
-.timeline-content {
-    background: var(--light-neutral);
-    padding: 12px 15px;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-}
-
-.timeline-time {
-    font-weight: 800;
-    color: var(--primary-color);
-    font-size: 0.95rem;
-}
-
-.timeline-title {
-    font-weight: 600;
-    font-size: 0.95rem;
-    margin: 3px 0;
-}
-
-.timeline-desc {
-    font-size: 0.85rem;
-    color: #5f6368;
-}
-
-/* Carousel Section Layout */
-.carousel-section {
-    margin-bottom: 45px;
-    margin-top: 20px;
-}
-
-.carousel-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.carousel-track-container {
-    overflow: hidden;
-    width: 100%;
-    padding: 10px 0;
-}
-
-.carousel-track {
-    display: flex;
-    gap: 20px;
-    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.project-slide {
-    flex: 0 0 calc(33.333% - 14px);
-    background: var(--white);
-    border-radius: 10px;
-    padding: 25px;
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-top: 4px solid var(--primary-color);
-}
-
-.project-slide h3 {
-    font-size: 1.15rem;
-    margin-bottom: 5px;
-}
-
-.project-course {
-    font-size: 0.9rem;
-    color: #5f6368;
-    margin-bottom: 10px;
-}
-
-.project-brief {
-    font-size: 0.9rem;
-    margin-bottom: 15px;
-    flex-grow: 1;
-}
-
-.project-link {
-    color: var(--primary-color);
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    align-self: flex-start;
-    font-size: 0.9rem;
-}
-
-.project-link:hover {
-    text-decoration: underline;
-}
-
-.carousel-btn {
-    background-color: var(--white);
-    border: 1px solid #dadce0;
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    z-index: 10;
-    box-shadow: var(--shadow);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-}
-
-.prev-btn { right: -22px; }
-.next-btn { left: -22px; }
-
-.carousel-btn:hover {
-    background-color: var(--light-neutral);
-}
-
-/* Footer Section */
-.main-footer {
-    background-color: var(--dark-neutral);
-    color: var(--white);
-    text-align: center;
-    padding: 20px 0;
-    margin-top: 20px;
-    font-size: 0.9rem;
-}
-
-/* Modal Popup Core */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(32, 33, 36, 0.6);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.modal.active {
-    display: flex;
-    opacity: 1;
-}
-
-.modal-content {
-    background-color: var(--white);
-    padding: 40px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 650px;
-    max-height: 85vh;
-    overflow-y: auto;
-    position: relative;
-    box-shadow: 0 12px 36px rgba(0,0,0,0.25);
-    transform: translateY(-20px);
-    transition: transform 0.3s ease;
-}
-
-.modal.active .modal-content {
-    transform: translateY(0);
-}
-
-.close-modal {
-    position: absolute;
-    top: 20px;
-    left: 25px;
-    font-size: 2rem;
-    cursor: pointer;
-    color: #5f6368;
-}
-
-.close-modal:hover {
-    color: var(--dark-neutral);
-}
-
-/* Mobile Responsiveness Viewports */
-@media (max-width: 900px) {
-    .hero-flex-container {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 20px;
+    } catch (error) {
+        console.error("שגיאה באתחול האתר:", error);
     }
-    .hero-partners-box {
-        align-self: stretch;
-        align-items: center;
-    }
-    .hero-logos-row {
-        justify-content: center;
-        width: 100%;
-    }
-    .main-content-layout {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .content-primary, .sidebar-schedule {
-        flex: 0 0 100%;
-        width: 100%;
-    }
-    .sidebar-schedule {
-        position: static;
-    }
-    .project-slide { flex: 0 0 calc(50% - 10px); }
 }
 
-@media (max-width: 600px) {
-    .project-slide { flex: 0 0 100%; }
-    .hero-section h1 { font-size: 1.6rem; }
-    .prev-btn { right: -10px; }
-    .next-btn { left: -10px; }
-    .modal-content { padding: 25px; }
-    .partner-logo { height: 28px; }
+// רינדור אזור הכותרת (Hero)
+function renderHero(eventData) {
+    if (!eventData) return;
+    document.getElementById('event-title').textContent = eventData.title || '';
+    document.getElementById('event-date').textContent = eventData.date || '';
+    document.getElementById('event-location').textContent = eventData.location || '';
 }
+
+// רינדור הלו"ז (תוכנית האירוע) בסרגל הצדי
+function renderSchedule(scheduleData) {
+    const timeline = document.getElementById('schedule-timeline');
+    if (!timeline || !scheduleData) return;
+    
+    timeline.innerHTML = ''; 
+    
+    scheduleData.forEach(item => {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'timeline-item';
+        itemEl.innerHTML = `
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <div class="timeline-time">${item.time}</div>
+                <div class="timeline-title">${item.title}</div>
+                ${item.desc ? `<div class="timeline-desc">${item.desc}</div>` : ''}
+            </div>
+        `;
+        timeline.appendChild(itemEl);
+    });
+}
+
+// רינדור תקציר הקהילה
+function renderCommunity(communityData) {
+    if (!communityData) return;
+    document.getElementById('community-brief').textContent = communityData.brief || '';
+    
+    const communityBtn = document.getElementById('read-more-community');
+    if (communityBtn) {
+        communityBtn.onclick = () => {
+            openModal(communityData.full || 'אין מידע נוסף');
+        };
+    }
+}
+
+// רינדור קרוסלת הפרויקטים
+function renderCarousel() {
+    const track = document.getElementById('carousel-track');
+    if (!track) return;
+    
+    track.innerHTML = '';
+    
+    projectsData.forEach(project => {
+        const slide = document.createElement('div');
+        slide.className = 'project-slide';
+        slide.innerHTML = `
+            <div>
+                <h3>${project.lecturer || project["נשם המרצה"] || 'מרצה'}</h3>
+                <div class="project-course">${project.course}</div>
+                <p class="project-brief">${project.brief}</p>
+            </div>
+            <span class="project-link" onclick="openProjectModal(${project.id})">קראו עוד קורסים פדגוגיים ←</span>
+        `;
+        track.appendChild(slide);
+    });
+    
+    updateCarouselPosition();
+}
+
+// ניווט בקרוסלה (חצים)
+function moveCarousel(direction) {
+    const track = document.getElementById('carousel-track');
+    if (!track || projectsData.length === 0) return;
+    
+    let visibleSlides = 3;
+    if (window.innerWidth <= 900) visibleSlides = 2;
+    if (window.innerWidth <= 600) visibleSlides = 1;
+    
+    const maxSlide = projectsData.length - visibleSlides;
+    
+    currentSlide += direction;
+    
+    if (currentSlide < 0) currentSlide = 0;
+    if (currentSlide > maxSlide) currentSlide = maxSlide;
+    
+    updateCarouselPosition();
+}
+
+function updateCarouselPosition() {
+    const track = document.getElementById('carousel-track');
+    if (!track || projectsData.length === 0) return;
+    
+    let slideWidth = 33.333; 
+    if (window.innerWidth <= 900) slideWidth = 50;
+    if (window.innerWidth <= 600) slideWidth = 100;
+    
+    const offset = currentSlide * slideWidth;
+    track.style.transform = `translateX(${offset}%)`;
+}
+
+// ניהול מודל (פופאפ)
+function openModal(htmlContent) {
+    const modal = document.getElementById('custom-modal');
+    const modalBody = document.getElementById('modal-body-content');
+    if (!modal || !modalBody) return;
+    
+    modalBody.innerHTML = htmlContent;
+    modal.classList.add('active');
+}
+
+function openProjectModal(projectId) {
+    const project = projectsData.find(p => p.id === projectId);
+    if (!project) return;
+    
+    const content = `
+        <h2>${project.lecturer || project["נשם המרצה"] || 'מרצה'}</h2>
+        <p style="color: #5f6368; margin-bottom: 15px;"><strong>קורס אקדמי:</strong> ${project.course}</p>
+        <div style="line-height: 1.7; font-size: 1.1rem;">
+            ${project.full}
+        </div>
+    `;
+    openModal(content);
+}
+
+function setupModalEvents() {
+    const modal = document.getElementById('custom-modal');
+    const closeBtn = document.getElementById('close-modal-btn');
+    if (!modal) return;
+    
+    if (closeBtn) {
+        closeBtn.onclick = () => modal.classList.remove('active');
+    }
+    
+    window.onclick = (event) => {
+        if (event.target === modal) {
+            modal.classList.remove('active');
+        }
+    };
+}
+
+// עדכון רספונסיבי לקרוסלה בשינוי מסך
+window.addEventListener('resize', () => {
+    currentSlide = 0;
+    updateCarouselPosition();
+});
+
+// הפעלת האתר ברגע שה-DOM מוכן
+document.addEventListener('DOMContentLoaded', initSite);
