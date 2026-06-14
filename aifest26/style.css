@@ -1,23 +1,291 @@
-/* Partners & Credits Section Styling */
+:root {
+    --primary-color: #1a73e8;
+    --secondary-color: #34a853;
+    --dark-neutral: #202124;
+    --light-neutral: #f8f9fa;
+    --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Assistant', sans-serif;
+    background-color: #f1f3f4;
+    color: var(--dark-neutral);
+    line-height: 1.6;
+}
+
+.container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #121824 0%, #1a233a 100%);
+    color: var(--white);
+    padding: 50px 0;
+    text-align: center;
+    border-bottom: 4px solid var(--primary-color);
+    margin-bottom: 30px;
+}
+
+.hero-section h1 {
+    font-size: 2.3rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.event-meta {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Two-Column Layout (Blurb & Sidebar) */
+.main-content-layout {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 30px;
+    align-items: flex-start;
+}
+
+.content-primary {
+    flex: 0 0 70%;
+    width: 70%;
+}
+
+.sidebar-schedule {
+    flex: 0 0 30%;
+    width: 30%;
+    position: sticky;
+    top: 20px;
+}
+
+/* Cards & Structural Boxes */
+.card {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 25px;
+}
+
+.blurb-card {
+    border-right: 6px solid var(--primary-color);
+}
+
+.community-box {
+    background: linear-gradient(to left, #e8f0fe, var(--white));
+    border: 1px solid #d2e3fc;
+}
+
+.community-box h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.schedule-card {
+    padding: 20px;
+}
+
+.btn {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: var(--transition);
+}
+
+.btn:hover {
+    background-color: #1557b0;
+}
+
+/* Timeline / Sidebar Schedule */
+h2 {
+    margin-bottom: 15px;
+    font-weight: 800;
+    font-size: 1.6rem;
+}
+
+.timeline {
+    position: relative;
+    padding: 10px 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background-color: #dadce0;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+    padding-right: 25px;
+}
+
+.timeline-dot {
+    position: absolute;
+    right: 4px;
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+    border: 3px solid var(--white);
+    box-shadow: 0 0 0 2px rgba(52, 168, 83, 0.2);
+}
+
+.timeline-content {
+    background: var(--light-neutral);
+    padding: 12px 15px;
+    border-radius: 8px;
+    box-shadow: none;
+    border: 1px solid #e0e0e0;
+}
+
+.timeline-time {
+    font-weight: 800;
+    color: var(--primary-color);
+    font-size: 0.95rem;
+}
+
+.timeline-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin: 3px 0;
+}
+
+.timeline-desc {
+    font-size: 0.85rem;
+    color: #5f6368;
+}
+
+/* Carousel Section Layout */
+.carousel-section {
+    margin-bottom: 45px;
+    margin-top: 20px;
+}
+
+.carousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.carousel-track-container {
+    overflow: hidden;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.project-slide {
+    flex: 0 0 calc(33.333% - 14px);
+    background: var(--white);
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-top: 4px solid var(--primary-color);
+}
+
+.project-slide h3 {
+    font-size: 1.15rem;
+    margin-bottom: 5px;
+}
+
+.project-course {
+    font-size: 0.9rem;
+    color: #5f6368;
+    margin-bottom: 10px;
+}
+
+.project-brief {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+.project-link {
+    color: var(--primary-color);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    align-self: flex-start;
+    font-size: 0.9rem;
+}
+
+.project-link:hover {
+    text-decoration: underline;
+}
+
+.carousel-btn {
+    background-color: var(--white);
+    border: 1px solid #dadce0;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+}
+
+.prev-btn { right: -22px; }
+.next-btn { left: -22px; }
+
+.carousel-btn:hover {
+    background-color: var(--light-neutral);
+}
+
+/* Partners Section & Strict Logo Dimensions */
 .partners-section {
     text-align: center;
-    margin: 50px 0 30px 0;
-    padding-top: 30px;
+    margin: 40px 0 20px 0;
+    padding-top: 25px;
     border-top: 1px solid #dadce0;
 }
 
 .partners-credit {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     color: #5f6368;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .partners-logos {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 40px;
+    gap: 35px;
     flex-wrap: wrap;
 }
 
@@ -27,33 +295,101 @@
 }
 
 .partner-link:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     opacity: 0.85;
 }
 
 .partner-logo {
-    max-height: 70px;
-    width: auto;
+    height: 45px;          /* גובה קבוע מוגדר היטב למניעת השתלטות ויזואלית */
+    width: auto;           /* שמירה על פרופורציות מקוריות של הקובץ */
+    max-width: 160px;      /* הגבלת רוחב מקסימלי למניעת מתיחה */
     object-fit: contain;
-    /* פילטר עדין למקרה שהלוגו המקורי אינו בעל רקע שקוף לחלוטין */
-    border-radius: 4px;
+    display: block;
 }
 
-/* Footer adjustment */
+/* Footer Section */
 .main-footer {
     background-color: var(--dark-neutral);
     color: var(--white);
     text-align: center;
     padding: 20px 0;
     margin-top: 20px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+}
+
+/* Modal Popup Core */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(32, 33, 36, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 650px;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.25);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    left: 25px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #5f6368;
+}
+
+.close-modal:hover {
+    color: var(--dark-neutral);
+}
+
+/* Mobile Responsiveness Viewports */
+@media (max-width: 900px) {
+    .main-content-layout {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .content-primary, .sidebar-schedule {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+    .sidebar-schedule {
+        position: static;
+    }
+    .project-slide { flex: 0 0 calc(50% - 10px); }
 }
 
 @media (max-width: 600px) {
-    .partners-logos {
-        gap: 25px;
-    }
-    .partner-logo {
-        max-height: 55px;
-    }
+    .project-slide { flex: 0 0 100%; }
+    .hero-section h1 { font-size: 1.7rem; }
+    .prev-btn { right: -10px; }
+    .next-btn { left: -10px; }
+    .modal-content { padding: 25px; }
+    .partner-logo { height: 38px; }
 }
