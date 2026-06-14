@@ -1,1 +1,70 @@
 
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פסטיבל בינה מלאכותית 2026</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="hero-section">
+        <div class="container">
+            <h1 id="event-title">טוען כותרת...</h1>
+            <p class="event-meta"><span id="event-date"></span> | <span id="event-location"></span></p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <!-- Blurb Section -->
+        <section class="card blurb-card">
+            <h2>אודות הפסטיבל</h2>
+            <p id="event-blurb">טוען תוכן...</p>
+        </section>
+
+        <!-- Community Section Inside a Distinct Highlight Box -->
+        <section class="card community-box">
+            <h2>קהילת סוכני שינוי</h2>
+            <p id="community-brief">טוען תקציר קהילה...</p>
+            <button class="btn" id="read-more-community">קראו עוד..</button>
+        </section>
+
+        <!-- Schedule Section -->
+        <section class="schedule-section">
+            <h2>תוכנית האירוע</h2>
+            <div id="schedule-timeline" class="timeline"></div>
+        </section>
+
+        <!-- Projects Carousel Section -->
+        <section class="carousel-section">
+            <h2>פרויקטים של חברי הקהילה</h2>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn prev-btn" onclick="moveCarousel(-1)">&#10095;</button>
+                <div class="carousel-track-container">
+                    <div id="carousel-track" class="carousel-track"></div>
+                </div>
+                <button class="carousel-btn next-btn" onclick="moveCarousel(1)">&#10094;</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <p>פסטיבל בינה מלאכותית 2026 | המכללה האקדמית בית ברל</p>
+    </footer>
+
+    <!-- Universal Popup Component Modal -->
+    <div id="custom-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal-btn">&times;</span>
+            <div id="modal-body-content"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
