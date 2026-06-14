@@ -1,143 +1,431 @@
-let appData = {};
-let currentSlideIndex = 0;
-
-document.addEventListener("DOMContentLoaded", () => {
-    // Graceful asynchronous fetch handling local asset resources safely
-    fetch('data.json')
-        .then(response => response.json())
-        .then(data => {
-            appData = data;
-            initializeSite();
-        })
-        .catch(error => console.error('Error importing dataset structure:', error));
-
-    // Modal Lifecycle Listeners
-    const modal = document.getElementById('custom-modal');
-    const closeBtn = document.getElementById('close-modal-btn');
-    
-    closeBtn.addEventListener('click', closeModal);
-    window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-});
-
-function initializeSite() {
-    // Populate Core Meta Elements
-    document.getElementById('event-title').innerText = appData.event.title;
-    document.getElementById('event-date').innerText = appData.event.date;
-    document.getElementById('event-location').innerText = appData.event.location;
-    document.getElementById('event-blurb').innerHTML = appData.event.blurb;
-
-    // Populate Community Highlight Box Elements
-    document.getElementById('community-brief').innerText = appData.community.brief;
-    document.getElementById('read-more-community').addEventListener('click', openCommunityModal);
-
-    // Build Chronological Event Schedule Timeline Nodes
-    const scheduleTimeline = document.getElementById('schedule-timeline');
-    appData.schedule.forEach(item => {
-        const itemHtml = `
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <div class="timeline-time">${item.time}</div>
-                    <div class="timeline-title">${item.title}</div>
-                    ${item.desc ? `<p class="timeline-desc">${item.desc}</p>` : ''}
-                </div>
-            </div>
-        `;
-        scheduleTimeline.insertAdjacentHTML('beforeend', itemHtml);
-    });
-
-    // Populate Dynamic Project Slides Inside Track Elements
-    const carouselTrack = document.getElementById('carousel-track');
-    appData.projects.forEach((proj, idx) => {
-        const slideHtml = `
-            <div class="project-slide">
-                <div>
-                    <h3>${proj.lecturer}</h3>
-                    <div class="project-course">${proj.course}</div>
-                    <p class="project-brief">${proj.brief}</p>
-                </div>
-                <span class="project-link" onclick="openProjectModal(${idx})">קראו עוד קצת..</span>
-            </div>
-        `;
-        carouselTrack.insertAdjacentHTML('beforeend', slideHtml);
-    });
-    
-    updateCarouselPosition();
+:root {
+    --primary-color: #1a73e8;
+    --secondary-color: #34a853;
+    --dark-neutral: #202124;
+    --light-neutral: #f8f9fa;
+    --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease;
 }
 
-/* Modal Routing Controls */
-function openModal(contentHtml) {
-    const modal = document.getElementById('custom-modal');
-    document.getElementById('modal-body-content').innerHTML = contentHtml;
-    modal.style.display = 'flex';
-    setTimeout(() => modal.classList.add('active'), 10);
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-function closeModal() {
-    const modal = document.getElementById('custom-modal');
-    modal.classList.remove('active');
-    setTimeout(() => modal.style.display = 'none', 300);
+body {
+    font-family: 'Assistant', sans-serif;
+    background-color: #f1f3f4;
+    color: var(--dark-neutral);
+    line-height: 1.6;
 }
 
-function openCommunityModal() {
-    const content = `
-        <h2>קהילת סוכני שינוי</h2>
-        <p style="font-weight:600; margin-top:10px; color:var(--primary-color);">${appData.community.brief}</p>
-        <hr style="margin:15px 0; border:0; border-top:1px solid #dadce0;">
-        <div>${appData.community.full}</div>
-    `;
-    openModal(content);
+.container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-function openProjectModal(index) {
-    const proj = appData.projects[index];
-    const tagsHtml = proj.tags.map(t => `<span style="background:#e8f0fe; color:var(--primary-color); padding:4px 8px; border-radius:4px; font-size:0.85rem; font-weight:600; margin-left:6px;">${t}</span>`).join('');
-    
-    const content = `
-        <h2>${proj.lecturer}</h2>
-        <p style="font-size:1.1rem; color:#5f6368; margin-bottom:5px;"><strong>קורס:</strong> ${proj.course}</p>
-        <div style="margin-bottom:15px;">${tagsHtml}</div>
-        <hr style="margin:15px 0; border:0; border-top:1px solid #dadce0;">
-        <h4 style="margin-bottom:5px; font-weight:800;">תקציר היוזמה:</h4>
-        <p>${proj.brief}</p>
-        <h4 style="margin-bottom:5px; font-weight:800;">פירוט הפרויקט והחדשנות:</h4>
-        <p>${proj.full}</p>
-    `;
-    openModal(content);
+/* Hero Section Layout with Inline Partners */
+.hero-section {
+    background: linear-gradient(135deg, #121824 0%, #1a233a 100%);
+    color: var(--white);
+    padding: 35px 0;
+    border-bottom: 4px solid var(--primary-color);
+    margin-bottom: 30px;
 }
 
-/* Sliding Carousel Controls */
-function getVisibleSlidesCount() {
-    if (window.innerWidth <= 600) return 1;
-    if (window.innerWidth <= 900) return 2;
-    return 3;
+.hero-flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
 }
 
-function moveCarousel(direction) {
-    const totalSlides = appData.projects.length;
-    const visibleSlides = getVisibleSlidesCount();
-    const maxIndex = totalSlides - visibleSlides;
-
-    currentSlideIndex += direction;
-
-    // Boundary constraints safeguarding loops smoothly
-    if (currentSlideIndex < 0) currentSlideIndex = 0;
-    if (currentSlideIndex > maxIndex) currentSlideIndex = maxIndex;
-
-    updateCarouselPosition();
+.hero-text-area {
+    text-align: right;
+    flex: 1;
 }
 
-function updateCarouselPosition() {
-    const track = document.getElementById('carousel-track');
-    if (!track || !track.firstElementChild) return;
-    
-    const slideWidth = track.firstElementChild.getBoundingClientRect().width;
-    const gap = 20; 
-    
-    // Smooth transformations working uniformly across RTL platforms
-    const amountToMove = currentSlideIndex * (slideWidth + gap);
-    track.style.transform = `translateX(${amountToMove}px)`;
+.hero-section h1 {
+    font-size: 2.1rem;
+    font-weight: 800;
+    margin-bottom: 8px;
 }
 
-// Ensure resize events re-evaluate container layout cleanly
-window.addEventListener('resize', updateCarouselPosition);
+.event-meta {
+    font-size: 1.05rem;
+    opacity: 0.9;
+}
+
+/* Redesigned Sponsors Box */
+.hero-partners-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.partners-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #dadce0;
+    opacity: 0.85;
+}
+
+.hero-logos-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.partner-link {
+    display: block;
+    transition: var(--transition);
+}
+
+/* Thin border divider inside the links, except for the last child */
+.hero-logos-row .partner-link:not(:last-child) {
+    padding-left: 15px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.partner-link:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+
+.partner-logo {
+    height: 32px; /* גובה אלגנטי וקומפקטי במיוחד */
+    width: auto;
+    max-width: 110px;
+    object-fit: contain;
+    display: block;
+}
+
+/* פילטר בהירות קל עבור לוגו צבעוני על רקע כהה במידת הצורך */
+.logo-brightness {
+    filter: drop-shadow(0px 1px 2px rgba(255,255,255,0.2));
+}
+
+/* Two-Column Layout (Blurb & Sidebar) */
+.main-content-layout {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 30px;
+    align-items: flex-start;
+}
+
+.content-primary {
+    flex: 0 0 70%;
+    width: 70%;
+}
+
+.sidebar-schedule {
+    flex: 0 0 30%;
+    width: 30%;
+    position: sticky;
+    top: 20px;
+}
+
+/* Cards & Structural Boxes */
+.card {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 25px;
+}
+
+.blurb-card {
+    border-right: 6px solid var(--primary-color);
+}
+
+.community-box {
+    background: linear-gradient(to left, #e8f0fe, var(--white));
+    border: 1px solid #d2e3fc;
+}
+
+.community-box h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.schedule-card {
+    padding: 20px;
+}
+
+.btn {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: var(--transition);
+}
+
+.btn:hover {
+    background-color: #1557b0;
+}
+
+/* Timeline / Sidebar Schedule */
+h2 {
+    margin-bottom: 15px;
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+
+.timeline {
+    position: relative;
+    padding: 10px 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background-color: #dadce0;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+    padding-right: 25px;
+}
+
+.timeline-dot {
+    position: absolute;
+    right: 4px;
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+    border: 3px solid var(--white);
+    box-shadow: 0 0 0 2px rgba(52, 168, 83, 0.2);
+}
+
+.timeline-content {
+    background: var(--light-neutral);
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.timeline-time {
+    font-weight: 800;
+    color: var(--primary-color);
+    font-size: 0.95rem;
+}
+
+.timeline-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin: 3px 0;
+}
+
+.timeline-desc {
+    font-size: 0.85rem;
+    color: #5f6368;
+}
+
+/* Carousel Section Layout */
+.carousel-section {
+    margin-bottom: 45px;
+    margin-top: 20px;
+}
+
+.carousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.carousel-track-container {
+    overflow: hidden;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.project-slide {
+    flex: 0 0 calc(33.333% - 14px);
+    background: var(--white);
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-top: 4px solid var(--primary-color);
+}
+
+.project-slide h3 {
+    font-size: 1.15rem;
+    margin-bottom: 5px;
+}
+
+.project-course {
+    font-size: 0.9rem;
+    color: #5f6368;
+    margin-bottom: 10px;
+}
+
+.project-brief {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+.project-link {
+    color: var(--primary-color);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    align-self: flex-start;
+    font-size: 0.9rem;
+}
+
+.project-link:hover {
+    text-decoration: underline;
+}
+
+.carousel-btn {
+    background-color: var(--white);
+    border: 1px solid #dadce0;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+}
+
+.prev-btn { right: -22px; }
+.next-btn { left: -22px; }
+
+.carousel-btn:hover {
+    background-color: var(--light-neutral);
+}
+
+/* Footer Section */
+.main-footer {
+    background-color: var(--dark-neutral);
+    color: var(--white);
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+/* Modal Popup Core */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(32, 33, 36, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 650px;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.25);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    left: 25px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #5f6368;
+}
+
+.close-modal:hover {
+    color: var(--dark-neutral);
+}
+
+/* Mobile Responsiveness Viewports */
+@media (max-width: 900px) {
+    .hero-flex-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    .hero-partners-box {
+        align-self: stretch;
+        align-items: center;
+    }
+    .hero-logos-row {
+        justify-content: center;
+        width: 100%;
+    }
+    .main-content-layout {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .content-primary, .sidebar-schedule {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+    .sidebar-schedule {
+        position: static;
+    }
+    .project-slide { flex: 0 0 calc(50% - 10px); }
+}
+
+@media (max-width: 600px) {
+    .project-slide { flex: 0 0 100%; }
+    .hero-section h1 { font-size: 1.6rem; }
+    .prev-btn { right: -10px; }
+    .next-btn { left: -10px; }
+    .modal-content { padding: 25px; }
+    .partner-logo { height: 28px; }
+}
