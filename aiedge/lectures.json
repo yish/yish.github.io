@@ -64,6 +64,7 @@
     "date": "9.6.2026",
     "image": "meroz.jpg",
     "speaker": { "he": "נעמה מרוז", "en": "Naama Meroz", "ar": "نعمة ميروز" },
+    "video": "https://www.youtube.com/embed/bnWxZU4_Lj4",
     "title": {
       "he": "מהנדס 10X- הטמעת בינה מלאכותית במקצועות STEM",
       "en": "10X Engineer - Implementing AI in STEM Subjects",
