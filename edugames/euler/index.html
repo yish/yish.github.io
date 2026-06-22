@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" class="transition-colors duration-350">
 <head>
@@ -19,8 +18,12 @@
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
 
-  <!-- Custom animations and scrollbar tweaks -->
-  <style>
+  <!-- ================================================================= -->
+  <!-- 1. SEPARATED CSS (Copy this section into "styles.css")            -->
+  <!-- ================================================================= -->
+  <!-- On your GitHub Pages, you can uncomment the line below:           -->
+  <!-- <link rel="stylesheet" href="styles.css"> -->
+  <style id="custom-styles">
     @keyframes spinSlow {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
@@ -92,11 +95,9 @@
         class="p-2 rounded-lg border transition-all duration-300 bg-white border-slate-200 text-indigo-600 hover:bg-slate-50 shadow-sm dark:bg-slate-900 dark:border-slate-800 dark:text-amber-400 dark:hover:text-amber-300"
         aria-label="Toggle theme mode"
       >
-        <!-- Moon Icon (Visible when light mode is loaded) -->
         <svg id="moon-icon" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
         </svg>
-        <!-- Sun Icon (Hidden by default, shown in dark mode) -->
         <svg id="sun-icon" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
@@ -111,7 +112,7 @@
     <div id="story-tab-content" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       
       <!-- LEFT COLUMN: GRAPH VISUALIZER -->
-      <section class="lg:col-span-7 flex flex-col gap-4">
+      <section class="lg:col-span-9 flex flex-col gap-4">
         
         <!-- Narrator Box -->
         <div id="narrator-box" class="relative overflow-hidden bg-gradient-to-r from-white to-indigo-50/50 dark:from-slate-900 dark:to-indigo-950 border border-indigo-200 dark:border-indigo-500/30 rounded-xl p-4 shadow-md dark:shadow-xl transition-all">
@@ -137,10 +138,8 @@
         <!-- SVG Visual Workspace -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center relative shadow-md dark:shadow-2xl overflow-hidden min-h-[460px] transition-colors">
           
-          <!-- Radial Backdrop Grid -->
           <div id="radial-grid" class="absolute inset-0 [background-size:24px_24px] opacity-40 transition-all"></div>
           
-          <!-- Top Overlay HUD -->
           <div class="absolute top-3 left-4 flex gap-2 z-10">
             <span id="hud-id" class="text-[10px] md:text-xs font-mono px-2 py-1 rounded bg-slate-50 border border-slate-200 dark:bg-slate-950 dark:border-indigo-950/80 text-indigo-600 dark:text-indigo-400">
               ID: LC-102
@@ -150,7 +149,6 @@
             </span>
           </div>
 
-          <!-- Tutor switch -->
           <div class="absolute top-3 right-4 z-10">
             <button 
               onclick="toggleTutorMode()" 
@@ -161,7 +159,6 @@
             </button>
           </div>
 
-          <!-- SVG Drawboard -->
           <div class="w-full max-w-md aspect-square relative z-10 mt-4">
             <svg id="story-svg" class="w-full h-full" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
               <defs>
@@ -187,21 +184,68 @@
                   </feMerge>
                 </filter>
               </defs>
-              <!-- Populated programmatically -->
             </svg>
           </div>
 
-          <!-- Interaction Alerts overlay -->
+          <!-- FLOATING COLLAPSIBLE TELEMETRY PANEL -->
+          <div id="telemetry-floating-panel" onclick="event.stopPropagation()" class="absolute bottom-3 right-4 z-20 w-60 md:w-64 bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl flex flex-col transition-all duration-300 max-h-[85%] text-[10px]">
+            <!-- Header Collapse Toggle -->
+            <div onclick="toggleTelemetryCollapse()" class="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-950 rounded-t-xl cursor-pointer border-b border-slate-200 dark:border-slate-800 select-none">
+              <span class="font-mono font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+                🛰️ Telemetry
+              </span>
+              <span id="telemetry-toggle-icon" class="font-mono text-slate-400 hover:text-indigo-500 transition-colors">
+                [−]
+              </span>
+            </div>
+            <!-- Collapsible Body Content -->
+            <div id="telemetry-floating-body" class="p-2 space-y-2 overflow-y-auto">
+              <div class="grid grid-cols-2 gap-1.5">
+                <div class="bg-slate-50 dark:bg-slate-950 p-1.5 rounded border border-slate-200 dark:border-slate-800/80">
+                  <span class="text-slate-500 text-[8px] block font-mono uppercase">Target</span>
+                  <span class="font-bold capitalize flex items-center gap-1 mt-0.5 text-[10px]">
+                    <span id="level-target-dot" class="h-1.5 w-1.5 rounded-full"></span>
+                    <span id="level-target-text">Euler path</span>
+                  </span>
+                </div>
+                <div class="bg-slate-50 dark:bg-slate-950 p-1.5 rounded border border-slate-200 dark:border-slate-800/80">
+                  <span class="text-slate-500 text-[8px] block font-mono uppercase">Progress</span>
+                  <span id="weaving-progress-text" class="font-bold font-mono block mt-0.5 text-[10px]">
+                    0/4 lines
+                  </span>
+                </div>
+              </div>
+
+              <div class="overflow-hidden border border-slate-200 dark:border-slate-800 rounded-lg">
+                <table class="w-full text-left text-[9px] font-mono">
+                  <thead class="bg-slate-100 text-slate-600 dark:bg-slate-950 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
+                    <tr>
+                      <th class="p-1">Node</th>
+                      <th class="p-1 text-center">Deg</th>
+                      <th class="p-1 text-center">Par</th>
+                      <th class="p-1 text-right">Rem</th>
+                    </tr>
+                  </thead>
+                  <tbody id="telemetry-table-body" class="divide-y divide-slate-200 dark:divide-slate-800/60">
+                  </tbody>
+                </table>
+              </div>
+
+              <div id="theorem-text-analysis" class="p-1.5 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-indigo-950/60 text-[9px] text-slate-600 dark:text-slate-400 leading-snug">
+                Detecting grid parity matrices...
+              </div>
+            </div>
+          </div>
+
           <div class="absolute bottom-4 left-4 right-4 text-center">
             <div id="story-alert-container"></div>
           </div>
         </div>
 
-        <!-- Foot controls -->
         <div class="flex justify-between items-center bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 transition-colors shadow-sm">
           <div class="flex gap-2">
             <button onclick="resetStoryLevel()" class="px-3 py-1.5 text-xs font-mono rounded border transition-colors bg-slate-100 dark:bg-slate-950 hover:bg-slate-200 dark:hover:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300">
-              🔄 Clear Current Path
+              🔄 Clear Grid
             </button>
             <button onclick="undoStoryStep()" id="story-undo-btn" class="px-3 py-1.5 text-xs font-mono rounded border transition-colors bg-slate-100 dark:bg-slate-950 hover:bg-slate-200 dark:hover:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300">
               ↩ Undo Step
@@ -214,67 +258,14 @@
 
       </section>
 
-      <!-- RIGHT COLUMN: TELEMETRY DIAGNOSTICS -->
-      <section class="lg:col-span-5 flex flex-col gap-6">
+      <!-- RIGHT COLUMN: LEVEL SELECTOR -->
+      <section class="lg:col-span-3 flex flex-col gap-6">
         
-        <!-- Sector Diagnostics Panel -->
-        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-md dark:shadow-xl transition-colors">
-          <h3 class="text-sm font-mono text-indigo-600 dark:text-indigo-300 uppercase tracking-wider mb-4 pb-2 border-b border-indigo-100 dark:border-indigo-950/60 font-semibold">
-            🛰️ Sector Diagnostic Telemetry
-          </h3>
-          
-          <div class="grid grid-cols-2 gap-4 mb-5">
-            <div class="bg-slate-50 dark:bg-slate-950 p-3 rounded-lg border border-slate-200 dark:border-slate-800/80">
-              <span class="text-slate-500 text-[10px] block font-mono uppercase">Level Target</span>
-              <span class="text-base font-bold capitalize flex items-center gap-1.5 mt-0.5">
-                <span id="level-target-dot" class="h-2.5 w-2.5 rounded-full"></span>
-                <span id="level-target-text">Euler path</span>
-              </span>
-            </div>
-            <div class="bg-slate-50 dark:bg-slate-950 p-3 rounded-lg border border-slate-200 dark:border-slate-800/80">
-              <span class="text-slate-500 text-[10px] block font-mono uppercase">Weaving Progress</span>
-              <span id="weaving-progress-text" class="text-base font-bold font-mono block mt-0.5">
-                0 / 4 Conduits
-              </span>
-            </div>
-          </div>
-
-          <div class="space-y-3">
-            <h4 class="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              Node Connection Degrees (Euler Theorem proof)
-            </h4>
-            
-            <div class="overflow-hidden border border-slate-200 dark:border-slate-800 rounded-lg">
-              <table class="w-full text-left text-xs font-mono">
-                <thead class="bg-slate-100 text-slate-600 dark:bg-slate-950 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
-                  <tr>
-                    <th class="p-2">Node Name</th>
-                    <th class="p-2 text-center">Degree</th>
-                    <th class="p-2 text-center">Parity</th>
-                    <th class="p-2 text-right">Remaining</th>
-                  </tr>
-                </thead>
-                <tbody id="telemetry-table-body" class="divide-y divide-slate-200 dark:divide-slate-800/60">
-                  <!-- Injected programmatically -->
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Mathematical Output verdict description -->
-            <div class="mt-4 p-3 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-indigo-950/60 text-xs space-y-2 leading-relaxed text-slate-600 dark:text-slate-300">
-              <span class="font-mono text-indigo-600 dark:text-indigo-400 font-semibold block uppercase">Graph Theorem Output:</span>
-              <div id="theorem-text-analysis">Detecting grid parity matrices...</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sector Selector Panel -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-md dark:shadow-xl transition-colors">
           <h3 class="text-sm font-mono text-indigo-600 dark:text-indigo-300 uppercase tracking-wider mb-4 pb-2 border-b border-indigo-100 dark:border-indigo-950/60 font-semibold">
             🗺️ Power Grid Sector Selector
           </h3>
           <div id="sector-selectors-container" class="flex flex-col gap-2">
-            <!-- Injected dynamically -->
           </div>
         </div>
 
@@ -285,15 +276,12 @@
     <!-- ================= SANDBOX TAB ================= -->
     <div id="sandbox-tab-content" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start hidden">
       
-      <!-- LEFT COLUMN: CANVAS GRAPH EDITOR -->
-      <section class="lg:col-span-7 flex flex-col gap-4">
+      <section class="lg:col-span-9 flex flex-col gap-4">
         
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center relative shadow-md dark:shadow-2xl overflow-hidden min-h-[480px] transition-colors">
           
-          <!-- Canvas Radial Backdrop Grid -->
           <div id="sandbox-radial-grid" class="absolute inset-0 [background-size:24px_24px] opacity-40 transition-all"></div>
           
-          <!-- Top HUD Overlay -->
           <div class="absolute top-3 left-4 flex gap-2 z-10">
             <span class="text-xs font-mono px-2 py-1 rounded bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 uppercase">
               Graph Design Sandbox
@@ -303,7 +291,6 @@
             </span>
           </div>
 
-          <!-- SVG Canvas Workspace -->
           <div class="w-full max-w-md aspect-square relative z-10 mt-6 rounded-xl border border-slate-200 dark:border-slate-800/80 bg-slate-500/5">
             <svg id="sandbox-svg" class="w-full h-full cursor-crosshair" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
               <defs>
@@ -322,17 +309,68 @@
                   </feMerge>
                 </filter>
               </defs>
-              <!-- Rendered programmatically -->
             </svg>
           </div>
 
-          <!-- Simulation Traversal Warning HUD -->
+          <!-- FLOATING COLLAPSIBLE SANDBOX SOLVER HUD -->
+          <div id="solver-floating-panel" onclick="event.stopPropagation()" class="absolute bottom-3 right-4 z-20 w-60 md:w-64 bg-white/95 dark:bg-slate-900/95 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl flex flex-col transition-all duration-300 max-h-[85%] text-[10px]">
+            <!-- Header Toggle -->
+            <div onclick="toggleSolverCollapse()" class="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-950 rounded-t-xl cursor-pointer border-b border-slate-200 dark:border-slate-800 select-none">
+              <span class="font-mono font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+                🧬 Real-time Solver
+              </span>
+              <span id="solver-toggle-icon" class="font-mono text-slate-400 hover:text-indigo-500 transition-colors">
+                [−]
+              </span>
+            </div>
+            <!-- Solver Content body -->
+            <div id="solver-floating-body" class="p-2 space-y-2 overflow-y-auto">
+              <div class="grid grid-cols-3 gap-1">
+                <div class="bg-slate-50 dark:bg-slate-950 p-1 rounded border border-slate-200 dark:border-slate-800/80 text-center">
+                  <span class="text-slate-500 text-[8px] block font-mono uppercase">V</span>
+                  <span id="sb-count-vertices" class="text-xs font-mono font-bold block text-slate-800 dark:text-slate-200">0</span>
+                </div>
+                <div class="bg-slate-50 dark:bg-slate-950 p-1 rounded border border-slate-200 dark:border-slate-800/80 text-center">
+                  <span class="text-slate-500 text-[8px] block font-mono uppercase">E</span>
+                  <span id="sb-count-edges" class="text-xs font-mono font-bold block text-slate-800 dark:text-slate-200">0</span>
+                </div>
+                <div class="bg-slate-50 dark:bg-slate-950 p-1 rounded border border-slate-200 dark:border-slate-800/80 text-center">
+                  <span class="text-slate-500 text-[8px] block font-mono uppercase">Odds</span>
+                  <span id="sb-count-odds" class="text-xs font-mono font-bold block text-amber-600 dark:text-amber-500">0</span>
+                </div>
+              </div>
+
+              <div class="bg-slate-50 dark:bg-slate-950 p-1.5 rounded-lg border border-slate-200 dark:border-indigo-950 text-[9px] font-mono text-slate-600 dark:text-slate-400 leading-tight">
+                <span class="text-indigo-600 dark:text-indigo-400 font-bold block uppercase text-[8px] mb-0.5">Handshaking Check:</span>
+                <div class="flex justify-between items-center">
+                  <span>Sum deg:</span>
+                  <strong id="sb-deg-sum" class="text-slate-800 dark:text-slate-200">0</strong>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span>2|E|:</span>
+                  <strong id="sb-double-edges" class="text-slate-800 dark:text-slate-200">0</strong>
+                </div>
+              </div>
+
+              <div id="sb-verdict-box" class="p-2 rounded-lg border flex gap-1.5 transition-colors bg-slate-50 dark:bg-slate-950 items-start">
+                <div id="sb-verdict-emoji" class="text-sm mt-0.5">ℹ️</div>
+                <div>
+                  <h4 class="text-[9px] font-mono uppercase font-bold tracking-wider text-slate-700 dark:text-slate-300 leading-none">
+                    Verdict
+                  </h4>
+                  <p id="sb-verdict-text" class="text-[9px] mt-0.5 leading-snug text-slate-600 dark:text-slate-400">
+                    Add some nodes and lines to analyze.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="absolute bottom-4 left-4 right-4 text-center">
             <div id="sandbox-alert-container"></div>
           </div>
         </div>
 
-        <!-- Designer Action toolbar -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl flex flex-wrap justify-between items-center gap-3 transition-colors">
           <div class="flex flex-wrap gap-2">
             <button 
@@ -377,70 +415,19 @@
 
       </section>
 
-      <!-- RIGHT COLUMN: STATS & SOLVER telemetry -->
-      <section class="lg:col-span-5 flex flex-col gap-6">
+      <!-- RIGHT COLUMN: EXPERIMENT INSTRUCTIONS -->
+      <section class="lg:col-span-3 flex flex-col gap-6">
         
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-md dark:shadow-xl transition-colors">
-          <h3 class="text-sm font-mono text-indigo-600 dark:text-indigo-300 uppercase tracking-wider mb-4 pb-2 border-b border-indigo-100 dark:border-indigo-950/60 font-semibold">
-            🧬 Real-time Graph Theory Solver
-          </h3>
-
-          <!-- Basic parameters -->
-          <div class="grid grid-cols-3 gap-2 mb-4">
-            <div class="bg-slate-50 dark:bg-slate-950 p-2.5 rounded border border-slate-200 dark:border-slate-800/80 text-center">
-              <span class="text-slate-500 text-[9px] block font-mono uppercase">Vertices (V)</span>
-              <span id="sb-count-vertices" class="text-lg font-mono font-bold mt-0.5 block text-slate-800 dark:text-slate-200">0</span>
-            </div>
-            <div class="bg-slate-50 dark:bg-slate-950 p-2.5 rounded border border-slate-200 dark:border-slate-800/80 text-center">
-              <span class="text-slate-500 text-[9px] block font-mono uppercase">Edges (E)</span>
-              <span id="sb-count-edges" class="text-lg font-mono font-bold mt-0.5 block text-slate-800 dark:text-slate-200">0</span>
-            </div>
-            <div class="bg-slate-50 dark:bg-slate-950 p-2.5 rounded border border-slate-200 dark:border-slate-800/80 text-center">
-              <span class="text-slate-500 text-[9px] block font-mono uppercase">Odd Nodes</span>
-              <span id="sb-count-odds" class="text-lg font-mono font-bold mt-0.5 block text-amber-600 dark:text-amber-500">0</span>
-            </div>
-          </div>
-
-          <!-- Live Handshake proof verification box -->
-          <div class="bg-slate-50 dark:bg-slate-950 p-3 rounded-lg border border-slate-200 dark:border-indigo-950 mb-4 text-xs font-mono text-slate-600 dark:text-slate-300 leading-relaxed transition-colors">
-            <span class="text-indigo-600 dark:text-indigo-400 font-bold block uppercase mb-1">Handshaking Lemma Check:</span>
-            <div class="flex justify-between items-center">
-              <span>Sum of node degrees:</span>
-              <strong id="sb-deg-sum" class="text-slate-800 dark:text-slate-200">0</strong>
-            </div>
-            <div class="flex justify-between items-center mt-1">
-              <span>Double the lines ($2|E|$):</span>
-              <strong id="sb-double-edges" class="text-slate-800 dark:text-slate-200">0</strong>
-            </div>
-            <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5 border-t border-slate-200 dark:border-slate-800 pt-1.5 italic">
-              Proof verified: Sum of degrees ($2 \times E$) always equals double the lines!
-            </div>
-          </div>
-
-          <!-- Dynamic Verdict Panel box -->
-          <div id="sb-verdict-box" class="p-4 rounded-xl border flex gap-3 transition-colors bg-slate-50 dark:bg-slate-950">
-            <div id="sb-verdict-emoji" class="text-2xl mt-0.5">ℹ️</div>
-            <div>
-              <h4 class="text-xs font-mono uppercase font-bold tracking-wider text-slate-700 dark:text-slate-300">
-                Euler Status Verdict
-              </h4>
-              <p id="sb-verdict-text" class="text-xs mt-1 leading-relaxed text-slate-600 dark:text-slate-400">
-                Add some nodes and lines to analyze.
-              </p>
-            </div>
-          </div>
-
-          <!-- Quick instructions list -->
-          <div class="mt-5 space-y-2 text-xs text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-200 dark:border-slate-800/80 pt-4 transition-colors">
-            <h4 class="font-mono text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] font-semibold mb-2">
-              How to experiment:
-            </h4>
+          <h4 class="font-mono text-slate-700 dark:text-slate-300 uppercase tracking-wider text-xs font-semibold mb-3">
+            How to experiment:
+          </h4>
+          <div class="space-y-3 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
             <p>1. Place some nodes. Click inside the canvas zone to append junctions.</p>
             <p>2. Connect nodes by switching to <strong>Place Lines</strong>, clicking node A and then node B.</p>
             <p>3. Build an <strong>even-degree</strong> grid to verify a circuit. Build a grid with <strong>exactly 2 odd-degree</strong> nodes to verify a path.</p>
             <p>4. Launch <strong>Play Test Grid</strong> and try out your design dynamically!</p>
           </div>
-
         </div>
 
       </section>
@@ -549,156 +536,163 @@
 
   </main>
 
-  <!-- FOOTER BAR -->
   <footer class="mt-auto border-t border-slate-200 dark:border-indigo-950/40 bg-slate-100 dark:bg-slate-950/80 p-4 text-center text-xs font-mono text-slate-500 transition-all">
     Made for Grade 10 Mathematics & Computer Science classes • Designed to run entirely client-side.
   </footer>
 
-  <!-- ================= JAVASCRIPT GAME STATE ENGINE ================= -->
-  <script>
-    // --- IN-GAME ASSET GRAPH DATA ---
-    const LEVELS = [
+  <!-- ================================================================= -->
+  <!-- 2. SEPARATED JSON DATA (Copy this content into "levels.json")     -->
+  <!-- ================================================================= -->
+  <script type="application/json" id="levels-data">
+    [
       {
-        id: 1,
-        name: "The Sector 1 Sub-Grid",
-        type: "path",
-        description: "Connect all nodes in this basic conduit array.",
-        narrative: "Welcome, Apprentice! Our floating city runs on Aether Conduits. The Sector 1 sub-grid has flickered out. Select any node to start, then click connected nodes to power up the lines. Remember: every line must be powered exactly once!",
-        tip: "Look at the numbers next to each node. Those show the connection count (degree). Two nodes have an ODD number of lines. Weave your path between them!",
-        nodes: [
-          { id: 'A', x: 100, y: 280, label: "Alpha" },
-          { id: 'B', x: 300, y: 280, label: "Beta" },
-          { id: 'C', x: 200, y: 160, label: "Gamma" },
-          { id: 'D', x: 200, y: 50, label: "Delta" }
+        "id": 1,
+        "name": "The Sector 1 Sub-Grid",
+        "type": "path",
+        "description": "Connect all nodes in this basic conduit array.",
+        "narrative": "Welcome, Apprentice! Our floating city runs on Aether Conduits. The Sector 1 sub-grid has flickered out. Select any node to start, then click connected nodes to power up the lines. Remember: every line must be powered exactly once!",
+        "tip": "Look at the numbers next to each node. Those show the connection count (degree). Two nodes have an ODD number of lines. Weave your path between them!",
+        "nodes": [
+          { "id": "A", "x": 100, "y": 280, "label": "Alpha" },
+          { "id": "B", "x": 300, "y": 280, "label": "Beta" },
+          { "id": "C", "x": 200, "y": 160, "label": "Gamma" },
+          { "id": "D", "x": 200, "y": 50, "label": "Delta" }
         ],
-        edges: [
-          { id: 'e1', u: 'A', v: 'B' },
-          { id: 'e2', u: 'B', v: 'C' },
-          { id: 'e3', u: 'C', v: 'A' },
-          { id: 'e4', u: 'C', v: 'D' }
+        "edges": [
+          { "id": "e1", "u": "A", "v": "B" },
+          { "id": "e2", "u": "B", "v": "C" },
+          { "id": "e3", "u": "C", "v": "A" },
+          { "id": "e4", "u": "C", "v": "D" }
         ]
       },
       {
-        id: 2,
-        name: "The Hex-Core Matrix",
-        type: "path",
-        description: "Identify the critical entry nodes. Notice the node degrees!",
-        narrative: "Fascinating. This grid has two nodes with an ODD degree. My predecessor, Leonhard Euler, mathematically proved that we MUST start our path at one of these odd nodes, and we will always finish at the other. Try starting elsewhere and see why it fails!",
-        tip: "The amber rings indicate ODD nodes. Choose one of them as your starting point to avoid getting trapped!",
-        nodes: [
-          { id: 'A', x: 100, y: 280, label: "Core-A" },
-          { id: 'B', x: 300, y: 280, label: "Core-B" },
-          { id: 'C', x: 300, y: 150, label: "Core-C" },
-          { id: 'D', x: 100, y: 150, label: "Core-D" },
-          { id: 'E', x: 200, y: 60, label: "Apex" }
+        "id": 2,
+        "name": "The Hex-Core Matrix",
+        "type": "path",
+        "description": "Identify the critical entry nodes. Notice the node degrees!",
+        "narrative": "Fascinating. This grid has two nodes with an ODD degree. My predecessor, Leonhard Euler, mathematically proved that we MUST start our path at one of these odd nodes, and we will always finish at the other. Try starting elsewhere and see why it fails!",
+        "tip": "The amber rings indicate ODD nodes. Choose one of them as your starting point to avoid getting trapped!",
+        "nodes": [
+          { "id": "A", "x": 100, "y": 280, "label": "Core-A" },
+          { "id": "B", "x": 300, "y": 280, "label": "Core-B" },
+          { "id": "C", "x": 300, "y": 150, "label": "Core-C" },
+          { "id": "D", "x": 100, "y": 150, "label": "Core-D" },
+          { "id": "E", "x": 200, "y": 60, "label": "Apex" }
         ],
-        edges: [
-          { id: 'e1', u: 'A', v: 'B' },
-          { id: 'e2', u: 'B', v: 'C' },
-          { id: 'e3', u: 'C', v: 'D' },
-          { id: 'e4', u: 'D', v: 'A' },
-          { id: 'e5', u: 'A', v: 'C' },
-          { id: 'e6', u: 'B', v: 'D' },
-          { id: 'e7', u: 'D', v: 'E' },
-          { id: 'e8', u: 'C', v: 'E' }
+        "edges": [
+          { "id": "e1", "u": "A", "v": "B" },
+          { "id": "e2", "u": "B", "v": "C" },
+          { "id": "e3", "u": "C", "v": "D" },
+          { "id": "e4", "u": "D", "v": "A" },
+          { "id": "e5", "u": "A", "v": "C" },
+          { "id": "e6", "u": "B", "v": "D" },
+          { "id": "e7", "u": "D", "v": "E" },
+          { "id": "e8", "u": "C", "v": "E" }
         ]
       },
       {
-        id: 3,
-        name: "The Crystal Star Core",
-        type: "circuit",
-        description: "All nodes here have an EVEN degree. Weave a perfect circuit!",
-        narrative: "Marvelous job! Next up is the Crystal Star. Here, every single node has an EVEN number of conduits. When all nodes are even, we can weave an Euler Circuit: start anywhere, power every line, and return exactly to where you started!",
-        tip: "Since all nodes are even, you can choose any node to begin. Just make sure your final step lands right back on your starting node!",
-        nodes: [
-          { id: 'A', x: 200, y: 70, label: "Star-Peak" },
-          { id: 'B', x: 320, y: 160, label: "Star-Right" },
-          { id: 'C', x: 270, y: 300, label: "Star-SE" },
-          { id: 'D', x: 130, y: 300, label: "Star-SW" },
-          { id: 'E', x: 80, y: 160, label: "Star-Left" }
+        "id": 3,
+        "name": "The Crystal Star Core",
+        "type": "circuit",
+        "description": "All nodes here have an EVEN degree. Weave a perfect circuit!",
+        "narrative": "Marvelous job! Next up is the Crystal Star. Here, every single node has an EVEN number of conduits. When all nodes are even, we can weave an Euler Circuit: start anywhere, power every line, and return exactly to where you started!",
+        "tip": "Since all nodes are even, you can choose any node to begin. Just make sure your final step lands right back on your starting node!",
+        "nodes": [
+          { "id": "A", "x": 200, "y": 70, "label": "Star-Peak" },
+          { "id": "B", "x": 320, "y": 160, "label": "Star-Right" },
+          { "id": "C", "x": 270, "y": 300, "label": "Star-SE" },
+          { "id": "D", "x": 130, "y": 300, "label": "Star-SW" },
+          { "id": "E", "x": 80, "y": 160, "label": "Star-Left" }
         ],
-        edges: [
-          { id: 'e1', u: 'A', v: 'B' },
-          { id: 'e2', u: 'B', v: 'C' },
-          { id: 'e3', u: 'C', v: 'D' },
-          { id: 'e4', u: 'D', v: 'E' },
-          { id: 'e5', u: 'E', v: 'A' },
-          { id: 'e6', u: 'A', v: 'C' },
-          { id: 'e7', u: 'B', v: 'D' },
-          { id: 'e8', u: 'C', v: 'E' },
-          { id: 'e9', u: 'D', v: 'A' },
-          { id: 'e10', u: 'B', v: 'E' }
+        "edges": [
+          { "id": "e1", "u": "A", "v": "B" },
+          { "id": "e2", "u": "B", "v": "C" },
+          { "id": "e3", "u": "C", "v": "D" },
+          { "id": "e4", "u": "D", "v": "E" },
+          { "id": "e5", "u": "E", "v": "A" },
+          { "id": "e6", "u": "A", "v": "C" },
+          { "id": "e7", "u": "B", "v": "D" },
+          { "id": "e8", "u": "C", "v": "E" },
+          { "id": "e9", "u": "D", "v": "A" },
+          { "id": "e10", "u": "B", "v": "E" }
         ]
       },
       {
-        id: 4,
-        name: "The Citadel Twin-Grid",
-        type: "path",
-        description: "Two power hubs linked by a single crucial bridge.",
-        narrative: "Warning, Apprentice! We are approaching the Twin Citadel. It is composed of two distinct sectors linked by a single crucial conduit. If you cross this bridge too early, you'll trap yourself on the other side with no way back! This is Fleury's Rule.",
-        tip: "Start at one of the odd nodes, completely power that whole wing first, then cross the bridge to clear the second wing!",
-        nodes: [
-          { id: 'A', x: 110, y: 100, label: "North-Left" },
-          { id: 'B', x: 50, y: 200, label: "Far-Left" },
-          { id: 'G', x: 110, y: 300, label: "South-Left" },
-          { id: 'C', x: 170, y: 200, label: "Left-Bridgehead" },
-          { id: 'D', x: 230, y: 200, label: "Right-Bridgehead" },
-          { id: 'E', x: 290, y: 100, label: "North-Right" },
-          { id: 'H', x: 290, y: 300, label: "South-Right" },
-          { id: 'F', x: 350, y: 200, label: "Far-Right" }
+        "id": 4,
+        "name": "The Citadel Twin-Grid",
+        "type": "path",
+        "description": "Two power hubs linked by a single crucial bridge.",
+        "narrative": "Warning, Apprentice! We are approaching the Twin Citadel. It is composed of two distinct sectors linked by a single crucial conduit. If you cross this bridge too early, you'll trap yourself on the other side with no way back! This is Fleury's Rule.",
+        "tip": "Start at one of the odd nodes, completely power that whole wing first, then cross the bridge to clear the second wing!",
+        "nodes": [
+          { "id": "A", "x": 110, "y": 100, "label": "North-Left" },
+          { "id": "B", "x": 50, "y": 200, "label": "Far-Left" },
+          { "id": "G", "x": 110, "y": 300, "label": "South-Left" },
+          { "id": "C", "x": 170, "y": 200, "label": "Left-Bridgehead" },
+          { "id": "D", "x": 230, "y": 200, "label": "Right-Bridgehead" },
+          { "id": "E", "x": 290, "y": 100, "label": "North-Right" },
+          { "id": "H", "x": 290, "y": 300, "label": "South-Right" },
+          { "id": "F", "x": 350, "y": 200, "label": "Far-Right" }
         ],
-        edges: [
-          { id: 'e1', u: 'A', v: 'B' },
-          { id: 'e2', u: 'B', v: 'G' },
-          { id: 'e3', u: 'G', v: 'C' },
-          { id: 'e4', u: 'C', v: 'A' },
-          { id: 'e5', u: 'A', v: 'C' }, 
-          { id: 'e6', u: 'C', v: 'D' }, 
-          { id: 'e7', u: 'D', v: 'E' },
-          { id: 'e8', u: 'E', v: 'F' },
-          { id: 'e9', u: 'F', v: 'H' },
-          { id: 'e10', u: 'H', v: 'D' },
-          { id: 'e11', u: 'D', v: 'F' }
+        "edges": [
+          { "id": "e1", "u": "A", "v": "B" },
+          { "id": "e2", "u": "B", "v": "G" },
+          { "id": "e3", "u": "G", "v": "C" },
+          { "id": "e4", "u": "C", "v": "A" },
+          { "id": "e5", "u": "A", "v": "C" }, 
+          { "id": "e6", "u": "C", "v": "D" }, 
+          { "id": "e7", "u": "D", "v": "E" },
+          { "id": "e8", "u": "E", "v": "F" },
+          { "id": "e9", "u": "F", "v": "H" },
+          { "id": "e10", "u": "H", "v": "D" },
+          { "id": "e11", "u": "D", "v": "F" }
         ]
       },
       {
-        id: 5,
-        name: "The Neo-Königsberg Grand Core",
-        type: "circuit",
-        description: "The ultimate challenge. Apply all laws of Graph Theory.",
-        narrative: "This is it—the core of the entire metropolis. It is inspired by the ancient 'Seven Bridges of Königsberg' puzzle that baffled the world's finest minds. We've re-engineered the bridges to make it solvable. Can you power the central Grand Core?",
-        tip: "Take a deep breath. Every node here is even (degree 4). You can start anywhere, but plan your route to ensure you don't paint yourself into a corner!",
-        nodes: [
-          { id: 'A', x: 200, y: 60, label: "Core-N" },
-          { id: 'B', x: 300, y: 100, label: "Core-NE" },
-          { id: 'C', x: 340, y: 200, label: "Core-E" },
-          { id: 'D', x: 300, y: 300, label: "Core-SE" },
-          { id: 'E', x: 200, y: 340, label: "Core-S" },
-          { id: 'F', x: 100, y: 300, label: "Core-SW" },
-          { id: 'G', x: 60, y: 200, label: "Core-W" },
-          { id: 'H', x: 100, y: 100, label: "Core-NW" }
+        "id": 5,
+        "name": "The Neo-Königsberg Grand Core",
+        "type": "circuit",
+        "description": "The ultimate challenge. Apply all laws of Graph Theory.",
+        "narrative": "This is it—the core of the entire metropolis. It is inspired by the ancient 'Seven Bridges of Königsberg' puzzle that baffled the world's finest minds. We've re-engineered the bridges to make it solvable. Can you power the central Grand Core?",
+        "tip": "Take a deep breath. Every node here is even (degree 4). You can start anywhere, but plan your route to ensure you don't paint yourself into a corner!",
+        "nodes": [
+          { "id": "A", "x": 200, "y": 60, "label": "Core-N" },
+          { "id": "B", "x": 300, "y": 100, "label": "Core-NE" },
+          { "id": "C", "x": 340, "y": 200, "label": "Core-E" },
+          { "id": "D", "x": 300, "y": 300, "label": "Core-SE" },
+          { "id": "E", "x": 200, "y": 340, "label": "Core-S" },
+          { "id": "F", "x": 100, "y": 300, "label": "Core-SW" },
+          { "id": "G", "x": 60, "y": 200, "label": "Core-W" },
+          { "id": "H", "x": 100, "y": 100, "label": "Core-NW" }
         ],
-        edges: [
-          { id: 'e1', u: 'A', v: 'B' },
-          { id: 'e2', u: 'B', v: 'C' },
-          { id: 'e3', u: 'C', v: 'D' },
-          { id: 'e4', u: 'D', v: 'E' },
-          { id: 'e5', u: 'E', v: 'F' },
-          { id: 'e6', u: 'F', v: 'G' },
-          { id: 'e7', u: 'G', v: 'H' },
-          { id: 'e8', u: 'H', v: 'A' },
-          { id: 'e9', u: 'A', v: 'D' },
-          { id: 'e10', u: 'A', v: 'F' },
-          { id: 'e11', u: 'B', v: 'E' },
-          { id: 'e12', u: 'B', v: 'G' },
-          { id: 'e13', u: 'C', v: 'F' },
-          { id: 'e14', u: 'C', v: 'H' },
-          { id: 'e15', u: 'D', v: 'G' },
-          { id: 'e16', u: 'E', v: 'H' }
+        "edges": [
+          { "id": "e1", "u": "A", "v": "B" },
+          { "id": "e2", "u": "B", "v": "C" },
+          { "id": "e3", "u": "C", "v": "D" },
+          { "id": "e4", "u": "D", "v": "E" },
+          { "id": "e5", "u": "E", "v": "F" },
+          { "id": "e6", "u": "F", "v": "G" },
+          { "id": "e7", "u": "G", "v": "H" },
+          { "id": "e8", "u": "H", "v": "A" },
+          { "id": "e9", "u": "A", "v": "D" },
+          { "id": "e10", "u": "A", "v": "F" },
+          { "id": "e11", "u": "B", "v": "E" },
+          { "id": "e12", "u": "B", "v": "G" },
+          { "id": "e13", "u": "C", "v": "F" },
+          { "id": "e14", "u": "C", "v": "H" },
+          { "id": "e15", "u": "D", "v": "G" },
+          { "id": "e16", "u": "E", "v": "H" }
         ]
       }
-    ];
+    ]
+  </script>
 
+  <!-- ================================================================= -->
+  <!-- 3. SEPARATED JAVASCRIPT (Copy this section into "app.js")        -->
+  <!-- ================================================================= -->
+  <!-- On your GitHub Pages, you can uncomment the line below:           -->
+  <!-- <script src="app.js" defer></script> -->
+  <script id="app-logic">
     // --- STATE MANAGEMENT ---
     let theme = 'light';
     let activeTab = 'story';
@@ -709,6 +703,36 @@
     let levelStatus = 'intro'; // 'intro' | 'playing' | 'stuck' | 'victory'
     let tutorEnabled = true;
     let showNarrative = true;
+    let LEVELS = []; // Dynamically resolved on load
+    
+    let telemetryCollapsed = false;
+    let solverCollapsed = false;
+
+    function toggleTelemetryCollapse() {
+      telemetryCollapsed = !telemetryCollapsed;
+      const body = document.getElementById('telemetry-floating-body');
+      const icon = document.getElementById('telemetry-toggle-icon');
+      if (telemetryCollapsed) {
+        body.classList.add('hidden');
+        icon.innerText = '[+]';
+      } else {
+        body.classList.remove('hidden');
+        icon.innerText = '[−]';
+      }
+    }
+
+    function toggleSolverCollapse() {
+      solverCollapsed = !solverCollapsed;
+      const body = document.getElementById('solver-floating-body');
+      const icon = document.getElementById('solver-toggle-icon');
+      if (solverCollapsed) {
+        body.classList.add('hidden');
+        icon.innerText = '[+]';
+      } else {
+        body.classList.remove('hidden');
+        icon.innerText = '[−]';
+      }
+    }
 
     // --- SANDBOX STATE ---
     let sandboxNodes = [
@@ -727,6 +751,25 @@
     let sbVisitedEdges = [];
     let sbPathHistory = [];
     let sbStatus = 'idle'; // 'idle' | 'playing' | 'stuck' | 'victory'
+
+    // --- SECURE DATA INGESTION ENGINE (Allows fetching levels.json OR fallback) ---
+    async function loadLevelDatabase() {
+      try {
+        // Attempt dynamically fetching levels.json (Ideal when split on GitHub)
+        const response = await fetch('levels.json');
+        if (response.ok) {
+          LEVELS = await response.json();
+          console.log("Successfully imported levels from external JSON database.");
+          return;
+        }
+      } catch (e) {
+        console.warn("External levels.json unavailable. Reverting to local fallback block.");
+      }
+      
+      // Fallback: Parse levels-data elements locally
+      const inlineData = document.getElementById('levels-data').textContent;
+      LEVELS = JSON.parse(inlineData);
+    }
 
     // --- CONNECTIVITY SOLVER helper ---
     function isGraphConnected(nodes, edges) {
@@ -756,6 +799,7 @@
     // --- LIVE COMPUTATION HELPERS ---
     function getStoryNodeDegrees() {
       const level = LEVELS[currentLevelIdx];
+      if (!level) return {};
       const degrees = {};
       level.nodes.forEach(n => {
         degrees[n.id] = { total: 0, current: 0 };
@@ -796,8 +840,6 @@
     // --- TAB NAVIGATION ---
     function switchTab(tab) {
       activeTab = tab;
-      
-      // Update Tab Buttons layout
       const tabs = ['story', 'sandbox', 'handbook'];
       tabs.forEach(t => {
         const btn = document.getElementById(`tab-${t}-btn`);
@@ -811,7 +853,6 @@
         }
       });
 
-      // Reset test state inside Sandbox upon leaving/entering
       if (tab === 'sandbox') {
         sandboxTool = 'node';
         sbStatus = 'idle';
@@ -829,6 +870,12 @@
     function toggleNarrator() {
       showNarrative = false;
       document.getElementById('narrator-box').classList.add('hidden');
+    }
+
+    function showNarratorWithToggle() {
+      showNarrative = true;
+      document.getElementById('narrator-box').classList.remove('hidden');
+      renderStoryTab();
     }
 
     // --- SYSTEM THEME CONTROLS ---
@@ -852,7 +899,6 @@
 
     // --- MAIN ENGINE CONTROLLER ---
     function renderUI() {
-      // Set backdrop properties for grid
       const gridPatternColor = theme === 'dark' ? '#1e1e38' : '#cbd5e1';
       document.getElementById('radial-grid').style.backgroundImage = `radial-gradient(${gridPatternColor} 1.5px, transparent 1.5px)`;
       document.getElementById('sandbox-radial-grid').style.backgroundImage = `radial-gradient(${gridPatternColor} 1.5px, transparent 1.5px)`;
@@ -863,7 +909,6 @@
         renderSandboxTab();
       }
       
-      // Auto-render any newly appended LaTeX formulas on elements using mathematical attributes
       renderMathInElement(document.body, {
         delimiters: [
           {left: '$$', right: '$$', display: true},
@@ -922,7 +967,6 @@
       if (levelStatus === 'victory') return;
       const level = LEVELS[currentLevelIdx];
 
-      // Init path starts
       if (levelStatus === 'intro') {
         activeNodeId = nodeId;
         pathHistory = [nodeId];
@@ -932,7 +976,6 @@
         return;
       }
 
-      // Traversal mechanics
       if (levelStatus === 'playing') {
         const edge = level.edges.find(e => 
           ((e.u === activeNodeId && e.v === nodeId) || (e.v === activeNodeId && e.u === nodeId)) &&
@@ -955,7 +998,6 @@
               levelStatus = 'victory';
             }
           } else {
-            // Check gridlock/dead ends
             const remainingOutgoing = level.edges.filter(e => 
               (e.u === nodeId || e.v === nodeId) && !visitedEdges.includes(e.id)
             );
@@ -970,18 +1012,16 @@
 
     function renderStoryTab() {
       const level = LEVELS[currentLevelIdx];
+      if (!level) return;
       const nodeDegrees = getStoryNodeDegrees();
       const oddNodesCount = Object.values(nodeDegrees).filter(d => d.total % 2 !== 0).length;
 
-      // Update Narrator Panel Texts
       document.getElementById('narrative-text').innerText = `"${level.narrative}"`;
       document.getElementById('tip-text').innerText = level.tip;
 
-      // Update HUD Indicators
       document.getElementById('hud-id').innerText = `ID: LC-${level.id * 102}`;
       document.getElementById('hud-level-badge').innerText = `Level ${level.id} / 5`;
 
-      // Draw SVG Graphics
       const svg = document.getElementById('story-svg');
       svg.innerHTML = `
         <defs>
@@ -1009,7 +1049,6 @@
         </defs>
       `;
 
-      // 1. Draw Edges
       level.edges.forEach(edge => {
         const uNode = level.nodes.find(n => n.id === edge.u);
         const vNode = level.nodes.find(n => n.id === edge.v);
@@ -1028,7 +1067,6 @@
         svg.appendChild(g);
       });
 
-      // 2. Draw Nodes
       level.nodes.forEach(node => {
         const deg = nodeDegrees[node.id];
         const isOdd = deg ? deg.total % 2 !== 0 : false;
@@ -1083,7 +1121,6 @@
         svg.appendChild(g);
       });
 
-      // Update Alert Box Content based on State
       const alertContainer = document.getElementById('story-alert-container');
       if (levelStatus === 'intro') {
         alertContainer.innerHTML = `
@@ -1133,12 +1170,10 @@
         `;
       }
 
-      // Update Telemetry Panel
       document.getElementById('level-target-text').innerText = `Euler ${level.type}`;
       document.getElementById('level-target-dot').className = `h-2.5 w-2.5 rounded-full ${level.type === 'circuit' ? 'bg-cyan-500' : 'bg-amber-500'}`;
       document.getElementById('weaving-progress-text').innerText = `${visitedEdges.length} / ${level.edges.length} Conduits`;
 
-      // Telemetry table generator
       const tableBody = document.getElementById('telemetry-table-body');
       tableBody.innerHTML = '';
       level.nodes.forEach(node => {
@@ -1163,7 +1198,6 @@
         tableBody.appendChild(row);
       });
 
-      // Verification Text Analysis box
       const analysisEl = document.getElementById('theorem-text-analysis');
       let explanation = oddNodesCount === 2 
         ? "Because it has exactly 2 odd nodes, Euler's theorem states that a single open continuous PATH exists. You must start at one odd node and end at the other."
@@ -1173,10 +1207,8 @@
         <p class="text-slate-500 dark:text-slate-400 mt-1">${explanation}</p>
       `;
 
-      // Undo button state
       document.getElementById('story-undo-btn').disabled = pathHistory.length === 0;
 
-      // Draw Sector Selector Cards
       const selectorContainer = document.getElementById('sector-selectors-container');
       selectorContainer.innerHTML = '';
       LEVELS.forEach((lvl, idx) => {
@@ -1227,7 +1259,6 @@
         }
       });
 
-      // Toggle hud panel simulation status indicator
       if (sandboxTool === 'play') {
         document.getElementById('sandbox-sim-status').classList.remove('hidden');
       } else {
@@ -1264,7 +1295,6 @@
       const y = Math.round(((e.clientY - rect.top) / rect.height) * 400);
 
       if (sandboxTool === 'node') {
-        // Enforce spacing threshold between nodes
         const tooClose = sandboxNodes.some(n => Math.hypot(n.x - x, n.y - y) < 25);
         if (tooClose) return;
 
@@ -1288,7 +1318,6 @@
           sandboxSelectedNodeId = nodeId;
         } else {
           if (sandboxSelectedNodeId !== nodeId) {
-            // Check duplicities
             const alreadyExists = sandboxEdges.some(ed => 
               (ed.u === sandboxSelectedNodeId && ed.v === nodeId) ||
               (ed.v === sandboxSelectedNodeId && ed.u === nodeId)
@@ -1350,7 +1379,6 @@
               sbStatus = 'victory';
             }
           } else {
-            // Check stuck limits
             const remainingOutgoing = sandboxEdges.filter(ed => 
               (ed.u === nodeId || ed.v === nodeId) && !sbVisitedEdges.includes(ed.id)
             );
@@ -1388,7 +1416,6 @@
         </defs>
       `;
 
-      // 1. Draw Sandbox lines
       sandboxEdges.forEach(edge => {
         const uNode = sandboxNodes.find(n => n.id === edge.u);
         const vNode = sandboxNodes.find(n => n.id === edge.v);
@@ -1409,7 +1436,6 @@
         svg.appendChild(g);
       });
 
-      // 2. Draw Sandbox Nodes
       sandboxNodes.forEach(node => {
         const isActiveNode = sbActiveNodeId === node.id;
         const isSourceSelected = sandboxSelectedNodeId === node.id;
@@ -1442,17 +1468,14 @@
         svg.appendChild(g);
       });
 
-      // Update Sandbox HUD elements
       document.getElementById('sb-count-vertices').innerText = sandboxNodes.length;
       document.getElementById('sb-count-edges').innerText = sandboxEdges.length;
       document.getElementById('sb-count-odds').innerText = oddNodesCount;
 
-      // Degree computations
       const degSum = Object.values(nodeDegrees).reduce((acc, curr) => acc + curr.total, 0);
       document.getElementById('sb-deg-sum').innerText = degSum;
       document.getElementById('sb-double-edges').innerText = 2 * sandboxEdges.length;
 
-      // Compute status results panel
       const verdictBox = document.getElementById('sb-verdict-box');
       const verdictEmoji = document.getElementById('sb-verdict-emoji');
       const verdictText = document.getElementById('sb-verdict-text');
@@ -1484,7 +1507,6 @@
         verdictBox.className = "p-4 rounded-xl border flex gap-3 bg-rose-50 border-rose-300/60 dark:bg-rose-950/40 dark:border-rose-400/40 text-rose-800 dark:text-rose-200";
       }
 
-      // Update Sandbox Alert box during active testing
       const sandboxAlertContainer = document.getElementById('sandbox-alert-container');
       if (sandboxTool === 'play') {
         if (sbStatus === 'idle') {
@@ -1523,13 +1545,13 @@
       }
     }
 
-    // --- CANVAS CLICK EVENT MAPS ---
+    // --- EVENT ATTACHMENTS ---
     document.getElementById('sandbox-svg').addEventListener('click', handleSandboxCanvasClick);
 
-    // --- STARTUP BOOTSTRAP ---
-    window.onload = function() {
-      // Setup initial light theme setup
+    // --- RUN-TIME ENTRY POINT BOOTSTRAP ---
+    window.onload = async function() {
       document.documentElement.classList.remove('dark');
+      await loadLevelDatabase(); // Resolves JSON dynamically
       selectLevel(0);
     }
   </script>
