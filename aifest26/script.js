@@ -35,11 +35,9 @@ function renderHero(eventData) {
     }
 }
 
-// פונקציית טעינת רישום מתוקנת ואמינה
 function renderRegistration(regData) {
     if (!regData) return;
     
-    // הזרקת הטקסטים וההסברים
     const regNote = document.getElementById('reg-note');
     if (regNote) regNote.textContent = regData.note || '';
     
@@ -49,10 +47,9 @@ function renderRegistration(regData) {
     const ndaLink = document.getElementById('nda-link');
     if (ndaLink) ndaLink.href = regData.nda_url || '#';
     
-    // בניית כפתורי קישורי הרישום
     const linksContainer = document.getElementById('reg-links-container');
     if (linksContainer && regData.links) {
-        linksContainer.innerHTML = ''; // ניקוי loader
+        linksContainer.innerHTML = '';
         regData.links.forEach(link => {
             const aBtn = document.createElement('a');
             aBtn.className = 'reg-target-btn';
