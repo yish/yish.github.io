@@ -12,7 +12,7 @@ async function initSite() {
         projectsData = data.projects || [];
 
         renderHero(data.event);
-        renderRegistration(data.registration); // פונקציית טעינת רישום חדשה
+        renderRegistration(data.registration); 
         renderSchedule(data.schedule);
         renderCommunity(data.community);
         renderCarousel();
@@ -35,17 +35,24 @@ function renderHero(eventData) {
     }
 }
 
-// בניית אזור הרישום וה-NDA מתוך ה-JSON
+// פונקציית טעינת רישום מתוקנת ואמינה
 function renderRegistration(regData) {
     if (!regData) return;
     
-    document.getElementById('reg-note').textContent = regData.note || '';
-    document.getElementById('nda-text').innerHTML = regData.nda_text || '';
-    document.getElementById('nda-link').href = regData.nda_url || '#';
+    // הזרקת הטקסטים וההסברים
+    const regNote = document.getElementById('reg-note');
+    if (regNote) regNote.textContent = regData.note || '';
     
+    const ndaText = document.getElementById('nda-text');
+    if (ndaText) ndaText.innerHTML = regData.nda_text || '';
+    
+    const ndaLink = document.getElementById('nda-link');
+    if (ndaLink) ndaLink.href = regData.nda_url || '#';
+    
+    // בניית כפתורי קישורי הרישום
     const linksContainer = document.getElementById('reg-links-container');
     if (linksContainer && regData.links) {
-        linksContainer.innerHTML = '';
+        linksContainer.innerHTML = ''; // ניקוי loader
         regData.links.forEach(link => {
             const aBtn = document.createElement('a');
             aBtn.className = 'reg-target-btn';
