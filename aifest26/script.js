@@ -1,8 +1,6 @@
-// משתנים גלובליים לניהול הקרוסלה
 let currentSlide = 0;
 let projectsData = [];
 
-// פונקציה ראשית להבאת הנתונים מקובץ ה-JSON
 async function initSite() {
     try {
         const response = await fetch('data.json');
@@ -11,11 +9,10 @@ async function initSite() {
         }
         const data = await response.json();
         
-        // שמירת פרויקטים למשתנה גלובלי
         projectsData = data.projects || [];
 
-        // רינדור רכיבי האתר
         renderHero(data.event);
+        renderRegistration(data.registration); // פונקציית טעינת רישום חדשה
         renderSchedule(data.schedule);
         renderCommunity(data.community);
         renderCarousel();
@@ -26,25 +23,44 @@ async function initSite() {
     }
 }
 
-// רינדור אזור הכותרת (Hero) והבלרב (אודות)
 function renderHero(eventData) {
     if (!eventData) return;
     document.getElementById('event-title').textContent = eventData.title || '';
     document.getElementById('event-date').textContent = eventData.date || '';
     document.getElementById('event-location').textContent = eventData.location || '';
     
-    // תיקון: הזרקת הבלרב אל תוך כרטיס האודות בעמוד
     const blurbContainer = document.getElementById('event-blurb');
     if (blurbContainer) {
         blurbContainer.innerHTML = eventData.blurb || '';
     }
 }
 
-// רינדור הלו"ז (תוכנית האירוע) בסרגל הצדי
+// בניית אזור הרישום וה-NDA מתוך ה-JSON
+function renderRegistration(regData) {
+    if (!regData) return;
+    
+    document.getElementById('reg-note').textContent = regData.note || '';
+    document.getElementById('nda-text').innerHTML = regData.nda_text || '';
+    document.getElementById('nda-link').href = regData.nda_url || '#';
+    
+    const linksContainer = document.getElementById('reg-links-container');
+    if (linksContainer && regData.links) {
+        linksContainer.innerHTML = '';
+        regData.links.forEach(link => {
+            const aBtn = document.createElement('a');
+            aBtn.className = 'reg-target-btn';
+            aBtn.href = link.url;
+            aBtn.target = '_blank';
+            aBtn.rel = 'noopener noreferrer';
+            aBtn.textContent = link.label;
+            linksContainer.appendChild(aBtn);
+        });
+    }
+}
+
 function renderSchedule(scheduleData) {
     const timeline = document.getElementById('schedule-timeline');
     if (!timeline || !scheduleData) return;
-    
     timeline.innerHTML = ''; 
     
     scheduleData.forEach(item => {
@@ -62,7 +78,6 @@ function renderSchedule(scheduleData) {
     });
 }
 
-// רינדור תקציר הקהילה
 function renderCommunity(communityData) {
     if (!communityData) return;
     document.getElementById('community-brief').textContent = communityData.brief || '';
@@ -75,19 +90,15 @@ function renderCommunity(communityData) {
     }
 }
 
-// רינדור קרוסלת הפרויקטים
 function renderCarousel() {
     const track = document.getElementById('carousel-track');
     if (!track) return;
-    
     track.innerHTML = '';
     
     projectsData.forEach(project => {
         const slide = document.createElement('div');
         slide.className = 'project-slide';
-        
-        // שליפת שם המרצה גם אם נשמר תחת מפתח עם שגיאת כתיב מהמקור במרוכז
-        const lecturerName = project.lecturer || project["נשם המרצה"] || 'חבר.ת קהילה';
+        const lecturerName = project.lecturer || 'חבר.ת קהילה';
         
         slide.innerHTML = `
             <div>
@@ -95,15 +106,13 @@ function renderCarousel() {
                 <div class="project-course">${project.course || ''}</div>
                 <p class="project-brief">${project.brief || ''}</p>
             </div>
-            <span class="project-link" onclick="openProjectModal(${project.id})">קראו עוד קורסים פדגוגיים ←</span>
+            <span class="project-link" onclick="openProjectModal(${project.id})">לפירוט היוזמה והחדשנות ←</span>
         `;
         track.appendChild(slide);
     });
-    
     updateCarouselPosition();
 }
 
-// ניווט בקרוסלה (חצים)
 function moveCarousel(direction) {
     const track = document.getElementById('carousel-track');
     if (!track || projectsData.length === 0) return;
@@ -113,7 +122,6 @@ function moveCarousel(direction) {
     if (window.innerWidth <= 600) visibleSlides = 1;
     
     const maxSlide = projectsData.length - visibleSlides;
-    
     currentSlide += direction;
     
     if (currentSlide < 0) currentSlide = 0;
@@ -134,7 +142,6 @@ function updateCarouselPosition() {
     track.style.transform = `translateX(${offset}%)`;
 }
 
-// ניהול מודל (פופאפ)
 function openModal(htmlContent) {
     const modal = document.getElementById('custom-modal');
     const modalBody = document.getElementById('modal-body-content');
@@ -148,13 +155,12 @@ function openProjectModal(projectId) {
     const project = projectsData.find(p => p.id === projectId);
     if (!project) return;
     
-    const lecturerName = project.lecturer || project["נשם המרצה"] || 'חבר.ת קהילה';
-    
     const content = `
-        <h2>${lecturerName}</h2>
-        <p style="color: #5f6368; margin-bottom: 15px;"><strong>קורס אקדמי:</strong> ${project.course || ''}</p>
-        <div style="line-height: 1.7; font-size: 1.1rem;">
-            ${project.full || project.brief || ''}
+        <h2>${project.lecturer}</h2>
+        <p style="color: #1a73e8; margin-bottom: 12px; font-weight: 600;"><strong>קורס אקדמי:</strong> ${project.course || ''}</p>
+        <hr style="margin-bottom:15px; border:0; border-top:1px solid #dadce0;">
+        <div style="line-height: 1.7; font-size: 1.05rem; color:#202124;">
+            ${project.full || project.brief}
         </div>
     `;
     openModal(content);
@@ -168,7 +174,6 @@ function setupModalEvents() {
     if (closeBtn) {
         closeBtn.onclick = () => modal.classList.remove('active');
     }
-    
     window.onclick = (event) => {
         if (event.target === modal) {
             modal.classList.remove('active');
@@ -176,11 +181,9 @@ function setupModalEvents() {
     };
 }
 
-// עדכון רספונסיבי לקרוסלה בשינוי מסך
 window.addEventListener('resize', () => {
     currentSlide = 0;
     updateCarouselPosition();
 });
 
-// הפעלת האתר ברגע שה-DOM מוכן
 document.addEventListener('DOMContentLoaded', initSite);
