@@ -52,7 +52,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wider text-slate-900 flex items-center gap-2">
-                    ABYSS LAB <span class="text-xs bg-cyan-100 text-cyan-800 border border-cyan-200 px-2 py-0.5 rounded font-mono-tech uppercase">Buoyancy Simulator v2.5</span>
+                    ABYSS LAB <span class="text-xs bg-cyan-100 text-cyan-800 border border-cyan-200 px-2 py-0.5 rounded font-mono-tech uppercase">Buoyancy Simulator v2.6</span>
                 </h1>
                 <p class="text-[11px] text-slate-500">Hydrostatic Equilibrium & Cargo Mass Lab</p>
             </div>
@@ -87,6 +87,9 @@
                 <button onclick="toggleTutorial(true)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg border border-slate-200 flex items-center gap-1.5 text-xs font-semibold transition-colors">
                     <i data-lucide="book-open" class="w-4 h-4 text-cyan-600"></i> Physics Manual
                 </button>
+                <button onclick="toggleLOs(true)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg border border-slate-200 flex items-center gap-1.5 text-xs font-semibold transition-colors" title="View Learning Objectives">
+                    <i data-lucide="clipboard-list" class="w-4 h-4 text-cyan-600"></i> LOs
+                </button>
                 <button onclick="resetSimulation()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-1.5 rounded-lg border border-slate-200 transition-colors" title="Reset Simulation">
                     <i data-lucide="refresh-cw" class="w-4 h-4"></i>
                 </button>
@@ -94,10 +97,10 @@
         </div>
     </header>
 
-    <!-- Main Workspace Layout: Sidebars minimized to w-72 to maximize center view -->
+    <!-- Main Workspace Layout -->
     <main class="flex-1 flex overflow-hidden p-3 gap-3">
         
-        <!-- LEFT PANEL: Dynamic Telemetry Console -->
+        <!-- LEFT PANEL: Dynamic Telemetry Console & Hydrostatic Advisor -->
         <section class="w-72 bg-white border border-slate-200 rounded-xl p-3 flex flex-col justify-between overflow-y-auto shrink-0 shadow-sm">
             <div class="space-y-3">
                 <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-100 pb-1.5">
@@ -137,8 +140,8 @@
                         </div>
                     </div>
 
-                    <!-- Integrated Collapsible Hydrostatic Advisor Panel -->
-                    <div id="equilibrium-tip" class="bg-indigo-50/70 p-2.5 rounded-lg border border-indigo-150">
+                    <!-- Relocated Collapsible Hydrostatic Advisor Panel -->
+                    <div id="equilibrium-tip" class="bg-indigo-50 p-2.5 rounded-lg border border-indigo-150">
                         <div class="flex items-center justify-between text-[10px] text-indigo-700 font-bold mb-1 select-none">
                             <span class="flex items-center gap-1">
                                 <i data-lucide="brain-circuit" class="w-3.5 h-3.5 text-indigo-600"></i> HYDROSTATIC ADVISOR
@@ -167,9 +170,9 @@
                             <span>Ballast Water:</span>
                             <span id="telemetry-ballast-mass" class="font-semibold">8,600 kg</span>
                         </div>
-                        <div class="flex justify-between text-[11px] text-amber-600 bg-amber-50 px-1 rounded">
-                            <span>Collected Cargo:</span>
-                            <span id="telemetry-cargo-mass" class="font-bold">+0 kg</span>
+                        <div class="flex justify-between text-[11px] text-amber-600 bg-amber-50 px-1 rounded font-bold">
+                            <span>Cargo Payload:</span>
+                            <span id="telemetry-cargo-mass">+0 kg</span>
                         </div>
                         <div class="flex justify-between text-xs font-bold border-t border-slate-200 pt-1 text-slate-800">
                             <span>Total Sub Mass (m):</span>
@@ -249,7 +252,7 @@
                 </div>
             </div>
 
-            <!-- Sonar Viewport Box -->
+            <!-- Sonar Viewport Box (Sub positioned left-third) -->
             <div class="flex-1 bg-sky-50 border border-slate-200 rounded-xl relative overflow-hidden flex flex-col shadow-inner">
                 <!-- Instrument/Sonar Grid Overlay -->
                 <div class="absolute inset-0 pointer-events-none opacity-20 overflow-hidden">
@@ -272,12 +275,12 @@
                 <!-- Ocean Stratification Markers (Right scale) -->
                 <div id="layer-boundaries" class="absolute right-2.5 top-0 bottom-0 w-44 flex flex-col justify-between py-6 text-[9px] text-right font-mono-tech select-none z-10 pointer-events-none text-slate-500 font-bold">
                     <div class="h-1/3 flex flex-col justify-start border-r-2 border-sky-300 pr-1.5">
-                        <span class="text-sky-600">Epipelagic Layer</span>
+                        <span class="text-sky-600 font-bold">Epipelagic Layer</span>
                         <span>ρ: ~960 kg/m³</span>
                         <span>Warm Surface Freshwater</span>
                     </div>
                     <div class="h-1/3 flex flex-col justify-center border-r-2 border-teal-300 pr-1.5">
-                        <span class="text-teal-600">Thermocline/Halocline</span>
+                        <span class="text-teal-600 font-bold">Thermocline/Halocline</span>
                         <span>ρ scales: 960→1000 kg/m³</span>
                         <span>Sharp Density Transition</span>
                     </div>
@@ -481,7 +484,7 @@
                     <ul class="list-disc pl-4 space-y-1 text-slate-600 text-[11px]">
                         <li><strong>Hover Depth:</strong> Find the exact target height. Match your ballast pumps so $F_b = F_g$.</li>
                         <li><strong>Cargo Adjust:</strong> If your sub gains cargo, decrease your ballast immediately to compensate for the weight!</li>
-                        <li><strong>Avoid Mines & Crags:</strong> High vertical speed causes damage when collision occurs. Stay in the center channel.</li>
+                        <li><strong>Avoid Mines & Crags:</strong> Submarine is anchored in the left 22% of the screen so you have ample warning on sonar to evade hazards.</li>
                     </ul>
                 </div>
             </div>
@@ -489,6 +492,153 @@
             <div class="mt-5 flex justify-end border-t border-slate-100 pt-3">
                 <button onclick="toggleTutorial(false)" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-5 py-2 rounded-xl transition-all font-sans-modern flex items-center gap-1.5 text-xs shadow-md">
                     Initialize Hydrostatic Test Run <i data-lucide="chevrons-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learning Objectives (LOs) Modal Popup -->
+    <div id="los-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300 hidden opacity-0">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 shadow-2xl relative text-slate-700">
+            <button onclick="toggleLOs(false)" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <div class="flex items-center space-x-3 border-b border-slate-100 pb-3 mb-4">
+                <div class="bg-cyan-50 p-2 rounded-xl border border-cyan-100">
+                    <i data-lucide="clipboard-list" class="w-7 h-7 text-cyan-600"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold tracking-wider text-slate-900 font-sans-modern">Educational Learning Objectives</h2>
+                    <p class="text-xs text-slate-500 font-mono-tech">Abyss Lab: Buoyancy Pilot Syllabus & Standards Alignment</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-xs leading-relaxed font-sans-modern">
+                <!-- Section 1 -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-150">
+                    <h3 class="text-cyan-800 font-bold text-sm mb-2 flex items-center gap-1.5 border-b border-slate-200 pb-1">
+                        1. Primary Physics Learning Objectives
+                    </h3>
+                    <div class="space-y-3">
+                        <div>
+                            <h4 class="font-semibold text-slate-800 mb-1">1.1. Archimedes' Principle & Fluid Displacement</h4>
+                            <p class="text-slate-500 mb-1.5">Students will be able to:</p>
+                            <ul class="list-disc pl-5 space-y-1 text-slate-600">
+                                <li><strong>1.1.1.</strong> Define buoyant force ($F_b$) as the upward force exerted by a fluid that opposes the weight of a partially or fully immersed object.</li>
+                                <li><strong>1.1.2.</strong> State Archimedes' Principle quantitatively:
+                                    <span class="block text-center font-mono text-cyan-800 bg-white border border-slate-200 py-1.5 my-1.5 rounded text-xs">
+                                        F<sub>b</sub> = ρ<sub>fluid</sub> × V<sub>displaced</sub> × g
+                                    </span>
+                                    where ρ is the fluid density, V is the submerged volume of the vessel (50 m³), and g is gravity (9.81 m/s²).
+                                </li>
+                                <li><strong>1.1.3.</strong> Analyze how changing fluid density ($\rho$) at different ocean depths directly alters the magnitude of the upward buoyant force ($F_b$), even when the submarine's volume ($V$) remains constant.</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-slate-800 mb-1">1.2. Hydrostatic Equilibrium & Net Forces</h4>
+                            <p class="text-slate-500 mb-1.5">Students will be able to:</p>
+                            <ul class="list-disc pl-5 space-y-1 text-slate-600">
+                                <li><strong>1.2.1.</strong> Construct a vertical free-body diagram representing the concurrent forces acting on a submarine: Gravity ($F_g$, downward) and Buoyancy ($F_b$, upward).</li>
+                                <li><strong>1.2.2.</strong> Formulate the net vertical force equation under hydrostatic conditions:
+                                    <span class="block text-center font-mono text-cyan-800 bg-white border border-slate-200 py-1.5 my-1.5 rounded text-xs">
+                                        ΣF<sub>y</sub> = F<sub>g</sub> - F<sub>b</sub>
+                                    </span>
+                                </li>
+                                <li><strong>1.2.3.</strong> Explain the physical state of <strong>neutral buoyancy</strong> (equilibrium) as the condition where net vertical force is zero ($\Sigma F_y = 0$), causing vertical acceleration ($a_y$) to cease:
+                                    <span class="block text-center font-mono text-cyan-800 bg-white border border-slate-200 py-1.5 my-1.5 rounded text-[10px]">
+                                        F<sub>g</sub> = F<sub>b</sub> ⟹ m<sub>total</sub> × g = ρ<sub>fluid</sub> × V × g ⟹ m<sub>total</sub> = ρ<sub>fluid</sub> × V
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2 -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-150">
+                    <h3 class="text-amber-800 font-bold text-sm mb-2 flex items-center gap-1.5 border-b border-slate-200 pb-1">
+                        2. Practical Application & Dynamic Systems Objectives
+                    </h3>
+                    <div class="space-y-3">
+                        <div>
+                            <h4 class="font-semibold text-slate-800 mb-1">2.1. Variable Mass Systems (Cargo Loading)</h4>
+                            <p class="text-slate-500 mb-1.5">Students will be able to:</p>
+                            <ul class="list-disc pl-5 space-y-1 text-slate-600">
+                                <li><strong>2.1.1.</strong> Predict how retrieving dry cargo payload (adding +800 kg per research pod) affects the submarine's gravity vector ($F_g$).</li>
+                                <li><strong>2.1.2.</strong> Calculate the necessary compensatory reduction in ballast water mass to maintain neutral buoyancy at a target depth after loading cargo:
+                                    <span class="block text-center font-mono text-cyan-800 bg-white border border-slate-200 py-1.5 my-1.5 rounded text-xs">
+                                        Δm<sub>ballast</sub> = -Δm<sub>cargo</sub>
+                                    </span>
+                                </li>
+                                <li><strong>2.1.3.</strong> Demonstrate real-time control adjustments by venting ballast water immediately upon cargo capture to prevent uncontrolled downward acceleration.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-slate-800 mb-1">2.2. Ocean Stratification & Density Gradients</h4>
+                            <p class="text-slate-500 mb-1.5">Students will be able to:</p>
+                            <ul class="list-disc pl-5 space-y-1 text-slate-600">
+                                <li><strong>2.2.1.</strong> Identify that natural ocean environments exhibit a density gradient where density increases with depth:
+                                    <span class="block text-center font-mono text-cyan-800 bg-white border border-slate-200 py-1.5 my-1.5 rounded text-xs">
+                                        ρ(y) = 960 + 0.8 × y kg/m³
+                                    </span>
+                                </li>
+                                <li><strong>2.2.2.</strong> Infer why a submarine with a fixed total mass will naturally stabilize at a specific "resting depth" where the surrounding water density matches the vessel's average density.</li>
+                                <li><strong>2.2.3.</strong> Determine the unique ballast slider percentage required to hover at any given depth along this linear gradient.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 class="font-semibold text-slate-800 mb-1">2.3. Control Systems & Latency (Engineering)</h4>
+                            <p class="text-slate-500 mb-1.5">Students will be able to:</p>
+                            <ul class="list-disc pl-5 space-y-1 text-slate-600">
+                                <li><strong>2.3.1.</strong> Identify the physical limitations of mechanical pumps (rate-limited at 2000 kg/s) and how this creates a control latency (time delay) between input adjustments and physical mass changes.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3 -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-150">
+                    <h3 class="text-indigo-800 font-bold text-sm mb-2 flex items-center gap-1.5 border-b border-slate-200 pb-1">
+                        3. Curriculum Alignment (NGSS)
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-[11px]">
+                            <thead>
+                                <tr class="border-b border-slate-200 text-slate-500 font-bold">
+                                    <th class="pb-1.5 pr-2">Standard</th>
+                                    <th class="pb-1.5 pr-2">Description</th>
+                                    <th class="pb-1.5">Application in Simulator</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-150 text-slate-600">
+                                <tr>
+                                    <td class="py-2 pr-2 font-semibold text-indigo-700">MS-PS2-2</td>
+                                    <td class="py-2 pr-2">Plan an investigation to provide evidence that the change in an object’s motion depends on the sum of the forces on the object and the mass of the object.</td>
+                                    <td class="py-2">Balancing F<sub>g</sub> and F<sub>b</sub> to control vertical displacement and velocity.</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 pr-2 font-semibold text-indigo-700">HS-PS2-1</td>
+                                    <td class="py-2 pr-2">Analyze data to support the claim that Newton’s second law of motion describes the mathematical relationship among the net force on a macroscopic object, its mass, and its acceleration.</td>
+                                    <td class="py-2">Experiencing how changing total sub mass (dry mass + ballast + cargo) impacts acceleration under a net force.</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 pr-2 font-semibold text-indigo-700">HS-PS1-3</td>
+                                    <td class="py-2 pr-2">Plan and conduct an investigation to gather evidence to compare the structure of substances at the bulk scale to infer the strength of electrical forces between particles.</td>
+                                    <td class="py-2">Investigating water density variations (ρ) and their consequences on buoyancy.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 flex justify-end border-t border-slate-100 pt-3">
+                <button onclick="toggleLOs(false)" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-6 py-1.5 rounded-lg text-xs shadow-sm transition-all font-sans-modern">
+                    Return to Mission
                 </button>
             </div>
         </div>
@@ -520,7 +670,7 @@
             </div>
 
             <div class="flex gap-2">
-                <button onclick="resetSimulation()" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 rounded-xl transition-all font-sans-modern text-xs flex items-center justify-center gap-1.5 shadow-md">
+                <button onclick="resetSimulation()" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 rounded-xl transition-all font-sans-modern text-xs flex items-center justify-center gap-1.5 shadow-sm">
                     <i data-lucide="play" class="w-4 h-4"></i> Restart Test Protocol
                 </button>
             </div>
@@ -543,16 +693,16 @@
         const G = 9.81;              // Gravitational constant (m/s^2)
         const SUB_VOLUME = 50.0;     // Submarine displacement volume (m^3)
         
-        // RECALIBRATED MASS VALUES (Submarine lightened, ballast increased to fix cargo lock-out)
-        const DRY_MASS = 40000;         // Lightened from 48000 kg (16.6% lighter)
-        const MAX_BALLAST_MASS = 12000; // Multiplied ballast water limit from 4000 to 12000 kg (3x volume capacity)
+        // RECALIBRATED MASS VALUES (Optimized for flexible balancing with loaded cargo)
+        const DRY_MASS = 40000;         // Lighter dry mass (40,000 kg)
+        const MAX_BALLAST_MASS = 12000; // Increased ballast water limit (12,000 kg)
         
         const CARGO_UNIT_MASS = 800; // Weight of each salvaged scientific pod (kg)
-        const PUMP_RATE = 2000;      // Performance speed of pumps (upgraded to 2000 kg/s to handle bigger volume)
+        const PUMP_RATE = 2000;      // Performance speed of pumps (kg of water per second)
         const DRAG_COEFF = 3800;     // Quadratic drag fluid resistance coefficient
         const LINEAR_DRAG = 20000;   // Linear damping coefficient to stabilize small oscillations
         
-        // LEVEL NAVIGATION LENGTH
+        // LEVEL NAVIGATION LENGTH (Extended map size)
         const LEVEL_LENGTH = 3600;
 
         // Simulator State Model
@@ -576,7 +726,7 @@
         let cruiseSpeed = 40;         // Default horizontal movement speed (pixels/second)
         let elapsedRealTime = 0;
         let cameraX = 0;
-        let subVisualX = 180;         // Main vessel coordinate offset (dynamically scaled in resizeCanvas)
+        let subVisualX = 180;         // Left-third horizontal display offset (updated dynamically)
 
         // Core Environment Profiles: Extended level lengths (3600px total length) and distributed items
         const levelProfiles = [
@@ -729,6 +879,20 @@
                     btn.innerHTML = `<i data-lucide="pause" class="w-3.5 h-3.5"></i> <span id="pause-text">Pause</span>`;
                 }
                 lucide.createIcons();
+            }
+        }
+
+        // Toggle Learning Objectives (LOs) Modal
+        function toggleLOs(show) {
+            const mod = document.getElementById('los-modal');
+            if (show) {
+                mod.classList.remove('hidden');
+                mod.style.opacity = '1';
+                // Trigger dynamic lucide icon rendering inside popup
+                lucide.createIcons();
+            } else {
+                mod.style.opacity = '0';
+                setTimeout(() => mod.classList.add('hidden'), 300);
             }
         }
 
@@ -1465,7 +1629,7 @@
             const bounds = canvas.getBoundingClientRect();
             canvas.width = bounds.width;
             canvas.height = bounds.height;
-            // Dynamically position the submarine in the left 22% of the viewport (left third zone)
+            // Position the submarine securely in the left 22% of the screen (left third layout)
             subVisualX = canvas.width * 0.22;
         }
 
