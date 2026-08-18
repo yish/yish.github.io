@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50 text-slate-800 transition-colors duration-200">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hattie & Donoghue Learning Model Explorer</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0284c7',
+              700: '#0369a1',
+            }
+          }
+        }
+      }
+    };
+
+    // Default to Light Mode unless explicitly saved as dark
+    (function initThemeScript() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
+  <style>
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #334155;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    .modal-backdrop {
+      background-color: rgba(15, 23, 42, 0.60);
+      backdrop-filter: blur(6px);
+    }
+    .dark .modal-backdrop {
+      background-color: rgba(2, 6, 23, 0.80);
+      backdrop-filter: blur(8px);
+    }
+    .glow-card {
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+    }
+    .dark .glow-card {
+      box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.15);
+    }
+    .grid-node {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .grid-node:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body class="h-full font-sans antialiased bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col justify-between selection:bg-sky-500 selection:text-white transition-colors duration-200">
+
+  <div id="app" class="min-h-screen flex flex-col">
+    <!-- Header Bar -->
+    <header class="border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 sticky top-0 z-30 backdrop-blur-md shadow-sm dark:shadow-none transition-colors duration-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20 text-white">
+            <i class="fa-solid fa-brain text-xl"></i>
+          </div>
+          <div>
+            <h1 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+              Hattie & Donoghue <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-700 dark:bg-sky-500/20 dark:text-sky-300 border border-sky-300/60 dark:border-sky-500/30">2016 Model</span>
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Interactive Browser & Meta-Synthesis of Learning Strategies</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 text-xs">
+          <!-- Quick Meta Stats Display -->
+          <div class="hidden lg:flex items-center gap-3 bg-slate-100 dark:bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700/60">
+            <div><span class="text-slate-500 dark:text-slate-400">Metas:</span> <strong class="text-sky-600 dark:text-sky-400">228</strong></div>
+            <div class="h-3 w-px bg-slate-300 dark:bg-slate-700"></div>
+            <div><span class="text-slate-500 dark:text-slate-400">Studies:</span> <strong class="text-sky-600 dark:text-sky-400">18,956+</strong></div>
+            <div class="h-3 w-px bg-slate-300 dark:bg-slate-700"></div>
+            <div><span class="text-slate-500 dark:text-slate-400">Students:</span> <strong class="text-sky-600 dark:text-sky-400">~13M+</strong></div>
+            <div class="h-3 w-px bg-slate-300 dark:bg-slate-700"></div>
+            <div><span class="text-slate-500 dark:text-slate-400">Avg Effect (<em>d</em>):</span> <strong class="text-emerald-600 dark:text-emerald-400">0.53</strong></div>
+          </div>
+          
+          <!-- Palette Theme Switcher Button -->
+          <button id="themeToggleBtn" onclick="toggleTheme()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold transition-all flex items-center gap-2 text-xs shadow-sm border border-slate-200 dark:border-slate-700/80 cursor-pointer">
+            <!-- Dynamically populated via JS -->
+          </button>
+
+          <button onclick="openElaborateModal()" class="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold transition-all flex items-center gap-1.5 shadow-md shadow-sky-600/20 cursor-pointer">
+            <i class="fa-solid fa-book-open text-xs"></i> <span>Full Model Guide</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+      
+      <!-- Interactive Grid Section (Fig. 1 Visualizer) -->
+      <section class="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-7 border border-slate-200 dark:border-slate-800 glow-card relative transition-colors duration-200">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 pb-4 border-b border-slate-100 dark:border-slate-800 gap-3">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400 mb-1 flex items-center gap-2">
+              <i class="fa-solid fa-diagram-project"></i> Figure 1: Conceptual Model Architecture
+            </div>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">Interactive Model Grid</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Click any element node below to inspect definitions, rationale, and effect sizes (<em>d</em>).</p>
+          </div>
+          
+          <!-- Category Badges Legend -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-[11px] text-slate-400 dark:text-slate-500 mr-1 font-medium">Phase Legend:</span>
+            <span class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60">Inputs/Outputs</span>
+            <span class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-blue-50 text-blue-800 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/60">Success Criteria</span>
+            <span class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60">Surface Phase</span>
+            <span class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-purple-50 text-purple-800 border border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-800/60">Deep Phase</span>
+            <span class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-rose-50 text-rose-800 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60">Transfer Phase</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-5 relative">
+          
+          <!-- INPUTS Column (Left) -->
+          <div class="md:col-span-2 flex flex-col justify-between gap-3 bg-slate-50 dark:bg-slate-950/70 p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800/80">
+            <div class="text-center text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-widest pb-1 border-b border-slate-200 dark:border-slate-800">
+              Inputs
+            </div>
+            
+            <button onclick="openElementModal('skill')" class="grid-node text-left p-3 rounded-xl bg-amber-50 hover:bg-amber-100/90 dark:bg-amber-950/30 dark:hover:bg-amber-900/40 border border-amber-200 dark:border-amber-800/50 cursor-pointer">
+              <div class="flex items-center justify-between text-amber-800 dark:text-amber-400 mb-1">
+                <span class="font-bold text-xs sm:text-sm">Skill</span>
+                <i class="fa-solid fa-graduation-cap text-xs"></i>
+              </div>
+              <p class="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2">Prior achievement & working memory capabilities.</p>
+              <div class="mt-2 text-[10px] text-amber-800 dark:text-amber-300 flex justify-between font-medium">
+                <span>Avg <em>d</em>: <strong>0.75</strong></span>
+                <span>2 Strategies</span>
+              </div>
+            </button>
+
+            <button onclick="openElementModal('will')" class="grid-node text-left p-3 rounded-xl bg-amber-50 hover:bg-amber-100/90 dark:bg-amber-950/30 dark:hover:bg-amber-900/40 border border-amber-200 dark:border-amber-800/50 cursor-pointer">
+              <div class="flex items-center justify-between text-amber-800 dark:text-amber-400 mb-1">
+                <span class="font-bold text-xs sm:text-sm">Will</span>
+                <i class="fa-solid fa-heart text-xs"></i>
+              </div>
+              <p class="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2">Dispositions, mindframes, self-efficacy & anxiety reduction.</p>
+              <div class="mt-2 text-[10px] text-amber-800 dark:text-amber-300 flex justify-between font-medium">
+                <span>Avg <em>d</em>: <strong>0.48</strong></span>
+                <span>7 Strategies</span>
+              </div>
+            </button>
+
+            <button onclick="openElementModal('thrill')" class="grid-node text-left p-3 rounded-xl bg-amber-50 hover:bg-amber-100/90 dark:bg-amber-950/30 dark:hover:bg-amber-900/40 border border-amber-200 dark:border-amber-800/50 cursor-pointer">
+              <div class="flex items-center justify-between text-amber-800 dark:text-amber-400 mb-1">
+                <span class="font-bold text-xs sm:text-sm">Thrill</span>
+                <i class="fa-solid fa-bolt text-xs"></i>
+              </div>
+              <p class="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2">Motivations, goals, deep & achieving orientation.</p>
+              <div class="mt-2 text-[10px] text-amber-800 dark:text-amber-300 flex justify-between font-medium">
+                <span>Avg <em>d</em>: <strong>0.34</strong></span>
+                <span>8 Strategies</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- LEARNING PROCESS FLOW (Center 8 Columns) -->
+          <div class="md:col-span-8 flex flex-col justify-between gap-3.5 bg-slate-50 dark:bg-slate-950/70 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-800/80">
+            
+            <div class="w-full">
+              <button onclick="openElementModal('success_criteria')" class="grid-node w-full p-3.5 rounded-xl bg-blue-50 hover:bg-blue-100/90 dark:bg-blue-950/30 dark:hover:bg-blue-900/40 border border-blue-200 dark:border-blue-800/50 text-left cursor-pointer">
+                <div class="flex items-center justify-between text-blue-800 dark:text-blue-400 mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                    <span class="font-bold text-xs sm:text-sm">Knowing Success Criteria</span>
+                  </div>
+                  <span class="text-[10px] bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-300 px-2 py-0.5 rounded font-medium border border-blue-200 dark:border-blue-700/50">Pre-Learning Gate</span>
+                </div>
+                <p class="text-xs text-slate-600 dark:text-slate-300">Understanding target criteria, goal clarity, advance organizers, and worked examples.</p>
+                <div class="mt-2 text-[11px] text-blue-800 dark:text-blue-300 flex items-center justify-between border-t border-blue-200/80 dark:border-blue-900/50 pt-1.5 font-medium">
+                  <span>9 Empirical Strategies Synthesis</span>
+                  <span class="font-bold">Avg Effect Size <em>d</em> = 0.55</span>
+                </div>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              
+              <!-- Surface Learning Column -->
+              <div class="space-y-3 bg-emerald-50/60 dark:bg-emerald-950/20 p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-900/40">
+                <div class="text-xs font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider flex items-center justify-between pb-1 border-b border-emerald-200 dark:border-emerald-900/40">
+                  <span>1. Surface Phase</span>
+                  <i class="fa-solid fa-layer-group"></i>
+                </div>
+
+                <button onclick="openElementModal('surface_acquiring')" class="grid-node text-left w-full p-3 rounded-xl bg-emerald-50 hover:bg-emerald-100/80 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 border border-emerald-200 dark:border-emerald-800/50 cursor-pointer">
+                  <div class="flex justify-between items-center text-emerald-800 dark:text-emerald-400 font-bold text-xs">
+                    <span>Surface Acquiring</span>
+                    <i class="fa-solid fa-arrow-down-a-z"></i>
+                  </div>
+                  <p class="text-[11px] text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">Vocabulary, facts, outlining, note-taking & mnemonics.</p>
+                  <div class="mt-2 text-[10px] text-emerald-800 dark:text-emerald-300 flex justify-between font-medium">
+                    <span>Avg <em>d</em>: <strong>0.63</strong></span>
+                    <span>10 Strategies</span>
+                  </div>
+                </button>
+
+                <button onclick="openElementModal('surface_consolidating')" class="grid-node text-left w-full p-3 rounded-xl bg-emerald-50 hover:bg-emerald-100/80 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 border border-emerald-200 dark:border-emerald-800/50 cursor-pointer">
+                  <div class="flex justify-between items-center text-emerald-800 dark:text-emerald-400 font-bold text-xs">
+                    <span>Surface Consolidating</span>
+                    <i class="fa-solid fa-rotate-right"></i>
+                  </div>
+                  <p class="text-[11px] text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">Deliberate practice, feedback, spaced repetition & review.</p>
+                  <div class="mt-2 text-[10px] text-emerald-800 dark:text-emerald-300 flex justify-between font-medium">
+                    <span>Avg <em>d</em>: <strong>0.57</strong></span>
+                    <span>11 Strategies</span>
+                  </div>
+                </button>
+              </div>
+
+              <!-- Deep Learning Column -->
+              <div class="space-y-3 bg-purple-50/60 dark:bg-purple-950/20 p-3 rounded-xl border border-purple-200/80 dark:border-purple-900/40">
+                <div class="text-xs font-bold text-purple-800 dark:text-purple-400 uppercase tracking-wider flex items-center justify-between pb-1 border-b border-purple-200 dark:border-purple-900/40">
+                  <span>2. Deep Phase</span>
+                  <i class="fa-solid fa-network-wired"></i>
+                </div>
+
+                <button onclick="openElementModal('deep_acquiring')" class="grid-node text-left w-full p-3 rounded-xl bg-purple-50 hover:bg-purple-100/80 dark:bg-purple-950/40 dark:hover:bg-purple-900/50 border border-purple-200 dark:border-purple-800/50 cursor-pointer">
+                  <div class="flex justify-between items-center text-purple-800 dark:text-purple-400 font-bold text-xs">
+                    <span>Deep Acquiring</span>
+                    <i class="fa-solid fa-diagram-next"></i>
+                  </div>
+                  <p class="text-[11px] text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">Elaboration, metacognition, self-regulation & organizing.</p>
+                  <div class="mt-2 text-[10px] text-purple-800 dark:text-purple-300 flex justify-between font-medium">
+                    <span>Avg <em>d</em>: <strong>0.57</strong></span>
+                    <span>5 Strategies</span>
+                  </div>
+                </button>
+
+                <button onclick="openElementModal('deep_consolidating')" class="grid-node text-left w-full p-3 rounded-xl bg-purple-50 hover:bg-purple-100/80 dark:bg-purple-950/40 dark:hover:bg-purple-900/50 border border-purple-200 dark:border-purple-800/50 cursor-pointer">
+                  <div class="flex justify-between items-center text-purple-800 dark:text-purple-400 font-bold text-xs">
+                    <span>Deep Consolidating</span>
+                    <i class="fa-solid fa-comments"></i>
+                  </div>
+                  <p class="text-[11px] text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">Classroom discussion, peer tutoring, self-explanation & reflection.</p>
+                  <div class="mt-2 text-[10px] text-purple-800 dark:text-purple-300 flex justify-between font-medium">
+                    <span>Avg <em>d</em>: <strong>0.53</strong></span>
+                    <span>12 Strategies</span>
+                  </div>
+                </button>
+              </div>
+
+            </div>
+
+            <div>
+              <button onclick="openElementModal('transfer')" class="grid-node w-full p-3.5 rounded-xl bg-rose-50 hover:bg-rose-100/90 dark:bg-rose-950/30 dark:hover:bg-rose-900/40 border border-rose-200 dark:border-rose-800/50 text-left cursor-pointer">
+                <div class="flex items-center justify-between text-rose-800 dark:text-rose-400 mb-1">
+                  <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-shuffle"></i>
+                    <span class="font-bold text-xs sm:text-sm">3. Transfer of Learning</span>
+                  </div>
+                  <span class="text-[10px] bg-rose-100 dark:bg-rose-900/60 text-rose-800 dark:text-rose-300 px-2 py-0.5 rounded font-medium border border-rose-200 dark:border-rose-700/50">Highest Impact Stage</span>
+                </div>
+                <p class="text-xs text-slate-600 dark:text-slate-300">Detecting similarities & differences across contexts, pattern recognition in novel problems, far transfer mastery.</p>
+                <div class="mt-2 text-[11px] text-rose-800 dark:text-rose-300 flex items-center justify-between border-t border-rose-200/80 dark:border-rose-900/50 pt-1.5 font-medium">
+                  <span>3 Meta-Analytic Constructs</span>
+                  <span class="font-bold">Avg Effect Size <em>d</em> = 1.09</span>
+                </div>
+              </button>
+            </div>
+
+          </div>
+
+          <div class="md:col-span-2 flex flex-col justify-between gap-3 bg-slate-50 dark:bg-slate-950/70 p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800/80">
+            <div class="text-center text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-widest pb-1 border-b border-slate-200 dark:border-slate-800">
+              Outputs
+            </div>
+
+            <button onclick="openElementModal('skill')" class="grid-node text-left p-3 rounded-xl bg-amber-50 hover:bg-amber-100/90 dark:bg-amber-950/30 dark:hover:bg-amber-900/40 border border-amber-200 dark:border-amber-800/50 cursor-pointer">
+              <div class="flex items-center justify-between text-amber-800 dark:text-amber-400 mb-1">
+                <span class="font-bold text-xs sm:text-sm">Skill</span>
+                <i class="fa-solid fa-award text-xs"></i>
+              </div>
+              <p class="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2">Enhanced domain proficiency & academic achievement.</p>
+              <div class="mt-2 text-[10px] text-amber-800 dark:text-amber-300 font-medium">
+                <span>Outcome Dimension</span>
+              </div>
+            </button>
+
+            <button onclick="openElementModal('will')" class="grid-node text-left p-3 rounded-xl bg-amber-50 hover:bg-amber-100/90 dark:bg-amber-950/30 dark:hover:bg-amber-900/40 border border-amber-200 dark:border-amber-800/50 cursor-pointer">
+              <div class="flex items-center justify-between text-amber-800 dark:text-amber-400 mb-1">
+                <span class="font-bold text-xs sm:text-sm">Will</span>
+                <i class="fa-solid fa-shield-halved text-xs"></i>
+              </div>
+              <p class="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2">Strengthened dispositions & willingness to reinvest effort.</p>
+              <div class="mt-2 text-[10px] text-amber-800 dark:text-amber-300 font-medium">
+                <span>Outcome Dimension</span>
+              </div>
+            </button>
+
+            <button onclick="openElementModal('thrill')" class="grid-node text-left p-3 rounded-xl bg-amber-50 hover:bg-amber-100/90 dark:bg-amber-950/30 dark:hover:bg-amber-900/40 border border-amber-200 dark:border-amber-800/50 cursor-pointer">
+              <div class="flex items-center justify-between text-amber-800 dark:text-amber-400 mb-1">
+                <span class="font-bold text-xs sm:text-sm">Thrill</span>
+                <i class="fa-solid fa-fire text-xs"></i>
+              </div>
+              <p class="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2">Renewed curiosity, mastery pleasure & intrinsic motivation.</p>
+              <div class="mt-2 text-[10px] text-amber-800 dark:text-amber-300 font-medium">
+                <span>Outcome Dimension</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- ENVIRONMENT Base Layer -->
+          <div class="md:col-span-12">
+            <button onclick="openElementModal('environment')" class="grid-node w-full p-3.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 dark:bg-slate-800 dark:hover:bg-slate-700/80 border border-slate-200 dark:border-slate-700 text-left flex flex-col sm:flex-row sm:items-center justify-between gap-2 cursor-pointer transition-colors duration-200">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-300">
+                  <i class="fa-solid fa-compass-drafting text-sm"></i>
+                </div>
+                <div>
+                  <span class="font-bold text-slate-800 dark:text-slate-200 text-xs sm:text-sm">Underlying Environment & Study Context</span>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">Environmental structuring, time management, sleep, exercise, background music, social support.</p>
+                </div>
+              </div>
+              <div class="text-right text-xs text-slate-600 dark:text-slate-400 font-medium">
+                <span>8 Strategies | Avg Effect Size <em>d</em> = 0.17</span>
+              </div>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 leading-relaxed text-slate-700 dark:text-slate-300 shadow-sm transition-colors duration-200">
+        <div class="flex items-start gap-4">
+          <div class="hidden sm:flex w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 dark:bg-sky-950 dark:text-sky-400 items-center justify-center border border-sky-200 dark:border-sky-800/60 shrink-0 text-xl">
+            <i class="fa-solid fa-quote-left"></i>
+          </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+              Model Conceptual Foundations & Core Finding
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+              The <strong>Hattie & Donoghue (2016) Learning Model</strong> demonstrates that learning strategies are not universally effective in isolation, but are highly dependent on the student’s specific phase in the learning cycle. Synthesizing over 228 meta-analyses spanning 18,956+ studies, the model organizes learning into three primary phases: <strong>Surface</strong>, <strong>Deep</strong>, and <strong>Transfer</strong>, each split into an <em>acquisition</em> and <em>consolidation</em> phase. Crucially, the authors prove that high-level thinking strategies (like problem-based learning or peer tutoring) often backfire when introduced prior to acquiring sufficient surface knowledge, whereas low-level strategies (like highlighting or mnemonics) excel during initial exposure but diminish as deep understanding is forged.
+              <button onclick="openElaborateModal()" class="inline-flex items-center gap-1 ml-1.5 font-bold text-sky-600 dark:text-sky-400 hover:text-sky-500 underline decoration-sky-400/50 underline-offset-4 cursor-pointer transition">
+                more... <i class="fa-solid fa-arrow-right text-xs"></i>
+              </button>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm transition-colors duration-200">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">Global Learning Strategy Directory</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Search and filter meta-analytic strategies across all phases of the model.</p>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center gap-3">
+            <div class="relative w-full sm:w-64">
+              <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+              <input type="text" id="strategySearchInput" oninput="filterGlobalStrategies()" placeholder="Search strategy name..." class="w-full bg-slate-100 dark:bg-slate-950 text-xs rounded-xl pl-8 pr-3 py-2 border border-slate-300 dark:border-slate-800 focus:outline-none focus:border-sky-500 text-slate-800 dark:text-slate-200 transition-colors">
+            </div>
+            <select id="phaseFilterSelect" onchange="filterGlobalStrategies()" class="w-full sm:w-auto bg-slate-100 dark:bg-slate-950 text-xs rounded-xl px-3 py-2 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-sky-500 transition-colors cursor-pointer">
+              <option value="ALL">All Model Components</option>
+              <option value="skill">Skill Inputs/Outputs</option>
+              <option value="will">Will Dispositions</option>
+              <option value="thrill">Thrill Motivation</option>
+              <option value="success_criteria">Success Criteria</option>
+              <option value="surface_acquiring">Acquiring Surface</option>
+              <option value="surface_consolidating">Consolidating Surface</option>
+              <option value="deep_acquiring">Acquiring Deep</option>
+              <option value="deep_consolidating">Consolidating Deep</option>
+              <option value="transfer">Transfer Phase</option>
+              <option value="environment">Environment Context</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 dark:border-slate-800 text-xs uppercase text-slate-500 dark:text-slate-400 font-semibold bg-slate-50 dark:bg-slate-950">
+                <th class="py-3 px-4">Strategy Name</th>
+                <th class="py-3 px-4">Phase / Component</th>
+                <th class="py-3 px-4">Effect Size (<em>d</em>)</th>
+                <th class="py-3 px-4">Description Summary</th>
+                <th class="py-3 px-4 text-right">Pattern View</th>
+              </tr>
+            </thead>
+            <tbody id="globalStrategyTableBody" class="divide-y divide-slate-200 dark:divide-slate-800 text-xs sm:text-sm">
+              <!-- Injected dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-6 mt-12 transition-colors duration-200">
+      <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 dark:text-slate-400">
+        <p>Based on John A.C. Hattie & Gregory M. Donoghue (2016), <em>Learning strategies: a synthesis and conceptual model</em>, npj Science of Learning 1, 16013.</p>
+      </div>
+    </footer>
+  </div>
+
+  <div id="elaborateModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden my-auto transition-colors duration-200">
+      <div class="p-5 sm:p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900 sticky top-0 z-10">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 dark:bg-sky-500/20 dark:text-sky-300 flex items-center justify-center border border-sky-300/60 dark:border-sky-500/30">
+            <i class="fa-solid fa-book-journal-whills text-lg"></i>
+          </div>
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Elaborate Model Explanation & Meta-Synthesis</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Synthesis of 228 Meta-Analyses on Learning Strategies (Hattie & Donoghue, 2016)</p>
+          </div>
+        </div>
+        <button onclick="closeElaborateModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-xl p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-6 text-slate-700 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+          <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+            <div class="text-2xl font-black text-sky-600 dark:text-sky-400">228</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">Meta-Analyses Synthesized</div>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+            <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400">18,956</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">Primary Research Studies</div>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+            <div class="text-2xl font-black text-purple-600 dark:text-purple-400">13M+</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">Estimated Student Sample</div>
+          </div>
+        </div>
+
+        <section class="space-y-2">
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <i class="fa-solid fa-bullseye text-sky-600 dark:text-sky-400"></i> The Core Problem in Study Skills Training
+          </h3>
+          <p>
+            For decades, educators and study-skills programs have attempted to teach generic "learning strategies" or "critical thinking skills" as standalone courses. Hattie & Donoghue’s synthesis proves that generic strategy training taught out of context yields disappointing results. Metacognition and learning strategies are <strong>not content-free</strong>; critical thinking in mathematics (e.g., checking that step-by-step logic avoids division by zero) is fundamentally different from critical thinking in history (e.g., assessing source bias and historical context).
+          </p>
+        </section>
+
+        <section class="space-y-2">
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <i class="fa-solid fa-clock text-amber-600 dark:text-amber-400"></i> "Knowing When to Hold 'Em, Knowing When to Fold 'Em"
+          </h3>
+          <p>
+            The central thesis of the model is that strategy effectiveness depends entirely on <strong>when</strong> during the learning cycle a strategy is invoked:
+          </p>
+          <ul class="list-disc pl-5 space-y-1 text-slate-700 dark:text-slate-300">
+            <li><strong>Surface Acquiring Phase:</strong> Strategies like outlining, summarization, and note-taking assist learners in acquiring vocabulary and basic facts. Overlearning surface facts frees working memory space for complex reasoning.</li>
+            <li><strong>Surface Consolidating Phase:</strong> Spaced practice, deliberate practice, and receiving feedback build retrieval strength so knowledge becomes easily accessible.</li>
+            <li><strong>Deep Acquiring Phase:</strong> Metacognitive planning, concept mapping, and self-regulation allow students to seek relational meaning and connect new concepts to prior schema.</li>
+            <li><strong>Deep Consolidating Phase:</strong> Dialogue, peer tutoring, classroom discussion, and self-explanation enable students to test their conceptual structures and "speak the language of learning."</li>
+            <li><strong>Transfer Phase:</strong> Explicitly teaching students to detect <em>similarities and differences</em> between known problems and novel tasks leads to dramatic transfer gains (<em>d</em> = 1.32).</li>
+          </ul>
+        </section>
+
+        <section class="space-y-2 bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400"></i> Why Advanced Strategies (PBL, Inquiry) Fail Prematurely
+          </h3>
+          <p>
+            The model resolves the paradox of why methods like <strong>Problem-Based Learning (PBL, <em>d</em> = 0.15)</strong> or <strong>Inquiry-Based Teaching (<em>d</em> = 0.31)</strong> produce surprisingly small overall effect sizes. When novice learners are placed in unstructured problem-based environments without prior surface knowledge, they engage in <em>backward reasoning</em> (working from unknown to known), leading to high error rates and cognitive overload. When PBL is applied after students possess solid surface knowledge, forward reasoning occurs, and outcomes skyrocket.
+          </p>
+        </section>
+      </div>
+
+      <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex justify-end">
+        <button onclick="closeElaborateModal()" class="px-5 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-semibold transition cursor-pointer">
+          Close Overview
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="elementModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden my-auto transition-colors duration-200">
+      <div id="elementModalHeader" class="p-5 sm:p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900 sticky top-0 z-10">
+        <!-- Dynamically injected header -->
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-6">
+        <!-- Definition & Rationale Section -->
+        <div class="bg-slate-50 dark:bg-slate-950 p-5 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400 mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-circle-info"></i> Definition & Empirical Rationale
+          </h3>
+          <p id="elementDefinitionText" class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+            <!-- Dynamically injected definition text -->
+          </p>
+        </div>
+
+        <!-- Strategy Table -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-table-list text-sky-600 dark:text-sky-400"></i> Meta-Analytic Strategies Table
+            </h3>
+            <span id="strategyCountBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+              0 Strategies
+            </span>
+          </div>
+
+          <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-200 dark:border-slate-800 text-xs uppercase text-slate-500 dark:text-slate-400 font-semibold bg-slate-50 dark:bg-slate-950">
+                  <th class="py-3 px-4">Strategy Name</th>
+                  <th class="py-3 px-4">Effect Size (<em>d</em>)</th>
+                  <th class="py-3 px-4">Short Description</th>
+                  <th class="py-3 px-4 text-right">Pattern View</th>
+                </tr>
+              </thead>
+              <tbody id="elementStrategyTableBody" class="divide-y divide-slate-200 dark:divide-slate-800 text-xs sm:text-sm">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex justify-end">
+        <button onclick="closeElementModal()" class="px-5 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded-xl text-xs font-semibold transition cursor-pointer">
+          Close Window
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="patternModal" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden my-auto transition-colors duration-200">
+      <div id="patternModalHeader" class="p-5 sm:p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900 sticky top-0 z-10">
+        <!-- Injected pattern header -->
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-5 text-slate-700 dark:text-slate-300 text-xs sm:text-sm">
+        
+        <!-- Pattern Badges Bar -->
+        <div class="flex items-center gap-3 flex-wrap text-xs pb-2 border-b border-slate-200 dark:border-slate-800">
+          <span id="patternPhaseBadge" class="px-3 py-1 rounded-lg bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 border border-sky-300 dark:border-sky-800 font-medium">Phase</span>
+          <span id="patternEffectBadge" class="px-3 py-1 rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 font-bold">Effect Size</span>
+        </div>
+
+        <!-- Problem / Challenge -->
+        <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h4 class="text-xs font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-circle-exclamation"></i> Problem / Learning Challenge
+          </h4>
+          <p id="patternProblemText" class="text-slate-700 dark:text-slate-300 leading-relaxed"></p>
+        </div>
+
+        <!-- Context -->
+        <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h4 class="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-compass"></i> Learning Context & Phase Timing
+          </h4>
+          <p id="patternContextText" class="text-slate-700 dark:text-slate-300 leading-relaxed"></p>
+        </div>
+
+        <!-- Solution Procedure -->
+        <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h4 class="text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-key"></i> Solution Procedure & Implementation
+          </h4>
+          <div id="patternSolutionText" class="text-slate-700 dark:text-slate-300 leading-relaxed space-y-2"></div>
+        </div>
+
+        <!-- Notes / Caveats -->
+        <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h4 class="text-xs font-bold text-purple-700 dark:text-purple-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation"></i> Pedagogical Notes & Caveats
+          </h4>
+          <p id="patternNotesText" class="text-slate-700 dark:text-slate-300 leading-relaxed"></p>
+        </div>
+
+        <!-- References -->
+        <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+          <h4 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-quote-right"></i> Meta-Analytic References
+          </h4>
+          <p id="patternReferencesText" class="text-xs text-slate-500 dark:text-slate-400 italic"></p>
+        </div>
+
+      </div>
+
+      <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex justify-between items-center">
+        <button onclick="backToElementModal()" class="px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-medium transition flex items-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-arrow-left"></i> Back to Component Table
+        </button>
+        <button onclick="closePatternModal()" class="px-5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-semibold transition cursor-pointer">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const MODEL_ELEMENTS = {
+      skill: {
+        id: 'skill',
+        title: 'Skill (Prior Knowledge & Cognitive Capability)',
+        category: 'Inputs / Outcomes',
+        colorClass: 'amber',
+        definition: 'Skill refers to the prior achievement, domain knowledge, and short-term working memory capacity that a student brings to a learning encounter. Ausubel famously noted that the single most important factor influencing learning is what the learner already knows.',
+        strategies: [
+          {
+            id: 'prior_achievement',
+            name: 'Prior Achievement Alignment',
+            effectSize: 0.77,
+            description: 'Assessing and building directly upon student existing baseline achievement.',
+            problem: 'New instructional content fails to connect or vastly exceeds the learner cognitive entry point.',
+            context: 'Pre-learning assessment and instructional readiness design.',
+            solution: 'Administer diagnostic checks to ascertain existing mental schemas; calibrate instructional depth so new knowledge anchors to existing memory structures.',
+            notes: 'Prior achievement effect sizes are highest in upper secondary and tertiary levels.',
+            references: 'Hattie & Donoghue (2016); Ausubel (1968).'
+          },
+          {
+            id: 'working_memory',
+            name: 'Working Memory Management',
+            effectSize: 0.68,
+            description: 'Optimizing instructional load to match short-term working memory limits.',
+            problem: 'Cognitive overload occurs when short-term memory is flooded with excessive unorganized inputs.',
+            context: 'Initial instruction and problem presentation.',
+            solution: 'Break complex information into manageable chunks, utilize visual-verbal dual coding, and reduce extraneous cognitive friction.',
+            notes: 'While working memory correlates with general fluid intelligence, generic "brain training" games show zero far transfer to academic skills.',
+            references: 'Cowan (2012); Melby-Lervåg & Hulme (2013).'
+          }
+        ]
+      },
+      will: {
+        id: 'will',
+        title: 'Will (Dispositions & Mindframes)',
+        category: 'Inputs / Outcomes',
+        colorClass: 'amber',
+        definition: 'Will represents the learner habits of mind, self-efficacy beliefs, emotional resilience, and attitudes towards learning tasks. Claxton defined powerful learners through emotional resilience, resourcefulness, strategic reflection, and social sophistication.',
+        strategies: [
+          {
+            id: 'self_efficacy',
+            name: 'Self-Efficacy Cultivation',
+            effectSize: 0.90,
+            description: 'Fostering confidence in one ability to master specific challenging goals.',
+            problem: 'Learners experience self-doubt and surrender when encountering challenging material.',
+            context: 'Pre-task motivation and goal-setting phases.',
+            solution: 'Provide mastery experiences, clear incremental success benchmarks, and constructive feedback focusing on effortful progress.',
+            notes: 'Self-efficacy has the highest effect size (d = 0.90) among affective input variables.',
+            references: 'Bandura (1997); Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'reducing_anxiety',
+            name: 'Anxiety Reduction & Coping',
+            effectSize: 0.45,
+            description: 'Equipping students with explicit emotional coping strategies to deal with stress.',
+            problem: 'High anxiety consumes working memory resources and triggers cognitive paralysis.',
+            context: 'High-stakes evaluation and novel task entry.',
+            solution: 'Teach emotional self-regulation, reframing errors as informative feedback, and systematic problem breakdown.',
+            notes: 'Providing explicit coping strategies is far more effective than merely measuring stress.',
+            references: 'Frydenberg (2010); Galla & Wood (2012).'
+          },
+          {
+            id: 'task_value',
+            name: 'Task Value & Relevance',
+            effectSize: 0.46,
+            description: 'Helping students perceive the authentic utility and personal meaning of the content.',
+            problem: 'Students view learning tasks as arbitrary school requirements without real-world utility.',
+            context: 'Unit introduction and motivation.',
+            solution: 'Connect subject matter to real-world applications, future career goals, and personal interest areas.',
+            notes: 'Enhances student willingness to invest effort during difficult learning phases.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'self_concept',
+            name: 'Academic Self-Concept Building',
+            effectSize: 0.41,
+            description: 'Enhancing the student overall belief in their domain-specific competence.',
+            problem: 'Negative domain self-concept ("I am not a math person") creates learned helplessness.',
+            context: 'Longitudinal learning and skill development.',
+            solution: 'Highlight personal mastery growth over time rather than normative peer comparisons.',
+            notes: 'Strongly correlated with sustained academic persistence.',
+            references: 'Hattie (2009).'
+          },
+          {
+            id: 'attitude_content',
+            name: 'Attitude to Subject Matter',
+            effectSize: 0.35,
+            description: 'Promoting positive interest and appreciation for specific subject domains.',
+            problem: 'Boredom and negative disposition towards academic disciplines.',
+            context: 'Curriculum delivery and teacher modeling.',
+            solution: 'Model teacher enthusiasm, present intrigue-driven problems, and foster supportive group dynamics.',
+            notes: 'Positive attitude supports intrinsic reinvestment in learning.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'mindfulness',
+            name: 'Mindfulness & Focus Training',
+            effectSize: 0.29,
+            description: 'Training present-moment attention and impulse control during learning.',
+            problem: 'Distractibility and mind-wandering during cognitive tasks.',
+            context: 'Daily study routines and classroom transitions.',
+            solution: 'Incorporate brief mindfulness exercises and focus-anchoring techniques before complex study sessions.',
+            notes: 'Moderate positive effect on self-regulation and attention retention.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'mindset',
+            name: 'Growth Mindset Interventions',
+            effectSize: 0.19,
+            description: 'Teaching that intellectual ability is malleable rather than fixed.',
+            problem: 'Students believe intelligence is an unchangeable fixed trait.',
+            context: 'Feedback delivery and error analysis.',
+            solution: 'Praise effort, strategy selection, and persistence rather than innate talent or intelligence.',
+            notes: 'Growth mindset interventions yield modest average direct achievement gains (d = 0.19) because school cultures often reinforce fixed grading structures.',
+            references: 'Dweck (2012); Hattie & Donoghue (2016).'
+          }
+        ]
+      },
+      thrill: {
+        id: 'thrill',
+        title: 'Thrill (Motivations & Orientations)',
+        category: 'Inputs / Outcomes',
+        colorClass: 'amber',
+        definition: 'Thrill encapsulates the student intrinsic motivation, goal orientations, and emotional delight derived from mastering challenging material. It includes deep, achieving, and surface motivation styles.',
+        strategies: [
+          {
+            id: 'deep_motivation',
+            name: 'Deep Motivation Orientation',
+            effectSize: 0.75,
+            description: 'Internal drive to achieve conceptual understanding and make ideas personal.',
+            problem: 'Surface compliance where students seek only minimal passing requirements.',
+            context: 'Goal setting and curriculum exploration.',
+            solution: 'Cultivate intrinsic curiosity by framing topics around fundamental questions and conceptual paradoxes.',
+            notes: 'Strongest positive motivational orientation for long-term academic growth.',
+            references: 'Biggs (1993); Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'achieving_approach',
+            name: 'Achieving Approach Strategy',
+            effectSize: 0.70,
+            description: 'Systematic organization of time, effort, and study habits to excel.',
+            problem: 'Disorganized effort leading to wasted time and suboptimal academic outcomes.',
+            context: 'Study planning and exam preparation.',
+            solution: 'Teach students to optimize effort, schedule targeted study sessions, and adhere to clear performance standards.',
+            notes: 'Combines strategic discipline with goal direction.',
+            references: 'Biggs (1993).'
+          },
+          {
+            id: 'deep_approach',
+            name: 'Deep Approach Execution',
+            effectSize: 0.63,
+            description: 'Actively seeking underlying meaning and making connections across concepts.',
+            problem: 'Rote memorization of isolated facts without conceptual coherence.',
+            context: 'Reading, research, and complex problem solving.',
+            solution: 'Prompt students to ask "why" and "how" questions, challenge evidence, and relate new ideas to personal experience.',
+            notes: 'Essential bridge between surface knowledge and deep understanding.',
+            references: 'Entwistle (2000).'
+          },
+          {
+            id: 'goals_general',
+            name: 'Goal Orientation Synthesis',
+            effectSize: 0.48,
+            description: 'Setting clear, challenging, and explicit targets for learning tasks.',
+            problem: 'Vague intentions ("do your best") lead to low commitment and weak effort.',
+            context: 'Pre-task planning.',
+            solution: 'Guide students to define explicit performance and mastery targets with concrete milestones.',
+            notes: 'Specific challenging goals consistently outperform generic encouragement.',
+            references: 'Hulleman et al. (2010).'
+          },
+          {
+            id: 'mastery_goals',
+            name: 'Mastery Goal Adoption',
+            effectSize: 0.19,
+            description: 'Focusing on personal skill development and learning for its own sake.',
+            problem: 'Excessive focus on relative peer ranking damages intrinsic motivation.',
+            context: 'Individual student goal setting.',
+            solution: 'Frame success around personal progress and skill acquisition rather than outperforming peers.',
+            notes: 'Mastery goals show modest direct correlation with test scores if assessments measure only surface recall.',
+            references: 'Carpenter (2007); Hulleman et al. (2010).'
+          },
+          {
+            id: 'achieving_motivation',
+            name: 'Achieving Motivation',
+            effectSize: 0.18,
+            description: 'Drive to attain high grades and academic recognition.',
+            problem: 'Extrinsic drive without strategic study skills yields minimal understanding.',
+            context: 'Assessment preparation.',
+            solution: 'Channel grade motivation into effective learning strategies and structured time management.',
+            notes: 'Most effective when paired with deep learning strategies.',
+            references: 'Biggs (1993).'
+          },
+          {
+            id: 'surface_approach',
+            name: 'Surface / Performance Approach',
+            effectSize: 0.11,
+            description: 'Learning merely to reproduce information or complete task requirements.',
+            problem: 'Shallow engagement resulting in rapid forgetting post-assessment.',
+            context: 'Rote recall assignments.',
+            solution: 'Scaffold tasks so surface recall is explicitly treated as a stepping stone to deeper relational thinking.',
+            notes: 'Yields minimal long-term retention or conceptual understanding.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'surface_motivation',
+            name: 'Surface Motivation / Avoidance',
+            effectSize: -0.19,
+            description: 'Desire to put in minimal effort purely to avoid failure or embarrassment.',
+            problem: 'Active work avoidance and defensive self-handicapping.',
+            context: 'Task engagement under low confidence.',
+            solution: 'Reduce fear of failure by creating safe error-tolerant environments and clear success pathways.',
+            notes: 'Negative effect on academic growth (d = -0.19).',
+            references: 'Hattie & Donoghue (2016).'
+          }
+        ]
+      },
+      success_criteria: {
+        id: 'success_criteria',
+        title: 'Knowing Success Criteria (Pre-Learning Gate)',
+        category: 'Success Criteria',
+        colorClass: 'blue',
+        definition: 'Understanding what success looks like before starting a task. When students are clear about the standards of performance expected, they can plan, self-monitor, and select appropriate strategies effectively.',
+        strategies: [
+          {
+            id: 'sc_clarity',
+            name: 'Explicit Success Criteria Provision',
+            effectSize: 1.13,
+            description: 'Directly communicating explicit benchmarks and rubrics for successful performance.',
+            problem: 'Students do not know how their work will be judged or what excellence looks like.',
+            context: 'Unit launch and task assignment.',
+            solution: 'Share clear rubrics, exemplar work, and specific behavioral criteria before students begin work.',
+            notes: 'Highest impact strategy category in the pre-learning phase (d = 1.13).',
+            references: 'Clarke (2005); Heritage (2007); Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'planning_prediction',
+            name: 'Planning & Prediction',
+            effectSize: 0.76,
+            description: 'Teaching students to plan their study sequence and predict task outcomes.',
+            problem: 'Students dive into tasks impulsively without strategic orientation.',
+            context: 'Task initiation.',
+            solution: 'Require students to outline their steps, estimate time required, and predict key challenges.',
+            notes: 'Develops metacognitive executive function.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'goal_intentions',
+            name: 'Goal Implementation Intentions',
+            effectSize: 0.68,
+            description: 'Formulating "If-Then" plans for executing study goals.',
+            problem: 'Good intentions fail during execution due to unexpected obstacles.',
+            context: 'Goal setting and study planning.',
+            solution: 'Prompt students to specify exact triggers: "IF situation X arises, THEN I will execute strategy Y."',
+            notes: 'Dramatically increases goal follow-through.',
+            references: 'Gollwitzer; Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'concept_mapping_sc',
+            name: 'Teacher-Student Co-Constructed Concept Maps',
+            effectSize: 0.64,
+            description: 'Co-creating structural maps of the learning domain before diving into details.',
+            problem: 'Students view topics as disconnected fragments rather than an organized whole.',
+            context: 'Unit overview and orientation.',
+            solution: 'Work interactively with students to diagram key concepts and their structural relationships.',
+            notes: 'Co-constructed maps (d = 0.64) are far more effective than pre-packaged teacher maps given passively.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'standards_self_judgement',
+            name: 'Setting Standards for Self-Judgement',
+            effectSize: 0.62,
+            description: 'Training students to evaluate their own draft work against explicit quality standards.',
+            problem: 'Students rely entirely on the teacher to judge work quality.',
+            context: 'Drafting and formative revision.',
+            solution: 'Provide self-assessment checklists and scoring guides so students judge their own readiness.',
+            notes: 'Fosters self-regulated, autonomous learning.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'goal_difficulty',
+            name: 'Appropriately Challenging Goals',
+            effectSize: 0.57,
+            description: 'Setting goals that are challenging yet attainable with effort.',
+            problem: 'Easy goals induce boredom; impossible goals induce helplessness.',
+            context: 'Goal specification.',
+            solution: 'Set target goals in the student "Zone of Proximal Development" requiring stretch and effort.',
+            notes: 'Challenge fuels cognitive engagement.',
+            references: 'Locke & Latham; Hattie (2009).'
+          },
+          {
+            id: 'advance_organisers',
+            name: 'Advance Organizers',
+            effectSize: 0.42,
+            description: 'Providing conceptual frameworks prior to detailed content presentation.',
+            problem: 'Learners struggle to categorize new incoming information.',
+            context: 'Pre-lesson presentation.',
+            solution: 'Present high-level comparative organizers or graphic charts before introducing detailed content.',
+            notes: 'Acts as an anchor for new surface knowledge.',
+            references: 'Ausubel (1968); Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'worked_examples',
+            name: 'Worked Examples',
+            effectSize: 0.37,
+            description: 'Providing step-by-step solved problem demonstrations before independent practice.',
+            problem: 'Novices experience cognitive overload when solving complex problems from scratch.',
+            context: 'Initial problem-solving instruction.',
+            solution: 'Present fully worked solutions, then faded worked examples, before unassisted practice.',
+            notes: 'Reduces extraneous cognitive load for novice learners.',
+            references: 'Sweller; Dunlosky et al. (2013).'
+          },
+          {
+            id: 'goal_commitment',
+            name: 'Goal Commitment Interventions',
+            effectSize: 0.37,
+            description: 'Securing student personal buy-in to performance targets.',
+            problem: 'Goals set by teachers are ignored or treated passively by students.',
+            context: 'Goal setting.',
+            solution: 'Involve students in goal creation and public commitment contracts.',
+            notes: 'Sustains persistence through difficult study phases.',
+            references: 'Hattie & Donoghue (2016).'
+          }
+        ]
+      },
+      surface_acquiring: {
+        id: 'surface_acquiring',
+        title: 'Acquiring Surface Knowledge',
+        category: 'Surface Phase',
+        colorClass: 'emerald',
+        definition: 'First exposure to new content, facts, terminology, and core procedures. The primary aim is acquiring accurate subject matter vocabulary and isolated concepts into working memory.',
+        strategies: [
+          {
+            id: 'prior_knowledge_integration',
+            name: 'Integrating with Prior Knowledge',
+            effectSize: 0.93,
+            description: 'Explicitly bridging new surface facts to existing mental schemas.',
+            problem: 'New facts remain isolated and are quickly forgotten.',
+            context: 'Initial content exposure.',
+            solution: 'Prompt students to recall what they already know about a topic before introducing new facts.',
+            notes: 'Highest impact strategy in surface acquisition (d = 0.93).',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'outlining_transforming',
+            name: 'Outlining & Transforming',
+            effectSize: 0.85,
+            description: 'Rearranging instructional text into structured hierarchical outlines.',
+            problem: 'Passive reading leads to shallow processing and poor retention.',
+            context: 'Textbook study and lecture processing.',
+            solution: 'Have students active-code texts into hierarchical bullet outlines, matrices, or visual charts.',
+            notes: 'Requires active cognitive reorganization of material.',
+            references: 'Lavery (2008); Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'mnemonics',
+            name: 'Mnemonic Keyword Strategies',
+            effectSize: 0.76,
+            description: 'Using visual or verbal memory tricks to encode arbitrary facts and vocabulary.',
+            problem: 'High volume of arbitrary vocabulary or sequences is difficult to memorize directly.',
+            context: 'Foreign language vocabulary, anatomy, historical dates.',
+            solution: 'Teach acrostics, peg-word associations, and imagery keywords to store arbitrary facts.',
+            notes: 'Highly effective for surface recall, but does not substitute for deep understanding.',
+            references: 'Dunlosky et al. (2013); Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'wm_training_context',
+            name: 'Working Memory Load Reduction',
+            effectSize: 0.72,
+            description: 'Structuring content presentation to minimize cognitive clutter.',
+            problem: 'Excessive information density overwhelms novice working memory.',
+            context: 'Lesson material design.',
+            solution: 'Present single concepts sequentially, eliminate decorative distractions, and use dual coding.',
+            notes: 'Focuses on instructional design that respects working memory limits.',
+            references: 'Cowan (2012).'
+          },
+          {
+            id: 'summarisation',
+            name: 'Summarization Techniques',
+            effectSize: 0.66,
+            description: 'Writing concise summaries capturing the core main ideas of a text.',
+            problem: 'Students cannot identify central points in dense informational text.',
+            context: 'Reading comprehension and note review.',
+            solution: 'Teach explicit rule-based summarization: delete redundant text, eliminate trivia, collapse lists, choose topic sentences.',
+            notes: 'Requires explicit instruction; ineffective if students simply copy sentences.',
+            references: 'Pressley (2002); Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'organising_surface',
+            name: 'Information Organizing',
+            effectSize: 0.60,
+            description: 'Sorting facts into coherent categories, tables, or timelines.',
+            problem: 'Unstructured factual information is chaotic in memory.',
+            context: 'Initial note consolidation.',
+            solution: 'Guide students to categorize raw facts into thematic matrices or chronological timelines.',
+            notes: 'Facilitates mental storage strength.',
+            references: 'Dignath et al. (2008).'
+          },
+          {
+            id: 'record_keeping',
+            name: 'Record Keeping & Tracking',
+            effectSize: 0.54,
+            description: 'Maintaining systematic logs of study progress, scores, and completed tasks.',
+            problem: 'Students lack awareness of study volume and completion status.',
+            context: 'Independent study management.',
+            solution: 'Provide study logs and error-tracking spreadsheets for daily student completion.',
+            notes: 'Builds accountability and self-monitoring habits.',
+            references: 'Lavery (2008).'
+          },
+          {
+            id: 'highlighting',
+            name: 'Underlining & Highlighting',
+            effectSize: 0.50,
+            description: 'Marking key terms and phrases during initial reading.',
+            problem: 'Passive, indiscriminate highlighting of entire pages without critical selection.',
+            context: 'First reading pass.',
+            solution: 'Train students to limit highlighting to one key phrase per paragraph after reading the paragraph first.',
+            notes: 'Highlighting on a first pass without understanding is ineffective; works best as a targeted second pass tool.',
+            references: 'Dunlosky et al. (2013).'
+          },
+          {
+            id: 'note_taking',
+            name: 'Active Note Taking',
+            effectSize: 0.50,
+            description: 'Capturing and synthesizing lecture or reading content in written form.',
+            problem: 'Verbatim transcribing without mental processing leads to superficial learning.',
+            context: 'Lectures and direct instruction.',
+            solution: 'Utilize structured note formats like Cornell Notes (cues, main notes, summary) requiring immediate processing.',
+            notes: 'Generative note taking (in student own words) far outperforms verbatim laptop typing.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'imagery',
+            name: 'Mental & Visual Imagery',
+            effectSize: 0.45,
+            description: 'Forming mental pictures or visual diagrams of factual content.',
+            problem: 'Abstract text without concrete visual representations is hard to retain.',
+            context: 'Reading abstract descriptions.',
+            solution: 'Encourage students to draw quick sketch diagrams or visualize biological/physical processes.',
+            notes: 'Useful for concrete spatial and procedural concepts.',
+            references: 'Lavery (2008).'
+          }
+        ]
+      },
+      surface_consolidating: {
+        id: 'surface_consolidating',
+        title: 'Consolidating Surface Knowledge',
+        category: 'Surface Phase',
+        colorClass: 'emerald',
+        definition: 'Embedding surface facts into long-term memory so they become easily retrievable. The goal is building storage strength and retrieval strength through effortful practice and rehearsal.',
+        strategies: [
+          {
+            id: 'deliberate_practice',
+            name: 'Deliberate Practice',
+            effectSize: 0.77,
+            description: 'Targeted practice on specific weak components with expert feedback.',
+            problem: 'Mindless repetition of already-mastered skills without correcting errors.',
+            context: 'Skill development and drill practice.',
+            solution: 'Isolate specific component weaknesses, practice at maximum concentration, and receive instant corrective guidance.',
+            notes: 'Requires high mental effort and immediate expert feedback loop.',
+            references: 'Ericsson; Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'effort_investment',
+            name: 'Maximizing Cognitive Effort',
+            effectSize: 0.77,
+            description: 'Sustaining high mental effort and willingness to grapple with difficulty.',
+            problem: 'Giving up quickly when practice becomes challenging.',
+            context: 'Consolidation drills.',
+            solution: 'Cultivate tolerance for ambiguity and frame cognitive struggle as the driver of memory formation.',
+            notes: 'Cognitive effort directly predicts long-term retention strength.',
+            references: 'von Stumm et al. (2011).'
+          },
+          {
+            id: 'rehearsal_memorisation',
+            name: 'Rehearsal & Meaningful Memorization',
+            effectSize: 0.73,
+            description: 'Repeated retrieval practice of understood factual content.',
+            problem: 'Rote memorization without prior understanding creates fragile, inflexible memories.',
+            context: 'Fact consolidation.',
+            solution: 'Execute flashcard drills and active recall exercises AFTER initial conceptual understanding is secured.',
+            notes: 'Marton emphasized that "meaningful memorization" (after understanding) is extremely powerful, whereas "rote memorization" (before understanding) fails.',
+            references: 'Marton et al. (2005); Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'giving_receiving_feedback',
+            name: 'Receiving & Acting on Feedback',
+            effectSize: 0.71,
+            description: 'Seeking, interpreting, and applying feedback on performance accuracy.',
+            problem: 'Feedback is ignored, viewed as evaluation rather than guidance, or not acted upon.',
+            context: 'Post-practice review.',
+            solution: 'Provide feedback addressing "Where am I going?", "How am I going?", and "Where to next?" and require immediate student revision.',
+            notes: 'One of the most powerful influences on achievement across all research.',
+            references: 'Hattie & Timperley (2007).'
+          },
+          {
+            id: 'spaced_practice',
+            name: 'Spaced vs Massed Practice',
+            effectSize: 0.60,
+            description: 'Distributing study sessions over time rather than cramming in one block.',
+            problem: 'Massed study (cramming) creates rapid temporary performance without durable retention.',
+            context: 'Study schedule planning.',
+            solution: 'Space review sessions across days and weeks (e.g., review at 1 day, 1 week, 1 month intervals).',
+            notes: 'Robustly supported by cognitive science for building durable long-term storage.',
+            references: 'Bjork & Bjork (1992); Dunlosky et al. (2013).'
+          },
+          {
+            id: 'help_seeking_surface',
+            name: 'Adaptive Help Seeking',
+            effectSize: 0.60,
+            description: 'Actively seeking clarification when stuck from accurate sources.',
+            problem: 'Students either suffer in silence or copy answers expediently without learning.',
+            context: 'Independent practice.',
+            solution: 'Teach adaptive help seeking (asking for hints or explanations) rather than expedient help seeking (asking for answers).',
+            notes: 'Requires a classroom climate where asking for help is welcomed.',
+            references: 'Ryan & Shin (2011).'
+          },
+          {
+            id: 'time_on_task',
+            name: 'Time on Task & Engagement',
+            effectSize: 0.54,
+            description: 'Sustaining active, focused engagement during practice time.',
+            problem: 'Off-task behavior and multi-tasking during study hours.',
+            context: 'Classroom practice and homework.',
+            solution: 'Structure focused time blocks (e.g., Pomodoro technique) free from digital distractions.',
+            notes: 'Quality of cognitive engagement matters more than passive seated time.',
+            references: 'Claessens et al. (2010).'
+          },
+          {
+            id: 'reviewing_records',
+            name: 'Reviewing Records & Notes',
+            effectSize: 0.49,
+            description: 'Periodically revisiting past notes and graded assignments.',
+            problem: 'Notes are written once and never re-opened.',
+            context: 'Weekly review routines.',
+            solution: 'Implement weekly note-review schedules where students annotate and test themselves on past notes.',
+            notes: 'Reactivates decaying memory traces.',
+            references: 'Lavery (2008).'
+          },
+          {
+            id: 'practice_testing',
+            name: 'Practice Testing (Retrieval Practice)',
+            effectSize: 0.44,
+            description: 'Self-testing using practice quizzes, flashcards, and low-stakes tests.',
+            problem: 'Students rely on passive re-reading, which creates an illusion of competence.',
+            context: 'Consolidation study.',
+            solution: 'Use low-stakes practice tests, practice questions, and closed-book self-quizzing.',
+            notes: 'Retrieval practice directly alters memory structure, strengthening retrieval pathways.',
+            references: 'Dunlosky et al. (2013); Donoghue et al. (2015).'
+          },
+          {
+            id: 'test_taking_coaching',
+            name: 'Test-Taking Strategy Coaching',
+            effectSize: 0.27,
+            description: 'Teaching exam mechanics, time allocation, and question analysis.',
+            problem: 'Test anxiety and poor exam pacing reduce demonstrated achievement.',
+            context: 'Exam preparation.',
+            solution: 'Teach explicit test mechanics: analyzing question prompts, pacing, and process of elimination.',
+            notes: 'Modest effect size; helps ensure assessment measures true underlying skill rather than test-wiseness.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'interleaved_practice',
+            name: 'Interleaved Practice',
+            effectSize: 0.21,
+            description: 'Mixing different problem types within a single practice session.',
+            problem: 'Blocked practice (doing 20 identical problems) lets students execute procedures without choosing the right formula.',
+            context: 'Math and problem-solving practice.',
+            solution: 'Shuffle practice problems across multiple topics so students learn to select the correct approach.',
+            notes: 'Feels harder during practice but produces superior long-term discrimination skills.',
+            references: 'Dunlosky et al. (2013).'
+          }
+        ]
+      },
+      deep_acquiring: {
+        id: 'deep_acquiring',
+        title: 'Acquiring Deep Understanding',
+        category: 'Deep Phase',
+        colorClass: 'purple',
+        definition: 'Moving beyond isolated facts to construct relational meaning, identify conceptual patterns, and integrate ideas into higher-order mental models. Requires metacognitive monitoring and active self-regulation.',
+        strategies: [
+          {
+            id: 'elaboration_organisation',
+            name: 'Elaboration & Structural Organization',
+            effectSize: 0.75,
+            description: 'Connecting new concepts to existing conceptual frameworks and organizing relationship diagrams.',
+            problem: 'Concepts remain isolated without relational structure.',
+            context: 'Deep learning introduction.',
+            solution: 'Ask students to explain how new concepts relate to prior units, create concept hierarchies, and contrast differing theories.',
+            notes: 'Highest impact strategy in deep acquisition (d = 0.75).',
+            references: 'Donker et al. (2014); Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'strategy_monitoring',
+            name: 'Strategy Monitoring & Metacognition',
+            effectSize: 0.71,
+            description: 'Actively checking whether chosen study strategies are producing actual understanding.',
+            problem: 'Students blindly use ineffective strategies without noticing lack of comprehension.',
+            context: 'Ongoing study.',
+            solution: 'Prompt students with reflection checkpoints: "Is this strategy working? What alternative strategy should I deploy?"',
+            notes: 'Distinguishes highly self-regulated learners.',
+            references: 'Pintrich et al. (2000).'
+          },
+          {
+            id: 'metacognitive_strategies',
+            name: 'Metacognitive Regulation',
+            effectSize: 0.61,
+            description: 'Planning, monitoring, and adapting cognitive processes before, during, and after tasks.',
+            problem: 'Unreflective learning where students fail to catch comprehension breakdowns.',
+            context: 'Complex reading and problem solving.',
+            solution: 'Explicitly model metacognitive think-alouds: planning goals, monitoring understanding, and taking corrective action when confused.',
+            notes: 'Metacognition must be taught within specific subject domain contexts.',
+            references: 'Schraw & Dennison (1994); Dignath et al. (2008).'
+          },
+          {
+            id: 'self_regulation',
+            name: 'Self-Regulation Training',
+            effectSize: 0.52,
+            description: 'Orchestrating cognition, motivation, and behavior toward academic goals.',
+            problem: 'Impulsivity, procrastination, and lack of study control.',
+            context: 'Independent learning.',
+            solution: 'Teach comprehensive self-regulation cycles: self-assessment, goal selection, strategy deployment, and outcome evaluation.',
+            notes: 'Combines cognitive, metacognitive, and motivational self-control.',
+            references: 'Boekaerts (1997); Dignath et al. (2008).'
+          },
+          {
+            id: 'elaborative_interrogation',
+            name: 'Elaborative Interrogation',
+            effectSize: 0.42,
+            description: 'Generating explanations for why explicitly stated facts or truths are valid.',
+            problem: 'Accepting facts passively without asking "Why is this true?"',
+            context: 'Reading expository texts.',
+            solution: 'Prompt students during reading with "Why" questions: "Why does this fact make sense in light of X?"',
+            notes: 'Encourages integration of new facts with pre-existing background domain knowledge.',
+            references: 'Dunlosky et al. (2013).'
+          }
+        ]
+      },
+      deep_consolidating: {
+        id: 'deep_consolidating',
+        title: 'Consolidating Deep Understanding',
+        category: 'Deep Phase',
+        colorClass: 'purple',
+        definition: 'Automating deep relational thinking through social interaction, peer dialogue, self-explanation, and problem solving. Allows students to "speak the language of learning" and test their mental models against others.',
+        strategies: [
+          {
+            id: 'peer_help_seeking',
+            name: 'Seeking Help from Peers',
+            effectSize: 0.83,
+            description: 'Engaging knowledgeable peers to explain complex relational concepts.',
+            problem: 'Students get stuck on conceptual hurdles when working in isolation.',
+            context: 'Group work and collaborative problem solving.',
+            solution: 'Structure peer study pairs where students articulate where their understanding breaks down and seek peer explanations.',
+            notes: 'Extremely high impact (d = 0.83) when peer help is accurate and constructive.',
+            references: 'Donker et al. (2014); Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'classroom_discussion',
+            name: 'Classroom Dialogue & Discussion',
+            effectSize: 0.82,
+            description: 'Participating in structured teacher-guided dialogue and argumentative discourse.',
+            problem: 'Teacher-monologue classrooms where students passively listen without vocalizing ideas.',
+            context: 'Consolidating complex conceptual units.',
+            solution: 'Facilitate Socratic seminars, fishbowl discussions, and structured debate over core concepts.',
+            notes: 'Allows students to hear alternative perspectives and test their verbal arguments.',
+            references: 'Hattie (2009).'
+          },
+          {
+            id: 'evaluation_reflection',
+            name: 'Evaluation & Reflection',
+            effectSize: 0.75,
+            description: 'Critically reviewing learning processes, arguments, and evidence quality.',
+            problem: 'Students finish assignments and move on without reflecting on quality or process.',
+            context: 'Post-project debrief.',
+            solution: 'Conduct structured post-mortem reflections: "What worked? What evidence was weakest? How would I re-approach this?"',
+            notes: 'Transforms experience into reusable strategic knowledge.',
+            references: 'Lavery (2008).'
+          },
+          {
+            id: 'self_consequences',
+            name: 'Self-Consequences & Self-Reinforcement',
+            effectSize: 0.70,
+            description: 'Setting self-administered rewards or contingencies for study milestones.',
+            problem: 'Lack of personal accountability during long study sessions.',
+            context: 'Independent study management.',
+            solution: 'Train students to set clear study targets paired with immediate self-rewards upon verified mastery.',
+            notes: 'Builds intrinsic accountability and agency.',
+            references: 'Lavery (2008).'
+          },
+          {
+            id: 'problem_solving_teaching',
+            name: 'Problem-Solving Teaching (Post-Surface)',
+            effectSize: 0.68,
+            description: 'Teaching heuristic problem-solving strategies AFTER surface knowledge is established.',
+            problem: 'Introducing unstructured problem solving to complete novices leads to cognitive overload.',
+            context: 'Advanced application stage.',
+            solution: 'Deploy problem-solving challenges, case studies, and real-world scenarios AFTER students possess key surface vocabulary.',
+            notes: 'Crucial timing principle: problem-solving instruction has high impact (d = 0.68) when introduced AFTER surface acquisition, but fails (d = 0.15) if used prematurely.',
+            references: 'Schoenfeld (1992); Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'self_verbalisation_questioning',
+            name: 'Self-Verbalization & Self-Questioning',
+            effectSize: 0.64,
+            description: 'Talking aloud through problem steps and asking self-directed questions.',
+            problem: 'Silent, mindless execution of problem steps without metacognitive monitoring.',
+            context: 'Individual problem solving.',
+            solution: 'Prompt students to ask themselves: "What am I doing? Why am I doing this step? How does this help solve the problem?"',
+            notes: 'Forces explicit vocalization of hidden cognitive steps.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'peer_tutoring',
+            name: 'Peer Tutoring (Becoming the Teacher)',
+            effectSize: 0.54,
+            description: 'Teaching content and concepts to peers.',
+            problem: 'Passive study does not expose gaps in one own mental models.',
+            context: 'Reciprocal study groups.',
+            solution: 'Implement reciprocal peer tutoring where students alternate playing the role of teacher and student.',
+            notes: 'The tutor often gains more than the tutee because teaching requires deep mental organization.',
+            references: 'Hattie (2009).'
+          },
+          {
+            id: 'self_explanation',
+            name: 'Self-Explanation',
+            effectSize: 0.50,
+            description: 'Explaining to oneself how new information relates to existing knowledge or problem steps.',
+            problem: 'Reading text passively without generating underlying explanations.',
+            context: 'Reading complex proofs or expository texts.',
+            solution: 'Prompt students after each paragraph or proof step to explain in their own words what that step accomplishes.',
+            notes: 'Helps repair faulty mental models.',
+            references: 'Dunlosky et al. (2013).'
+          },
+          {
+            id: 'self_monitoring_deep',
+            name: 'Self-Monitoring Comprehension',
+            effectSize: 0.45,
+            description: 'Tracking one ongoing state of comprehension during reading or problem solving.',
+            problem: 'Continuing to read pages while mind-wandering without catching comprehension loss.',
+            context: 'Independent study.',
+            solution: 'Use stop-and-check prompts: "Can I explain what I just read without looking at the page?"',
+            notes: 'Prevents illusion of competence.',
+            references: 'Lavery (2008).'
+          },
+          {
+            id: 'verbalising_steps',
+            name: 'Verbalizing Problem Steps',
+            effectSize: 0.41,
+            description: 'Outlining explicit procedural steps out loud while solving problems.',
+            problem: 'Skipping steps or making procedural slips in multi-step problems.',
+            context: 'Math and science derivation practice.',
+            solution: 'Require students to write or state a justification alongside every mathematical transformation step.',
+            notes: 'Reduces execution errors.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'cooperative_learning',
+            name: 'Collaborative / Cooperative Learning',
+            effectSize: 0.38,
+            description: 'Working in small structured groups toward a shared learning objective.',
+            problem: 'Unstructured group work leads to free-riding or domination by one student.',
+            context: 'Group projects.',
+            solution: 'Use cooperative learning structures (e.g., Jigsaw method) with individual accountability and positive interdependence.',
+            notes: 'Requires structure to be effective; loose group work yields low effects.',
+            references: 'Hattie (2009).'
+          },
+          {
+            id: 'critical_thinking_techniques',
+            name: 'Embedded Critical Thinking Techniques',
+            effectSize: 0.34,
+            description: 'Applying formal logical evaluation standards within a specific content domain.',
+            problem: 'Attempting to teach generic "critical thinking" as a content-free skill.',
+            context: 'Domain-specific analysis.',
+            solution: 'Teach domain-specific evaluation criteria (e.g., historical source bias, mathematical proof validity) directly within subject content.',
+            notes: 'Critical thinking is NOT content-free; history critical thinking differs fundamentally from math critical thinking.',
+            references: 'Wiliam (2014); Hattie & Donoghue (2016).'
+          }
+        ]
+      },
+      transfer: {
+        id: 'transfer',
+        title: 'Transfer of Learning (Far Transfer Mastery)',
+        category: 'Transfer Phase',
+        colorClass: 'rose',
+        definition: 'Applying knowledge, skills, and conceptual understanding acquired in one context to novel, unfamiliar contexts. Transfer is not automatic; it requires explicit instruction in recognizing deep underlying structural similarities and subtle surface differences.',
+        strategies: [
+          {
+            id: 'similarities_differences',
+            name: 'Detecting Similarities & Differences (Variation Theory)',
+            effectSize: 1.32,
+            description: 'Explicitly comparing novel tasks with known problems to identify structural sameness and surface differences.',
+            problem: 'Students fail to transfer skills because novel problems look superficially different from class examples.',
+            context: 'Transfer and problem-solving practice.',
+            solution: 'Present paired problems that look different on the surface but share the same deep mathematical/logical structure, asking students to identify similarities and differences before solving.',
+            notes: 'Highest overall effect size in the entire meta-synthesis (d = 1.32). Based on Ference Marton Variation Theory.',
+            references: 'Marton (2006); Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'seeing_patterns',
+            name: 'Pattern Recognition in Novel Contexts',
+            effectSize: 1.14,
+            description: 'Training learners to extract core abstract patterns from specific domain instances.',
+            problem: 'Learners remain trapped by surface domain details and cannot see generalized patterns.',
+            context: 'Cross-domain problem solving.',
+            solution: 'Guide students to abstract general principles ("playing the whole game") and test them across diverse scenario contexts.',
+            notes: 'Dramatically accelerates adaptive expertise.',
+            references: 'Perkins & Salomon (2012); Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'far_transfer',
+            name: 'Far Transfer Explicit Coaching',
+            effectSize: 0.80,
+            description: 'Teaching students how to pause, re-evaluate strategies, and adapt knowledge to remote contexts.',
+            problem: 'Students rigidly apply old strategies to new contexts where they are no longer appropriate ("tyranny of success").',
+            context: 'Real-world problem solving and interdisciplinary projects.',
+            solution: 'Teach explicit transfer routines (e.g., Reciprocal Teaching, thinking aloud about goals, evaluating resource fit) when encountering unfamiliar tasks.',
+            notes: 'Requires overcoming automatic habits and pausing before tackling novel problems.',
+            references: 'Bereiter & Scardamalia (2014); Hattie & Donoghue (2016).'
+          }
+        ]
+      },
+      environment: {
+        id: 'environment',
+        title: 'Underlying Environment & Learning Context',
+        category: 'Environment',
+        colorClass: 'slate',
+        definition: 'The external physical, physiological, and social surroundings in which study takes place. Research shows environmental factors have surprisingly modest direct effect sizes compared to cognitive and metacognitive strategies.',
+        strategies: [
+          {
+            id: 'env_structuring',
+            name: 'Environmental Structuring',
+            effectSize: 0.41,
+            description: 'Organizing a dedicated, organized physical workspace free from major disruptions.',
+            problem: 'Cluttered, chaotic study spaces cause frequent attention shifts.',
+            context: 'Home study setup.',
+            solution: 'Designate a consistent, quiet, well-lit study environment reserved specifically for academic work.',
+            notes: 'Modest positive effect on focus retention.',
+            references: 'Lavery (2008).'
+          },
+          {
+            id: 'time_management',
+            name: 'Time Management',
+            effectSize: 0.40,
+            description: 'Scheduling study blocks, setting deadlines, and prioritizing tasks.',
+            problem: 'Poor time allocation and last-minute cramming.',
+            context: 'Weekly study planning.',
+            solution: 'Use daily planners, prioritize tasks by urgency/importance, and break projects into scheduled sub-tasks.',
+            notes: 'Effective for organizing surface study, but must be paired with deep learning strategies.',
+            references: 'Claessens et al. (2010).'
+          },
+          {
+            id: 'exercise_brain',
+            name: 'Physical Exercise',
+            effectSize: 0.26,
+            description: 'Regular aerobic exercise to support brain health and executive function.',
+            problem: 'Sedentary study habits causing mental fatigue.',
+            context: 'Daily health routines.',
+            solution: 'Maintain regular physical exercise to enhance mood, neuroplasticity, and executive function.',
+            notes: 'Modest indirect positive impact on academic cognitive performance.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'social_support',
+            name: 'Social Support Systems',
+            effectSize: 0.12,
+            description: 'Perceived encouragement from family, peers, and teachers.',
+            problem: 'Feeling isolated or unsupported in academic pursuits.',
+            context: 'Social learning environment.',
+            solution: 'Foster supportive peer study groups and positive teacher-student relationships.',
+            notes: 'Provides emotional buffer during difficult academic challenges.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'time_of_day',
+            name: 'Time of Day Preference',
+            effectSize: 0.12,
+            description: 'Studying at preferred chronotype hours (morning vs evening).',
+            problem: 'Studying during peak physiological exhaustion.',
+            context: 'Personal study scheduling.',
+            solution: 'Align demanding study tasks with personal peak alertness hours when possible.',
+            notes: 'Very small overall effect size across empirical studies.',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'student_control',
+            name: 'Student Control Over Environment',
+            effectSize: 0.02,
+            description: 'Giving students autonomy over study settings.',
+            problem: 'Belief that total environmental freedom automatically improves learning.',
+            context: 'Autonomous study choices.',
+            solution: 'Provide choice within structured bounds rather than completely unguided autonomy.',
+            notes: 'Negligible direct effect size (d = 0.02).',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'background_music',
+            name: 'Background Music Impact',
+            effectSize: -0.04,
+            description: 'Listening to background music during cognitive study tasks.',
+            problem: 'Music with lyrics competes for working memory phonological resources.',
+            context: 'Study environment setup.',
+            solution: 'Prefer silence or non-lyrical ambient sound during heavy reading and memorization tasks.',
+            notes: 'Slight negative effect size on cognitive tasks requiring working memory (d = -0.04).',
+            references: 'Hattie & Donoghue (2016).'
+          },
+          {
+            id: 'sleep_deprivation',
+            name: 'Sleep Quality & Hygiene',
+            effectSize: -0.05,
+            description: 'Impact of sleep variations within normal ranges.',
+            problem: 'Severe sleep deprivation impairs consolidation and memory encoding.',
+            context: 'Daily study hygiene.',
+            solution: 'Maintain consistent 7-9 hour sleep routines to allow neural memory consolidation.',
+            notes: 'While severe sleep deprivation is harmful, minor variations in sleep show near-zero correlation with immediate test scores.',
+            references: 'Hattie & Donoghue (2016).'
+          }
+        ]
+      }
+    };
+
+    let currentModalElementId = null;
+    let allStrategiesFlatList = [];
+
+    // Flatten strategy directory for search & global table
+    function initializeFlatStrategyList() {
+      allStrategiesFlatList = [];
+      Object.keys(MODEL_ELEMENTS).forEach(key => {
+        const elem = MODEL_ELEMENTS[key];
+        elem.strategies.forEach(strat => {
+          allStrategiesFlatList.push({
+            ...strat,
+            elementId: elem.id,
+            elementTitle: elem.title,
+            colorClass: elem.colorClass
+          });
+        });
+      });
+      allStrategiesFlatList.sort((a, b) => b.effectSize - a.effectSize);
+    }
+
+    function updateThemeToggleUI(theme) {
+      const btn = document.getElementById('themeToggleBtn');
+      if (!btn) return;
+      if (theme === 'dark') {
+        btn.innerHTML = `<i class="fa-solid fa-sun text-amber-400"></i><span>Light Mode</span>`;
+        btn.setAttribute('aria-label', 'Switch to Light Mode');
+      } else {
+        btn.innerHTML = `<i class="fa-solid fa-moon text-slate-600"></i><span>Dark Mode</span>`;
+        btn.setAttribute('aria-label', 'Switch to Dark Mode');
+      }
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      if (isDark) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+        updateThemeToggleUI('light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        updateThemeToggleUI('dark');
+      }
+    }
+
+    function renderGlobalStrategyTable(strategiesToRender) {
+      const tbody = document.getElementById('globalStrategyTableBody');
+      if (!tbody) return;
+
+      const list = strategiesToRender || allStrategiesFlatList;
+
+      if (list.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="py-8 text-center text-slate-400 dark:text-slate-500 text-xs">
+              No matching learning strategies found. Try broadening your search or phase filter.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = list.map(strat => {
+        let badgeBg = 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300';
+        if (strat.effectSize >= 0.70) {
+          badgeBg = 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800';
+        } else if (strat.effectSize >= 0.40) {
+          badgeBg = 'bg-sky-100 text-sky-800 dark:bg-sky-950/80 dark:text-sky-300 border border-sky-300 dark:border-sky-800';
+        } else if (strat.effectSize >= 0.0) {
+          badgeBg = 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-300 dark:border-amber-800';
+        } else {
+          badgeBg = 'bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-300 dark:border-rose-800';
+        }
+
+        return `
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+            <td class="py-3 px-4 font-semibold text-slate-900 dark:text-white">
+              ${strat.name}
+            </td>
+            <td class="py-3 px-4 text-xs text-slate-600 dark:text-slate-400">
+              ${strat.elementTitle}
+            </td>
+            <td class="py-3 px-4">
+              <span class="px-2.5 py-1 rounded-md text-xs font-bold ${badgeBg}">
+                d = ${strat.effectSize >= 0 ? strat.effectSize.toFixed(2) : strat.effectSize.toFixed(2)}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-slate-600 dark:text-slate-300 text-xs max-w-xs sm:max-w-md truncate">
+              ${strat.description}
+            </td>
+            <td class="py-3 px-4 text-right">
+              <button onclick="openPatternModal('${strat.elementId}', '${strat.id}')" class="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 dark:bg-sky-950/60 dark:hover:bg-sky-900/80 dark:text-sky-300 border border-sky-200 dark:border-sky-800/60 rounded-lg font-medium text-xs transition cursor-pointer">
+                View Pattern <i class="fa-solid fa-arrow-right text-[10px] ml-1"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterGlobalStrategies() {
+      const searchVal = (document.getElementById('strategySearchInput')?.value || '').toLowerCase().trim();
+      const phaseVal = document.getElementById('phaseFilterSelect')?.value || 'ALL';
+
+      let filtered = allStrategiesFlatList.filter(strat => {
+        const matchesSearch = strat.name.toLowerCase().includes(searchVal) || 
+                              strat.description.toLowerCase().includes(searchVal) ||
+                              strat.problem.toLowerCase().includes(searchVal);
+        
+        let matchesPhase = true;
+        if (phaseVal !== 'ALL') {
+          matchesPhase = strat.elementId === phaseVal;
+        }
+
+        return matchesSearch && matchesPhase;
+      });
+
+      renderGlobalStrategyTable(filtered);
+    }
+
+    function openElementModal(elementId) {
+      const data = MODEL_ELEMENTS[elementId];
+      if (!data) return;
+
+      currentModalElementId = elementId;
+
+      const headerContainer = document.getElementById('elementModalHeader');
+      headerContainer.innerHTML = `
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 dark:bg-sky-500/20 dark:text-sky-300 flex items-center justify-center border border-sky-300/60 dark:border-sky-500/30">
+            <i class="fa-solid fa-diagram-project text-lg"></i>
+          </div>
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">${data.title}</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Category: ${data.category}</p>
+          </div>
+        </div>
+        <button onclick="closeElementModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-xl p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      `;
+
+      document.getElementById('elementDefinitionText').textContent = data.definition;
+      document.getElementById('strategyCountBadge').textContent = `${data.strategies.length} Strategies Synthesized`;
+
+      const tbody = document.getElementById('elementStrategyTableBody');
+      tbody.innerHTML = data.strategies.map(strat => {
+        let badgeBg = 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300';
+        if (strat.effectSize >= 0.70) {
+          badgeBg = 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800';
+        } else if (strat.effectSize >= 0.40) {
+          badgeBg = 'bg-sky-100 text-sky-800 dark:bg-sky-950/80 dark:text-sky-300 border border-sky-300 dark:border-sky-800';
+        } else if (strat.effectSize >= 0.0) {
+          badgeBg = 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-300 dark:border-amber-800';
+        } else {
+          badgeBg = 'bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-300 dark:border-rose-800';
+        }
+
+        return `
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+            <td class="py-3 px-4 font-semibold text-slate-900 dark:text-white">${strat.name}</td>
+            <td class="py-3 px-4">
+              <span class="px-2.5 py-1 rounded-md text-xs font-bold ${badgeBg}">
+                d = ${strat.effectSize.toFixed(2)}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-slate-600 dark:text-slate-300 text-xs">${strat.description}</td>
+            <td class="py-3 px-4 text-right">
+              <button onclick="openPatternModal('${elementId}', '${strat.id}')" class="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 dark:bg-sky-950/60 dark:hover:bg-sky-900/80 dark:text-sky-300 border border-sky-200 dark:border-sky-800/60 rounded-lg font-medium text-xs transition cursor-pointer">
+                View Pattern <i class="fa-solid fa-arrow-right text-[10px] ml-1"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('elementModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeElementModal() {
+      document.getElementById('elementModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    function openPatternModal(elementId, strategyId) {
+      const elem = MODEL_ELEMENTS[elementId];
+      if (!elem) return;
+      const strat = elem.strategies.find(s => s.id === strategyId);
+      if (!strat) return;
+
+      closeElementModal();
+
+      const headerContainer = document.getElementById('patternModalHeader');
+      headerContainer.innerHTML = `
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300 flex items-center justify-center border border-purple-300/60 dark:border-purple-500/30">
+            <i class="fa-solid fa-puzzle-piece text-lg"></i>
+          </div>
+          <div>
+            <div class="text-[10px] font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">Pedagogical Design Pattern</div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">${strat.name}</h2>
+          </div>
+        </div>
+        <button onclick="closePatternModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-xl p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      `;
+
+      document.getElementById('patternPhaseBadge').textContent = `Phase: ${elem.title}`;
+      document.getElementById('patternEffectBadge').textContent = `Effect Size d = ${strat.effectSize.toFixed(2)}`;
+      document.getElementById('patternProblemText').textContent = strat.problem;
+      document.getElementById('patternContextText').textContent = strat.context;
+      document.getElementById('patternSolutionText').innerHTML = `<p>${strat.solution}</p>`;
+      document.getElementById('patternNotesText').textContent = strat.notes;
+      document.getElementById('patternReferencesText').textContent = strat.references;
+
+      document.getElementById('patternModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function backToElementModal() {
+      closePatternModal();
+      if (currentModalElementId) {
+        openElementModal(currentModalElementId);
+      }
+    }
+
+    function closePatternModal() {
+      document.getElementById('patternModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    function openElaborateModal() {
+      document.getElementById('elaborateModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeElaborateModal() {
+      document.getElementById('elaborateModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeFlatStrategyList();
+      
+      const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      updateThemeToggleUI(currentTheme);
+      
+      renderGlobalStrategyTable();
+    });
+  </script>
+</body>
+</html>
