@@ -1,1 +1,72 @@
+/* ========================================== */
+/* STYLE CONFIGURATION & THEME DEFINITIONS    */
+/* ========================================== */
 
+:root {
+  --font-main: 'Heebo', sans-serif;
+  --transition-speed: 0.25s;
+}
+
+body {
+  font-family: var(--font-main);
+  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+/* רקע כהה ומטושטש למודאלים */
+.modal-backdrop {
+  background-color: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* התאמת פסי גלילה (Scrollbar) למצב בהיר וכהה */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* מקלדת מקוצרת (Kbd) */
+kbd {
+  font-family: inherit;
+}
+
+/* אנימציית הופעה חלקה */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
