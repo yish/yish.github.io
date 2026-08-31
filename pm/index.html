@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="he" dir="rtl" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,100 +13,76 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Heebo', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              50: '#f5f3ff',
-              100: '#ede9fe',
-              500: '#8b5cf6',
-              600: '#7c3aed',
-              700: '#6d28d9',
-            }
-          }
-        }
-      }
-    }
-  </script>
-
-  <style>
-    body {
-      font-family: 'Heebo', sans-serif;
-    }
-    .modal-backdrop {
-      background-color: rgba(15, 23, 42, 0.72);
-      backdrop-filter: blur(6px);
-    }
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #f1f5f9;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
-    kbd {
-      font-family: inherit;
-    }
-  </style>
+  <!-- קישור לקובץ העיצוב החיצוני -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- קישור לקובץ הלוגיקה החיצוני -->
+  <script src="app.js" defer></script>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-indigo-100 selection:text-indigo-900">
 
-  <!-- Toast Notification Container -->
-  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 transform -translate-y-20 opacity-0 pointer-events-none">
-    <div class="bg-slate-900 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-3 border border-slate-700 text-sm font-medium">
-      <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- התראת Toast צפה -->
+  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 transform -translate-y-24 opacity-0 pointer-events-none">
+    <div class="bg-slate-900/95 dark:bg-slate-100 dark:text-slate-900 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-3 border border-slate-700/50 dark:border-slate-300 text-sm font-semibold backdrop-blur-md">
+      <svg class="w-5 h-5 text-emerald-400 dark:text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
       <span id="toast-text">הודעה</span>
     </div>
   </div>
 
-  <!-- Header -->
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm backdrop-blur-md bg-white/95">
+  <!-- סרגל עליון (Header) -->
+  <header class="bg-white/90 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
         
-        <!-- Logo & Title -->
+        <!-- לוגו וכותרת ראשית -->
         <div class="flex items-center gap-3.5">
-          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
             <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
             </svg>
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h1 class="text-xl sm:text-2xl font-black bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-600 bg-clip-text text-transparent">
+              <h1 class="text-xl sm:text-2xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
                 פרומפטים לחינוך והוראה
               </h1>
-              <span class="hidden sm:inline-flex text-xs px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-bold border border-indigo-200">
+              <span class="hidden sm:inline-flex text-xs px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold border border-indigo-200 dark:border-indigo-800">
                 AI פדגוגי
               </span>
             </div>
-            <p class="text-xs text-slate-500 hidden sm:block">
-              מאגר תבניות פרומפט להוראה – התאמה אישית והפעלה ב-ChatGPT, Claude ו-Gemini
+            <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">
+              מאגר תבניות להוראה – התאמה אישית והפעלה ב-ChatGPT, Claude ו-Gemini
             </p>
           </div>
         </div>
 
-        <!-- Action Buttons -->
+        <!-- כפתורי פעולה עליונים -->
         <div class="flex items-center gap-2 sm:gap-3">
+          
+          <!-- מתג החלפת Theme (כהה/בהיר) -->
+          <button
+            id="theme-toggle-btn"
+            title="החלף ערכת נושא (כהה/בהיר)"
+            class="p-2.5 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-colors flex items-center justify-center"
+          >
+            <!-- אייקון שמש (מוצג במצב כהה) -->
+            <svg id="sun-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <!-- אייקון ירח (מוצג במצב בהיר) -->
+            <svg id="moon-icon" class="w-5 h-5 block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+
+          <!-- כפתור רענון נתונים -->
           <button
             id="refresh-btn"
             title="רענן מתוך הגיליון"
-            class="p-2.5 text-slate-600 hover:text-indigo-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all flex items-center gap-1.5 text-sm font-medium"
+            class="p-2.5 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all flex items-center gap-1.5 text-sm font-medium"
           >
             <svg id="refresh-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -114,9 +90,10 @@
             <span class="hidden md:inline">רענון</span>
           </button>
 
+          <!-- כפתור תרומת פרומפט -->
           <button
             id="contribute-btn"
-            class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-md shadow-indigo-200 hover:shadow-lg transition-all transform active:scale-95"
+            class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-md shadow-indigo-500/20 hover:shadow-lg transition-all transform active:scale-95"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -129,37 +106,37 @@
     </div>
   </header>
 
-  <!-- Banner & Status -->
-  <section class="bg-gradient-to-b from-indigo-50/70 to-transparent border-b border-indigo-100/50 py-5 px-4 sm:px-6">
+  <!-- באנר עליון וסטטוס מקור הנתונים -->
+  <section class="bg-gradient-to-b from-indigo-50/70 dark:from-indigo-950/30 to-transparent border-b border-indigo-100/60 dark:border-indigo-900/40 py-5 px-4 sm:px-6">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
       <div class="space-y-1 text-center md:text-right">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">
-          <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold border border-emerald-200 dark:border-emerald-800">
+          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <span>מוצגים רק פרומפטים מאושרים (עמודת 'מאושר' = 1)</span>
         </div>
-        <p class="text-sm text-slate-600">
-          בחרו פרומפט, התאימו את הפרטים בתיבת העריכה, ובחרו את ה-AI המועדף עליכם להפעלה מיידית!
+        <p class="text-sm text-slate-600 dark:text-slate-400">
+          לחצו על פרומפט כדי להזין את הפרטים שלכם, ולפתוח ישירות ב-ChatGPT, Claude או Gemini!
         </p>
       </div>
 
-      <div class="flex items-center gap-3 bg-white px-4 py-2 rounded-2xl border border-slate-200 shadow-sm text-xs text-slate-600">
+      <div class="flex items-center gap-3 bg-white dark:bg-slate-900 px-4 py-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm text-xs text-slate-600 dark:text-slate-300">
         <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-        <span id="data-status" class="font-medium text-slate-700">טוען פרומפטים מ-Google Sheets...</span>
+        <span id="data-status" class="font-semibold text-slate-700 dark:text-slate-200">טוען פרומפטים מ-Google Sheets...</span>
       </div>
     </div>
   </section>
 
-  <!-- Main Content -->
+  <!-- תוכן מרכזי -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-6">
     
-    <!-- Search & Complexity Filter Bar -->
-    <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm space-y-3.5">
+    <!-- תיבת חיפוש ופילטרים -->
+    <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3.5 transition-colors">
       
-      <!-- Search Input -->
+      <!-- שורת חיפוש -->
       <div class="relative">
-        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
@@ -168,48 +145,48 @@
           id="search-input"
           type="text"
           placeholder="חפש לפי שם, מטרה, תרחיש שימוש, טיפים או מילות מפתח..."
-          class="w-full pr-12 pl-10 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white text-sm sm:text-base transition-all"
+          class="w-full pr-12 pl-10 py-3.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-900 text-sm sm:text-base transition-all"
         />
-        <button id="clear-search-btn" class="hidden absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
+        <button id="clear-search-btn" class="hidden absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
 
-      <!-- Complexity Filter Chips -->
-      <div class="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-100">
-        <span class="text-xs font-bold text-slate-500 ml-1">רמת מורכבות:</span>
+      <!-- סינון לפי רמת מורכבות -->
+      <div class="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 ml-1">רמת מורכבות:</span>
         <div id="complexity-filters" class="flex flex-wrap items-center gap-1.5">
-          <!-- Dynamic complexity filter buttons -->
+          <!-- כפתורי רמות מורכבות נוצרים דינמית -->
         </div>
       </div>
 
     </div>
 
-    <!-- Results Count -->
-    <div class="flex items-center justify-between text-xs sm:text-sm text-slate-500 px-1">
+    <!-- מונה תוצאות -->
+    <div class="flex items-center justify-between text-xs sm:text-sm text-slate-500 dark:text-slate-400 px-1">
       <span id="results-count">טוען נתונים...</span>
     </div>
 
-    <!-- Cards Grid -->
+    <!-- גריד כרטיסיות הפרומפטים -->
     <div id="prompts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      <!-- Cards rendered here dynamically -->
+      <!-- כרטיסיות הפרומפט נוצרות דינמית -->
     </div>
 
-    <!-- Empty State -->
-    <div id="empty-state" class="hidden bg-white rounded-3xl p-12 text-center border border-dashed border-slate-300 max-w-lg mx-auto space-y-4">
-      <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-2xl mx-auto flex items-center justify-center">
+    <!-- מצב ללא תוצאות (Empty State) -->
+    <div id="empty-state" class="hidden bg-white dark:bg-slate-900 rounded-3xl p-12 text-center border border-dashed border-slate-300 dark:border-slate-800 max-w-lg mx-auto space-y-4">
+      <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-2xl mx-auto flex items-center justify-center">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       </div>
-      <h3 class="text-lg font-bold text-slate-800">לא נמצאו פרומפטים תואמים</h3>
-      <p class="text-sm text-slate-500">
+      <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">לא נמצאו פרומפטים תואמים</h3>
+      <p class="text-sm text-slate-500 dark:text-slate-400">
         נסו לשנות את מילות החיפוש או תרמו פרומפט חדש למאגר.
       </p>
       <div class="flex justify-center gap-3 pt-2">
-        <button id="reset-filters-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-xl transition-colors">
+        <button id="reset-filters-btn" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold rounded-xl transition-colors">
           איפוס סינונים
         </button>
       </div>
@@ -217,11 +194,11 @@
 
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-white border-t border-slate-200 mt-16 py-6 px-4 text-center text-xs text-slate-500">
+  <!-- פוטר (Footer) -->
+  <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-16 py-6 px-4 text-center text-xs text-slate-500 dark:text-slate-400">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2">
-        <div class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">
+        <div class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black text-xs shadow-sm">
           AI
         </div>
         <span>מאגר פרומפטים שיתופי לחינוך והוראה</span>
@@ -230,7 +207,7 @@
       <div class="flex items-center gap-4">
         <button
           onclick="openContributeModal()"
-          class="text-indigo-600 hover:underline font-bold"
+          class="text-indigo-600 dark:text-indigo-400 hover:underline font-bold"
         >
           רוצים לתרום פרומפט משלכם? לחצו כאן
         </button>
@@ -238,91 +215,91 @@
     </div>
   </footer>
 
-  <!-- Modal: View All Fields, Edit Template & Choose Chatbot -->
+  <!-- מודאל: הצגת כל השדות, עריכת תבנית הפרומפט ובחירת צ'אטבוט -->
   <div id="edit-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 modal-backdrop hidden">
-    <div class="bg-white rounded-3xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 animate-fadeIn">
       
-      <!-- Modal Header -->
-      <div class="p-5 sm:p-6 border-b border-slate-200 flex items-start justify-between bg-gradient-to-r from-slate-50 via-indigo-50/40 to-purple-50/40">
+      <!-- כותרת המודאל -->
+      <div class="p-5 sm:p-6 border-b border-slate-200 dark:border-slate-800 flex items-start justify-between bg-gradient-to-r from-slate-50 via-indigo-50/40 to-purple-50/40 dark:from-slate-900 dark:via-indigo-950/30 dark:to-purple-950/30">
         <div class="space-y-1.5 flex-1 pl-4">
           <div class="flex items-center gap-2 flex-wrap">
-            <span id="modal-complexity-badge" class="inline-flex items-center text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+            <span id="modal-complexity-badge" class="inline-flex items-center text-xs font-bold px-2.5 py-0.5 rounded-full border">
               רמת מורכבות: בסיסי
             </span>
             <span class="text-xs text-slate-400">•</span>
-            <span class="text-xs text-indigo-700 font-semibold">מאגר פרומפטים מאושר</span>
+            <span class="text-xs text-indigo-700 dark:text-indigo-300 font-semibold">מאגר פרומפטים מאושר</span>
           </div>
-          <h2 id="modal-prompt-title" class="text-xl sm:text-2xl font-black text-slate-900 leading-tight">שם הפרומפט</h2>
-          <p id="modal-prompt-goal" class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">מטרת הפרומפט</p>
+          <h2 id="modal-prompt-title" class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">שם הפרומפט</h2>
+          <p id="modal-prompt-goal" class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">מטרת הפרומפט</p>
         </div>
 
-        <button id="close-edit-modal-btn" class="p-2 text-slate-400 hover:text-slate-700 hover:bg-white rounded-xl transition-colors shrink-0">
+        <button id="close-edit-modal-btn" class="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors shrink-0">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
 
-      <!-- Modal Body (Scrollable with all sheet fields) -->
+      <!-- גוף המודאל (גלילה עם כל שדות ההדרכה הפדגוגית) -->
       <div class="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
         
-        <!-- Accordion/Grid for Pedagogical Guidance Fields -->
+        <!-- כרטיסיות הדרכה פדגוגית -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
           
           <!-- 1. תרחיש שימוש לדוגמא -->
-          <div id="modal-scenario-box" class="bg-indigo-50/60 p-4 rounded-2xl border border-indigo-100/80 space-y-1.5">
-            <div class="flex items-center gap-1.5 text-xs font-bold text-indigo-900">
-              <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div id="modal-scenario-box" class="bg-indigo-50/70 dark:bg-indigo-950/40 p-4 rounded-2xl border border-indigo-100 dark:border-indigo-900/60 space-y-1.5">
+            <div class="flex items-center gap-1.5 text-xs font-bold text-indigo-900 dark:text-indigo-300">
+              <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span>תרחיש שימוש לדוגמא</span>
             </div>
-            <p id="modal-scenario-text" class="text-xs text-indigo-950/80 leading-relaxed whitespace-pre-line"></p>
+            <p id="modal-scenario-text" class="text-xs text-indigo-950/80 dark:text-indigo-200/90 leading-relaxed whitespace-pre-line"></p>
           </div>
 
-          <!-- 2. הסבר לשימוש בפרומפט (טיפים) -->
-          <div id="modal-tips-box" class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-100/80 space-y-1.5">
-            <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-900">
-              <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <!-- 2. הסבר לשימוש בפרומפט (טיפים לעבודה נכונה) -->
+          <div id="modal-tips-box" class="bg-emerald-50/70 dark:bg-emerald-950/40 p-4 rounded-2xl border border-emerald-100 dark:border-emerald-900/60 space-y-1.5">
+            <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-900 dark:text-emerald-300">
+              <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
               <span>טיפים והסבר לעבודה נכונה</span>
             </div>
-            <p id="modal-tips-text" class="text-xs text-emerald-950/80 leading-relaxed whitespace-pre-line"></p>
+            <p id="modal-tips-text" class="text-xs text-emerald-950/80 dark:text-emerald-200/90 leading-relaxed whitespace-pre-line"></p>
           </div>
 
-          <!-- 3. הערות ואזהרות -->
-          <div id="modal-warnings-box" class="bg-amber-50/60 p-4 rounded-2xl border border-amber-200/80 space-y-1.5">
-            <div class="flex items-center gap-1.5 text-xs font-bold text-amber-900">
-              <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <!-- 3. הערות ואזהרות (מגבלות ומה לא לעשות) -->
+          <div id="modal-warnings-box" class="bg-amber-50/70 dark:bg-amber-950/40 p-4 rounded-2xl border border-amber-200 dark:border-amber-900/60 space-y-1.5">
+            <div class="flex items-center gap-1.5 text-xs font-bold text-amber-900 dark:text-amber-300">
+              <svg class="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
               <span>הערות, אזהרות ומגבלות</span>
             </div>
-            <p id="modal-warnings-text" class="text-xs text-amber-950/80 leading-relaxed whitespace-pre-line"></p>
+            <p id="modal-warnings-text" class="text-xs text-amber-950/80 dark:text-amber-200/90 leading-relaxed whitespace-pre-line"></p>
           </div>
 
         </div>
 
-        <!-- Section: עריכת תבנית הפרומפט -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <!-- אזור עריכת תבנית הפרומפט -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
           
-          <div class="bg-slate-50/80 px-4 sm:px-5 py-3 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+          <div class="bg-slate-50 dark:bg-slate-800/80 px-4 sm:px-5 py-3 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
-              <h3 class="text-sm font-bold text-slate-800">עריכת תבנית הפרומפט (התוכן שיועבר לצ'אטבוט)</h3>
+              <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200">עריכת תבנית הפרומפט (התוכן שיועבר לצ'אטבוט)</h3>
             </div>
 
-            <!-- Tab Toggles -->
-            <div class="flex items-center gap-1 bg-slate-200/70 p-1 rounded-xl text-xs font-semibold">
-              <button id="tab-smart-btn" class="px-3 py-1 rounded-lg bg-white text-indigo-700 shadow-sm transition-all flex items-center gap-1">
+            <!-- מתג מעבר בין טאבים -->
+            <div class="flex items-center gap-1 bg-slate-200/70 dark:bg-slate-700/60 p-1 rounded-xl text-xs font-semibold">
+              <button id="tab-smart-btn" class="px-3 py-1 rounded-lg bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-300 shadow-sm transition-all flex items-center gap-1 font-bold">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                 </svg>
-                <span id="tab-smart-label">הזנת משתנים מהירה</span>
+                <span id="tab-smart-label">הזנת משתנים</span>
               </button>
-              <button id="tab-direct-btn" class="px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1">
+              <button id="tab-direct-btn" class="px-3 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-1">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
@@ -333,28 +310,28 @@
 
           <div class="p-4 sm:p-5 space-y-4">
             
-            <!-- Smart Mode -->
+            <!-- מצב הזנת משתנים חכם -->
             <div id="smart-fields-container" class="space-y-4">
               <div id="variable-inputs-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <!-- Dynamic variables -->
+                <!-- שדות משתנים מוזרקים דינמית -->
               </div>
 
-              <!-- Live Preview -->
+              <!-- תצוגה מקדימה בלייב -->
               <div class="space-y-1.5 pt-2">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-slate-700">תצוגה מקדימה של הפרומפט הסופי:</span>
-                  <span class="text-[11px] text-slate-400">מתעדכן בזמן אמת</span>
+                  <span class="text-xs font-bold text-slate-700 dark:text-slate-300">תצוגה מקדימה של הפרומפט הסופי:</span>
+                  <span class="text-[11px] text-slate-400 dark:text-slate-500">מתעדכן בזמן אמת</span>
                 </div>
-                <div id="prompt-live-preview" class="bg-slate-900 text-slate-100 p-4 rounded-2xl text-xs sm:text-sm font-mono whitespace-pre-wrap max-h-48 overflow-y-auto leading-relaxed border border-slate-800"></div>
+                <div id="prompt-live-preview" class="bg-slate-900 dark:bg-slate-950 text-slate-100 p-4 rounded-2xl text-xs sm:text-sm font-mono whitespace-pre-wrap max-h-48 overflow-y-auto leading-relaxed border border-slate-800"></div>
               </div>
             </div>
 
-            <!-- Direct Mode -->
+            <!-- מצב עריכת טקסט חופשית -->
             <div id="direct-edit-container" class="hidden space-y-2">
               <textarea
                 id="modal-prompt-textarea"
                 rows="8"
-                class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm font-sans leading-relaxed focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white resize-y"
+                class="w-full p-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl text-xs sm:text-sm font-sans text-slate-800 dark:text-slate-100 leading-relaxed focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-900 resize-y"
                 placeholder="ערוך את תבנית הפרומפט כאן..."
               ></textarea>
             </div>
@@ -363,16 +340,16 @@
 
         </div>
 
-        <!-- Section: בחירת צ'אטבוט להפעלה -->
-        <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 space-y-3">
+        <!-- אזור בחירת צ'אטבוט להפעלה -->
+        <div class="bg-slate-50 dark:bg-slate-800/60 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-              <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
               בחרו היכן לפתוח את הפרומפט הערוך:
             </span>
-            <span class="text-[11px] text-slate-500">לחצו על ה-AI המבוקש להפעלה מיידית</span>
+            <span class="text-[11px] text-slate-500 dark:text-slate-400">לחצו על ה-AI המבוקש להפעלה מיידית</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -380,56 +357,56 @@
             <!-- 1. ChatGPT -->
             <button
               id="launch-chatgpt-btn"
-              class="group bg-white hover:bg-emerald-50 border-2 border-emerald-200 hover:border-emerald-500 p-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md flex flex-col items-start text-right transform active:scale-95"
+              class="group bg-white dark:bg-slate-900 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 border-2 border-emerald-200 dark:border-emerald-800/80 hover:border-emerald-500 p-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md flex flex-col items-start text-right transform active:scale-95"
             >
               <div class="flex items-center justify-between w-full mb-1.5">
-                <div class="flex items-center gap-2 font-bold text-slate-900 text-sm group-hover:text-emerald-700">
-                  <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
+                <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-300">
+                  <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black text-xs">
                     GPT
                   </div>
                   <span>ChatGPT</span>
                 </div>
-                <svg class="w-4 h-4 text-emerald-600 group-hover:translate-x-[-2px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-[-2px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               </div>
-              <p class="text-[11px] text-slate-500">נפתח עם הפרומפט מוטמע ב-URL</p>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">נפתח עם הפרומפט מוטמע ב-URL</p>
             </button>
 
             <!-- 2. Claude -->
             <button
               id="launch-claude-btn"
-              class="group bg-white hover:bg-amber-50 border-2 border-amber-200 hover:border-amber-500 p-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md flex flex-col items-start text-right transform active:scale-95"
+              class="group bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-amber-950/40 border-2 border-amber-200 dark:border-amber-800/80 hover:border-amber-500 p-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md flex flex-col items-start text-right transform active:scale-95"
             >
               <div class="flex items-center justify-between w-full mb-1.5">
-                <div class="flex items-center gap-2 font-bold text-slate-900 text-sm group-hover:text-amber-800">
-                  <div class="w-6 h-6 rounded-lg bg-amber-600 text-white flex items-center justify-center font-bold text-xs">
+                <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm group-hover:text-amber-800 dark:group-hover:text-amber-300">
+                  <div class="w-6 h-6 rounded-lg bg-amber-600 text-white flex items-center justify-center font-black text-xs">
                     Cl
                   </div>
                   <span>Claude</span>
                 </div>
-                <svg class="w-4 h-4 text-amber-600 group-hover:translate-x-[-2px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-amber-600 dark:text-amber-400 group-hover:translate-x-[-2px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               </div>
-              <p class="text-[11px] text-slate-500">נפתח עם הפרומפט מוטמע ב-URL</p>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">נפתח עם הפרומפט מוטמע ב-URL</p>
             </button>
 
             <!-- 3. Gemini -->
             <button
               id="launch-gemini-btn"
-              class="group bg-white hover:bg-blue-50 border-2 border-blue-200 hover:border-blue-500 p-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md flex flex-col items-start text-right transform active:scale-95"
+              class="group bg-white dark:bg-slate-900 hover:bg-blue-50 dark:hover:bg-blue-950/40 border-2 border-blue-200 dark:border-blue-800/80 hover:border-blue-500 p-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md flex flex-col items-start text-right transform active:scale-95"
             >
               <div class="flex items-center justify-between w-full mb-1.5">
-                <div class="flex items-center gap-2 font-bold text-slate-900 text-sm group-hover:text-blue-700">
-                  <div class="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
+                <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm group-hover:text-blue-700 dark:group-hover:text-blue-300">
+                  <div class="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center font-black text-xs">
                     ✦
                   </div>
                   <span>Gemini</span>
                 </div>
-                <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-bold">העתק+Ctrl+V</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold">העתק+Ctrl+V</span>
               </div>
-              <p class="text-[11px] text-slate-500">מועתק ללוח ונפתח להדבקה קלה</p>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">מועתק ללוח ונפתח להדבקה</p>
             </button>
 
           </div>
@@ -437,11 +414,11 @@
 
       </div>
 
-      <!-- Modal Footer -->
-      <div class="p-4 sm:p-5 border-t border-slate-200 bg-white flex items-center justify-between gap-3">
+      <!-- פוטר המודאל -->
+      <div class="p-4 sm:p-5 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-between gap-3">
         <button
           id="modal-copy-only-btn"
-          class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5"
+          class="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
@@ -451,7 +428,7 @@
 
         <button
           id="modal-close-bottom-btn"
-          class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs sm:text-sm font-bold transition-all"
+          class="px-5 py-2.5 bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white rounded-xl text-xs sm:text-sm font-bold transition-all"
         >
           סיום
         </button>
@@ -460,21 +437,21 @@
     </div>
   </div>
 
-  <!-- Modal: Google Form for Contributing Prompts -->
+  <!-- מודאל: Google Form לתרומת פרומפטים -->
   <div id="contribute-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 modal-backdrop hidden">
-    <div class="bg-white rounded-3xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800 animate-fadeIn">
       
-      <!-- Contribute Header -->
-      <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-gradient-to-r from-purple-50 to-indigo-50">
+      <!-- כותרת מודאל תרומה -->
+      <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-slate-900 dark:to-indigo-950/40">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-200">
+          <div class="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/20">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-slate-900">טופס תרומת פרומפט פדגוגי</h2>
-            <p class="text-xs text-slate-500">הפרומפט ייבדק ויתווסף למאגר לאחר אישור (עמודה 'מאושר' = 1)</p>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">טופס תרומת פרומפט פדגוגי</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">הפרומפט ייבדק ויתווסף למאגר לאחר אישור (עמודה 'מאושר' = 1)</p>
           </div>
         </div>
 
@@ -483,14 +460,14 @@
             href="https://docs.google.com/forms/d/e/1FAIpQLSdy0P75QVPiJs-RsO461f5482TKiFJHIWn3BMvgH-7huctvfw/viewform?usp=dialog"
             target="_blank"
             rel="noopener noreferrer"
-            class="px-3 py-1.5 bg-white border border-slate-200 text-indigo-700 hover:bg-indigo-50 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            class="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors"
           >
             <span>פתח בלשונית נפרדת</span>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
-          <button id="close-contribute-modal-btn" class="p-2 text-slate-400 hover:text-slate-700 hover:bg-white rounded-xl transition-colors">
+          <button id="close-contribute-modal-btn" class="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -498,8 +475,8 @@
         </div>
       </div>
 
-      <!-- Embedded Google Form iframe -->
-      <div class="flex-1 bg-slate-100 relative">
+      <!-- טופס Google Forms מוטמע ב-iframe -->
+      <div class="flex-1 bg-slate-100 dark:bg-slate-950 relative">
         <iframe
           id="google-form-iframe"
           src="https://docs.google.com/forms/d/e/1FAIpQLSdy0P75QVPiJs-RsO461f5482TKiFJHIWn3BMvgH-7huctvfw/viewform?embedded=true"
@@ -514,612 +491,5 @@
     </div>
   </div>
 
-  <!-- Application Logic -->
-  <script>
-    // כתובת הגיליון לקריאת נתונים
-    const SHEET_ID = '1Ca9sM_Hy-MvOGT5gaMSpEg6Xf9FiC47rrxEm0wvNQVo';
-    const GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
-
-    // מאגר פרומפטים מובנה כגיבוי איכותי הכולל את כל שדות הגיליון
-    const DEFAULT_PROMPTS = [
-      {
-        id: 'def-1',
-        title: 'תכנון מערך שיעור אינטראקטיבי מבוסס מיומנויות',
-        goal: 'בניית מערך שיעור מובנה הכולל פתיחה מסקרנת, התנסות פעילה ומשוב מעצב',
-        scenario: 'המורה מעוניינת לבנות שיעור מעורר מעורבות בנושא חדש ומאתגר, וזקוקה לחלוקת זמנים ולשאלת פתיחה (Hook) שתרתק את הכיתה.',
-        prompt: `פעל כמומחה פדגוגי בכיר. בנה מערך שיעור מקיף בנושא: [נושא השיעור].\nקהל היעד: תלמידי כיתה [שכבת גיל/כיתה], משך השיעור: [45 / 90 דקות].\nהמטרות הלימודיות: [מטרות עיקריות].\n\nאנא בנה את המערך במבנה הבא:\n1. פתיחה ומליאה (Hook): שאלת אתגר, סרטון או חידה לעורר סקרנות (5-10 דק').\n2. הקנייה ממוקדת: הצגת הרעיון המרכזי בדרך חווייתית ואינטראקטיבית.\n3. פעילות והתנסות בקבוצות/יחידים: משימה פעילה המפתחת חשיבה ביקורתית.\n4. סיכום והערכה מעצבת: כרטיס יציאה (Exit Ticket) או שאלת רפלקציה.\n5. הצעת דיפרנציאציה: התאמה לתלמידים מתקשים ותלמידים מצטיינים.`,
-        tips: 'הגדירו מראש מטרות לימודיות ברורות ומדודות. ציינו אם יש מגבלות ציוד (למשל: ללא מחשבים / עם טלפונים).',
-        warnings: 'ודאו שהזמנים המוצעים ריאליים לכיתה שלכם ושמשימת הסיכום אכן בודקת את השגת המטרה.',
-        complexity: 'בינוני',
-        approved: 1
-      },
-      {
-        id: 'def-2',
-        title: 'יצירת משחק חדר בריחה לימודי בכיתה',
-        goal: 'הפיכת נושא לימודי למשחק חידות ואתגרים מרתק לעבודה שיתופית בקבוצות',
-        scenario: 'כהכנה למבחן סיכום או לשיעור חווייתי לקראת סוף יחידת לימוד, המורה רוצה שהתלמידים יפתרו חידות תוכן בשיתוף פעולה.',
-        prompt: `אתה מעצב משחקים לימודיים (Gamification Specialist).\nתכנן חדר בריחה כיתתי (בלי ציוד יקר, על בסיס דפים ורמזים) בנושא: [נושא השיעור/היחידה].\nקהל היעד: כיתה [שכבת גיל], מספר תחנות: [3 עד 5 תחנות].\n\nעבור כל תחנה/חידה כלול:\n1. סיפור המסגרת (עלילה מסתורית ומלהיבה שמתאימה לגיל).\n2. תוכן החידה המבוסס ישירות על החומר הנלמד (למשל: צופן, פירמידת מושגים, התאמת כרטיסיות).\n3. פתרון החידה וקבלת קוד או מילת מפתח לשלב הבא.\n4. רמז למורה במידה והתלמידים נתקעים.\n5. משימת סיום קבוצתית המשלבת את כל הקודים שנאספו.`,
-        tips: 'מומלץ להגדיר סיפור מסגרת סוחף שמתחבר לעולמם של התלמידים. הכינו דפי עזר עם רמזים מראש.',
-        warnings: 'אל תייצרו חידות מורכבות מדי מתמטית/טכנית שיסיטו את הפוקוס מהתוכן הלימודי הנלמד.',
-        complexity: 'מתקדם',
-        approved: 1
-      },
-      {
-        id: 'def-3',
-        title: 'מחוון הערכה מפורט עם מדרגות ביצוע (Rubric)',
-        goal: 'ניסוח מחוון הערכה שקוף וברור למטלה, פרויקט או עבודה כתובה',
-        scenario: 'המורה חילקה פרויקט חקר ורוצה שהתלמידים ידעו בדיוק כיצד יוערכו בכל קריטריון.',
-        prompt: `צור מחוון הערכה (רובריקה) מקצועי ומפורט עבור המטלה: [תיאור המטלה או הפרויקט].\nשכבת גיל: [שכבת כיתה], מקצוע: [תחום הדעת].\nהניקוד הכולל: 100 נקודות.\n\nאנא בנה טבלה עם 4 רמות ביצוע:\n- מצטיין (100%-90%)\n- טוב מאוד / נאות (89%-75%)\n- טעון שיפור (74%-60%)\n- לא מותאם / ראשוני (מתחת ל-60%)\n\nהקריטריונים להערכה צריכים לכלול:\n1. שליטה בתוכן ובמושגים המרכזיים.\n2. עומק הניתוח והחשיבה הביקורתית.\n3. מבנה, בהירות וארגון המידע.\n4. יצירתיות, מקוריות ועבודת צוות.\nהוסף גם שאלות קצרות להערכה עצמית של התלמיד.`,
-        tips: 'השתמשו בניסוחים חיוביים המתארים מה התלמיד השיג ולא רק מה חסר.',
-        warnings: 'ודאו שסך כל האחוזים והנקודות מתכנסים במדויק ל-100 נקודות.',
-        complexity: 'בסיסי',
-        approved: 1
-      },
-      {
-        id: 'def-4',
-        title: 'פישוט והנגשת טקסט מורכב להוראה מותאמת',
-        goal: 'התאמת טקסט עיוני ברמות קריאה שונות עם ביאורי מילים ושאלות הבנה',
-        scenario: 'בכיתה הטרוגנית, המורה רוצה שכל התלמידים יעבדו על אותו נושא אך ברמת טקסט נגישה לתלמידי שילוב.',
-        prompt: `אנא פעל כמומחה להוראה מותאמת והנגשת שפה.\nלפניך הטקסט הבא:\n\"\"\"\n[הדבק כאן את הטקסט המקורי]\n\"\"\"\n\nבצע את הפעולות הבאות:\n1. שכתב את הטקסט לרמת קריאה המתאימה לתלמידי [שכבת גיל / רמת קריאה].\n2. השתמש במשפטים קצרים וברורים, חלק לפסקאות עם כותרות ביניים.\n3. צור מילון מונחים קצר בצד עם 4-5 מילים מאתגרות והסברן בעברית פשוטה.\n4. נסח 3 שאלות הבנה ברמות חשיבה שונות: שאלה לאיתור מידע, שאלה להסקת מסקנות ושאלה לחיבור אישי של הלומד.`,
-        tips: 'הדביקו טקסט קצר יחסית (עד 300 מילים בכל פעם) כדי לקבל פישוט איכותי ומדויק.',
-        warnings: 'בדקו שהשכתוב לא השמיט מושגי מפתח קריטיים הנדרשים בתוכנית הלימודים.',
-        complexity: 'בסיסי',
-        approved: 1
-      },
-      {
-        id: 'def-5',
-        title: 'סימולציית שיחה עם דמות היסטורית / מדעית',
-        goal: 'הפיכת ה-AI לדמות היסטורית או מדעית לראיון כיתתי מעמיק',
-        scenario: 'במהלך שיעור היסטוריה או מדעים, המורה מקרין את הצ׳אט והכיתה "מראיינת" את אלברט איינשטיין או דוד בן גוריון.',
-        prompt: `אני רוצה שתשמש כדמות של: [שם הדמות - למשל אלברט איינשטיין / דוד בן-גוריון / מארי קירי].\nהשיחה מיועדת לתלמידי כיתה [שכבת גיל] שלומדים על [הנושא הנלמד והתקופה].\n\nהנחיות להתנהגותך:\n1. הישאר בדמות לאורך כל השיחה! דבר בגוף ראשון בסגנון התקופה אך בשפה נגישה לתלמידים.\n2. פתח בברכה חמה והצג את עצמך בקצרה יחד עם ההישג או האירוע המרכזי בחייך.\n3. עודד את התלמידים לשאול אותך שאלות קשות על הדילמות, הכישלונות והתגליות שלך.\n4. בסוף כל תשובה, החזר לתלמיד שאלה מעוררת מחשבה שמשווה בין התקופה שלך למציאות של היום.`,
-        tips: 'בקשו מהתלמידים להכין מראש 2 שאלות מאתגרות שלא ניתן לענות עליהן ב"כן/לא".',
-        warnings: 'הזכירו לתלמידים שמדובר בסימולציה מבוססת בינה מלאכותית ויש לאמת עובדות היסטוריות קריטיות.',
-        complexity: 'בינוני',
-        approved: 1
-      },
-      {
-        id: 'def-6',
-        title: 'יצירת דף עבודה מדורג ברמות קושי עולות',
-        goal: 'הפקת דף עבודה הכולל שאלות ידע, הבנה, יישום ואתגר לחשיבה גבוהה',
-        scenario: 'המורה רוצה דף תרגול אישי לכיתה שמאפשר לכל תלמיד להתקדם בקצב שלו לפי רמתו.',
-        prompt: `פעל כמפתח תכניות לימודים. צור דף עבודה מקיף ומדורג בנושא: [נושא דף העבודה].\nמקצוע: [מתמטיקה / מדעים / אזרחות / לשון / אחר], שכבת גיל: [כיתה].\n\nבנה את דף העבודה ב-3 רמות מדורגות:\nרמה 1 - שליטה בסיסית והגדרות (3 שאלות ידע והבנה ישירה).\nרמה 2 - יישום וניתוח (2 שאלות מורכבות / בעיות מילוליות / ניתוח מקרה).\nרמה 3 - שאלת אתגר והעמקה (משימת חקר קצרה או שאלת חשיבה ביקורתית).\n\nלכל שאלה הוסף:\n- מחוון קצר לתשובה נכונה\n- טיפ/רמז לתלמיד שמתקשה`,
-        tips: 'ציינו את המושגים המדויקים שתרצו שיופיעו בשאלות הרמה הבסיסית.',
-        warnings: 'וודאו ששאלת האתגר עדיין ברת השגה ואינה דורשת ידע מוקדם שלא נלמד.',
-        complexity: 'בינוני',
-        approved: 1
-      }
-    ];
-
-    const COMPLEXITY_LEVELS = ['הכל', 'בסיסי', 'בינוני', 'מתקדם'];
-
-    // משתני מצב
-    let allPrompts = [];
-    let searchQuery = '';
-    let selectedComplexity = 'הכל';
-    let currentEditingPrompt = null;
-    let variableValues = {};
-    let activeEditTab = 'smart'; // 'smart' | 'direct'
-
-    // הצגת Toast
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      const toastText = document.getElementById('toast-text');
-      toastText.textContent = message;
-      toast.classList.remove('-translate-y-20', 'opacity-0', 'pointer-events-none');
-      toast.classList.add('translate-y-0', 'opacity-100');
-
-      setTimeout(() => {
-        toast.classList.add('-translate-y-20', 'opacity-0', 'pointer-events-none');
-        toast.classList.remove('translate-y-0', 'opacity-100');
-      }, 3800);
-    }
-
-    // העתקה בטוחה ללוח
-    function copyText(text) {
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text);
-        } else {
-          const textarea = document.createElement('textarea');
-          textarea.value = text;
-          textarea.style.position = 'fixed';
-          textarea.style.opacity = '0';
-          document.body.appendChild(textarea);
-          textarea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textarea);
-        }
-        return true;
-      } catch (err) {
-        console.error('Copy failed:', err);
-        return false;
-      }
-    }
-
-    // חילוץ משתנים מוקפים בסוגריים מרובעים
-    function extractVariables(text) {
-      const regex = /\[(.*?)\]/g;
-      const matches = [];
-      let match;
-      while ((match = regex.exec(text)) !== null) {
-        if (!matches.includes(match[1])) {
-          matches.push(match[1]);
-        }
-      }
-      return matches;
-    }
-
-    // צבע תגית לפי רמת מורכבות
-    function getComplexityBadge(complexity) {
-      const comp = (complexity || 'בסיסי').trim();
-      if (comp.includes('מתקדם')) {
-        return { text: 'מתקדם', class: 'bg-purple-100 text-purple-800 border-purple-200' };
-      } else if (comp.includes('בינוני')) {
-        return { text: 'בינוני', class: 'bg-indigo-100 text-indigo-800 border-indigo-200' };
-      }
-      return { text: 'בסיסי', class: 'bg-emerald-100 text-emerald-800 border-emerald-200' };
-    }
-
-    // טעינת נתונים מה-Google Sheet
-    async function loadPromptsFromSheet() {
-      const statusEl = document.getElementById('data-status');
-      const refreshIcon = document.getElementById('refresh-icon');
-      refreshIcon.classList.add('animate-spin', 'text-indigo-600');
-      statusEl.textContent = 'טוען נתונים מהגיליון...';
-
-      try {
-        const response = await fetch(GVIZ_URL);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const text = await response.text();
-
-        const jsonStart = text.indexOf('{');
-        const jsonEnd = text.lastIndexOf('}');
-        if (jsonStart === -1 || jsonEnd === -1) throw new Error('Invalid JSON format');
-
-        const jsonString = text.substring(jsonStart, jsonEnd + 1);
-        const data = JSON.parse(jsonString);
-
-        const cols = (data.table.cols || []).map((col, idx) => ({
-          idx,
-          label: (col.label || col.id || '').trim().toLowerCase()
-        }));
-
-        const findColIdx = (keywords) => {
-          const found = cols.find(c => keywords.some(k => c.label.includes(k)));
-          return found ? found.idx : -1;
-        };
-
-        // זיהוי כל שדות הגיליון
-        const approvedIdx = findColIdx(['מאושר', 'approved', 'אישור', 'status', 'סטטוס']);
-        const titleIdx = findColIdx(['שם הפרומפט', 'שם', 'כותרת', 'title']);
-        const goalIdx = findColIdx(['מטרת הפרומפט', 'מטרה', 'goal', 'purpose']);
-        const scenarioIdx = findColIdx(['תרחיש שימוש לדוגמא', 'תרחיש שימוש', 'תרחיש', 'דוגמא', 'scenario']);
-        const promptTemplateIdx = findColIdx(['תבנית הפרומפט', 'תבנית', 'פרומפט', 'נוסח', 'prompt', 'template']);
-        const tipsIdx = findColIdx(['הסבר לשימוש בפרומפט', 'טיפים לעבודה נכונה', 'הסבר', 'טיפים', 'tips']);
-        const warningsIdx = findColIdx(['הערות ואזהרות', 'מגבלות', 'נקודות לשיפור', 'מה לא לעשות', 'אזהרות', 'הערות', 'warnings']);
-        const complexityIdx = findColIdx(['רמת המורכבות של הפרומפט', 'רמת המורכבות', 'מורכבות', 'complexity', 'רמה']);
-
-        const parsedPrompts = [];
-        const rows = data.table.rows || [];
-
-        rows.forEach((row, rowIndex) => {
-          const cells = row.c || [];
-          const getVal = (idx) => (idx >= 0 && cells[idx] && cells[idx].v !== null && cells[idx].v !== undefined) ? String(cells[idx].v).trim() : '';
-
-          // סינון: רק שורות בהן מופיע 1 בעמודת מאושר
-          const approvedVal = approvedIdx >= 0 ? getVal(approvedIdx) : (cells[0] ? String(cells[0].v).trim() : '1');
-          const isApproved = approvedVal === '1' || approvedVal.toLowerCase() === 'true' || approvedVal === 'כן' || approvedVal === 'מאושר';
-
-          if (isApproved) {
-            const title = titleIdx >= 0 ? getVal(titleIdx) : getVal(1) || `פרומפט ${rowIndex + 1}`;
-            const goal = goalIdx >= 0 ? getVal(goalIdx) : getVal(2) || 'ללא תיאור מוגדר';
-            const scenario = scenarioIdx >= 0 ? getVal(scenarioIdx) : '';
-            const promptText = promptTemplateIdx >= 0 ? getVal(promptTemplateIdx) : getVal(3) || goal;
-            const tips = tipsIdx >= 0 ? getVal(tipsIdx) : '';
-            const warnings = warningsIdx >= 0 ? getVal(warningsIdx) : '';
-            const complexity = complexityIdx >= 0 ? getVal(complexityIdx) : 'בסיסי';
-
-            if (title && (promptText || goal)) {
-              parsedPrompts.push({
-                id: `sheet-${rowIndex}`,
-                title,
-                goal,
-                scenario: scenario || 'מתאים לשילוב במהלך הוראה פרונטלית, עבודה קבוצתית או תרגול עצמאי.',
-                prompt: promptText || goal,
-                tips: tips || 'מומלץ לעבור על התבנית, להזין את הפרטים הרלוונטיים לכיתתכם ולדייק את התוצאה בשיחה חוזרת עם הצ׳אטבוט.',
-                warnings: warnings || 'זכרו לבדוק את התוצרים שמופקים ולוודא התאמה מלאה לרמת התלמידים ולתוכנית הלימודים.',
-                complexity: complexity || 'בסיסי',
-                approved: 1
-              });
-            }
-          }
-        });
-
-        if (parsedPrompts.length > 0) {
-          allPrompts = parsedPrompts;
-          statusEl.textContent = `נטענו ${parsedPrompts.length} פרומפטים מאושרים בזמן אמת`;
-          showToast(`נטענו ${parsedPrompts.length} פרומפטים מאושרים בהצלחה!`);
-        } else {
-          allPrompts = DEFAULT_PROMPTS;
-          statusEl.textContent = 'מוצגים פרומפטים מובנים (הגיליון ריק מפרומפטים שסומנו 1 במאושר)';
-        }
-      } catch (err) {
-        console.warn('Fallback to local prompts due to sheet access / CORS:', err);
-        allPrompts = DEFAULT_PROMPTS;
-        statusEl.textContent = 'מוצג מאגר פרומפטים חינוכיים מובנה';
-      } finally {
-        refreshIcon.classList.remove('animate-spin', 'text-indigo-600');
-        renderComplexityFilters();
-        renderPrompts();
-      }
-    }
-
-    // הצגת כפתורי סינון מורכבות
-    function renderComplexityFilters() {
-      const container = document.getElementById('complexity-filters');
-      container.innerHTML = '';
-
-      COMPLEXITY_LEVELS.forEach(lvl => {
-        const btn = document.createElement('button');
-        const isActive = selectedComplexity === lvl;
-        btn.className = `px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
-          isActive
-            ? 'bg-indigo-600 text-white shadow-sm font-bold'
-            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-        }`;
-        btn.textContent = lvl;
-        btn.onclick = () => {
-          selectedComplexity = lvl;
-          renderComplexityFilters();
-          renderPrompts();
-        };
-        container.appendChild(btn);
-      });
-    }
-
-    // סינון פרומפטים לפי חיפוש ומורכבות
-    function getFilteredPrompts() {
-      return allPrompts.filter(p => {
-        if (selectedComplexity !== 'הכל' && !p.complexity.includes(selectedComplexity)) {
-          return false;
-        }
-
-        if (searchQuery.trim()) {
-          const q = searchQuery.toLowerCase();
-          const matchTitle = (p.title || '').toLowerCase().includes(q);
-          const matchGoal = (p.goal || '').toLowerCase().includes(q);
-          const matchScenario = (p.scenario || '').toLowerCase().includes(q);
-          const matchPrompt = (p.prompt || '').toLowerCase().includes(q);
-          const matchTips = (p.tips || '').toLowerCase().includes(q);
-          const matchWarnings = (p.warnings || '').toLowerCase().includes(q);
-          const matchComplexity = (p.complexity || '').toLowerCase().includes(q);
-
-          if (!matchTitle && !matchGoal && !matchScenario && !matchPrompt && !matchTips && !matchWarnings && !matchComplexity) {
-            return false;
-          }
-        }
-
-        return true;
-      });
-    }
-
-    // רינדור כרטיסיות
-    function renderPrompts() {
-      const grid = document.getElementById('prompts-grid');
-      const emptyState = document.getElementById('empty-state');
-      const resultsCount = document.getElementById('results-count');
-
-      const filtered = getFilteredPrompts();
-      resultsCount.innerHTML = `נמצאו <strong class="text-slate-800 font-bold">${filtered.length}</strong> פרומפטים מתאימים`;
-
-      grid.innerHTML = '';
-
-      if (filtered.length === 0) {
-        grid.classList.add('hidden');
-        emptyState.classList.remove('hidden');
-        return;
-      }
-
-      grid.classList.remove('hidden');
-      emptyState.classList.add('hidden');
-
-      filtered.forEach(prompt => {
-        const badge = getComplexityBadge(prompt.complexity);
-
-        const card = document.createElement('div');
-        card.className = 'group bg-white rounded-2xl border border-slate-200/90 hover:border-indigo-400 p-6 shadow-sm hover:shadow-xl transition-all duration-200 flex flex-col justify-between cursor-pointer relative overflow-hidden transform hover:-translate-y-1';
-        
-        card.innerHTML = `
-          <!-- Top Gradient Border -->
-          <div class="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-80 group-hover:opacity-100 transition-opacity"></div>
-
-          <div class="space-y-3">
-            <!-- Badge & Complexity -->
-            <div class="flex items-center justify-between gap-2">
-              <span class="inline-flex items-center text-xs font-bold px-2.5 py-0.5 rounded-full border ${badge.class}">
-                רמת ${badge.text}
-              </span>
-              <span class="text-[11px] text-slate-400 flex items-center gap-1">
-                <svg class="w-3 h-3 text-indigo-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
-                </svg>
-                ChatGPT • Claude • Gemini
-              </span>
-            </div>
-
-            <!-- שם הפרומפט -->
-            <h3 class="font-bold text-slate-900 text-lg group-hover:text-indigo-600 transition-colors leading-snug">
-              ${prompt.title}
-            </h3>
-
-            <!-- מטרת הפרומפט -->
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-              <p class="text-xs font-bold text-slate-500 mb-1 flex items-center gap-1.5">
-                <svg class="w-3.5 h-3.5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-                מטרת הפרומפט:
-              </p>
-              <p class="text-xs text-slate-700 leading-relaxed line-clamp-2">
-                ${prompt.goal || 'הפקת תוצר פדגוגי איכותי מותאם'}
-              </p>
-            </div>
-          </div>
-
-          <!-- Bottom CTA -->
-          <div class="pt-4 border-t border-slate-100 mt-5 flex items-center justify-between">
-            <span class="text-xs text-slate-400 font-medium">צפייה בכל השדות ועריכה</span>
-            <span class="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-50 group-hover:bg-indigo-600 text-indigo-700 group-hover:text-white font-bold text-xs rounded-xl transition-all shadow-sm">
-              <span>התאם ופתח</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-              </svg>
-            </span>
-          </div>
-        `;
-
-        // פתיחת מודאל מלא בלחיצה
-        card.onclick = () => openEditModal(prompt);
-
-        grid.appendChild(card);
-      });
-    }
-
-    // פתיחת מודאל עריכה והצגת כל השדות
-    function openEditModal(prompt) {
-      currentEditingPrompt = prompt;
-      variableValues = {};
-      activeEditTab = 'smart';
-
-      // כותרת, מטרה, מורכבות
-      document.getElementById('modal-prompt-title').textContent = prompt.title;
-      document.getElementById('modal-prompt-goal').textContent = prompt.goal || 'ללא תיאור מוגדר';
-      
-      const badge = getComplexityBadge(prompt.complexity);
-      const badgeEl = document.getElementById('modal-complexity-badge');
-      badgeEl.textContent = `רמת מורכבות: ${badge.text}`;
-      badgeEl.className = `inline-flex items-center text-xs font-bold px-2.5 py-0.5 rounded-full border ${badge.class}`;
-
-      // 1. תרחיש שימוש לדוגמא
-      document.getElementById('modal-scenario-text').textContent = prompt.scenario || 'לא הוזן תרחיש שימוש ספציפי.';
-      
-      // 2. טיפים והסבר לעבודה נכונה
-      document.getElementById('modal-tips-text').textContent = prompt.tips || 'הזינו ערכים ספציפיים וברורים במשתנים לקבלת תוצאה מדויקת.';
-
-      // 3. הערות, אזהרות ומגבלות
-      document.getElementById('modal-warnings-text').textContent = prompt.warnings || 'מומלץ לעבור על תשובת הבינה המלאכותית ולאמת עובדות טרם שימוש בכיתה.';
-
-      // תבנית הפרומפט
-      document.getElementById('modal-prompt-textarea').value = prompt.prompt;
-
-      const vars = extractVariables(prompt.prompt);
-      const varGrid = document.getElementById('variable-inputs-grid');
-      const smartTabLabel = document.getElementById('tab-smart-label');
-
-      smartTabLabel.textContent = vars.length > 0 ? `הזנת משתנים (${vars.length})` : 'הזנת משתנים';
-      varGrid.innerHTML = '';
-
-      if (vars.length > 0) {
-        vars.forEach(variableName => {
-          variableValues[variableName] = '';
-          const div = document.createElement('div');
-          div.className = 'space-y-1';
-          div.innerHTML = `
-            <label class="text-xs font-bold text-slate-700 block">${variableName}</label>
-            <input
-              type="text"
-              placeholder="הזן ערך עבור ${variableName}..."
-              class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
-            />
-          `;
-          const input = div.querySelector('input');
-          input.oninput = (e) => {
-            variableValues[variableName] = e.target.value;
-            updateLivePreview();
-          };
-          varGrid.appendChild(div);
-        });
-      } else {
-        varGrid.innerHTML = `
-          <div class="col-span-full text-center py-4 text-xs text-slate-500 bg-slate-50 rounded-xl border border-slate-100">
-            תבנית זו אינה מכילה משתנים מוגדרים מראש. תוכלו לעבור ללשונית "עריכת טקסט חופשית" לשינוי הנוסח לפי הצורך.
-          </div>
-        `;
-      }
-
-      setEditTab('smart');
-      updateLivePreview();
-
-      const modal = document.getElementById('edit-modal');
-      modal.classList.remove('hidden');
-    }
-
-    // החלפת טאבים
-    function setEditTab(tab) {
-      activeEditTab = tab;
-      const smartBtn = document.getElementById('tab-smart-btn');
-      const directBtn = document.getElementById('tab-direct-btn');
-      const smartContainer = document.getElementById('smart-fields-container');
-      const directContainer = document.getElementById('direct-edit-container');
-
-      if (tab === 'smart') {
-        smartBtn.className = 'px-3 py-1 rounded-lg bg-white text-indigo-700 shadow-sm transition-all flex items-center gap-1 font-bold';
-        directBtn.className = 'px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1';
-        smartContainer.classList.remove('hidden');
-        directContainer.classList.add('hidden');
-      } else {
-        smartBtn.className = 'px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center gap-1';
-        directBtn.className = 'px-3 py-1 rounded-lg bg-white text-indigo-700 shadow-sm transition-all flex items-center gap-1 font-bold';
-        smartContainer.classList.add('hidden');
-        directContainer.classList.remove('hidden');
-        document.getElementById('modal-prompt-textarea').value = getCalculatedPromptText();
-      }
-    }
-
-    // חישוב הפרומפט הסופי עם הערכים שהוזנו
-    function getCalculatedPromptText() {
-      if (!currentEditingPrompt) return '';
-      let text = currentEditingPrompt.prompt;
-      Object.entries(variableValues).forEach(([k, v]) => {
-        if (v && v.trim()) {
-          text = text.replaceAll(`[${k}]`, v.trim());
-        }
-      });
-      return text;
-    }
-
-    // עדכון תצוגה מקדימה
-    function updateLivePreview() {
-      const preview = document.getElementById('prompt-live-preview');
-      preview.textContent = getCalculatedPromptText();
-    }
-
-    // קבלת הפרומפט הסופי המוכן להעברה
-    function getFinalPrompt() {
-      if (activeEditTab === 'smart') {
-        return getCalculatedPromptText();
-      } else {
-        return document.getElementById('modal-prompt-textarea').value;
-      }
-    }
-
-    // סגירת מודאל עריכה
-    function closeEditModal() {
-      document.getElementById('edit-modal').classList.add('hidden');
-    }
-
-    // פונקציות פתיחה בצ'אטבוטים השונים:
-
-    // 1. פתיחה ב-ChatGPT (מעביר את הפרומפט על ה-URL)
-    function launchChatGPT() {
-      const text = getFinalPrompt();
-      copyText(text);
-      const url = `https://chatgpt.com/?q=${encodeURIComponent(text)}`;
-      showToast('פותח את ChatGPT עם הפרומפט הערוך...');
-      setTimeout(() => {
-        window.open(url, '_blank');
-      }, 200);
-    }
-
-    // 2. פתיחה ב-Claude (מעביר את הפרומפט על ה-URL)
-    function launchClaude() {
-      const text = getFinalPrompt();
-      copyText(text);
-      const url = `https://claude.ai/new?q=${encodeURIComponent(text)}`;
-      showToast('פותח את Claude עם הפרומפט הערוך...');
-      setTimeout(() => {
-        window.open(url, '_blank');
-      }, 200);
-    }
-
-    // 3. פתיחה ב-Gemini (שומר ב-Copy Buffer + פותח להדבקה ע"י Ctrl+V)
-    function launchGemini() {
-      const text = getFinalPrompt();
-      copyText(text);
-      showToast('הפרומפט הועתק ללוח! ב-Gemini לחצו Ctrl+V (הדבק) והפעילו ✨');
-      setTimeout(() => {
-        window.open('https://gemini.google.com/app', '_blank');
-      }, 250);
-    }
-
-    // פתיחת וסגירת חלון תרומת פרומפט
-    function openContributeModal() {
-      document.getElementById('contribute-modal').classList.remove('hidden');
-    }
-
-    function closeContributeModal() {
-      document.getElementById('contribute-modal').classList.add('hidden');
-    }
-
-    // אתחול אירועים בטעינת הדף
-    document.addEventListener('DOMContentLoaded', () => {
-      // טעינת נתונים ראשונית
-      loadPromptsFromSheet();
-
-      // חיפוש
-      const searchInput = document.getElementById('search-input');
-      const clearSearchBtn = document.getElementById('clear-search-btn');
-
-      searchInput.oninput = (e) => {
-        searchQuery = e.target.value;
-        if (searchQuery) {
-          clearSearchBtn.classList.remove('hidden');
-        } else {
-          clearSearchBtn.classList.add('hidden');
-        }
-        renderPrompts();
-      };
-
-      clearSearchBtn.onclick = () => {
-        searchInput.value = '';
-        searchQuery = '';
-        clearSearchBtn.classList.add('hidden');
-        renderPrompts();
-      };
-
-      // רענון
-      document.getElementById('refresh-btn').onclick = () => loadPromptsFromSheet();
-
-      // איפוס סינונים
-      document.getElementById('reset-filters-btn').onclick = () => {
-        searchInput.value = '';
-        searchQuery = '';
-        selectedComplexity = 'הכל';
-        clearSearchBtn.classList.add('hidden');
-        renderComplexityFilters();
-        renderPrompts();
-      };
-
-      // טאבים בעריכה
-      document.getElementById('tab-smart-btn').onclick = () => setEditTab('smart');
-      document.getElementById('tab-direct-btn').onclick = () => setEditTab('direct');
-
-      // פתיחה בצ'אטבוטים
-      document.getElementById('launch-chatgpt-btn').onclick = launchChatGPT;
-      document.getElementById('launch-claude-btn').onclick = launchClaude;
-      document.getElementById('launch-gemini-btn').onclick = launchGemini;
-
-      // כפתורים תחתונים במודאל
-      document.getElementById('modal-copy-only-btn').onclick = () => {
-        const text = getFinalPrompt();
-        copyText(text);
-        showToast('הפרומפט המותאם הועתק ללוח בהצלחה!');
-      };
-      document.getElementById('modal-close-bottom-btn').onclick = closeEditModal;
-      document.getElementById('close-edit-modal-btn').onclick = closeEditModal;
-
-      // מודאל תרומת פרומפט
-      document.getElementById('contribute-btn').onclick = openContributeModal;
-      document.getElementById('close-contribute-modal-btn').onclick = closeContributeModal;
-
-      // סגירת מודאלים בלחיצה על הרקע הכהה
-      window.onclick = (e) => {
-        const editModal = document.getElementById('edit-modal');
-        const contributeModal = document.getElementById('contribute-modal');
-        if (e.target === editModal) closeEditModal();
-        if (e.target === contributeModal) closeContributeModal();
-      };
-    });
-  </script>
 </body>
 </html>
