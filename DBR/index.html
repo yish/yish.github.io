@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>An Introduction to Educational Design Research (EDR / DBR)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            linen: '#FDFBF7',
+                            charcoal: '#1A2421',
+                            terracotta: '#D96A3D',
+                            sage: '#5F7A61',
+                            sand: '#EAE2D5',
+                            clay: '#8C5A47'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-gradient {
+            background: linear-gradient(135deg, #1A2421 0%, #2A3632 100%);
+        }
+    </style>
+</head>
+<body class="bg-brand-linen text-brand-charcoal font-sans antialiased">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-50 bg-brand-linen/90 backdrop-blur-md border-b border-brand-sand/40">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="font-serif text-xl font-bold tracking-tight text-brand-charcoal hover:text-brand-terracotta transition">
+                EDR <span class="text-brand-terracotta">Manifesto</span>
+            </a>
+            <nav class="hidden md:flex space-x-8 text-sm font-semibold tracking-wide uppercase text-brand-charcoal/80">
+                <a href="#foundations" class="hover:text-brand-terracotta transition">Foundations</a>
+                <a href="#quadrant" class="hover:text-brand-terracotta transition">Pasteur's Quadrant</a>
+                <a href="#conjecture" class="hover:text-brand-terracotta transition">Conjecture Mapping</a>
+                <a href="#misconceptions" class="hover:text-brand-terracotta transition">Misconceptions</a>
+                <a href="#challenges" class="hover:text-brand-terracotta transition">Challenges</a>
+            </nav>
+            <a href="#conjecture" class="bg-brand-terracotta hover:bg-brand-clay text-white text-xs uppercase tracking-wider font-bold px-5 py-2.5 rounded shadow transition duration-300">
+                Interactive Map
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="custom-gradient text-white py-24 px-6 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#FDFBF7_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <span class="text-brand-terracotta uppercase tracking-widest font-extrabold text-xs block mb-3">A Design Science of the Artificial</span>
+            <h1 class="font-serif text-4xl md:text-6xl font-bold leading-tight mb-6">
+                Bridging Academic Theory &amp; Contemporary Practice
+            </h1>
+            <p class="text-lg md:text-xl text-brand-sand/90 font-light max-w-2xl mx-auto mb-10 leading-relaxed">
+                Traditional social sciences excel at describing "what is." Educational Design Research (EDR) is an interventionist paradigm engineered to design and study "what ought to be."
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#foundations" class="bg-brand-terracotta hover:bg-brand-clay text-white font-bold px-8 py-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300 text-center">
+                    Explore the Paradigm
+                </a>
+                <a href="#quadrant" class="bg-white/10 hover:bg-white/20 text-brand-sand border border-white/20 font-bold px-8 py-4 rounded-lg transition duration-300 text-center">
+                    View Infographics
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 1: Herbert Simon & Foundations -->
+    <section id="foundations" class="py-20 px-6 max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+                <span class="text-brand-terracotta uppercase tracking-widest font-extrabold text-xs block mb-2">Epistemological Shift</span>
+                <h2 class="font-serif text-3xl md:text-4xl font-bold mb-6">
+                    Escape the "Sisyphus Trap" of Classical Research
+                </h2>
+                <div class="space-y-4 text-brand-charcoal/80 leading-relaxed">
+                    <p>
+                        For over half a century, traditional educational research was constrained by a severe credibility gap. By isolating variables in laboratory settings to establish artificial controls, educational inquiry produced context-free findings that routinely crumbled when introduced into messy, complex, real-world classrooms.
+                    </p>
+                    <p>
+                        DBR rejects this decontextualized paradigm. Rooted in <strong>Herbert Simon's (1969) Foundations of Design Science</strong>, it treats educational environments not as natural systems to be passively described, but as <em>artificial systems</em> engineered to accomplish human and value-driven pedagogical goals.
+                    </p>
+                    <p class="border-l-4 border-brand-sage pl-4 py-1 italic bg-brand-sand/20">
+                        "The natural sciences are concerned with how things are... Design, on the other hand, is concerned with how things ought to be." <br>
+                        <span class="block text-right text-xs font-semibold not-italic mt-1">— Herbert Simon, Sciences of the Artificial</span>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Static/CSS Decorative Visual Matrix -->
+            <div class="bg-white border border-brand-sand/50 rounded-2xl p-8 shadow-sm">
+                <h3 class="font-serif text-xl font-bold mb-6 text-center text-brand-charcoal">The Paradigmatic Divide</h3>
+                <div class="space-y-4">
+                    <div class="flex gap-4 p-4 rounded-xl bg-brand-linen hover:shadow-md transition">
+                        <div class="w-10 h-10 rounded-lg bg-brand-charcoal text-brand-sand flex items-center justify-center shrink-0 font-bold text-lg">01</div>
+                        <div>
+                            <h4 class="font-bold text-sm">Natural &amp; Social Science</h4>
+                            <p class="text-xs text-brand-charcoal/70 mt-1">Descriptive, value-neutral inquiry. Concentrates strictly on studying "what is" via isolated variables.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 p-4 rounded-xl bg-brand-linen hover:shadow-md transition">
+                        <div class="w-10 h-10 rounded-lg bg-brand-sage text-white flex items-center justify-center shrink-0 font-bold text-lg">02</div>
+                        <div>
+                            <h4 class="font-bold text-sm">Humanistic &amp; Philosophical</h4>
+                            <p class="text-xs text-brand-charcoal/70 mt-1">Critical interpretive scholarship. Rich in conceptual values but lacks rigorous empirical validation.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 p-4 rounded-xl bg-brand-terracotta/10 border border-brand-terracotta/30 shadow-sm">
+                        <div class="w-10 h-10 rounded-lg bg-brand-terracotta text-white flex items-center justify-center shrink-0 font-bold text-lg">03</div>
+                        <div>
+                            <h4 class="font-bold text-sm text-brand-terracotta">Design Science (DBR)</h4>
+                            <p class="text-xs text-brand-charcoal/90 mt-1">Active, use-inspired intervention. Simultaneously designs robust practical tools and advances learning theory.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Infographic 1 - Pasteur's Quadrant -->
+    <section id="quadrant" class="bg-brand-sand/20 py-20 px-6 border-y border-brand-sand/40">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-brand-terracotta uppercase tracking-widest font-extrabold text-xs block mb-2">Infographic 01</span>
+                <h2 class="font-serif text-3xl md:text-4xl font-bold mb-4">Stokes' Quadrant of Scientific Inquiry</h2>
+                <p class="text-brand-charcoal/70 text-sm">
+                    Hover over each quadrant to see how DBR operates in <strong>Pasteur's Quadrant</strong>, uniting the quest for fundamental understanding with practical, real-world utility.
+                </p>
+            </div>
+
+            <!-- HTML5 Responsive SVG Grid (Pasteur's Quadrant) -->
+            <div class="max-w-3xl mx-auto bg-white p-6 rounded-2xl shadow-md border border-brand-sand/50">
+                <svg viewBox="0 0 800 550" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <style>
+                            .quadrant-box { transition: all 0.3s ease; cursor: pointer; }
+                            .quadrant-box:hover { fill-opacity: 0.95; filter: drop-shadow(0px 8px 16px rgba(217, 106, 61, 0.15)); }
+                            .axis-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; fill: #1A2421; }
+                            .quad-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; }
+                            .quad-desc { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; }
+                        </style>
+                        <linearGradient id="grad-active" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#D96A3D" />
+                            <stop offset="100%" stop-color="#8C5A47" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Quadrant Background Lines -->
+                    <rect x="150" y="50" width="550" height="400" fill="#FDFBF7" stroke="#EAE2D5" stroke-width="2" />
+                    <line x1="425" y1="50" x2="425" y2="450" stroke="#EAE2D5" stroke-dasharray="5,5" stroke-width="2" />
+                    <line x1="150" y1="250" x2="700" y2="250" stroke="#EAE2D5" stroke-dasharray="5,5" stroke-width="2" />
+
+                    <!-- Axis Labels -->
+                    <!-- Y Axis: Quest for Fundamental Understanding -->
+                    <text x="50" y="250" class="axis-label" transform="rotate(-90, 50, 250)" text-anchor="middle">FUNDAMENTAL UNDERSTANDING?</text>
+                    <text x="120" y="150" class="axis-label" text-anchor="end" font-size="12">YES (High) &rarr;</text>
+                    <text x="120" y="350" class="axis-label" text-anchor="end" font-size="12">NO (Low) &rarr;</text>
+
+                    <!-- X Axis: Consideration of Use -->
+                    <text x="425" y="495" class="axis-label" text-anchor="middle">CONSIDERATION OF USE? (PRACTICAL UTILITY)</text>
+                    <text x="287" y="475" class="axis-label" text-anchor="middle" font-size="12">&larr; NO (Low)</text>
+                    <text x="562" y="475" class="axis-label" text-anchor="middle" font-size="12">YES (High) &rarr;</text>
+
+                    <!-- Quadrant 1: Bohr (Top-Left) -->
+                    <g class="quadrant-box">
+                        <rect x="155" y="55" width="265" height="190" fill="#EAE2D5" fill-opacity="0.2" rx="8" />
+                        <text x="287" y="120" class="quad-title" fill="#1A2421" text-anchor="middle">Pure Basic Research</text>
+                        <text x="287" y="145" class="quad-title" fill="#5F7A61" text-anchor="middle" font-size="16">BOHR'S QUADRANT</text>
+                        <text x="287" y="180" class="quad-desc" fill="#1A2421" fill-opacity="0.7" text-anchor="middle">Highly theoretical insights without</text>
+                        <text x="287" y="200" class="quad-desc" fill="#1A2421" fill-opacity="0.7" text-anchor="middle">regard to immediate practical use.</text>
+                    </g>
+
+                    <!-- Quadrant 2: Pasteur / DBR (Top-Right) - THE ACTIVE CARD -->
+                    <g class="quadrant-box">
+                        <rect x="430" y="55" width="265" height="190" fill="url(#grad-active)" rx="8" />
+                        <text x="562" y="110" class="quad-title" fill="#FDFBF7" text-anchor="middle">Use-Inspired Basic Science</text>
+                        <text x="562" y="135" class="quad-title" fill="#EAE2D5" text-anchor="middle" font-size="16">PASTEUR'S QUADRANT (DBR)</text>
+                        <text x="562" y="170" class="quad-desc" fill="#FDFBF7" text-anchor="middle" font-weight="bold">Simultaneously designs practical</text>
+                        <text x="562" y="190" class="quad-desc" fill="#FDFBF7" text-anchor="middle" font-weight="bold">classroom solutions and advances</text>
+                        <text x="562" y="210" class="quad-desc" fill="#FDFBF7" text-anchor="middle" font-weight="bold">robust academic learning theories.</text>
+                    </g>
+
+                    <!-- Quadrant 3: Sterile (Bottom-Left) -->
+                    <g class="quadrant-box">
+                        <rect x="155" y="255" width="265" height="190" fill="#EAE2D5" fill-opacity="0.1" rx="8" />
+                        <text x="287" y="340" class="quad-title" fill="#1A2421" fill-opacity="0.4" text-anchor="middle">Classifying / Exploratory</text>
+                        <text x="287" y="365" class="quad-desc" fill="#1A2421" fill-opacity="0.4" text-anchor="middle">Categorizing static events</text>
+                        <text x="287" y="385" class="quad-desc" fill="#1A2421" fill-opacity="0.4" text-anchor="middle">without theory or design.</text>
+                    </g>
+
+                    <!-- Quadrant 4: Edison (Bottom-Right) -->
+                    <g class="quadrant-box">
+                        <rect x="430" y="255" width="265" height="190" fill="#5F7A61" fill-opacity="0.15" rx="8" stroke="#5F7A61" stroke-width="1" />
+                        <text x="562" y="320" class="quad-title" fill="#1A2421" text-anchor="middle">Pure Applied R&amp;D</text>
+                        <text x="562" y="345" class="quad-title" fill="#5F7A61" text-anchor="middle" font-size="16">EDISON'S QUADRANT</text>
+                        <text x="562" y="380" class="quad-desc" fill="#1A2421" fill-opacity="0.7" text-anchor="middle">Optimizing practical utility or technical</text>
+                        <text x="562" y="400" class="quad-desc" fill="#1A2421" fill-opacity="0.7" text-anchor="middle">products without seeking theoretical laws.</text>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Infographic 2 - Sandoval's Conjecture Mapping -->
+    <section id="conjecture" class="py-20 px-6 max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <span class="text-brand-terracotta uppercase tracking-widest font-extrabold text-xs block mb-2">Infographic 02</span>
+            <h2 class="font-serif text-3xl md:text-4xl font-bold mb-4">Sandoval's Conjecture Mapping Architecture</h2>
+            <p class="text-brand-charcoal/70 text-sm">
+                How DBR links high-level theoretical conjectures to real-world outcomes by structuring physical embodiments and observing mediating psychological processes.
+            </p>
+        </div>
+
+        <!-- HTML5 Responsive SVG Infographic (Conjecture Map) -->
+        <div class="bg-white p-6 rounded-3xl shadow-xl border border-brand-sand/40 max-w-5xl mx-auto">
+            <svg viewBox="0 0 1000 450" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#D96A3D" />
+                    </marker>
+                    <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4">
+                        <circle cx="5" cy="5" r="5" fill="#5F7A61" />
+                    </marker>
+                    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+                        <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#1A2421" flood-opacity="0.08" />
+                    </filter>
+                </defs>
+
+                <!-- Box 1: High-Level Conjecture -->
+                <g filter="url(#shadow)">
+                    <rect x="20" y="100" width="200" height="250" fill="#1A2421" rx="12" />
+                    <text x="120" y="145" font-family="'Playfair Display', serif" font-size="18" font-weight="bold" fill="#FDFBF7" text-anchor="middle">Theoretical</text>
+                    <text x="120" y="170" font-family="'Playfair Display', serif" font-size="18" font-weight="bold" fill="#FDFBF7" text-anchor="middle">Conjectures</text>
+                    <line x1="40" y1="190" x2="200" y2="190" stroke="#D96A3D" stroke-width="2" />
+                    <text x="120" y="230" font-family="'Plus Jakarta Sans'" font-size="12" fill="#EAE2D5" text-anchor="middle">High-level claims about</text>
+                    <text x="120" y="250" font-family="'Plus Jakarta Sans'" font-size="12" fill="#EAE2D5" text-anchor="middle">how learning occurs within</text>
+                    <text x="120" y="270" font-family="'Plus Jakarta Sans'" font-size="12" fill="#EAE2D5" text-anchor="middle">the target domain.</text>
+                </g>
+
+                <!-- Arrow 1 -> 2 -->
+                <path d="M 220 225 L 260 225" stroke="#D96A3D" stroke-width="3" marker-end="url(#arrow)" />
+
+                <!-- Box 2: Embodiments -->
+                <g filter="url(#shadow)">
+                    <rect x="270" y="100" width="200" height="250" fill="#FDFBF7" stroke="#EAE2D5" stroke-width="2" rx="12" />
+                    <text x="370" y="145" font-family="'Playfair Display', serif" font-size="18" font-weight="bold" fill="#1A2421" text-anchor="middle">Embodiments</text>
+                    <text x="370" y="170" font-family="'Plus Jakarta Sans'" font-size="13" font-weight="bold" fill="#D96A3D" text-anchor="middle">PHYSICAL ARTIFACTS</text>
+                    <line x1="290" y1="190" x2="450" y2="190" stroke="#5F7A61" stroke-width="2" />
+                    <text x="370" y="225" font-family="'Plus Jakarta Sans'" font-size="11" fill="#1A2421" fill-opacity="0.8" text-anchor="middle">&#8226; Software Tools / UI</text>
+                    <text x="370" y="245" font-family="'Plus Jakarta Sans'" font-size="11" fill="#1A2421" fill-opacity="0.8" text-anchor="middle">&#8226; Curricular Tasks</text>
+                    <text x="370" y="265" font-family="'Plus Jakarta Sans'" font-size="11" fill="#1A2421" fill-opacity="0.8" text-anchor="middle">&#8226; Participant Norms</text>
+                    <text x="370" y="285" font-family="'Plus Jakarta Sans'" font-size="11" fill="#1A2421" fill-opacity="0.8" text-anchor="middle">&#8226; Teacher Scaffolds</text>
+                </g>
+
+                <!-- Arrow 2 -> 3 -->
+                <path d="M 470 225 L 510 225" stroke="#D96A3D" stroke-width="3" marker-end="url(#arrow)" />
+                <text x="490" y="210" font-family="'Plus Jakarta Sans'" font-size="11" font-weight="bold" fill="#5F7A61" text-anchor="middle">triggers</text>
+
+                <!-- Box 3: Mediating Processes -->
+                <g filter="url(#shadow)">
+                    <rect x="520" y="100" width="210" height="250" fill="#FDFBF7" stroke="#EAE2D5" stroke-width="2" rx="12" />
+                    <text x="625" y="145" font-family="'Playfair Display', serif" font-size="18" font-weight="bold" fill="#1A2421" text-anchor="middle">Mediating Processes</text>
+                    <text x="625" y="170" font-family="'Plus Jakarta Sans'" font-size="13" font-weight="bold" fill="#5F7A61" text-anchor="middle">PEOPLE IN ACTION</text>
+                    <line x1="540" y1="190" x2="710" y2="190" stroke="#D96A3D" stroke-width="2" />
+                    <text x="625" y="225" font-family="'Plus Jakarta Sans'" font-size="11" fill="#1A2421" fill-opacity="0.8" text-anchor="middle">&#8226; Peer Collaborations</text>
+                    <text x="625" y="245" font-family="'Plus Jakarta Sans'" font-size="11" fill="#1A2421" fill-opacity="0.8" text-anchor="middle">&#8226; Cognitive Conflict</text>
+                    <text x="625" y="265" font-family="'Plus Jakarta Sans'" font-size="11" fill="#1A2421" fill-opacity="0.8" text-anchor="middle">&#8226; Discourse Patterns</text>
+                    <text x="625" y="285" font-family="'Plus Jakarta Sans'" font-size="11" fill="#1A2421" fill-opacity="0.8" text-anchor="middle">&#8226; Reflection Loops</text>
+                </g>
+
+                <!-- Arrow 3 -> 4 -->
+                <path d="M 730 225 L 770 225" stroke="#D96A3D" stroke-width="3" marker-end="url(#arrow)" />
+                <text x="750" y="210" font-family="'Plus Jakarta Sans'" font-size="11" font-weight="bold" fill="#5F7A61" text-anchor="middle">yields</text>
+
+                <!-- Box 4: Outcomes -->
+                <g filter="url(#shadow)">
+                    <rect x="780" y="100" width="200" height="250" fill="#D96A3D" rx="12" />
+                    <text x="880" y="145" font-family="'Playfair Display', serif" font-size="18" font-weight="bold" fill="#FDFBF7" text-anchor="middle">Learning</text>
+                    <text x="880" y="170" font-family="'Playfair Display', serif" font-size="18" font-weight="bold" fill="#FDFBF7" text-anchor="middle">Outcomes</text>
+                    <line x1="800" y1="190" x2="960" y2="190" stroke="#1A2421" stroke-width="2" />
+                    <text x="880" y="230" font-family="'Plus Jakarta Sans'" font-size="12" fill="#FDFBF7" font-weight="bold" text-anchor="middle">&#8226; Concept Mastery</text>
+                    <text x="880" y="255" font-family="'Plus Jakarta Sans'" font-size="12" fill="#FDFBF7" font-weight="bold" text-anchor="middle">&#8226; Domain Competency</text>
+                    <text x="880" y="280" font-family="'Plus Jakarta Sans'" font-size="12" fill="#FDFBF7" font-weight="bold" text-anchor="middle">&#8226; Institutional Adoption</text>
+                </g>
+
+                <!-- Design Conjectures Link (Curly Bracket Bottom) -->
+                <path d="M 120 360 C 120 420, 370 420, 370 360" fill="none" stroke="#5F7A61" stroke-width="2" stroke-dasharray="5,5" marker-start="url(#dot)" marker-end="url(#dot)" />
+                <text x="245" y="415" font-family="'Plus Jakarta Sans'" font-size="12" font-weight="bold" fill="#5F7A61" text-anchor="middle">Design Conjectures (Theoretical mapping of embodiment)</text>
+
+                <!-- Theoretical Conjectures Link (Curly Bracket Top) -->
+                <path d="M 625 360 C 625 420, 880 420, 880 360" fill="none" stroke="#8C5A47" stroke-width="2" stroke-dasharray="5,5" marker-start="url(#dot)" marker-end="url(#dot)" />
+                <text x="752" y="415" font-family="'Plus Jakarta Sans'" font-size="12" font-weight="bold" fill="#8C5A47" text-anchor="middle">Theoretical Conjectures (Mechanistic learning paths)</text>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Section 4: Interactive Tab Dashboard (DBR Misconceptions) -->
+    <section id="misconceptions" class="bg-brand-sand/10 py-20 px-6 border-t border-brand-sand/40">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-brand-terracotta uppercase tracking-widest font-extrabold text-xs block mb-2">Myth vs. Reality</span>
+                <h2 class="font-serif text-3xl md:text-4xl font-bold mb-4">Dismantling DBR Misconceptions</h2>
+                <p class="text-brand-charcoal/70 text-sm">
+                    Because DBR operates at the intersection of design engineering and learning sciences, it is frequently subjected to misunderstandings. Select a misconception below to see its rigorous scientific rebuttal.
+                </p>
+            </div>
+
+            <!-- Tab Container -->
+            <div class="grid md:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left: Tab Buttons -->
+                <div class="md:col-span-5 space-y-2">
+                    <button onclick="switchTab(0)" class="tab-btn w-full text-left p-4 rounded-xl font-serif text-sm font-bold border transition duration-300 bg-brand-charcoal text-white border-brand-charcoal shadow-sm">
+                        1. "DBR is Not Really Scientific"
+                    </button>
+                    <button onclick="switchTab(1)" class="tab-btn w-full text-left p-4 rounded-xl font-serif text-sm font-bold border border-brand-sand/60 bg-white hover:bg-brand-sand/10 text-brand-charcoal transition duration-300">
+                        2. "It's the Same as Agile Development"
+                    </button>
+                    <button onclick="switchTab(2)" class="tab-btn w-full text-left p-4 rounded-xl font-serif text-sm font-bold border border-brand-sand/60 bg-white hover:bg-brand-sand/10 text-brand-charcoal transition duration-300">
+                        3. "You Cannot Publish This Research"
+                    </button>
+                    <button onclick="switchTab(3)" class="tab-btn w-full text-left p-4 rounded-xl font-serif text-sm font-bold border border-brand-sand/60 bg-white hover:bg-brand-sand/10 text-brand-charcoal transition duration-300">
+                        4. "The RCT is the Only Gold Standard"
+                    </button>
+                    <button onclick="switchTab(4)" class="tab-btn w-full text-left p-4 rounded-xl font-serif text-sm font-bold border border-brand-sand/60 bg-white hover:bg-brand-sand/10 text-brand-charcoal transition duration-300">
+                        5. "It's the Same as Action Research"
+                    </button>
+                </div>
+
+                <!-- Right: Content Display Panel -->
+                <div class="md:col-span-7 bg-white p-8 rounded-2xl shadow-md border border-brand-sand/40 min-h-[350px] flex flex-col justify-between">
+                    <div id="tab-content">
+                        <!-- Dynamic Content Injector -->
+                        <span class="text-xs uppercase font-extrabold tracking-widest text-brand-terracotta mb-2 block">Critique / Misconception</span>
+                        <h3 id="panel-title" class="font-serif text-xl md:text-2xl font-bold mb-4">"It's not really scientific, because the researcher is not neutral and you don't have a control group."</h3>
+                        <p id="panel-desc" class="text-sm text-brand-charcoal/70 mb-6 italic bg-brand-linen p-4 rounded-lg border-l-4 border-brand-terracotta">
+                            "How can subjective, participant-observer research yield reliable findings when standard control models are completely omitted?"
+                        </p>
+                        <h4 class="text-xs uppercase font-extrabold tracking-widest text-brand-sage mb-2">Rigorous Rebuttal</h4>
+                        <p id="panel-rebuttal" class="text-sm text-brand-charcoal/90 leading-relaxed">
+                            Standard clinical experiments try to "randomize away" context, but context, cognition, and tools are irreducibly co-constituted in learning. DBR maintains scientific rigor through <strong>systematic triangulation</strong> across multiple data sources and <strong>retrospective analysis</strong>, creating an audit trail that guarantees reliability through <strong>virtual replicability (trackability)</strong>.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Systemic Challenges & Community Directions -->
+    <section id="challenges" class="py-20 px-6 max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <span class="text-brand-terracotta uppercase tracking-widest font-extrabold text-xs block mb-2">The Road Ahead</span>
+            <h2 class="font-serif text-3xl md:text-4xl font-bold mb-4">Addressing Systemic Chokepoints</h2>
+            <p class="text-brand-charcoal/70 text-sm">
+                While DBR has grown in academic recognition, the design-science community is actively developing frameworks to tackle its remaining bottlenecks.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <div class="bg-white border border-brand-sand/50 p-8 rounded-2xl shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 rounded-xl bg-brand-terracotta/10 text-brand-terracotta flex items-center justify-center font-serif text-xl font-bold mb-6">01</div>
+                <h3 class="font-serif text-lg font-bold mb-3">The Scaling Chasm</h3>
+                <p class="text-xs text-brand-charcoal/70 mb-4">
+                    Interventions that perform flawlessly in the protective, highly-supported "Alpha" phase often collapse during widespread, un-scaffolded adoption.
+                </p>
+                <div class="border-t border-brand-sand/40 pt-4">
+                    <span class="text-xs uppercase font-bold text-brand-sage block mb-1">Direction: DBIR</span>
+                    <p class="text-xs text-brand-charcoal/90">
+                        Transitioning to <strong>Design-Based Implementation Research (DBIR)</strong>, co-negotiating policy alignment and school systems structures to design for "graceful degradation".
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-white border border-brand-sand/50 p-8 rounded-2xl shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 rounded-xl bg-brand-sage/10 text-brand-sage flex items-center justify-center font-serif text-xl font-bold mb-6">02</div>
+                <h3 class="font-serif text-lg font-bold mb-3">The Reporting Deficit</h3>
+                <p class="text-xs text-brand-charcoal/70 mb-4">
+                    Literature reviews reveal up to 40% of published DBR studies fail to report cycle counts or detail how designs evolved between iterations.
+                </p>
+                <div class="border-t border-brand-sand/40 pt-4">
+                    <span class="text-xs uppercase font-bold text-brand-sage block mb-1">Direction: Transparency</span>
+                    <p class="text-xs text-brand-charcoal/90">
+                        Advocating for <strong>formalized design logging templates</strong> in top-tier journals (such as <em>EDeR</em>) and sharing raw, retrospective datasets.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-white border border-brand-sand/50 p-8 rounded-2xl shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 rounded-xl bg-brand-charcoal/10 text-brand-charcoal flex items-center justify-center font-serif text-xl font-bold mb-6">03</div>
+                <h3 class="font-serif text-lg font-bold mb-3">Academic Mismatch</h3>
+                <p class="text-xs text-brand-charcoal/70 mb-4">
+                    Tenure systems favor abstract journal paper counts over robust, usable educational designs, rendering EDR highly taxing for doctoral students.
+                </p>
+                <div class="border-t border-brand-sand/40 pt-4">
+                    <span class="text-xs uppercase font-bold text-brand-sage block mb-1">Direction: Engineering Rights</span>
+                    <p class="text-xs text-brand-charcoal/90">
+                        Partnering with societies like the <strong>ISDDE</strong> to lobby committees to assess design-researchers on practicing impact alongside theoretical outputs.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="custom-gradient text-white py-16 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 border-b border-white/10 pb-12 mb-12">
+            <div>
+                <span class="font-serif text-xl font-bold text-brand-sand tracking-tight">Educational Design Research</span>
+                <p class="text-xs text-brand-sand/60 mt-2 max-w-sm">
+                    Reconnecting classroom learning theory and actionable design patterns to drive sustainable pedagogical change.
+                </p>
+            </div>
+            <div class="flex space-x-6 text-xs uppercase tracking-wider font-semibold text-brand-sand/80">
+                <a href="#foundations" class="hover:text-brand-terracotta transition">Foundations</a>
+                <a href="#quadrant" class="hover:text-brand-terracotta transition">Pasteur's Quadrant</a>
+                <a href="#conjecture" class="hover:text-brand-terracotta transition">Conjecture Mapping</a>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto text-center md:text-left text-xs text-brand-sand/40 flex flex-col md:flex-row justify-between gap-4">
+            <p>&copy; 2026 Dr. Yishay Mor. All Rights Reserved. Prepared for learning science review.</p>
+            <p>Built with Tailwind CSS, HTML5 Canvas Vector SVGs, and interactive Vanilla JS.</p>
+        </div>
+    </footer>
+
+    <!-- Tab Logic JavaScript -->
+    <script>
+        const misconceptionsData = [
+            {
+                title: 'Misconception 1: "DBR is Not Really Scientific"',
+                desc: '“It’s not really scientific because the researcher is not neutral and you don’t have a control group.”',
+                rebuttal: 'Standard clinical experiments try to "randomize away" context, but context, cognition, and tools are irreducibly co-constituted in learning. DBR maintains scientific rigor through <strong>systematic triangulation</strong> across multiple data sources (video, log files, written artifacts) and <strong>retrospective analysis</strong>, creating an audit trail that guarantees reliability through <strong>virtual replicability (trackability)</strong>.'
+            },
+            {
+                title: 'Misconception 2: "DBR is Just Agile Product Development"',
+                desc: '“Formative design evaluation, agile software iterations, and DBR are identical product-fixing loops.”',
+                rebuttal: 'Commercial software iterations focus strictly on local, immediate bug fixing. DBR is <strong>science-first</strong>: it operates in Pasteur\'s Quadrant to simultaneously build practical solutions and validate fundamental learning theories. Using systematic **Conjecture Mapping**, DBR generates novel **ontological innovations** (new theoretical categories for learning) that commercial design ignores.'
+            },
+            {
+                title: 'Misconception 3: "You Cannot Publish DBR Portfolios"',
+                desc: '“Because DBR is context-bound and lacks statistical populations, it cannot be published in top-tier journals.”',
+                rebuttal: 'DBR has a massive, highly-cited literature base spanning special issues in <em>Educational Researcher</em>, <em>Journal of the Learning Sciences</em>, and specialized peer-reviewed journals like <em>EDeR</em>. DBR generalizability is achieved through <strong>"thick descriptions"</strong> of context, facilitating <strong>analogy reasoning</strong> so other educators can adapt its heuristic design principles to their unique settings.'
+            },
+            {
+                title: 'Misconception 4: "The RCT is the Only Gold Standard"',
+                desc: '“Only double-blind, randomized controlled trials prove causal evidence to guide systemic educational policy.”',
+                rebuttal: 'RCTs are conservative: they require a stable, pre-existing reality to evaluate, and function as a "black box" that fails to explain <em>how or why</em> a treatment works. DBR operates in the <strong>Context of Discovery</strong> to design and test innovations that do not yet exist, creating the mature educational models that can later be subjected to larger statistical validation in the Context of Verification.'
+            },
+            {
+                title: 'Misconception 5: "DBR is the Same as Action Research"',
+                desc: '“Both occur in real classrooms, are cyclical, and aim to solve immediate problems, making them identical.”',
+                rebuttal: 'Action research is conducted by a <strong>lone practitioner</strong> focusing exclusively on improving their local classroom. DBR is conducted by a <strong>multidisciplinary co-design team</strong> (combining teachers, software developers, and researchers) with a **dual commitment**: solving local problems of practice while systematically producing reusable design heuristics for the wider scientific community.'
+            }
+        ];
+
+        function switchTab(index) {
+            // Update active button styles
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach((btn, i) => {
+                if (i === index) {
+                    btn.className = "tab-btn w-full text-left p-4 rounded-xl font-serif text-sm font-bold border transition duration-300 bg-brand-charcoal text-white border-brand-charcoal shadow-sm";
+                } else {
+                    btn.className = "tab-btn w-full text-left p-4 rounded-xl font-serif text-sm font-bold border border-brand-sand/60 bg-white hover:bg-brand-sand/10 text-brand-charcoal transition duration-300";
+                }
+            });
+
+            // Update content elements with brief fade effect
+            const container = document.getElementById('tab-content');
+            container.style.opacity = 0;
+            setTimeout(() => {
+                document.getElementById('panel-title').innerHTML = misconceptionsData[index].title;
+                document.getElementById('panel-desc').innerHTML = misconceptionsData[index].desc;
+                document.getElementById('panel-rebuttal').innerHTML = misconceptionsData[index].rebuttal;
+                container.style.opacity = 1;
+            }, 150);
+        }
+    </script>
+</body>
+</html>
