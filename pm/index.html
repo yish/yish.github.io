@@ -8,10 +8,10 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts - Heebo -->
+  <!-- Google Fonts - Heebo, Cairo & Inter for Multilingual Support -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Heebo:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- קישור לקובץ העיצוב החיצוני -->
   <link rel="stylesheet" href="style.css">
@@ -35,33 +35,52 @@
   <!-- סרגל עליון (Header) -->
   <header class="bg-white/90 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
+      <div class="flex items-center justify-between h-20 gap-2">
         
         <!-- לוגו וכותרת ראשית -->
-        <div class="flex items-center gap-3.5">
-          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+        <div class="flex items-center gap-3.5 min-w-0">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 shrink-0">
             <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
             </svg>
           </div>
-          <div>
+          <div class="truncate">
             <div class="flex items-center gap-2">
-              <h1 class="text-xl sm:text-2xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
+              <h1 id="i18n-app-title" class="text-lg sm:text-2xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent truncate">
                 פרומפטים לחינוך והוראה
               </h1>
-              <span class="hidden sm:inline-flex text-xs px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold border border-indigo-200 dark:border-indigo-800">
+              <span id="i18n-pedagogical-badge" class="hidden sm:inline-flex text-xs px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold border border-indigo-200 dark:border-indigo-800 whitespace-nowrap">
                 AI פדגוגי
               </span>
             </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">
+            <p id="i18n-app-subtitle" class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block truncate">
               מאגר תבניות להוראה – התאמה אישית והפעלה ב-ChatGPT, Claude ו-Gemini
             </p>
           </div>
         </div>
 
-        <!-- כפתורי פעולה עליונים -->
-        <div class="flex items-center gap-2 sm:gap-3">
+        <!-- כפתורי פעולה עליונים: בחירת שפה, החלפת Theme, רענון ותרומה -->
+        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
           
+          <!-- בורר שפות (Language Selector: עברית / العربية / English) -->
+          <div class="relative inline-block text-right">
+            <label for="language-select" class="sr-only">בחירת שפה / Language / اختيار اللغة</label>
+            <div class="flex items-center bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+              <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 shrink-0 mx-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+              </svg>
+              <select
+                id="language-select"
+                class="bg-transparent text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 focus:outline-none cursor-pointer pr-1 pl-1"
+                aria-label="בחר שפה"
+              >
+                <option value="he" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100">עברית</option>
+                <option value="ar" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100">العربية</option>
+                <option value="en" class="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100">English</option>
+              </select>
+            </div>
+          </div>
+
           <!-- מתג החלפת Theme (כהה/בהיר) -->
           <button
             id="theme-toggle-btn"
@@ -87,18 +106,18 @@
             <svg id="refresh-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
-            <span class="hidden md:inline">רענון</span>
+            <span id="i18n-refresh-btn" class="hidden md:inline">רענון</span>
           </button>
 
           <!-- כפתור תרומת פרומפט -->
           <button
             id="contribute-btn"
-            class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-md shadow-indigo-500/20 hover:shadow-lg transition-all transform active:scale-95"
+            class="flex items-center gap-2 px-3.5 sm:px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-indigo-500/20 hover:shadow-lg transition-all transform active:scale-95 whitespace-nowrap"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span>תרמו פרומפט</span>
+            <span id="i18n-contribute-btn">תרמו פרומפט</span>
           </button>
         </div>
 
@@ -109,13 +128,13 @@
   <!-- באנר עליון וסטטוס מקור הנתונים -->
   <section class="bg-gradient-to-b from-indigo-50/70 dark:from-indigo-950/30 to-transparent border-b border-indigo-100/60 dark:border-indigo-900/40 py-5 px-4 sm:px-6">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="space-y-1 text-center md:text-right">
-        <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
+      <div class="space-y-1 text-center md:text-start">
+        <p id="i18n-banner-text" class="text-sm font-medium text-slate-700 dark:text-slate-300">
           לחצו על פרומפט כדי להזין את הפרטים שלכם, ולפתוח ישירות ב-ChatGPT, Claude או Gemini!
         </p>
       </div>
 
-      <div class="flex items-center gap-3 bg-white dark:bg-slate-900 px-4 py-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm text-xs text-slate-600 dark:text-slate-300">
+      <div class="flex items-center gap-3 bg-white dark:bg-slate-900 px-4 py-2 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm text-xs text-slate-600 dark:text-slate-300 shrink-0">
         <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
         <span id="data-status" class="font-semibold text-slate-700 dark:text-slate-200">טוען פרומפטים מ-Google Sheets...</span>
       </div>
@@ -129,8 +148,8 @@
     <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3.5 transition-colors">
       
       <!-- שורת חיפוש -->
-      <div class="relative">
-        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none">
+      <div class="relative flex items-center">
+        <div class="search-icon-pos absolute text-slate-400 dark:text-slate-500 pointer-events-none">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
@@ -139,9 +158,9 @@
           id="search-input"
           type="text"
           placeholder="חפש לפי שם, מטרה, תרחיש שימוש, טיפים או מילות מפתח..."
-          class="w-full pr-12 pl-10 py-3.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-900 text-sm sm:text-base transition-all"
+          class="search-input-field w-full py-3.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-900 text-sm sm:text-base transition-all"
         />
-        <button id="clear-search-btn" class="hidden absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+        <button id="clear-search-btn" class="search-clear-pos hidden absolute text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -150,7 +169,7 @@
 
       <!-- סינון לפי קטגוריה -->
       <div class="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-100 dark:border-slate-800">
-        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 ml-1">קטגוריה:</span>
+        <span id="i18n-category-label" class="text-xs font-bold text-slate-500 dark:text-slate-400">קטגוריה:</span>
         <div id="category-filters" class="flex flex-wrap items-center gap-1.5">
           <!-- כפתורי קטגוריות נוצרים דינמית -->
         </div>
@@ -158,7 +177,7 @@
 
       <!-- סינון לפי רמת מורכבות -->
       <div class="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-100 dark:border-slate-800">
-        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 ml-1">רמת מורכבות:</span>
+        <span id="i18n-complexity-label" class="text-xs font-bold text-slate-500 dark:text-slate-400">רמת מורכבות:</span>
         <div id="complexity-filters" class="flex flex-wrap items-center gap-1.5">
           <!-- כפתורי רמות מורכבות נוצרים דינמית -->
         </div>
@@ -183,8 +202,8 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       </div>
-      <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">לא נמצאו פרומפטים תואמים</h3>
-      <p class="text-sm text-slate-500 dark:text-slate-400">
+      <h3 id="i18n-empty-title" class="text-lg font-bold text-slate-800 dark:text-slate-200">לא נמצאו פרומפטים תואמים</h3>
+      <p id="i18n-empty-subtitle" class="text-sm text-slate-500 dark:text-slate-400">
         נסו לשנות את מילות החיפוש או תרמו פרומפט חדש למאגר.
       </p>
       <div class="flex justify-center gap-3 pt-2">
@@ -197,18 +216,19 @@
   </main>
 
   <!-- פוטר (Footer) -->
-  <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-16 py-6 px-4 text-center text-xs text-slate-500 dark:text-slate-400">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+  <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-16 py-6 px-4 text-xs text-slate-500 dark:text-slate-400">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-start">
       <div class="flex items-center gap-2">
-        <div class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black text-xs shadow-sm">
+        <div class="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black text-xs shadow-sm shrink-0">
           AI
         </div>
-        <span>מאגר פרומפטים שיתופי לחינוך והוראה</span>
+        <span id="i18n-footer-title">מאגר פרומפטים שיתופי לחינוך והוראה</span>
       </div>
 
       <div class="flex items-center gap-4">
         <button
           onclick="openContributeModal()"
+          id="i18n-footer-link"
           class="text-indigo-600 dark:text-indigo-400 hover:underline font-bold"
         >
           רוצים לתרום פרומפט משלכם? לחצו כאן
@@ -223,13 +243,13 @@
       
       <!-- כותרת המודאל -->
       <div class="p-5 sm:p-6 border-b border-slate-200 dark:border-slate-800 flex items-start justify-between bg-gradient-to-r from-slate-50 via-indigo-50/40 to-purple-50/40 dark:from-slate-900 dark:via-indigo-950/30 dark:to-purple-950/30">
-        <div class="space-y-1.5 flex-1 pl-4">
+        <div class="space-y-1.5 flex-1 pe-4">
           <div class="flex items-center gap-2 flex-wrap">
             <span id="modal-complexity-badge" class="inline-flex items-center text-xs font-bold px-2.5 py-0.5 rounded-full border">
               רמת מורכבות: בסיסי
             </span>
             <span class="text-xs text-slate-400">•</span>
-            <span class="text-xs text-indigo-700 dark:text-indigo-300 font-semibold">מאגר פרומפטים מאושר</span>
+            <span id="i18n-approved-repo-badge" class="text-xs text-indigo-700 dark:text-indigo-300 font-semibold">מאגר פרומפטים מאושר</span>
           </div>
           <h2 id="modal-prompt-title" class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">שם הפרומפט</h2>
           <p id="modal-prompt-goal" class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">מטרת הפרומפט</p>
@@ -255,7 +275,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span>תרחיש שימוש לדוגמא</span>
+              <span id="i18n-scenario-title">תרחיש שימוש לדוגמא</span>
             </div>
             <p id="modal-scenario-text" class="text-xs text-indigo-950/80 dark:text-indigo-200/90 leading-relaxed whitespace-pre-line"></p>
           </div>
@@ -266,7 +286,7 @@
               <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
-              <span>טיפים והסבר לעבודה נכונה</span>
+              <span id="i18n-tips-title">טיפים והסבר לעבודה נכונה</span>
             </div>
             <p id="modal-tips-text" class="text-xs text-emerald-950/80 dark:text-emerald-200/90 leading-relaxed whitespace-pre-line"></p>
           </div>
@@ -277,7 +297,7 @@
               <svg class="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
-              <span>הערות, אזהרות ומגבלות</span>
+              <span id="i18n-warnings-title">הערות, אזהרות ומגבלות</span>
             </div>
             <p id="modal-warnings-text" class="text-xs text-amber-950/80 dark:text-amber-200/90 leading-relaxed whitespace-pre-line"></p>
           </div>
@@ -290,7 +310,7 @@
           <div class="bg-slate-50 dark:bg-slate-800/80 px-4 sm:px-5 py-3 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
-              <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200">עריכת תבנית הפרומפט (התוכן שיועבר לצ'אטבוט)</h3>
+              <h3 id="i18n-edit-section-title" class="text-sm font-bold text-slate-800 dark:text-slate-200">עריכת תבנית הפרומפט (התוכן שיועבר לצ'אטבוט)</h3>
             </div>
 
             <!-- מתג מעבר בין טאבים -->
@@ -305,7 +325,7 @@
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
-                <span>עריכת טקסט חופשית</span>
+                <span id="tab-direct-label">עריכת טקסט חופשית</span>
               </button>
             </div>
           </div>
@@ -321,8 +341,8 @@
               <!-- תצוגה מקדימה בלייב -->
               <div class="space-y-1.5 pt-2">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-slate-700 dark:text-slate-300">תצוגה מקדימה של הפרומפט הסופי:</span>
-                  <span class="text-[11px] text-slate-400 dark:text-slate-500">מתעדכן בזמן אמת</span>
+                  <span id="i18n-live-preview-label" class="text-xs font-bold text-slate-700 dark:text-slate-300">תצוגה מקדימה של הפרומפט הסופי:</span>
+                  <span id="i18n-live-preview-sub" class="text-[11px] text-slate-400 dark:text-slate-500">מתעדכן בזמן אמת</span>
                 </div>
                 <div id="prompt-live-preview" class="bg-slate-900 dark:bg-slate-950 text-slate-100 p-4 rounded-2xl text-xs sm:text-sm font-mono whitespace-pre-wrap max-h-48 overflow-y-auto leading-relaxed border border-slate-800"></div>
               </div>
@@ -345,13 +365,13 @@
         <!-- אזור בחירת צ'אטבוט להפעלה -->
         <div class="bg-slate-50 dark:bg-slate-800/60 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+            <span id="i18n-choose-ai-label" class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
               <svg class="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
               בחרו היכן לפתוח את הפרומפט הערוך:
             </span>
-            <span class="text-[11px] text-slate-500 dark:text-slate-400">לחצו על ה-AI המבוקש להפעלה מיידית</span>
+            <span id="i18n-choose-ai-sub" class="text-[11px] text-slate-500 dark:text-slate-400">לחצו על ה-AI המבוקש להפעלה מיידית</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -359,56 +379,56 @@
             <!-- 1. ChatGPT -->
             <button
               id="launch-chatgpt-btn"
-              class="group bg-white dark:bg-slate-900 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 border-2 border-emerald-200 dark:border-emerald-800/80 hover:border-emerald-500 p-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md flex flex-col items-start text-right transform active:scale-95"
+              class="group bg-white dark:bg-slate-900 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 border-2 border-emerald-200 dark:border-emerald-800/80 hover:border-emerald-500 p-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md flex flex-col items-start text-start transform active:scale-95"
             >
               <div class="flex items-center justify-between w-full mb-1.5">
                 <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-300">
-                  <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black text-xs">
+                  <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black text-xs shrink-0">
                     GPT
                   </div>
                   <span>ChatGPT</span>
                 </div>
-                <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-[-2px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               </div>
-              <p class="text-[11px] text-slate-500 dark:text-slate-400">נפתח עם הפרומפט מוטמע ב-URL</p>
+              <p id="i18n-chatgpt-sub" class="text-[11px] text-slate-500 dark:text-slate-400">נפתח עם הפרומפט מוטמע ב-URL</p>
             </button>
 
             <!-- 2. Claude -->
             <button
               id="launch-claude-btn"
-              class="group bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-amber-950/40 border-2 border-amber-200 dark:border-amber-800/80 hover:border-amber-500 p-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md flex flex-col items-start text-right transform active:scale-95"
+              class="group bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-amber-950/40 border-2 border-amber-200 dark:border-amber-800/80 hover:border-amber-500 p-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md flex flex-col items-start text-start transform active:scale-95"
             >
               <div class="flex items-center justify-between w-full mb-1.5">
                 <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm group-hover:text-amber-800 dark:group-hover:text-amber-300">
-                  <div class="w-6 h-6 rounded-lg bg-amber-600 text-white flex items-center justify-center font-black text-xs">
+                  <div class="w-6 h-6 rounded-lg bg-amber-600 text-white flex items-center justify-center font-black text-xs shrink-0">
                     Cl
                   </div>
                   <span>Claude</span>
                 </div>
-                <svg class="w-4 h-4 text-amber-600 dark:text-amber-400 group-hover:translate-x-[-2px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               </div>
-              <p class="text-[11px] text-slate-500 dark:text-slate-400">נפתח עם הפרומפט מוטמע ב-URL</p>
+              <p id="i18n-claude-sub" class="text-[11px] text-slate-500 dark:text-slate-400">נפתח עם הפרומפט מוטמע ב-URL</p>
             </button>
 
             <!-- 3. Gemini -->
             <button
               id="launch-gemini-btn"
-              class="group bg-white dark:bg-slate-900 hover:bg-blue-50 dark:hover:bg-blue-950/40 border-2 border-blue-200 dark:border-blue-800/80 hover:border-blue-500 p-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md flex flex-col items-start text-right transform active:scale-95"
+              class="group bg-white dark:bg-slate-900 hover:bg-blue-50 dark:hover:bg-blue-950/40 border-2 border-blue-200 dark:border-blue-800/80 hover:border-blue-500 p-3.5 rounded-2xl transition-all shadow-sm hover:shadow-md flex flex-col items-start text-start transform active:scale-95"
             >
               <div class="flex items-center justify-between w-full mb-1.5">
                 <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-sm group-hover:text-blue-700 dark:group-hover:text-blue-300">
-                  <div class="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center font-black text-xs">
+                  <div class="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center font-black text-xs shrink-0">
                     ✦
                   </div>
                   <span>Gemini</span>
                 </div>
-                <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold">העתק+Ctrl+V</span>
+                <span id="i18n-gemini-badge" class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold">העתק+Ctrl+V</span>
               </div>
-              <p class="text-[11px] text-slate-500 dark:text-slate-400">מועתק ללוח ונפתח להדבקה</p>
+              <p id="i18n-gemini-sub" class="text-[11px] text-slate-500 dark:text-slate-400">מועתק ללוח ונפתח להדבקה</p>
             </button>
 
           </div>
@@ -425,14 +445,14 @@
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
           </svg>
-          <span>העתק פרומפט בלבד</span>
+          <span id="i18n-copy-prompt-btn">העתק פרומפט בלבד</span>
         </button>
 
         <button
           id="modal-close-bottom-btn"
           class="px-5 py-2.5 bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 dark:hover:bg-slate-600 text-white rounded-xl text-xs sm:text-sm font-bold transition-all"
         >
-          סיום
+          <span id="i18n-done-btn">סיום</span>
         </button>
       </div>
 
@@ -452,8 +472,8 @@
             </svg>
           </div>
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">טופס תרומת פרומפט פדגוגי</h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400">הפרומפט ייבדק ויתווסף למאגר לאחר אישור (עמודה 'מאושר' = 1)</p>
+            <h2 id="i18n-contrib-title" class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">טופס תרומת פרומפט פדגוגי</h2>
+            <p id="i18n-contrib-sub" class="text-xs text-slate-500 dark:text-slate-400">הפרומפט ייבדק ויתווסף למאגר לאחר אישור (עמודה 'מאושר' = 1)</p>
           </div>
         </div>
 
@@ -464,7 +484,7 @@
             rel="noopener noreferrer"
             class="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors"
           >
-            <span>פתח בלשונית נפרדת</span>
+            <span id="i18n-open-newtab">פתח בלשונית נפרדת</span>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
