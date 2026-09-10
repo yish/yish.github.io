@@ -30,7 +30,6 @@ if (window.tailwind) {
 const CONFIG = {
   SHEET_ID: '1Ca9sM_Hy-MvOGT5gaMSpEg6Xf9FiC47rrxEm0wvNQVo',
   GVIZ_URL: 'https://docs.google.com/spreadsheets/d/1Ca9sM_Hy-MvOGT5gaMSpEg6Xf9FiC47rrxEm0wvNQVo/gviz/tq?tqx=out:json',
-  TRANSLATIONS_URL: 'translations.json',
   COMPLEXITY_LEVELS: ['0', '1', '2', '3', '4', '5'] // '0' represents All/الכל/הכל
 };
 
@@ -345,7 +344,7 @@ function normalizeComplexity(val) {
 
 // --- מנהל בינאום ושפות (I18n Manager) ---
 const I18nManager = {
-  async init() {
+  init() {
     // ברירת מחדל קשיחה: עברית (או בחירה מפורשת של המשתמש בעבר)
     const savedLang = localStorage.getItem('edu_prompts_lang');
     if (savedLang && ['he', 'ar', 'en'].includes(savedLang)) {
@@ -354,20 +353,8 @@ const I18nManager = {
       State.lang = 'he'; // ברירת המחדל היא עברית
     }
 
-    // החלת השפה מיד עם המילון המובנה (ללא תלות ברשת)
+    // החלת השפה מיד עם המילון המובנה (עצמאי לחלוטין וללא תלות ברשת)
     this.applyLanguage(State.lang, false);
-
-    // ניסיון לעדכון עתידי מתוך translations.json במידה וקיים
-    try {
-      const res = await fetch(CONFIG.TRANSLATIONS_URL);
-      if (res.ok) {
-        const fetched = await res.json();
-        State.translations = { ...BUILTIN_TRANSLATIONS, ...fetched };
-        this.applyLanguage(State.lang, false);
-      }
-    } catch (e) {
-      console.info('Using builtin translations dictionary:', e);
-    }
   },
 
   t(key, params = {}) {
@@ -998,7 +985,7 @@ window.openContributeModal = () => {
 // אתחול האפליקציה וטעינת הנתונים
 async function initApp() {
   // 1. אתחול שפות ומצב תצוגה
-  await I18nManager.init();
+  I18nManager.init();
   ThemeManager.init();
 
   const statusEl = document.getElementById('data-status');
