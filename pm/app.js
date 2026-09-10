@@ -1,6 +1,6 @@
 /**
  * Educational Prompts App Logic
- * Modules: CONFIG, I18nManager, ThemeManager, SheetService, UIController, App Initialization
+ * Modules: CONFIG, BUILTIN_TRANSLATIONS, I18nManager, ThemeManager, SheetService, UIController, App Initialization
  */
 
 // הגדרת תצורת Tailwind עבור Dark Mode ופונטים רב-לשוניים
@@ -32,6 +32,211 @@ const CONFIG = {
   GVIZ_URL: 'https://docs.google.com/spreadsheets/d/1Ca9sM_Hy-MvOGT5gaMSpEg6Xf9FiC47rrxEm0wvNQVo/gviz/tq?tqx=out:json',
   TRANSLATIONS_URL: 'translations.json',
   COMPLEXITY_LEVELS: ['0', '1', '2', '3', '4', '5'] // '0' represents All/الכל/הכל
+};
+
+// מילון תרגומים מובנה כגיבוי מוחלט למקרה ש-translations.json נחסם ב-CORS או בטעינה מקומית
+const BUILTIN_TRANSLATIONS = {
+  he: {
+    appTitle: "פרומפטים לחינוך והוראה",
+    appSubtitle: "מאגר תבניות להוראה – התאמה אישית והפעלה ב-ChatGPT, Claude ו-Gemini",
+    pedagogicalBadge: "AI פדגוגי",
+    bannerText: "לחצו על פרומפט כדי להזין את הפרטים שלכם, ולפתוח ישירות ב-ChatGPT, Claude או Gemini!",
+    statusLoading: "טוען פרומפטים מ-Google Sheets...",
+    statusLoaded: "נטענו {count} פרומפטים מאושרים בזמן אמת",
+    statusFallback: "מוצג מאגר פרומפטים חינוכיים מובנה",
+    statusEmpty: "מוצגים פרומפטים מובנים (הגיליון ריק מפרומפטים שסומנו 1 במאושר)",
+    refresh: "רענון",
+    contribute: "תרמו פרומפט",
+    themeToggle: "החלף ערכת נושא (כהה/בהיר)",
+    searchPlaceholder: "חפש לפי שם, מטרה, תרחיש שימוש, טיפים או מילות מפתח...",
+    categoryLabel: "קטגוריה:",
+    complexityLabel: "רמת מורכבות:",
+    all: "הכל",
+    level: "רמה",
+    badgeLevel: "דרגה",
+    resultsCount: "נמצאו <strong class=\"text-slate-800 dark:text-slate-100 font-bold\">{count}</strong> פרומפטים מתאימים",
+    promptGoalLabel: "מטרת הפרומפט:",
+    defaultGoal: "הפקת תוצר פדגוגי איכותי מותאם",
+    defaultScenario: "מתאים לשילוב במהלך הוראה פרונטלית, עבודה קבוצתית או תרגול עצמאי.",
+    defaultTips: "מומלץ להזין את המשתנים הרלוונטיים לכיתתכם ולדייק את התוצאה בשיחה חוזרת.",
+    defaultWarnings: "זכרו לבדוק את התוצרים שמופקים ולוודא התאמה מלאה לרמת התלמידים.",
+    cardFooterHint: "צפייה בכל השדות ועריכה",
+    cardActionBtn: "התאם ופתח",
+    emptyTitle: "לא נמצאו פרומפטים תואמים",
+    emptySubtitle: "נסו לשנות את מילות החיפוש או תרמו פרומפט חדש למאגר.",
+    resetFilters: "איפוס סינונים",
+    approvedRepository: "מאגר פרומפטים מאושר",
+    modalComplexityPrefix: "רמת מורכבות: ",
+    scenarioTitle: "תרחיש שימוש לדוגמא",
+    tipsTitle: "טיפים והסבר לעבודה נכונה",
+    warningsTitle: "הערות, אזהרות ומגבלות",
+    editSectionTitle: "עריכת תבנית הפרומפט (התוכן שיועבר לצ'אטבוט)",
+    smartTab: "הזנת משתנים",
+    directTab: "עריכת טקסט חופשית",
+    varInputPlaceholder: "הזן ערך עבור {var}...",
+    noVarsNotice: "תבנית זו אינה מכילה משתנים מוגדרים מראש בסוגריים מרובעים. תוכלו לעבור ללשונית \"עריכת טקסט חופשית\" לשינוי הנוסח לפי הצורך.",
+    livePreviewLabel: "תצוגה מקדימה של הפרומפט הסופי:",
+    livePreviewSub: "מתעדכן בזמן אמת",
+    directEditTextareaPlaceholder: "ערוך את תבנית הפרומפט כאן...",
+    chooseAiLabel: "בחרו היכן לפתוח את הפרומפט הערוך:",
+    chooseAiSub: "לחצו על ה-AI המבוקש להפעלה מיידית",
+    chatgptSub: "נפתח עם הפרומפט מוטמע ב-URL",
+    claudeSub: "נפתח עם הפרומפט מוטמע ב-URL",
+    geminiSub: "מועתק ללוח ונפתח להדבקה",
+    geminiBadge: "העתק+Ctrl+V",
+    copyPromptOnly: "העתק פרומפט בלבד",
+    done: "סיום",
+    contribModalTitle: "טופס תרומת פרומפט פדגוגי",
+    contribModalSub: "הפרומפט ייבדק ויתווסף למאגר לאחר אישור (עמודה 'מאושר' = 1)",
+    openInNewTab: "פתח בלשונית נפרדת",
+    loadingForm: "טוען טופס...",
+    footerTitle: "מאגר פרומפטים שיתופי לחינוך והוראה",
+    footerLink: "רוצים לתרום פרומפט משלכם? לחצו כאן",
+    toasts: {
+      themeDark: "עברת למצב כהה 🌙",
+      themeLight: "עברת למצב בהיר ☀️",
+      loadedSuccess: "נטענו {count} פרומפטים מאושרים בהצלחה!",
+      copiedSuccess: "הפרומפט המותאם הועתק ללוח בהצלחה!",
+      launchingChatGPT: "פותח את ChatGPT עם הפרומפט הערוך...",
+      launchingClaude: "פותח את Claude עם הפרומפט הערוך...",
+      launchingGemini: "הפרומפט הועתק ללוח! ב-Gemini לחצו Ctrl+V להדבקה ✨",
+      langChanged: "שפת הממשק הוחלפה לעברית"
+    }
+  },
+  ar: {
+    appTitle: "برومبتات للتعليم والتدريس",
+    appSubtitle: "مستودع نماذج تعليمية – تخصيص وتشغيل مباشر على ChatGPT و Claude و Gemini",
+    pedagogicalBadge: "ذكاء اصطناعي تربوي",
+    bannerText: "انقر فوق أي برومبت لإدخال بياناتك وتشغيله مباشرة في ChatGPT أو Claude أو Gemini!",
+    statusLoading: "جارٍ تحميل البرومبتات من Google Sheets...",
+    statusLoaded: "تم تحميل {count} برومبت معتمد في الوقت الفعلي",
+    statusFallback: "يتم عرض مستودع البرومبتات التعليمية المدمج",
+    statusEmpty: "يتم عرض البرومبتات المدمجة (الجدول لا يحتوي على برومبتات معتمدة = 1)",
+    refresh: "تحديث",
+    contribute: "شارك برومبت",
+    themeToggle: "تبديل المظهر (داكن/فاتح)",
+    searchPlaceholder: "ابحث بالاسم، الهدف، سيناريو الاستخدام، النصائح أو الكلمات المفتاحية...",
+    categoryLabel: "الفئة:",
+    complexityLabel: "مستوى الصعوبة:",
+    all: "الكل",
+    level: "مستوى",
+    badgeLevel: "درجة",
+    resultsCount: "تم العثور على <strong class=\"text-slate-800 dark:text-slate-100 font-bold\">{count}</strong> برومبت مناسب",
+    promptGoalLabel: "هدف البرومبت:",
+    defaultGoal: "إنتاج مخرجات تربوية عالية الجودة ومخصصة",
+    defaultScenario: "مناسب للدمج أثناء التدريس المباشر أو العمل الجماعي أو التدريب الفردي.",
+    defaultTips: "يُوصى بإدخال المتغيرات المناسبة لصفك وتحسين النتيجة في محادثة متابعة.",
+    defaultWarnings: "تأكد من مراجعة المخرجات الناتجة والتحقق من توافقها مع مستوى الطلاب.",
+    cardFooterHint: "عرض جميع الحقول والتعديل",
+    cardActionBtn: "تخصيص وفتح",
+    emptyTitle: "لم يتم العثور على برومبتات مطابقة",
+    emptySubtitle: "جرّب تغيير كلمات البحث أو شارك برومبت جديد في المستودع.",
+    resetFilters: "إعادة ضبط الفلاتر",
+    approvedRepository: "مستودع برومبتات معتمد",
+    modalComplexityPrefix: "مستوى الصعوبة: ",
+    scenarioTitle: "سيناريو استخدام نموذجي",
+    tipsTitle: "نصائح وإرشادات للعمل الصحيح",
+    warningsTitle: "ملاحظات، تحذيرات وقيود",
+    editSectionTitle: "تعديل نموذج البرومبت (المحتوى المرسل لروبوت الدردشة)",
+    smartTab: "إدخال المتغيرات",
+    directTab: "تعديل حر للنص",
+    varInputPlaceholder: "أدخل قيمة لـ {var}...",
+    noVarsNotice: "هذا النموذج لا يحتوي على متغيرات محددة مسبقًا بين أقواس مربعة. يمكنك الانتقال إلى تبويب \"تعديل حر للنص\" لتعديل الصياغة.",
+    livePreviewLabel: "معاينة مباشرة للبرومبت النهائي:",
+    livePreviewSub: "يتم التحديث مباشرة",
+    directEditTextareaPlaceholder: "عدّل نموذج البرومبت هنا...",
+    chooseAiLabel: "اختر أين تريد فتح البرومبت المعدّل:",
+    chooseAiSub: "انقر فوق نموذج الذكاء الاصطناعي المطلوب للتشغيل الفوري",
+    chatgptSub: "يفتح مع تضمين البرومبت في الرابط",
+    claudeSub: "يفتح مع تضمين البرومبت في الرابط",
+    geminiSub: "يتم نسخه إلى الحافظة ويفتح للصق",
+    geminiBadge: "نسخ+Ctrl+V",
+    copyPromptOnly: "نسخ البرومبت فقط",
+    done: "إغلاق",
+    contribModalTitle: "نموذج مشاركة برومبت تربوي",
+    contribModalSub: "سيتم فحص البرومبت وإضافته للمستودع فور الاعتماد (العمود 'معتمد' = 1)",
+    openInNewTab: "فتح في علامة تبويب جديدة",
+    loadingForm: "جارٍ تحميل النموذج...",
+    footerTitle: "مستودع برومبتات تعاوني للتعليم والتدريس",
+    footerLink: "هل ترغب في مشاركة برومبت خاص بك؟ اضغط هنا",
+    toasts: {
+      themeDark: "تم التبديل إلى الوضع الداكن 🌙",
+      themeLight: "تم التبديل إلى الوضع الفاتح ☀️",
+      loadedSuccess: "تم تحميل {count} برومبت معتمد بنجاح!",
+      copiedSuccess: "تم نسخ البرومبت المخصص إلى الحافظة بنجاح!",
+      launchingChatGPT: "جارٍ فتح ChatGPT مع البرومبت المعدّل...",
+      launchingClaude: "جارٍ فتح Claude مع البرومبت المعدّل...",
+      launchingGemini: "تم نسخ البرومبت! في Gemini اضغط Ctrl+V للصق ✨",
+      langChanged: "تم تغيير لغة الواجهة إلى العربية"
+    }
+  },
+  en: {
+    appTitle: "Prompts for Education & Teaching",
+    appSubtitle: "Curated repository of pedagogical prompts – customize and launch in ChatGPT, Claude, and Gemini",
+    pedagogicalBadge: "Pedagogical AI",
+    bannerText: "Click on any prompt to enter your classroom details, then launch directly in ChatGPT, Claude, or Gemini!",
+    statusLoading: "Loading prompts from Google Sheets...",
+    statusLoaded: "Loaded {count} approved prompts in real time",
+    statusFallback: "Displaying built-in educational prompt repository",
+    statusEmpty: "Displaying built-in prompts (sheet has no approved = 1 items)",
+    refresh: "Refresh",
+    contribute: "Contribute Prompt",
+    themeToggle: "Toggle theme (Dark/Light)",
+    searchPlaceholder: "Search by title, goal, scenario, tips, or keywords...",
+    categoryLabel: "Category:",
+    complexityLabel: "Complexity level:",
+    all: "All",
+    level: "Level",
+    badgeLevel: "Level",
+    resultsCount: "Found <strong class=\"text-slate-800 dark:text-slate-100 font-bold\">{count}</strong> matching prompts",
+    promptGoalLabel: "Prompt Goal:",
+    defaultGoal: "Generate tailored, high-quality pedagogical outcomes",
+    defaultScenario: "Suitable for front-of-class instruction, group work, or self-paced student activities.",
+    defaultTips: "Fill in the relevant variables for your class and refine the answer through follow-up chat.",
+    defaultWarnings: "Always review the AI-generated outputs to verify factual accuracy and curriculum fit.",
+    cardFooterHint: "View all fields & edit",
+    cardActionBtn: "Customize & Launch",
+    emptyTitle: "No matching prompts found",
+    emptySubtitle: "Try adjusting your search terms or contribute a new prompt to the collection.",
+    resetFilters: "Reset filters",
+    approvedRepository: "Approved Prompts Repository",
+    modalComplexityPrefix: "Complexity: ",
+    scenarioTitle: "Example Use Case Scenario",
+    tipsTitle: "Tips & Best Practices",
+    warningsTitle: "Notes, Warnings & Limitations",
+    editSectionTitle: "Edit Prompt Template (Content sent to chatbot)",
+    smartTab: "Variable Inputs",
+    directTab: "Free Text Edit",
+    varInputPlaceholder: "Enter value for {var}...",
+    noVarsNotice: "This template does not contain square bracket variables. You can switch to the \"Free Text Edit\" tab to modify text directly.",
+    livePreviewLabel: "Live preview of final prompt:",
+    livePreviewSub: "Updates in real time",
+    directEditTextareaPlaceholder: "Edit the prompt template here...",
+    chooseAiLabel: "Choose where to launch the edited prompt:",
+    chooseAiSub: "Click your desired AI to launch immediately",
+    chatgptSub: "Opens with prompt embedded in URL",
+    claudeSub: "Opens with prompt embedded in URL",
+    geminiSub: "Copied to clipboard and opened for pasting",
+    geminiBadge: "Copy+Ctrl+V",
+    copyPromptOnly: "Copy prompt only",
+    done: "Done",
+    contribModalTitle: "Pedagogical Prompt Contribution Form",
+    contribModalSub: "The prompt will be reviewed and published once approved ('approved' column = 1)",
+    openInNewTab: "Open in new tab",
+    loadingForm: "Loading form...",
+    footerTitle: "Collaborative educational prompt repository",
+    footerLink: "Want to contribute your own prompt? Click here",
+    toasts: {
+      themeDark: "Switched to Dark Mode 🌙",
+      themeLight: "Switched to Light Mode ☀️",
+      loadedSuccess: "Loaded {count} approved prompts successfully!",
+      copiedSuccess: "Customized prompt copied to clipboard!",
+      launchingChatGPT: "Opening ChatGPT with edited prompt...",
+      launchingClaude: "Opening Claude with edited prompt...",
+      launchingGemini: "Prompt copied to clipboard! Press Ctrl+V in Gemini to paste ✨",
+      langChanged: "Language switched to English"
+    }
+  }
 };
 
 // מאגר פרומפטים מובנה כגיבוי איכותי
@@ -120,11 +325,11 @@ const State = {
   variableValues: {},
   activeEditTab: 'smart',
   theme: 'light',
-  lang: 'he',
-  translations: {}
+  lang: 'he', // עברית היא ברירת המחדל
+  translations: BUILTIN_TRANSLATIONS // מאותחל מיידית עם המילון המובנה
 };
 
-// פונקציית נרמול למורכבות 1-5 (מחלצת ספרה 1-5 או ממירה מטקסט)
+// פונקציית נרמול למורכבות 1-5
 function normalizeComplexity(val) {
   if (val === null || val === undefined) return '1';
   const str = String(val).trim();
@@ -141,33 +346,33 @@ function normalizeComplexity(val) {
 // --- מנהל בינאום ושפות (I18n Manager) ---
 const I18nManager = {
   async init() {
-    // 1. נסה לטעון שמירה מ-localStorage או מזהה דפדפן
+    // ברירת מחדל קשיחה: עברית (או בחירה מפורשת של המשתמש בעבר)
     const savedLang = localStorage.getItem('edu_prompts_lang');
     if (savedLang && ['he', 'ar', 'en'].includes(savedLang)) {
       State.lang = savedLang;
     } else {
-      const browserLang = (navigator.language || 'he').toLowerCase();
-      if (browserLang.startsWith('ar')) State.lang = 'ar';
-      else if (browserLang.startsWith('en')) State.lang = 'en';
-      else State.lang = 'he';
+      State.lang = 'he'; // ברירת המחדל היא עברית
     }
 
-    // 2. טעינת קובץ translations.json
+    // החלת השפה מיד עם המילון המובנה (ללא תלות ברשת)
+    this.applyLanguage(State.lang, false);
+
+    // ניסיון לעדכון עתידי מתוך translations.json במידה וקיים
     try {
       const res = await fetch(CONFIG.TRANSLATIONS_URL);
       if (res.ok) {
-        State.translations = await res.json();
+        const fetched = await res.json();
+        State.translations = { ...BUILTIN_TRANSLATIONS, ...fetched };
+        this.applyLanguage(State.lang, false);
       }
     } catch (e) {
-      console.warn('Could not load translations.json, using fallback dictionary:', e);
+      console.info('Using builtin translations dictionary:', e);
     }
-
-    this.applyLanguage(State.lang, false);
   },
 
   t(key, params = {}) {
-    const dict = State.translations[State.lang] || State.translations['he'] || {};
-    let text = dict[key] || key;
+    const dict = State.translations[State.lang] || State.translations['he'] || BUILTIN_TRANSLATIONS.he;
+    let text = dict[key] || (BUILTIN_TRANSLATIONS.he && BUILTIN_TRANSLATIONS.he[key]) || key;
 
     // החלפת פרמטרים כגון {count} או {var}
     Object.keys(params).forEach(p => {
@@ -177,8 +382,8 @@ const I18nManager = {
   },
 
   toast(subKey, params = {}) {
-    const dict = State.translations[State.lang] || State.translations['he'] || {};
-    const toasts = dict.toasts || {};
+    const dict = State.translations[State.lang] || State.translations['he'] || BUILTIN_TRANSLATIONS.he;
+    const toasts = dict.toasts || (BUILTIN_TRANSLATIONS.he && BUILTIN_TRANSLATIONS.he.toasts) || {};
     let text = toasts[subKey] || subKey;
     Object.keys(params).forEach(p => {
       text = text.replaceAll(`{${p}}`, params[p]);
@@ -249,6 +454,12 @@ const I18nManager = {
     // שדה עריכה ישירה placeholder
     const directTextarea = document.getElementById('modal-prompt-textarea');
     if (directTextarea) directTextarea.placeholder = this.t('directEditTextareaPlaceholder');
+
+    // עדכון סטטוס הנתונים במידה וקיים
+    const statusEl = document.getElementById('data-status');
+    if (statusEl && State.allPrompts.length > 0) {
+      statusEl.textContent = this.t('statusLoaded', { count: State.allPrompts.length });
+    }
 
     // רינדור מחדש של הפילטרים והכרטיסיות בהתאם לשפה
     UIController.renderComplexityFilters();
@@ -562,6 +773,7 @@ const UIController = {
     const grid = document.getElementById('prompts-grid');
     const emptyState = document.getElementById('empty-state');
     const resultsCount = document.getElementById('results-count');
+    if (!grid || !resultsCount) return;
 
     const filtered = this.getFilteredPrompts();
     resultsCount.innerHTML = I18nManager.t('resultsCount', { count: filtered.length });
@@ -570,12 +782,12 @@ const UIController = {
 
     if (filtered.length === 0) {
       grid.classList.add('hidden');
-      emptyState.classList.remove('hidden');
+      if (emptyState) emptyState.classList.remove('hidden');
       return;
     }
 
     grid.classList.remove('hidden');
-    emptyState.classList.add('hidden');
+    if (emptyState) emptyState.classList.add('hidden');
 
     filtered.forEach(prompt => {
       const badge = this.getComplexityBadge(prompt.complexity);
@@ -739,7 +951,7 @@ const UIController = {
 
   updateLivePreview() {
     const preview = document.getElementById('prompt-live-preview');
-    preview.textContent = this.getCalculatedPromptText();
+    if (preview) preview.textContent = this.getCalculatedPromptText();
   },
 
   getFinalPrompt() {
@@ -791,33 +1003,36 @@ async function initApp() {
 
   const statusEl = document.getElementById('data-status');
   const refreshIcon = document.getElementById('refresh-icon');
-  refreshIcon.classList.add('animate-spin', 'text-indigo-600');
-  statusEl.textContent = I18nManager.t('statusLoading');
+  if (refreshIcon) refreshIcon.classList.add('animate-spin', 'text-indigo-600');
+  if (statusEl) statusEl.textContent = I18nManager.t('statusLoading');
 
   try {
     const parsed = await SheetService.fetchPrompts();
     if (parsed && parsed.length > 0) {
       State.allPrompts = parsed;
-      statusEl.textContent = I18nManager.t('statusLoaded', { count: parsed.length });
+      if (statusEl) statusEl.textContent = I18nManager.t('statusLoaded', { count: parsed.length });
       UIController.showToast(I18nManager.toast('loadedSuccess', { count: parsed.length }));
     } else {
       State.allPrompts = DEFAULT_PROMPTS;
-      statusEl.textContent = I18nManager.t('statusEmpty');
+      if (statusEl) statusEl.textContent = I18nManager.t('statusEmpty');
     }
   } catch (err) {
     console.warn('Fallback to curated prompts:', err);
     State.allPrompts = DEFAULT_PROMPTS;
-    statusEl.textContent = I18nManager.t('statusFallback');
+    if (statusEl) statusEl.textContent = I18nManager.t('statusFallback');
   } finally {
-    refreshIcon.classList.remove('animate-spin', 'text-indigo-600');
+    if (refreshIcon) refreshIcon.classList.remove('animate-spin', 'text-indigo-600');
     UIController.renderCategoryFilters();
     UIController.renderComplexityFilters();
     UIController.renderPrompts();
   }
 
   // חיבור מאזיני אירועים
-  document.getElementById('theme-toggle-btn').onclick = () => ThemeManager.toggle();
-  document.getElementById('refresh-btn').onclick = () => initApp();
+  const themeBtn = document.getElementById('theme-toggle-btn');
+  if (themeBtn) themeBtn.onclick = () => ThemeManager.toggle();
+
+  const refreshBtn = document.getElementById('refresh-btn');
+  if (refreshBtn) refreshBtn.onclick = () => initApp();
 
   const langSelect = document.getElementById('language-select');
   if (langSelect) {
@@ -829,52 +1044,79 @@ async function initApp() {
   const searchInput = document.getElementById('search-input');
   const clearSearchBtn = document.getElementById('clear-search-btn');
 
-  searchInput.oninput = (e) => {
-    State.searchQuery = e.target.value;
-    if (State.searchQuery) {
-      clearSearchBtn.classList.remove('hidden');
-    } else {
+  if (searchInput) {
+    searchInput.oninput = (e) => {
+      State.searchQuery = e.target.value;
+      if (clearSearchBtn) {
+        if (State.searchQuery) {
+          clearSearchBtn.classList.remove('hidden');
+        } else {
+          clearSearchBtn.classList.add('hidden');
+        }
+      }
+      UIController.renderPrompts();
+    };
+  }
+
+  if (clearSearchBtn && searchInput) {
+    clearSearchBtn.onclick = () => {
+      searchInput.value = '';
+      State.searchQuery = '';
       clearSearchBtn.classList.add('hidden');
-    }
-    UIController.renderPrompts();
-  };
+      UIController.renderPrompts();
+    };
+  }
 
-  clearSearchBtn.onclick = () => {
-    searchInput.value = '';
-    State.searchQuery = '';
-    clearSearchBtn.classList.add('hidden');
-    UIController.renderPrompts();
-  };
+  const resetBtn = document.getElementById('reset-filters-btn');
+  if (resetBtn) {
+    resetBtn.onclick = () => {
+      if (searchInput) searchInput.value = '';
+      State.searchQuery = '';
+      State.selectedComplexity = '0';
+      State.selectedCategory = 'all';
+      if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
+      UIController.renderCategoryFilters();
+      UIController.renderComplexityFilters();
+      UIController.renderPrompts();
+    };
+  }
 
-  document.getElementById('reset-filters-btn').onclick = () => {
-    searchInput.value = '';
-    State.searchQuery = '';
-    State.selectedComplexity = '0';
-    State.selectedCategory = 'all';
-    clearSearchBtn.classList.add('hidden');
-    UIController.renderCategoryFilters();
-    UIController.renderComplexityFilters();
-    UIController.renderPrompts();
-  };
+  const smartTabBtn = document.getElementById('tab-smart-btn');
+  if (smartTabBtn) smartTabBtn.onclick = () => UIController.setEditTab('smart');
 
-  document.getElementById('tab-smart-btn').onclick = () => UIController.setEditTab('smart');
-  document.getElementById('tab-direct-btn').onclick = () => UIController.setEditTab('direct');
+  const directTabBtn = document.getElementById('tab-direct-btn');
+  if (directTabBtn) directTabBtn.onclick = () => UIController.setEditTab('direct');
 
-  document.getElementById('launch-chatgpt-btn').onclick = UIController.launchChatGPT;
-  document.getElementById('launch-claude-btn').onclick = UIController.launchClaude;
-  document.getElementById('launch-gemini-btn').onclick = UIController.launchGemini;
+  const chatgptBtn = document.getElementById('launch-chatgpt-btn');
+  if (chatgptBtn) chatgptBtn.onclick = UIController.launchChatGPT;
 
-  document.getElementById('modal-copy-only-btn').onclick = () => {
-    const text = UIController.getFinalPrompt();
-    UIController.copyToClipboard(text);
-    UIController.showToast(I18nManager.toast('copiedSuccess'));
-  };
-  document.getElementById('modal-close-bottom-btn').onclick = () => UIController.closeEditModal();
-  document.getElementById('close-edit-modal-btn').onclick = () => UIController.closeEditModal();
+  const claudeBtn = document.getElementById('launch-claude-btn');
+  if (claudeBtn) claudeBtn.onclick = UIController.launchClaude;
+
+  const geminiBtn = document.getElementById('launch-gemini-btn');
+  if (geminiBtn) geminiBtn.onclick = UIController.launchGemini;
+
+  const copyOnlyBtn = document.getElementById('modal-copy-only-btn');
+  if (copyOnlyBtn) {
+    copyOnlyBtn.onclick = () => {
+      const text = UIController.getFinalPrompt();
+      UIController.copyToClipboard(text);
+      UIController.showToast(I18nManager.toast('copiedSuccess'));
+    };
+  }
+
+  const closeBottomBtn = document.getElementById('modal-close-bottom-btn');
+  if (closeBottomBtn) closeBottomBtn.onclick = () => UIController.closeEditModal();
+
+  const closeTopBtn = document.getElementById('close-edit-modal-btn');
+  if (closeTopBtn) closeTopBtn.onclick = () => UIController.closeEditModal();
 
   const contribModal = document.getElementById('contribute-modal');
-  document.getElementById('contribute-btn').onclick = () => contribModal.classList.remove('hidden');
-  document.getElementById('close-contribute-modal-btn').onclick = () => contribModal.classList.add('hidden');
+  const contribBtn = document.getElementById('contribute-btn');
+  if (contribBtn && contribModal) contribBtn.onclick = () => contribModal.classList.remove('hidden');
+
+  const closeContribBtn = document.getElementById('close-contribute-modal-btn');
+  if (closeContribBtn && contribModal) closeContribBtn.onclick = () => contribModal.classList.add('hidden');
 
   window.onclick = (e) => {
     const editModal = document.getElementById('edit-modal');
