@@ -1,16 +1,16 @@
 /**
  * Educational Prompts App Logic
- * Modules: CONFIG, ThemeManager, SheetService, UIController, App Initialization
+ * Modules: CONFIG, I18nManager, ThemeManager, SheetService, UIController, App Initialization
  */
 
-// הגדרת תצורת Tailwind עבור Dark Mode
+// הגדרת תצורת Tailwind עבור Dark Mode ופונטים רב-לשוניים
 if (window.tailwind) {
   tailwind.config = {
     darkMode: 'class',
     theme: {
       extend: {
         fontFamily: {
-          sans: ['Heebo', 'sans-serif'],
+          sans: ['Heebo', 'Cairo', 'Inter', 'sans-serif'],
         },
         colors: {
           brand: {
@@ -30,7 +30,8 @@ if (window.tailwind) {
 const CONFIG = {
   SHEET_ID: '1Ca9sM_Hy-MvOGT5gaMSpEg6Xf9FiC47rrxEm0wvNQVo',
   GVIZ_URL: 'https://docs.google.com/spreadsheets/d/1Ca9sM_Hy-MvOGT5gaMSpEg6Xf9FiC47rrxEm0wvNQVo/gviz/tq?tqx=out:json',
-  COMPLEXITY_LEVELS: ['הכל', '1', '2', '3', '4', '5']
+  TRANSLATIONS_URL: 'translations.json',
+  COMPLEXITY_LEVELS: ['0', '1', '2', '3', '4', '5'] // '0' represents All/الכל/הכל
 };
 
 // מאגר פרומפטים מובנה כגיבוי איכותי
@@ -113,12 +114,14 @@ const DEFAULT_PROMPTS = [
 const State = {
   allPrompts: [],
   searchQuery: '',
-  selectedComplexity: 'הכל',
-  selectedCategory: 'הכל',
+  selectedComplexity: '0', // '0' = All
+  selectedCategory: 'all',
   currentEditingPrompt: null,
   variableValues: {},
   activeEditTab: 'smart',
-  theme: 'light'
+  theme: 'light',
+  lang: 'he',
+  translations: {}
 };
 
 // פונקציית נרמול למורכבות 1-5 (מחלצת ספרה 1-5 או ממירה מטקסט)
@@ -128,28 +131,159 @@ function normalizeComplexity(val) {
   const digitMatch = str.match(/[1-5]/);
   if (digitMatch) return digitMatch[0];
 
-  if (str.includes('בסיסי') || str.includes('קל')) return '1';
-  if (str.includes('בינוני')) return '3';
-  if (str.includes('מתקדם') || str.includes('קשה')) return '5';
+  if (str.includes('בסיסי') || str.includes('קל') || str.includes('basic') || str.includes('بسيط')) return '1';
+  if (str.includes('בינוני') || str.includes('medium') || str.includes('متوسط')) return '3';
+  if (str.includes('מתקדם') || str.includes('קשה') || str.includes('advanced') || str.includes('متقدم')) return '5';
 
   return '1';
 }
 
+// --- מנהל בינאום ושפות (I18n Manager) ---
+const I18nManager = {
+  async init() {
+    // 1. נסה לטעון שמירה מ-localStorage או מזהה דפדפן
+    const savedLang = localStorage.getItem('edu_prompts_lang');
+    if (savedLang && ['he', 'ar', 'en'].includes(savedLang)) {
+      State.lang = savedLang;
+    } else {
+      const browserLang = (navigator.language || 'he').toLowerCase();
+      if (browserLang.startsWith('ar')) State.lang = 'ar';
+      else if (browserLang.startsWith('en')) State.lang = 'en';
+      else State.lang = 'he';
+    }
+
+    // 2. טעינת קובץ translations.json
+    try {
+      const res = await fetch(CONFIG.TRANSLATIONS_URL);
+      if (res.ok) {
+        State.translations = await res.json();
+      }
+    } catch (e) {
+      console.warn('Could not load translations.json, using fallback dictionary:', e);
+    }
+
+    this.applyLanguage(State.lang, false);
+  },
+
+  t(key, params = {}) {
+    const dict = State.translations[State.lang] || State.translations['he'] || {};
+    let text = dict[key] || key;
+
+    // החלפת פרמטרים כגון {count} או {var}
+    Object.keys(params).forEach(p => {
+      text = text.replaceAll(`{${p}}`, params[p]);
+    });
+    return text;
+  },
+
+  toast(subKey, params = {}) {
+    const dict = State.translations[State.lang] || State.translations['he'] || {};
+    const toasts = dict.toasts || {};
+    let text = toasts[subKey] || subKey;
+    Object.keys(params).forEach(p => {
+      text = text.replaceAll(`{${p}}`, params[p]);
+    });
+    return text;
+  },
+
+  applyLanguage(lang, showNotification = true) {
+    State.lang = lang;
+    localStorage.setItem('edu_prompts_lang', lang);
+
+    const isRtl = lang === 'he' || lang === 'ar';
+    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
+
+    // עדכון אלמנט ה-select
+    const langSelect = document.getElementById('language-select');
+    if (langSelect) langSelect.value = lang;
+
+    // החלפת תגיות טקסט סטטיות בממשק
+    const setElem = (id, text) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    };
+
+    setElem('i18n-app-title', this.t('appTitle'));
+    setElem('i18n-app-subtitle', this.t('appSubtitle'));
+    setElem('i18n-pedagogical-badge', this.t('pedagogicalBadge'));
+    setElem('i18n-refresh-btn', this.t('refresh'));
+    setElem('i18n-contribute-btn', this.t('contribute'));
+    setElem('i18n-banner-text', this.t('bannerText'));
+    setElem('i18n-category-label', this.t('categoryLabel'));
+    setElem('i18n-complexity-label', this.t('complexityLabel'));
+    setElem('i18n-empty-title', this.t('emptyTitle'));
+    setElem('i18n-empty-subtitle', this.t('emptySubtitle'));
+    setElem('reset-filters-btn', this.t('resetFilters'));
+    setElem('i18n-footer-title', this.t('footerTitle'));
+    setElem('i18n-footer-link', this.t('footerLink'));
+
+    // מודאל עריכה
+    setElem('i18n-approved-repo-badge', this.t('approvedRepository'));
+    setElem('i18n-scenario-title', this.t('scenarioTitle'));
+    setElem('i18n-tips-title', this.t('tipsTitle'));
+    setElem('i18n-warnings-title', this.t('warningsTitle'));
+    setElem('i18n-edit-section-title', this.t('editSectionTitle'));
+    setElem('tab-smart-label', this.t('smartTab'));
+    setElem('tab-direct-label', this.t('directTab'));
+    setElem('i18n-live-preview-label', this.t('livePreviewLabel'));
+    setElem('i18n-live-preview-sub', this.t('livePreviewSub'));
+    setElem('i18n-choose-ai-label', this.t('chooseAiLabel'));
+    setElem('i18n-choose-ai-sub', this.t('chooseAiSub'));
+    setElem('i18n-chatgpt-sub', this.t('chatgptSub'));
+    setElem('i18n-claude-sub', this.t('claudeSub'));
+    setElem('i18n-gemini-sub', this.t('geminiSub'));
+    setElem('i18n-gemini-badge', this.t('geminiBadge'));
+    setElem('i18n-copy-prompt-btn', this.t('copyPromptOnly'));
+    setElem('i18n-done-btn', this.t('done'));
+
+    // מודאל תרומה
+    setElem('i18n-contrib-title', this.t('contribModalTitle'));
+    setElem('i18n-contrib-sub', this.t('contribModalSub'));
+    setElem('i18n-open-newtab', this.t('openInNewTab'));
+
+    // שדה חיפוש placeholder
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) searchInput.placeholder = this.t('searchPlaceholder');
+
+    // שדה עריכה ישירה placeholder
+    const directTextarea = document.getElementById('modal-prompt-textarea');
+    if (directTextarea) directTextarea.placeholder = this.t('directEditTextareaPlaceholder');
+
+    // רינדור מחדש של הפילטרים והכרטיסיות בהתאם לשפה
+    UIController.renderComplexityFilters();
+    UIController.renderCategoryFilters();
+    UIController.renderPrompts();
+
+    if (showNotification) {
+      UIController.showToast(this.toast('langChanged'));
+    }
+  }
+};
+
 // ניהול מצב כהה / בהיר
 const ThemeManager = {
   init() {
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    this.setTheme(prefersDark ? 'dark' : 'light');
+    const savedTheme = localStorage.getItem('edu_prompts_theme');
+    if (savedTheme) {
+      this.setTheme(savedTheme);
+    } else {
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      this.setTheme(prefersDark ? 'dark' : 'light');
+    }
 
     if (window.matchMedia) {
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        this.setTheme(e.matches ? 'dark' : 'light');
+        if (!localStorage.getItem('edu_prompts_theme')) {
+          this.setTheme(e.matches ? 'dark' : 'light');
+        }
       });
     }
   },
 
   setTheme(theme) {
     State.theme = theme;
+    localStorage.setItem('edu_prompts_theme', theme);
     const sunIcon = document.getElementById('sun-icon');
     const moonIcon = document.getElementById('moon-icon');
 
@@ -167,7 +301,7 @@ const ThemeManager = {
   toggle() {
     const nextTheme = State.theme === 'dark' ? 'light' : 'dark';
     this.setTheme(nextTheme);
-    UIController.showToast(nextTheme === 'dark' ? 'עברת למצב כהה 🌙' : 'עברת למצב בהיר ☀️');
+    UIController.showToast(nextTheme === 'dark' ? I18nManager.toast('themeDark') : I18nManager.toast('themeLight'));
   }
 };
 
@@ -203,34 +337,25 @@ const SheetService = {
       return found ? found.idx : -1;
     };
 
-    // זיהוי עמודות מדויק ומניעת בלבול בין שם הפרומפט לתבנית הפרומפט
-    const approvedIdx = getCol(l => l.includes('מאושר') || l.includes('approved') || l.includes('אישור') || l.includes('סטטוס'));
-    
-    // שם הפרומפט
-    const titleIdx = getCol(l => (l.includes('שם') || l.includes('כותרת') || l.includes('title')) && !l.includes('משתמש'));
-    
-    // מטרת הפרומפט
-    const goalIdx = getCol(l => l.includes('מטר') || l.includes('goal') || l.includes('purpose'));
-    
-    // קטגוריה
-    const categoryIdx = getCol(l => l.includes('קטגור') || l.includes('category') || l.includes('נושא') || l.includes('תחום'));
+    // זיהוי עמודות מדויק (תומך בעברית, אנגלית וערבית בכותרות הטבלה)
+    const approvedIdx = getCol(l => l.includes('מאושר') || l.includes('approved') || l.includes('אישור') || l.includes('סטטוס') || l.includes('معتمد'));
+    const titleIdx = getCol(l => (l.includes('שם') || l.includes('כותרת') || l.includes('title') || l.includes('اسم') || l.includes('عنوان')) && !l.includes('משתמש') && !l.includes('user'));
+    const goalIdx = getCol(l => l.includes('מטר') || l.includes('goal') || l.includes('purpose') || l.includes('هدف'));
+    const categoryIdx = getCol(l => l.includes('קטגור') || l.includes('category') || l.includes('נושא') || l.includes('תחום') || l.includes('فئة') || l.includes('تصنيف'));
 
-    // תבנית הפרומפט - שדה התוכן
+    // תבנית הפרומפט - שדה התוכן המלא
     const promptTemplateIdx = getCol(l => {
-      if (l.includes('תבנית') || l.includes('template')) return true;
-      if (l.includes('פרומפט') && !l.includes('שם') && !l.includes('מטר') && !l.includes('הסבר') && !l.includes('מורכבות') && !l.includes('הערות') && !l.includes('רמת') && !l.includes('קטגור')) {
-        return true;
-      }
-      if (l.includes('prompt') && !l.includes('name') && !l.includes('title') && !l.includes('goal') && !l.includes('level') && !l.includes('category')) {
-        return true;
-      }
+      if (l.includes('תבנית') || l.includes('template') || l.includes('نموذج') || l.includes('قالب')) return true;
+      if (l.includes('פרומפט') && !l.includes('שם') && !l.includes('מטר') && !l.includes('הסבר') && !l.includes('מורכבות') && !l.includes('הערות') && !l.includes('רמת') && !l.includes('קטגור')) return true;
+      if (l.includes('prompt') && !l.includes('name') && !l.includes('title') && !l.includes('goal') && !l.includes('level') && !l.includes('category')) return true;
+      if (l.includes('برومبت') && !l.includes('اسم') && !l.includes('هدف') && !l.includes('مستوى') && !l.includes('فئة')) return true;
       return false;
     });
 
-    const scenarioIdx = getCol(l => l.includes('תרחיש') || l.includes('דוגמא') || l.includes('scenario') || l.includes('example'));
-    const tipsIdx = getCol(l => l.includes('טיפ') || l.includes('הסבר') || l.includes('הנחיות') || l.includes('tips') || l.includes('עבודה נכונה'));
-    const warningsIdx = getCol(l => l.includes('אזהר') || l.includes('הערות') || l.includes('מגבלות') || l.includes('מה לא לעשות') || l.includes('warnings'));
-    const complexityIdx = getCol(l => l.includes('מורכבות') || l.includes('רמת') || l.includes('רמה') || l.includes('complexity') || l.includes('דרג'));
+    const scenarioIdx = getCol(l => l.includes('תרחיש') || l.includes('דוגמא') || l.includes('scenario') || l.includes('example') || l.includes('سيناريو'));
+    const tipsIdx = getCol(l => l.includes('טיפ') || l.includes('הסבר') || l.includes('הנחיות') || l.includes('tips') || l.includes('عבודה נכונה') || l.includes('نصائح'));
+    const warningsIdx = getCol(l => l.includes('אזהר') || l.includes('הערות') || l.includes('מגבלות') || l.includes('מה לא לעשות') || l.includes('warnings') || l.includes('تحذير') || l.includes('ملاحظات'));
+    const complexityIdx = getCol(l => l.includes('מורכבות') || l.includes('רמת') || l.includes('רמה') || l.includes('complexity') || l.includes('level') || l.includes('صعوبة') || l.includes('مستوى'));
 
     const parsedPrompts = [];
 
@@ -240,17 +365,14 @@ const SheetService = {
 
       // סינון: רק שורות בהן מופיע 1 בעמודת מאושר
       const approvedVal = approvedIdx >= 0 ? getVal(approvedIdx) : (cells[0] ? String(cells[0].v).trim() : '1');
-      const isApproved = approvedVal === '1' || approvedVal.toLowerCase() === 'true' || approvedVal === 'כן' || approvedVal === 'מאושר';
+      const isApproved = approvedVal === '1' || approvedVal.toLowerCase() === 'true' || approvedVal === 'כן' || approvedVal === 'מאושר' || approvedVal === 'نعم' || approvedVal === 'معتمد';
 
       if (isApproved) {
         const title = titleIdx >= 0 ? getVal(titleIdx) : getVal(1) || `פרומפט ${rowIndex + 1}`;
-        const goal = goalIdx >= 0 ? getVal(goalIdx) : getVal(2) || 'ללא תיאור מוגדר';
+        const goal = goalIdx >= 0 ? getVal(goalIdx) : getVal(2) || I18nManager.t('defaultGoal');
         const category = categoryIdx >= 0 ? getVal(categoryIdx) : 'כללי';
         const scenario = scenarioIdx >= 0 ? getVal(scenarioIdx) : '';
-        
-        // שליפת תבנית הפרומפט המדויקת
         const promptTemplate = promptTemplateIdx >= 0 ? getVal(promptTemplateIdx) : (getVal(3) || goal);
-        
         const tips = tipsIdx >= 0 ? getVal(tipsIdx) : '';
         const warnings = warningsIdx >= 0 ? getVal(warningsIdx) : '';
         const rawComplexity = complexityIdx >= 0 ? getVal(complexityIdx) : '1';
@@ -262,10 +384,10 @@ const SheetService = {
             title,
             goal,
             category: category || 'כללי',
-            scenario: scenario || 'מתאים לשילוב במהלך הוראה פרונטלית, עבודה קבוצתית או תרגול עצמאי.',
+            scenario: scenario || I18nManager.t('defaultScenario'),
             prompt: promptTemplate || goal,
-            tips: tips || 'מומלץ להזין את המשתנים הרלוונטיים לכיתתכם ולדייק את התוצאה בשיחה חוזרת.',
-            warnings: warnings || 'זכרו לבדוק את התוצרים שמופקים ולוודא התאמה מלאה לרמת התלמידים.',
+            tips: tips || I18nManager.t('defaultTips'),
+            warnings: warnings || I18nManager.t('defaultWarnings'),
             complexity: complexity,
             approved: 1
           });
@@ -327,16 +449,18 @@ const UIController = {
 
   getComplexityBadge(complexity) {
     const comp = normalizeComplexity(complexity);
+    const badgeText = `${I18nManager.t('badgeLevel')} ${comp}`;
+
     if (comp === '5') {
-      return { text: 'דרגה 5', class: 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-800' };
+      return { text: badgeText, class: 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-800' };
     } else if (comp === '4') {
-      return { text: 'דרגה 4', class: 'bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border-purple-200 dark:border-purple-800' };
+      return { text: badgeText, class: 'bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border-purple-200 dark:border-purple-800' };
     } else if (comp === '3') {
-      return { text: 'דרגה 3', class: 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800' };
+      return { text: badgeText, class: 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-800 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800' };
     } else if (comp === '2') {
-      return { text: 'דרגה 2', class: 'bg-teal-100 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border-teal-200 dark:border-teal-800' };
+      return { text: badgeText, class: 'bg-teal-100 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border-teal-200 dark:border-teal-800' };
     }
-    return { text: 'דרגה 1', class: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' };
+    return { text: badgeText, class: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' };
   },
 
   renderComplexityFilters() {
@@ -352,7 +476,7 @@ const UIController = {
           ? 'bg-indigo-600 text-white shadow-sm font-bold'
           : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
       }`;
-      btn.textContent = lvl === 'הכל' ? 'הכל' : `רמה ${lvl}`;
+      btn.textContent = lvl === '0' ? I18nManager.t('all') : `${I18nManager.t('level')} ${lvl}`;
       btn.onclick = () => {
         State.selectedComplexity = lvl;
         this.renderComplexityFilters();
@@ -367,7 +491,6 @@ const UIController = {
     if (!container) return;
     container.innerHTML = '';
 
-    // חילוץ כל הקטגוריות הייחודיות מהפרומפטים
     const categorySet = new Set();
     State.allPrompts.forEach(p => {
       if (p.category) {
@@ -376,7 +499,7 @@ const UIController = {
       }
     });
 
-    const categories = ['הכל', ...Array.from(categorySet)];
+    const categories = ['all', ...Array.from(categorySet)];
 
     categories.forEach(cat => {
       const btn = document.createElement('button');
@@ -386,7 +509,7 @@ const UIController = {
           ? 'bg-purple-600 text-white shadow-sm font-bold'
           : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
       }`;
-      btn.textContent = cat;
+      btn.textContent = cat === 'all' ? I18nManager.t('all') : cat;
       btn.onclick = () => {
         State.selectedCategory = cat;
         this.renderCategoryFilters();
@@ -398,16 +521,16 @@ const UIController = {
 
   getFilteredPrompts() {
     return State.allPrompts.filter(p => {
-      // סינון לפי דרגת מורכבות 1-5
-      if (State.selectedComplexity !== 'הכל') {
+      // סינון מורכבות (0 = הכל)
+      if (State.selectedComplexity !== '0') {
         const normP = normalizeComplexity(p.complexity);
         if (normP !== State.selectedComplexity) {
           return false;
         }
       }
 
-      // סינון לפי קטגוריה
-      if (State.selectedCategory !== 'הכל') {
+      // סינון קטגוריה
+      if (State.selectedCategory !== 'all') {
         const cat = (p.category || '').toLowerCase();
         const selected = State.selectedCategory.toLowerCase();
         if (!cat.includes(selected)) {
@@ -415,7 +538,7 @@ const UIController = {
         }
       }
 
-      // חיפוש טקסט חופשי
+      // חיפוש חופשי
       if (State.searchQuery.trim()) {
         const q = State.searchQuery.toLowerCase();
         const matchTitle = (p.title || '').toLowerCase().includes(q);
@@ -441,7 +564,7 @@ const UIController = {
     const resultsCount = document.getElementById('results-count');
 
     const filtered = this.getFilteredPrompts();
-    resultsCount.innerHTML = `נמצאו <strong class="text-slate-800 dark:text-slate-100 font-bold">${filtered.length}</strong> פרומפטים מתאימים`;
+    resultsCount.innerHTML = I18nManager.t('resultsCount', { count: filtered.length });
 
     grid.innerHTML = '';
 
@@ -458,11 +581,11 @@ const UIController = {
       const badge = this.getComplexityBadge(prompt.complexity);
 
       const card = document.createElement('div');
-      card.className = 'group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-500 p-6 shadow-sm hover:shadow-xl dark:shadow-slate-950 transition-all duration-200 flex flex-col justify-between cursor-pointer relative overflow-hidden transform hover:-translate-y-1';
+      card.className = 'group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-500 p-6 shadow-sm hover:shadow-xl dark:shadow-slate-950 transition-all duration-200 flex flex-col justify-between cursor-pointer relative overflow-hidden transform hover:-translate-y-1 text-start';
       
       card.innerHTML = `
         <!-- Top Gradient Border -->
-        <div class="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-80 group-hover:opacity-100 transition-opacity"></div>
+        <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-80 group-hover:opacity-100 transition-opacity"></div>
 
         <div class="space-y-3">
           <!-- Badge & AI indicators -->
@@ -471,7 +594,7 @@ const UIController = {
               <span class="inline-flex items-center text-xs font-bold px-2.5 py-0.5 rounded-full border ${badge.class}">
                 ${badge.text}
               </span>
-              ${prompt.category && prompt.category !== 'כללי' ? `
+              ${prompt.category && prompt.category !== 'כללי' && prompt.category !== 'all' ? `
                 <span class="inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
                   ${prompt.category}
                 </span>
@@ -491,25 +614,25 @@ const UIController = {
           </h3>
 
           <!-- מטרת הפרומפט -->
-          <div class="bg-slate-50 dark:bg-slate-950 p-3.5 rounded-xl border border-slate-100 dark:border-slate-800">
+          <div class="bg-slate-50 dark:bg-slate-950 p-3.5 rounded-xl border border-slate-100 dark:border-slate-800 text-start">
             <p class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1.5">
               <svg class="w-3.5 h-3.5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
-              מטרת הפרומפט:
+              ${I18nManager.t('promptGoalLabel')}
             </p>
             <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed line-clamp-2">
-              ${prompt.goal || 'הפקת תוצר פדגוגי איכותי מותאם'}
+              ${prompt.goal || I18nManager.t('defaultGoal')}
             </p>
           </div>
         </div>
 
         <!-- Bottom CTA -->
         <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-5 flex items-center justify-between">
-          <span class="text-xs text-slate-400 dark:text-slate-500 font-medium">צפייה בכל השדות ועריכה</span>
+          <span class="text-xs text-slate-400 dark:text-slate-500 font-medium">${I18nManager.t('cardFooterHint')}</span>
           <span class="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-950/60 group-hover:bg-indigo-600 text-indigo-700 dark:text-indigo-300 group-hover:text-white font-bold text-xs rounded-xl transition-all shadow-sm">
-            <span>התאם ופתח</span>
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span>${I18nManager.t('cardActionBtn')}</span>
+            <svg class="w-3.5 h-3.5 rtl:rotate-0 ltr:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
           </span>
@@ -527,16 +650,16 @@ const UIController = {
     State.activeEditTab = 'smart';
 
     document.getElementById('modal-prompt-title').textContent = prompt.title;
-    document.getElementById('modal-prompt-goal').textContent = prompt.goal || 'ללא תיאור מוגדר';
+    document.getElementById('modal-prompt-goal').textContent = prompt.goal || I18nManager.t('defaultGoal');
     
     const badge = this.getComplexityBadge(prompt.complexity);
     const badgeEl = document.getElementById('modal-complexity-badge');
-    badgeEl.textContent = `רמת מורכבות: ${badge.text}`;
+    badgeEl.textContent = `${I18nManager.t('modalComplexityPrefix')}${badge.text}`;
     badgeEl.className = `inline-flex items-center text-xs font-bold px-2.5 py-0.5 rounded-full border ${badge.class}`;
 
-    document.getElementById('modal-scenario-text').textContent = prompt.scenario || 'לא הוזן תרחיש שימוש ספציפי.';
-    document.getElementById('modal-tips-text').textContent = prompt.tips || 'הזינו ערכים ספציפיים וברורים במשתנים לקבלת תוצאה מדויקת.';
-    document.getElementById('modal-warnings-text').textContent = prompt.warnings || 'מומלץ לעבור על תשובת הבינה המלאכותית ולאמת עובדות טרם שימוש בכיתה.';
+    document.getElementById('modal-scenario-text').textContent = prompt.scenario || I18nManager.t('defaultScenario');
+    document.getElementById('modal-tips-text').textContent = prompt.tips || I18nManager.t('defaultTips');
+    document.getElementById('modal-warnings-text').textContent = prompt.warnings || I18nManager.t('defaultWarnings');
     
     // טעינת תבנית הפרומפט לשדה העריכה
     document.getElementById('modal-prompt-textarea').value = prompt.prompt;
@@ -545,7 +668,7 @@ const UIController = {
     const varGrid = document.getElementById('variable-inputs-grid');
     const smartTabLabel = document.getElementById('tab-smart-label');
 
-    smartTabLabel.textContent = vars.length > 0 ? `הזנת משתנים (${vars.length})` : 'הזנת משתנים';
+    smartTabLabel.textContent = vars.length > 0 ? `${I18nManager.t('smartTab')} (${vars.length})` : I18nManager.t('smartTab');
     varGrid.innerHTML = '';
 
     if (vars.length > 0) {
@@ -557,7 +680,7 @@ const UIController = {
           <label class="text-xs font-bold text-slate-700 dark:text-slate-300 block">${variableName}</label>
           <input
             type="text"
-            placeholder="הזן ערך עבור ${variableName}..."
+            placeholder="${I18nManager.t('varInputPlaceholder', { var: variableName })}"
             class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-900 transition-all"
           />
         `;
@@ -571,7 +694,7 @@ const UIController = {
     } else {
       varGrid.innerHTML = `
         <div class="col-span-full text-center py-4 text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-100 dark:border-slate-800">
-          תבנית זו אינה מכילה משתנים מוגדרים מראש בסוגריים מרובעים. תוכלו לעבור ללשונית "עריכת טקסט חופשית" לשינוי הנוסח לפי הצורך.
+          ${I18nManager.t('noVarsNotice')}
         </div>
       `;
     }
@@ -635,7 +758,7 @@ const UIController = {
     const text = UIController.getFinalPrompt();
     UIController.copyToClipboard(text);
     const url = `https://chatgpt.com/?q=${encodeURIComponent(text)}`;
-    UIController.showToast('פותח את ChatGPT עם הפרומפט הערוך...');
+    UIController.showToast(I18nManager.toast('launchingChatGPT'));
     setTimeout(() => window.open(url, '_blank'), 200);
   },
 
@@ -643,14 +766,14 @@ const UIController = {
     const text = UIController.getFinalPrompt();
     UIController.copyToClipboard(text);
     const url = `https://claude.ai/new?q=${encodeURIComponent(text)}`;
-    UIController.showToast('פותח את Claude עם הפרומפט הערוך...');
+    UIController.showToast(I18nManager.toast('launchingClaude'));
     setTimeout(() => window.open(url, '_blank'), 200);
   },
 
   launchGemini() {
     const text = UIController.getFinalPrompt();
     UIController.copyToClipboard(text);
-    UIController.showToast('הפרומפט הועתק ללוח! ב-Gemini לחצו Ctrl+V להדבקה ✨');
+    UIController.showToast(I18nManager.toast('launchingGemini'));
     setTimeout(() => window.open('https://gemini.google.com/app', '_blank'), 250);
   }
 };
@@ -662,27 +785,29 @@ window.openContributeModal = () => {
 
 // אתחול האפליקציה וטעינת הנתונים
 async function initApp() {
+  // 1. אתחול שפות ומצב תצוגה
+  await I18nManager.init();
   ThemeManager.init();
 
   const statusEl = document.getElementById('data-status');
   const refreshIcon = document.getElementById('refresh-icon');
   refreshIcon.classList.add('animate-spin', 'text-indigo-600');
-  statusEl.textContent = 'טוען נתונים מהגיליון...';
+  statusEl.textContent = I18nManager.t('statusLoading');
 
   try {
     const parsed = await SheetService.fetchPrompts();
     if (parsed && parsed.length > 0) {
       State.allPrompts = parsed;
-      statusEl.textContent = `נטענו ${parsed.length} פרומפטים מאושרים בזמן אמת`;
-      UIController.showToast(`נטענו ${parsed.length} פרומפטים מאושרים בהצלחה!`);
+      statusEl.textContent = I18nManager.t('statusLoaded', { count: parsed.length });
+      UIController.showToast(I18nManager.toast('loadedSuccess', { count: parsed.length }));
     } else {
       State.allPrompts = DEFAULT_PROMPTS;
-      statusEl.textContent = 'מוצגים פרומפטים מובנים (הגיליון ריק מפרומפטים שסומנו 1 במאושר)';
+      statusEl.textContent = I18nManager.t('statusEmpty');
     }
   } catch (err) {
     console.warn('Fallback to curated prompts:', err);
     State.allPrompts = DEFAULT_PROMPTS;
-    statusEl.textContent = 'מוצג מאגר פרומפטים חינוכיים מובנה';
+    statusEl.textContent = I18nManager.t('statusFallback');
   } finally {
     refreshIcon.classList.remove('animate-spin', 'text-indigo-600');
     UIController.renderCategoryFilters();
@@ -693,6 +818,13 @@ async function initApp() {
   // חיבור מאזיני אירועים
   document.getElementById('theme-toggle-btn').onclick = () => ThemeManager.toggle();
   document.getElementById('refresh-btn').onclick = () => initApp();
+
+  const langSelect = document.getElementById('language-select');
+  if (langSelect) {
+    langSelect.onchange = (e) => {
+      I18nManager.applyLanguage(e.target.value, true);
+    };
+  }
 
   const searchInput = document.getElementById('search-input');
   const clearSearchBtn = document.getElementById('clear-search-btn');
@@ -717,8 +849,8 @@ async function initApp() {
   document.getElementById('reset-filters-btn').onclick = () => {
     searchInput.value = '';
     State.searchQuery = '';
-    State.selectedComplexity = 'הכל';
-    State.selectedCategory = 'הכל';
+    State.selectedComplexity = '0';
+    State.selectedCategory = 'all';
     clearSearchBtn.classList.add('hidden');
     UIController.renderCategoryFilters();
     UIController.renderComplexityFilters();
@@ -735,7 +867,7 @@ async function initApp() {
   document.getElementById('modal-copy-only-btn').onclick = () => {
     const text = UIController.getFinalPrompt();
     UIController.copyToClipboard(text);
-    UIController.showToast('הפרומפט המותאם הועתק ללוח בהצלחה!');
+    UIController.showToast(I18nManager.toast('copiedSuccess'));
   };
   document.getElementById('modal-close-bottom-btn').onclick = () => UIController.closeEditModal();
   document.getElementById('close-edit-modal-btn').onclick = () => UIController.closeEditModal();
