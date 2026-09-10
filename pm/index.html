@@ -110,13 +110,7 @@
   <section class="bg-gradient-to-b from-indigo-50/70 dark:from-indigo-950/30 to-transparent border-b border-indigo-100/60 dark:border-indigo-900/40 py-5 px-4 sm:px-6">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
       <div class="space-y-1 text-center md:text-right">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold border border-emerald-200 dark:border-emerald-800">
-          <svg class="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span>מוצגים רק פרומפטים מאושרים (עמודת 'מאושר' = 1)</span>
-        </div>
-        <p class="text-sm text-slate-600 dark:text-slate-400">
+        <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
           לחצו על פרומפט כדי להזין את הפרטים שלכם, ולפתוח ישירות ב-ChatGPT, Claude או Gemini!
         </p>
       </div>
@@ -152,6 +146,14 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
+      </div>
+
+      <!-- סינון לפי קטגוריה -->
+      <div class="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 ml-1">קטגוריה:</span>
+        <div id="category-filters" class="flex flex-wrap items-center gap-1.5">
+          <!-- כפתורי קטגוריות נוצרים דינמית -->
+        </div>
       </div>
 
       <!-- סינון לפי רמת מורכבות -->
