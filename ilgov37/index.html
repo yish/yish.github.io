@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ממשלת ישראל ה-37: תעודת סיום</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="theme-light density-compact">
+  <!-- Top Navigation & Controls Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-section">
+        <h1 id="ui-app-title" class="brand-title">ממשלת ישראל ה-37: תעודת סיום</h1>
+        <p id="ui-app-subtitle" class="brand-subtitle">דו״ח הערכה אסטרטגי 2022–2026</p>
+      </div>
+
+      <div class="controls-toolbar">
+        <!-- Language Selector -->
+        <div class="control-group">
+          <label for="lang-select" class="control-label" id="ui-lbl-lang">שפה:</label>
+          <select id="lang-select" class="control-select">
+            <option value="he" selected>עברית (Hebrew)</option>
+            <option value="en">English</option>
+            <option value="ar">العربية (Arabic)</option>
+            <option value="ru">Русский (Russian)</option>
+          </select>
+        </div>
+
+        <!-- Theme Mode (Light / Dark) -->
+        <div class="control-group">
+          <label for="theme-select" class="control-label" id="ui-lbl-theme">מראה:</label>
+          <select id="theme-select" class="control-select">
+            <option value="light" id="ui-opt-light">בהיר</option>
+            <option value="dark" id="ui-opt-dark">כהה</option>
+          </select>
+        </div>
+
+        <!-- Density Mode (Compact / Dense) -->
+        <div class="control-group">
+          <label for="density-select" class="control-label" id="ui-lbl-density">צפיפות:</label>
+          <select id="density-select" class="control-select">
+            <option value="compact" id="ui-opt-compact">קומפקטי</option>
+            <option value="dense" id="ui-opt-dense">דחוס</option>
+          </select>
+        </div>
+
+        <!-- About Button -->
+        <button id="btn-about" class="btn btn-secondary">
+          <span id="ui-btn-about">אודות והדו״ח</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View Area -->
+  <main class="main-content">
+    <!-- Filter and Search Bar -->
+    <section class="filter-bar">
+      <div class="search-box">
+        <input type="text" id="filter-input" placeholder="חיפוש לפי תחום או מילות מפתח..." class="search-input">
+      </div>
+      <div class="status-filters" id="category-filters">
+        <button class="filter-chip active" data-filter="all" id="ui-filter-all">הכל</button>
+        <button class="filter-chip" data-filter="failed" id="ui-filter-failed">כושל</button>
+        <button class="filter-chip" data-filter="negative" id="ui-filter-negative">שלילי / קריטי</button>
+        <button class="filter-chip" data-filter="mixed" id="ui-filter-mixed">מעורב</button>
+      </div>
+    </section>
+
+    <!-- Executive Summary Banner -->
+    <section class="summary-banner" id="summary-section">
+      <div class="summary-header">
+        <h2 id="ui-summary-title">סיכום אינטגרטיבי ומסקנות אסטרטגיות</h2>
+        <button id="btn-toggle-summary" class="btn-text">קרא עוד</button>
+      </div>
+      <div id="summary-content" class="summary-body collapsed"></div>
+    </section>
+
+    <!-- Cards Grid -->
+    <section class="cards-grid" id="chapters-container" aria-live="polite">
+      <!-- Injected via app.js -->
+    </section>
+  </main>
+
+  <!-- Detailed Analysis Modal -->
+  <div id="detail-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-dialog">
+      <header class="modal-header">
+        <div class="modal-title-area">
+          <span id="modal-category-badge" class="badge"></span>
+          <h2 id="modal-title" class="modal-title"></h2>
+        </div>
+        <button id="modal-close" class="btn-close" aria-label="סגור">&times;</button>
+      </header>
+      
+      <div class="modal-body" id="modal-body-content">
+        <!-- Injected via app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- About & Contact Modal -->
+  <div id="about-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-dialog about-dialog">
+      <header class="modal-header">
+        <h2 class="modal-title" id="ui-about-title">אודות היישום והדו״ח</h2>
+        <button id="about-close" class="btn-close" aria-label="סגור">&times;</button>
+      </header>
+      <div class="modal-body about-content" id="about-body">
+        <!-- Content set dynamically from i18n_ui.json -->
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
