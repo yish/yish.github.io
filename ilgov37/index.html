@@ -60,9 +60,17 @@
   <main class="main-content">
     <!-- Filter and Search Bar -->
     <section class="filter-bar">
-      <div class="search-box">
-        <input type="text" id="filter-input" placeholder="חיפוש לפי תחום או מילות מפתח..." class="search-input">
+      <div class="search-and-topic-group">
+        <div class="search-box">
+          <input type="text" id="filter-input" placeholder="חיפוש לפי נושא או מילות מפתח..." class="search-input">
+        </div>
+        <div class="topic-box">
+          <select id="topic-select" class="topic-select">
+            <!-- Dynamically populated per language -->
+          </select>
+        </div>
       </div>
+      
       <div class="status-filters" id="category-filters">
         <button class="filter-chip active" data-filter="all" id="ui-filter-all">הכל</button>
         <button class="filter-chip" data-filter="failed" id="ui-filter-failed">כושל</button>
@@ -103,7 +111,7 @@
     </div>
   </div>
 
-  <!-- About & Contact Modal -->
+  <!-- About & Feedback Modal -->
   <div id="about-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-dialog about-dialog">
       <header class="modal-header">
@@ -111,7 +119,7 @@
         <button id="about-close" class="btn-close" aria-label="סגור">&times;</button>
       </header>
       <div class="modal-body about-content" id="about-body">
-        <!-- Content set dynamically from i18n_ui.json -->
+        <!-- Content set dynamically from app.js & i18n_ui.json -->
       </div>
     </div>
   </div>
