@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Background subtle gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <!-- Card/Sheet gradient -->
+    <linearGradient id="sheetGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f1f5f9" />
+    </linearGradient>
+
+    <!-- Number 37 accent gradient -->
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+
+  <!-- App Rounded Base -->
+  <rect width="64" height="64" rx="16" fill="url(#bgGrad)" />
+
+  <!-- Outer Sheet / Report Card (Tilted 3deg for dynamism) -->
+  <g transform="translate(11, 8)">
+    <!-- Sheet Shadow & Base -->
+    <rect x="0" y="0" width="42" height="48" rx="5" fill="url(#sheetGrad)" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.35))" />
+    
+    <!-- Top Fold/Header Accent Line -->
+    <path d="M 0 5 Q 0 0 5 0 L 37 0 Q 42 0 42 5 L 42 7 L 0 7 Z" fill="#2563eb" />
+
+    <!-- "37" Badge Accent Circle -->
+    <circle cx="21" cy="24" r="14" fill="#eff6ff" />
+
+    <!-- Number "37" (Bold Serif/Display Style) -->
+    <text 
+      x="21" 
+      y="30" 
+      font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Assistant', sans-serif" 
+      font-size="17" 
+      font-weight="900" 
+      fill="url(#accentGrad)" 
+      text-anchor="middle" 
+      letter-spacing="-1">37</text>
+
+    <!-- Assessment / Evaluation lines at bottom -->
+    <rect x="7" y="40" width="14" height="2.5" rx="1.25" fill="#94a3b8" />
+    <rect x="23" y="40" width="12" height="2.5" rx="1.25" fill="#ef4444" />
+  </g>
+
+  <!-- Small floating verification badge (Bottom Right) -->
+  <circle cx="49" cy="48" r="7" fill="#ef4444" stroke="#ffffff" stroke-width="2" />
+  <!-- Exclamation / Critical mark on the rating badge -->
+  <text 
+    x="49" 
+    y="52.5" 
+    font-family="sans-serif" 
+    font-size="9" 
+    font-weight="900" 
+    fill="#ffffff" 
+    text-anchor="middle">!</text>
+</svg>
