@@ -8,10 +8,15 @@ const STATE = {
   theme: 'light',
   density: 'compact',
   activeFilter: 'all',
+  selectedTopicId: 'all',
   searchQuery: '',
   uiStrings: {},
   contentData: {}
 };
+
+const DOC_REPORT_URL = "https://docs.google.com/document/d/1xrR56z_ModNzuMQJjj3cpW9hQDB6REx5SbiwSN-yliM/edit?usp=sharing";
+const FEEDBACK_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSexihWTSheCFHFo9AfhV5W-pJmW8H6_CizbDJlAyXQrle5FpA/viewform?embedded=true";
+const FEEDBACK_FORM_DIRECT_URL = "https://docs.google.com/forms/d/e/1FAIpQLSexihWTSheCFHFo9AfhV5W-pJmW8H6_CizbDJlAyXQrle5FpA/viewform?usp=publish-editor";
 
 // Initializer
 document.addEventListener('DOMContentLoaded', async () => {
@@ -103,7 +108,13 @@ function setupEventListeners() {
     renderCards();
   });
 
-  // Category Filters
+  // Topic Select Dropdown
+  document.getElementById('topic-select').addEventListener('change', (e) => {
+    STATE.selectedTopicId = e.target.value;
+    renderCards();
+  });
+
+  // Category Status Filters
   const chips = document.querySelectorAll('.filter-chip');
   chips.forEach(chip => {
     chip.addEventListener('click', () => {
@@ -145,6 +156,29 @@ function setupEventListeners() {
   });
 }
 
+function populateTopicDropdown() {
+  const topicSelect = document.getElementById('topic-select');
+  const strings = STATE.uiStrings[STATE.currentLang] || {};
+  const chapters = STATE.contentData.chapters || [];
+
+  topicSelect.innerHTML = '';
+  
+  // Default option
+  const allOption = document.createElement('option');
+  allOption.value = 'all';
+  allOption.textContent = strings.dropdown_all_topics || 'כל הנושאים';
+  topicSelect.appendChild(allOption);
+
+  chapters.forEach(chap => {
+    const opt = document.createElement('option');
+    opt.value = chap.id;
+    opt.textContent = chap.title;
+    topicSelect.appendChild(opt);
+  });
+
+  topicSelect.value = STATE.selectedTopicId || 'all';
+}
+
 function renderApp() {
   updateDirection(STATE.currentLang);
   const strings = STATE.uiStrings[STATE.currentLang] || {};
@@ -170,6 +204,7 @@ function renderApp() {
   document.getElementById('ui-summary-title').textContent = strings.summary_title || '';
   document.getElementById('summary-content').textContent = STATE.contentData.executive_summary || '';
 
+  populateTopicDropdown();
   renderCards();
 }
 
@@ -180,11 +215,12 @@ function renderCards() {
   const chapters = STATE.contentData.chapters || [];
 
   const filtered = chapters.filter(chap => {
+    const matchesTopic = (STATE.selectedTopicId === 'all') || (chap.id === STATE.selectedTopicId);
     const matchesFilter = (STATE.activeFilter === 'all') || (chap.status_category === STATE.activeFilter);
     const matchesQuery = !STATE.searchQuery || 
       chap.title.toLowerCase().includes(STATE.searchQuery) ||
       chap.bottom_line.toLowerCase().includes(STATE.searchQuery);
-    return matchesFilter && matchesQuery;
+    return matchesTopic && matchesFilter && matchesQuery;
   });
 
   filtered.forEach(chapter => {
@@ -297,17 +333,35 @@ function renderAboutModal() {
   const strings = STATE.uiStrings[STATE.currentLang] || {};
   const aboutBody = document.getElementById('about-body');
   aboutBody.innerHTML = `
-    <p style="margin-bottom: 1rem;">${strings.about_text_p1 || ''}</p>
-    <div style="background: var(--bg-accent); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
-      <h4 style="font-weight: 700; margin-bottom: 0.5rem;">${strings.about_contact_title || 'יצירת קשר:'}</h4>
-      <p><strong>${strings.about_name || 'איש קשר'}:</strong> ישי מור (Yishay Mor)</p>
-      <p><strong>Email:</strong> <a href="mailto:yishaym@gmail.com" style="color: var(--primary-color);">yishaym@gmail.com</a></p>
-      <p><strong>Phone:</strong> <a href="tel:0526514574" style="color: var(--primary-color);">052-6514574</a></p>
+    <p style="margin-bottom: 1.25rem;">${strings.about_text_p1 || ''}</p>
+
+    <!-- Link to the full Google Doc Report -->
+    <div style="text-align: center; margin-bottom: 1.25rem;">
+      <a href="${DOC_REPORT_URL}" target="_blank" rel="noopener noreferrer" class="btn btn-doc-link">
+        📄 ${strings.about_view_full_doc || 'לצפייה בדו״ח המלא המקורי (Google Docs)'}
+      </a>
     </div>
-    <div style="border-inline-start: 4px solid #f59e0b; padding: 0.75rem 1rem; background: rgba(245, 158, 11, 0.1); border-radius: 0.25rem;">
+
+    <!-- Translation disclaimer -->
+    <div style="border-inline-start: 4px solid #f59e0b; padding: 0.75rem 1rem; background: rgba(245, 158, 11, 0.1); border-radius: 0.25rem; margin-bottom: 1.5rem;">
       <p style="font-size: 0.85rem; color: var(--text-main);">
         ${strings.about_translation_disclaimer || ''}
       </p>
+    </div>
+
+    <!-- Embedded Feedback Form -->
+    <div style="margin-top: 1rem;">
+      <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--primary-color); margin-bottom: 0.5rem;">
+        ${strings.about_feedback_title || 'טופס משוב, הערות והצעות שיפור:'}
+      </h3>
+      <div class="form-embed-wrapper">
+        <iframe src="${FEEDBACK_FORM_URL}" class="feedback-iframe" loading="lazy">טוען טופס...</iframe>
+        <div class="form-fallback">
+          <a href="${FEEDBACK_FORM_DIRECT_URL}" target="_blank" rel="noopener noreferrer" style="color: var(--primary-color); font-weight: 600;">
+            ${strings.about_form_external_link || 'פתח את טופס המשוב בלשונית נפרדת ↗'}
+          </a>
+        </div>
+      </div>
     </div>
   `;
 }
