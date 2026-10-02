@@ -393,19 +393,11 @@ function renderAboutModal() {
   aboutBody.innerHTML = `
     <p style="margin-bottom: 1.25rem;">${strings.about_text_p1 || ''}</p>
 
-    <!-- Links & QR Code Section -->
-    <div class="about-share-container">
-      <div class="about-doc-link-col">
-        <a href="${DOC_REPORT_URL}" target="_blank" rel="noopener noreferrer" class="btn btn-doc-link">
-          📄 ${strings.about_view_full_doc || 'לצפייה בדו״ח המלא המקורי (Google Docs)'}
-        </a>
-      </div>
-
-      <!-- App QR Code -->
-      <div class="qr-code-wrapper">
-        <img src="./ilgov37qr.png" alt="QR Code" class="qr-code-img" loading="eager" onerror="this.onerror=null; this.src='ilgov37qr.png';"/>
-        <span class="qr-code-caption">${strings.about_qr_caption || 'סרקו לשיתוף ולפתיחה במובייל'}</span>
-      </div>
+    <!-- Link to the full Google Doc Report -->
+    <div style="text-align: center; margin-bottom: 1.25rem;">
+      <a href="${DOC_REPORT_URL}" target="_blank" rel="noopener noreferrer" class="btn btn-doc-link">
+        📄 ${strings.about_view_full_doc || 'לצפייה בדו״ח המלא המקורי (Google Docs)'}
+      </a>
     </div>
 
     <!-- Translation disclaimer -->
