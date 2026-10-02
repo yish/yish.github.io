@@ -226,6 +226,20 @@ function populateTopicDropdown() {
 function renderApp() {
   updateDirection(STATE.currentLang);
   const strings = STATE.uiStrings[STATE.currentLang] || {};
+  const btnShareSpan = document.getElementById('ui-btn-share');
+  if (btnShareSpan) btnShareSpan.textContent = strings.btn_share || '🔗 שתף / QR';
+  
+  const shareTitle = document.getElementById('ui-share-modal-title');
+  if (shareTitle) shareTitle.textContent = strings.share_modal_title || 'שיתוף היישום';
+  
+  const qrInstruct = document.getElementById('ui-qr-instruction');
+  if (qrInstruct) qrInstruct.textContent = strings.qr_instruction || 'סרקו במכשיר נייד';
+
+  const btnNativeSpan = document.getElementById('ui-btn-native-share');
+  if (btnNativeSpan) btnNativeSpan.textContent = strings.btn_native_share || 'שתף';
+
+  const btnCopySpan = document.getElementById('ui-btn-copy-url');
+  if (btnCopySpan) btnCopySpan.textContent = strings.btn_copy_url || 'העתק קישור';
 
   // Update UI Elements
   document.getElementById('ui-app-title').textContent = strings.app_title || '';
