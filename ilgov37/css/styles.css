@@ -568,3 +568,80 @@ body {
   color: var(--text-muted);
   font-weight: 600;
 }
+
+/* Share & QR Modal */
+.share-dialog {
+  max-width: 420px;
+  text-align: center;
+}
+
+.share-modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem 1rem;
+}
+
+.qr-code-wrapper-prominent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-code-img-large {
+  width: 190px;
+  height: 190px;
+  max-width: 70vw;
+  max-height: 70vw;
+  object-fit: contain;
+  background-color: #ffffff;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+}
+
+.share-actions-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.share-actions-group .btn {
+  padding: 0.65rem 1rem;
+  font-size: 0.95rem;
+}
+
+.copy-toast {
+  background-color: #10b981;
+  color: #ffffff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.375rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: opacity 0.2s ease;
+}
+
+.copy-toast.hidden {
+  display: none;
+}
+
+/* Ensure About modal QR also always displays cleanly */
+.qr-code-wrapper {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.75rem auto;
+}
+
+.qr-code-img {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  background: #ffffff;
+  padding: 0.35rem;
+  border-radius: 0.5rem;
+}
