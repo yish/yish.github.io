@@ -81,6 +81,50 @@ function updateDirection(lang) {
 }
 
 function setupEventListeners() {
+  // Open Share & QR Modal
+  const btnShare = document.getElementById('btn-share');
+  if (btnShare) {
+    btnShare.addEventListener('click', () => {
+      document.getElementById('share-modal').classList.remove('hidden');
+    });
+  }
+
+  // Close Share Modal
+  const shareClose = document.getElementById('share-close');
+  if (shareClose) {
+    shareClose.addEventListener('click', () => {
+      document.getElementById('share-modal').classList.add('hidden');
+    });
+  }
+
+  // Native Web Share API (Ideal for Mobile)
+  const btnNativeShare = document.getElementById('btn-native-share');
+  if (btnNativeShare) {
+    btnNativeShare.addEventListener('click', async () => {
+      const shareData = {
+        title: document.title,
+        text: 'ממשלת ישראל ה-37: תעודת סיום — דו"ח הערכה אסטרטגי',
+        url: window.location.href
+      };
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {
+          // User cancelled or unsupported
+        }
+      } else {
+        // Fallback to copy link
+        copyAppUrl();
+      }
+    });
+  }
+
+  // Copy URL button
+  const btnCopyUrl = document.getElementById('btn-copy-url');
+  if (btnCopyUrl) {
+    btnCopyUrl.addEventListener('click', copyAppUrl);
+  }
+  
   // Language Change
   document.getElementById('lang-select').addEventListener('change', async (e) => {
     STATE.currentLang = e.target.value;
@@ -345,7 +389,7 @@ function renderAboutModal() {
 
       <!-- App QR Code -->
       <div class="qr-code-wrapper">
-        <img src="ilgov37qr.png" alt="QR Code for App" class="qr-code-img" loading="lazy">
+        <img src="./ilgov37qr.png" alt="QR Code" class="qr-code-img" loading="eager" onerror="this.onerror=null; this.src='ilgov37qr.png';"/>
         <span class="qr-code-caption">${strings.about_qr_caption || 'סרקו לשיתוף ולפתיחה במובייל'}</span>
       </div>
     </div>
@@ -372,4 +416,14 @@ function renderAboutModal() {
       </div>
     </div>
   `;
+}
+
+function copyAppUrl() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const toast = document.getElementById('copy-toast');
+    if (toast) {
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2500);
+    }
+  });
 }
