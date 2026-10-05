@@ -10,24 +10,34 @@
       "headlines": [
         "8-percentage-point surge in debt-to-GDP ratio to ~68.5% in 2025",
         "Record fiscal deficit of 6.8% of GDP in 2024",
-        "Unprecedented sovereign credit rating downgrades from Moody's, S&P, and Fitch"
+        "Unprecedented sovereign credit rating downgrades from Moody's, S&P, and Fitch",
+        "Defense expenditure nearly doubled to 8.3% of GDP"
       ],
-      "overview": "Israel's fiscal trajectory underwent a sharp transition from the 2022 budget surplus of the 36th Government—which brought the debt-to-GDP ratio down to 60.5%—to an acute expansion of the fiscal deficit to 6.8% of GDP in 2024. This spike was driven overwhelmingly by war expenditures, pushing defense outlays to 8.3% of GDP. Public debt expanded to 67.8% of GDP by year-end 2024 and reached roughly 68.5% in 2025. Rating agencies downgraded Israel's credit score citing geopolitical vulnerability and fiscal uncertainty, though 2025 showed stabilization with 2.9% GDP growth and inflation receding to 2.6%.",
+      "infographic": {
+        "type": "sparkline",
+        "title": "Debt-to-GDP Ratio (%)",
+        "labels": ["2021", "2022", "2023", "2024", "2025"],
+        "values": [68.0, 60.5, 61.5, 67.8, 68.5],
+        "unit": "%",
+        "highlight": "68.5%",
+        "color": "#ef4444"
+      },
+      "overview": "Israel's fiscal trajectory underwent a sharp transition from the 2022 budget surplus of the 36th Government (which brought debt-to-GDP down to 60.5%) to an acute deficit expansion of 6.8% of GDP in 2024 driven by war expenditures. Public debt rose to 67.8% of GDP at year-end 2024 and reached ~68.5% in 2025. All three major rating agencies downgraded Israel's sovereign rating citing geopolitical risk and fiscal loosening. However, 2025 indicators demonstrated stabilization: GDP growth rebounded to 2.9%, inflation slowed to 2.6%, and the policy rate was reduced to 4.25%.",
       "table": {
-        "headers": ["Indicator", "2021 (36th Gov)", "2022 (36th Gov)", "2023 (37th Gov)", "2024 (37th Gov)", "2025 (37th Gov)"],
+        "headers": ["Macroeconomic Indicator", "2021 (36th Gov)", "2022 (36th Gov)", "2023 (37th Gov)", "2024 (37th Gov)", "2025 (37th Gov)"],
         "rows": [
           ["Real GDP Growth", "8.6%", "6.4%", "~3.1%", "~1.0%", "2.9%"],
           ["Fiscal Deficit (% of GDP)", "4.4%", "Surplus / 0.0%", "4.2%", "6.8%", "4.3%"],
           ["Public Debt-to-GDP", "68.0%", "60.5%", "61.5%", "67.8%", "~68.5%"],
           ["Defense Spending (% of GDP)", "4.9%", "4.2%", "5.2%", "8.3%", "~7.5%"],
-          ["Sovereign Credit Rating", "Stable (A1/AA-)", "Positive", "Negative outlook", "Multiple downgrades", "Outlook stabilized (S&P)"],
+          ["Sovereign Credit Rating", "Stable (A1 / AA-)", "Positive", "Negative outlook", "Broad downgrades", "Outlook stabilized (S&P)"],
           ["Annual Inflation", "2.8%", "5.3%", "3.0%", "3.5%", "2.6%"],
           ["BoI Policy Rate (Year-End)", "0.1%", "3.25%", "4.75%", "4.5%", "4.25%"]
         ]
       },
-      "comparison_prev_gov": "The 36th Government eliminated the pandemic deficit through fiscal restraint and curtailed non-statutory coalition funds. In contrast, the 37th Government declined to dissolve redundant ministries and continued disbursing non-growth-enhancing coalition allocations, contributing to a medium-term structural deficit of ~3.6% of GDP.",
-      "arguments_supporters": "The economy displayed resilience under extreme wartime shock; maintaining a debt-to-GDP ratio below 69% compares favorably with past international crises, and 2025's rebound to 2.9% growth and rate cuts proved the macroeconomic foundations held firm.",
-      "arguments_critics": "Resilience stemmed from private high-tech dynamism and the Bank of Israel's $200B+ foreign reserves; the cabinet practiced fiscal populism by maintaining partisan coalition transfers, triggering credit downgrades and hundreds of millions in excess interest costs."
+      "comparison_prev_gov": "The 36th Government benefited from an extraordinary post-pandemic tax windfall and enacted restrained fiscal policy that closed the COVID deficit. The 37th Government faced the most expensive war in Israel's history, but declined to dissolve redundant ministries and continued distributing partisan coalition funds, embedding a structural deficit of ~3.6% of GDP.",
+      "arguments_supporters": "The economy demonstrated exceptional resilience; maintaining debt-to-GDP below 69% after a multi-front war compares favorably with past international crises. The rebound to 2.9% growth and rate cuts in 2025 prove macroeconomic fundamentals held firm.",
+      "arguments_critics": "Resilience stemmed from high-tech dynamism and the Bank of Israel's $200B+ foreign currency reserves, not executive governance. The cabinet practiced fiscal recklessness by maintaining coalition payouts, triggering sovereign downgrades that cost hundreds of millions in excess interest."
     },
     {
       "id": "cost_of_living",
@@ -37,45 +47,66 @@
       "bottom_line": "The 37th Government failed to curb the escalating cost of living. The confluence of elevated interest rates, supply disruptions, the VAT increase to 18%, and the absence of structural antitrust measures severely compressed Israeli household purchasing power.",
       "headlines": [
         "39% price level premium compared to the OECD average",
-        "VAT increased to 18% alongside frozen tax brackets",
-        "Over NIS 1,100 average monthly surge in mortgage repayments"
+        "VAT raised to 18% alongside frozen income tax brackets",
+        "Over NIS 1,100 average monthly surge in mortgage repayments",
+        "Cumulative increase of over 13% in basic food basket costs"
       ],
-      "overview": "The cost of living remained the foremost concern for the Israeli voter, with price levels standing 38%–39% above the OECD average. Rate hikes to 4.75% expanded debt servicing, adding over NIS 1,100 monthly to an average mortgage compared to 2021. Food conglomerates and importers instituted cumulative price hikes exceeding 13% over three years, exploiting regulatory expirations, Turkish trade embargoes, and Red Sea Houthi attacks. The government raised VAT to 18% in 2025 and froze tax credit brackets, eroding real disposable income.",
+      "infographic": {
+        "type": "bar",
+        "title": "Price Level Gap vs. OECD Average",
+        "labels": ["'21", "'22", "'23", "'24", "'25"],
+        "values": [32, 38, 36, 37, 39],
+        "unit": "%+",
+        "highlight": "+39%",
+        "color": "#f97316"
+      },
+      "overview": "Cost of living remained the foremost concern for the Israeli voter, with general domestic price levels standing 38%–39% above the OECD average. Sustained central bank rate hikes expanded debt servicing, adding over NIS 1,100 monthly to an average mortgage compared to 2021. Concurrently, food conglomerates and importers implemented cumulative price hikes exceeding 13% over three years, exploiting Turkish trade bans and Red Sea shipping disruptions. The government raised VAT to 18% in 2025 and froze tax credit brackets, eroding real disposable income.",
       "table": {
-        "headers": ["Indicator", "2021 (36th Gov)", "2022 (36th Gov)", "2023 (37th Gov)", "2024 (37th Gov)", "2025 (37th Gov)"],
+        "headers": ["Cost of Living Indicator", "2021 (36th Gov)", "2022 (36th Gov)", "2023 (37th Gov)", "2024 (37th Gov)", "2025 (37th Gov)"],
         "rows": [
-          ["Price Level Gap vs. OECD", "+32%", "+38%", "+36%", "+37%", "+39%"],
-          ["VAT Rate", "17%", "17%", "17%", "17%", "18%"],
-          ["Mortgage Repayment Increase", "Baseline (0.1%)", "~NIS 450/mo", "~NIS 1,150/mo", "~NIS 1,250/mo", "~NIS 1,100/mo"],
+          ["Price Gap vs. OECD", "+32% above avg", "+38% above avg", "+36% above avg", "+37% above avg", "+39% above avg"],
+          ["Value Added Tax (VAT) Rate", "17%", "17%", "17%", "17%", "18% (Raised to fund deficit)"],
+          ["Mortgage Repayment Increase", "Baseline (0.1%)", "~NIS 450/month", "~NIS 1,150/month", "~NIS 1,250/month", "~NIS 1,100/month"],
+          ["Electricity & Water Tariffs", "Moderate rise", "Global wave", "Targeted freeze", "Renewed adjustments", "Cumulative +8% to +14%"],
           ["Basic Food Basket Index", "+2.5%", "+4.8%", "+4.2%", "+5.5%", "+3.8%"]
         ]
       },
-      "comparison_prev_gov": "The 36th Government advanced market liberalization ('What is Good for Europe is Good for Israel') and agricultural tariff reductions. The 37th Government repealed disposable plastic and sugary beverage taxes as coalition concessions, while avoiding antitrust enforcement against major food cartels.",
-      "arguments_supporters": "Inflationary spikes were the inevitable consequence of a regional war, Red Sea logistics crises, and the Turkish embargo; the government compensated via utility tariff subsidies and tax credits for parents of young children.",
+      "comparison_prev_gov": "The 36th Government pursued market liberalization ('What is Good for Europe is Good for Israel'), agricultural tariff reductions, and health taxes. The 37th Government repealed disposable plastic and sugary beverage taxes as coalition concessions, while avoiding antitrust enforcement against major import cartels.",
+      "arguments_supporters": "Inflation was the unavoidable consequence of a prolonged regional war, Red Sea logistics crises, and the Turkish embargo; the government compensated via utility tariff subsidies and tax credits for working parents.",
       "arguments_critics": "The cabinet surrendered to major food cartels, failed to open parallel imports, and imposed regressive indirect taxation (18% VAT) while continuing to spend billions on redundant partisan ministries."
     },
     {
       "id": "hightech",
-      "title": "High-Tech Sector, Capital Raising, and Brain Drain",
+      "title": "The High-Tech Sector, Capital Raising, and Tech Brain Drain",
       "status_category": "mixed",
       "status_label": "Mixed",
       "bottom_line": "Israel's high-tech industry demonstrated remarkable vitality, regaining strong investment volumes; however, political instability accelerated structural shifts toward foreign corporate registration and the relocation of high-value human capital.",
       "headlines": [
         "150% surge in high-tech worker emigration in 2023",
         "Over 60% of new startups incorporated abroad (Delaware)",
-        "Capital raising rebounded to $14.6 billion in 2025 (+30%)"
+        "Capital raising rebounded to $14.6 billion in 2025 (+30%)",
+        "Trough of $8.0 billion in 2023 capital inflows (-47%)"
       ],
-      "overview": "Following the 2021 funding peak ($25.6B) and 2022 global correction ($15B), local investments contracted sharply in 2023 to $8.0B due to judicial overhaul strife and the outbreak of war. The sector rebounded in 2024–2025, reaching $14.6B raised behind cybersecurity and AI demand. However, a major structural reallocation occurred: over 60% of new startups incorporated and registered IP in Delaware, tech worker emigration rose 150%, and companies established overseas satellite R&D centers to manage reserve-duty disruptions.",
+      "infographic": {
+        "type": "donut",
+        "title": "Startups Incorporating Abroad (Delaware)",
+        "percentage": 62,
+        "label": "Over 60% in Delaware",
+        "sublabel": "Relocation of corporate entities & talent",
+        "color": "#e11d48"
+      },
+      "overview": "Following the 2021 funding peak ($25.6B) and 2022 global correction ($15B), local investments contracted sharply in 2023 to $8.0B due to judicial overhaul strife and the outbreak of war. The sector rebounded in 2024–2025, reaching $14.6B raised behind cybersecurity and AI demand. However, a major structural reallocation occurred: over 60% of new startups incorporated in Delaware, tech worker emigration rose 150%, and companies established overseas satellite R&D centers to manage employee reserve-duty disruptions.",
       "table": {
-        "headers": ["Indicator", "2021 (Peak)", "2022 (36th Gov)", "2023 (37th Gov)", "2024 (37th Gov)", "2025 (37th Gov)"],
+        "headers": ["High-Tech Indicator", "2021 (Global Peak)", "2022 (36th Gov)", "2023 (37th Gov)", "2024 (37th Gov)", "2025 (37th Gov)"],
         "rows": [
           ["Capital Raised ($B)", "$25.6B", "$15.0B", "$8.0B", "$11.2B", "$14.6B"],
-          ["Annual Growth Rate", "Historic peak", "Global correction", "-47% decline", "Partial recovery", "+30% surge"],
-          ["Share Incorporated Abroad", "<20%", "~20%", ">60% (Delaware)", "Elevated", "Plateaued high"]
+          ["Annual Growth Rate", "Historic peak", "Global correction", "-47% decline", "Partial recovery", "+30% growth"],
+          ["Total M&A Value ($B)", "Historic peak", "Contraction", "Deal trough", "Volume near 2021", "Moderate stabilization"],
+          ["Share Incorporated Abroad", "<20%", "~20%", ">60% (Delaware)", "Persistently elevated", "Plateaued high"]
         ]
       },
-      "comparison_prev_gov": "The 36th Government treated high tech as a primary national growth engine with regulatory fast-tracks. The 37th Government entered into open friction with industry leaders protesting the judicial overhaul, driving domestic capital flight.",
-      "arguments_supporters": "The 2025 rebound to $14.6B invalidates claims of sector collapse; the Innovation Authority deployed fast-track grants and simplified foreign expert visas.",
+      "comparison_prev_gov": "Under the 36th Government, high tech occupied a central role in national economic policy supported by regulatory fast-tracks. Under the 37th Government, the sector entered open confrontation with executive policy over the judicial overhaul, driving domestic capital flight.",
+      "arguments_supporters": "The 2025 rebound to $14.6B invalidates claims of sector collapse; the Innovation Authority deployed fast-track grants, streamlined foreign expert visas, and supported incubators.",
       "arguments_critics": "Inflows were concentrated in a handful of mature cyber unicorns while early-stage startups faced a drought; widespread Delaware incorporation drains future exit tax revenues and moves executive jobs abroad permanently."
     },
     {
@@ -87,17 +118,27 @@
       "headlines": [
         "October 7 disaster: 1,200 murdered, 251 hostages, 100,000+ displaced",
         "Over 86,000 newly recognized civilian victims of hostilities",
-        "Only 31% of the Tekuma Directorate reconstruction budget disbursed"
+        "Only 31% of the Tekuma Directorate reconstruction budget disbursed",
+        "Neutralization of Hamas/Hezbollah command (Nasrallah, Sinwar, Deif) & Iranian barrages"
       ],
-      "overview": "The security campaign encompassed three theaters: Gaza (dismantling Hamas brigades and eliminating Yahya Sinwar and Mohammed Deif, though lacking a day-after civilian governing plan), Lebanon (Operation Northern Arrows eliminating Hassan Nasrallah and Radwan invasion infrastructure), and direct Iranian missile barrages countered by historical interception rates and precision retaliatory strikes. Conversely, civilian reconstruction suffered severe delays: the Tekuma Directorate disbursed only NIS 5.4B of its NIS 17.4B budget by early 2026, and only 28% of returning residents felt secure.",
+      "infographic": {
+        "type": "gauge",
+        "title": "Tekuma Directorate Budget Disbursed",
+        "percentage": 31,
+        "label": "31% Paid Out",
+        "sublabel": "NIS 5.4B of NIS 17.4B allocation",
+        "color": "#f59e0b"
+      },
+      "overview": "The campaign encompassed three theaters: Gaza (dismantling Hamas brigades and eliminating Yahya Sinwar and Mohammed Deif, though lacking a day-after civilian plan), Lebanon (Operation Northern Arrows eliminating Hassan Nasrallah and Radwan invasion infrastructure), and direct Iranian missile barrages countered by historical interception rates and precision strikes. Conversely, civilian rehabilitation faced severe delays: the Tekuma Directorate disbursed only NIS 5.4B of its NIS 17.4B budget by early 2026, and only 28% of returning residents felt secure.",
       "table": {
-        "headers": ["Metric", "36th Government (2021–2022)", "37th Government (2023–2026)"],
+        "headers": ["Defense & Reconstruction Metric", "36th Government (2021–2022)", "37th Government (2023–2026)"],
         "rows": [
           ["Gaza Strip Policy", "Economic incentives for calm (~20k permits)", "Collapse of containment; total war; eliminated leadership"],
           ["Northern Front", "Maritime border agreement (Karish field)", "Attrition war; Op Northern Arrows; degradation of Hezbollah"],
           ["Direct Conflict with Iran", "Covert campaign between the wars (CBW)", "Interception of barrages; direct kinetic strikes inside Iran"],
-          ["Civilian Victims of Hostilities", "Low peacetime baseline", "Over 86,000 recognized victims"],
-          ["Tekuma Budget Disbursed", "Not applicable", "NIS 5.4B disbursed out of NIS 17.4B (31%)"]
+          ["Civilian Victims of Hostilities", "Low peacetime baseline", "Over 86,000 newly recognized civilian casualties"],
+          ["Tekuma Directorate Budget", "Not applicable", "NIS 17.4 billion five-year plan (NIS 19B framework)"],
+          ["Tekuma Capital Disbursed", "Not applicable", "NIS 5.4 billion actually paid out (31% execution)"]
         ]
       },
       "comparison_prev_gov": "The 36th Government operated under the assumption that economic incentives in Gaza and maritime gas agreements with Lebanon would secure quiet. The 37th Government maintained this containment until October 7, shifting thereafter to a decisive offensive doctrine.",
@@ -113,16 +154,27 @@
       "headlines": [
         "~72,000 draft-eligible Haredi men classified as evaders",
         "Only 1.2% compliance rate to direct personal draft notices (232 of 18,915)",
-        "Unprecedented reservist strain: 100–180 active duty days per year"
+        "Unprecedented reservist strain: 100–180 active duty days per year",
+        "Immediate IDF deficit of 12,000 soldiers annually (60% combat roles)"
       ],
+      "infographic": {
+        "type": "ratio",
+        "title": "Compliance to Personal Draft Notices",
+        "value": 1.2,
+        "total": 100,
+        "label": "1.2% Compliance",
+        "sublabel": "232 out of 18,915 personal orders",
+        "color": "#dc2626"
+      },
       "overview": "Following the expiration of deferment frameworks and the High Court of Justice ruling mandating universal conscription, the government avoided criminal or financial enforcement. While total Haredi enlistment reached 4,298 in 2025 (mostly working youth and older Stage-B reservists), compliance among full-time yeshiva students sent direct draft notices was almost zero (232 inductions). Concurrently, reservists suffered extraordinary exhaustion facing an immediate IDF deficit of 12,000 troops annually.",
       "table": {
-        "headers": ["Metric", "2021–2022 (36th Gov)", "2023–2024 (37th Gov)", "2025–2026 (37th Gov)"],
+        "headers": ["Burden Sharing Metric", "2021–2022 (36th Gov)", "2023–2024 (37th Gov)", "2025–2026 (37th Gov)"],
         "rows": [
           ["Annual Reserve Days / Soldier", "15–25 days", "100–180 days", "70–120 days"],
-          ["Total Annual Haredi Recruits", "1,700–1,800", "2,811 (Draft Year 2024)", "4,298 (Draft Year 2025)"],
-          ["Personal Notice Compliance", "Blanket statutory exemption", "Law expired; mass notices", "~1.2% compliance (232 of 18,915)"],
-          ["Non-Exempt Evaders on Record", "0 (under prior law)", "~60,000", "~72,000"]
+          ["Total Annual Haredi Recruits", "1,700–1,800 recruits", "2,811 (Draft Year 2024)", "4,298 (Draft Year 2025)"],
+          ["Draft-Eligible Annual Cohort", "~13,000 men", "~14,000 men", "~14,500 men"],
+          ["Personal Notice Compliance", "Blanket statutory exemption", "Law expired; mass call-ups", "~1.2% compliance (232 of 18,915)"],
+          ["Non-Exempt Evaders on Record", "0 (under prior law)", "~60,000 men", "~72,000 men"]
         ]
       },
       "comparison_prev_gov": "The 36th Government introduced progressive conscription targets with escalating institutional financial sanctions and lowering the exemption age to 21. The 37th Government pledged blanket statutory exemptions and pursued softened legislation without individual sanctions.",
@@ -131,24 +183,35 @@
     },
     {
       "id": "public_safety",
-      "title": "Public Safety, Violent Crime, and Vehicle Thefts",
+      "title": "Internal Security, General Crime, and Vehicle Thefts",
       "status_category": "failed",
       "status_label": "Failed",
       "bottom_line": "Internal security experienced a significant deterioration: homicides within Arab society doubled, total nationwide murders hit historical peaks, and institutional trust in the police dropped, despite targeted progress in reducing vehicle thefts and expanding civilian defense licensing.",
       "headlines": [
         "Historic peak of 252 homicides in Arab society in 2025 (+115% vs 2022)",
         "Homicide clearance rate in Arab communities collapsed to 14.8%",
-        "Vehicle thefts dropped 19%–20% in 2025–2026 following previous record surges"
+        "Record nationwide homicides exceeding 280 in 2025",
+        "Vehicle thefts dropped 19%–20% in 2025–2026 to under 15,200 incidents"
       ],
-      "overview": "Violent crime surged across Israel, with national homicides rising from 142 in 2022 to 274 in 2023 and 263 in 2024. Arab communities endured unprecedented criminal syndicate warfare (252 murdered in 2025) with clearance rates falling below 15%. In property crime, vehicle thefts surged during 2023–2024 before receding ~20% in 2025 due to border seam patrols. Meanwhile, police faced heavy criticism as public-order protest arrests made up 75.6% of all detentions in 2024.",
+      "infographic": {
+        "type": "bar",
+        "title": "Homicides in Arab Society",
+        "labels": ["'21", "'22", "'23", "'24", "'25"],
+        "values": [126, 116, 244, 230, 252],
+        "unit": "",
+        "highlight": "252 (Peak)",
+        "color": "#b91c1c"
+      },
+      "overview": "Violent crime surged across Israel, with national homicides rising from 142 in 2022 to 274 in 2023, 263 in 2024, and exceeding 280 in 2025. Arab communities endured unprecedented criminal syndicate warfare (252 murdered in 2025) with clearance rates falling below 15%. In property crime, vehicle thefts surged during 2023–2024 before receding ~20% in 2025 due to border seam patrols. Meanwhile, police faced heavy criticism as public-order protest arrests made up 75.6% of all detentions in 2024.",
       "table": {
-        "headers": ["Metric", "2021 (36th Gov)", "2022 (36th Gov)", "2023 (37th Gov)", "2024 (37th Gov)", "2025 (37th Gov)"],
+        "headers": ["Public Safety Indicator", "2021 (36th Gov)", "2022 (36th Gov)", "2023 (37th Gov)", "2024 (37th Gov)", "2025 (37th Gov)"],
         "rows": [
-          ["Total Homicides Nationally", "161", "142", "274", "263", ">280"],
-          ["Arab Community Homicides", "126", "116", "244", "230", "252"],
-          ["Arab Sector Clearance Rate", "~25%", "~21%", "14.9%", "14.8%", "<15%"],
-          ["Annual Vehicle Thefts", "~12.5k", "~15k", "+17% to +22%", ">18.5k", "~15.2k (-19%)"],
-          ["Public Trust in Police", "~58%", "~56%", "56%", "49%", "<48%"]
+          ["Total Homicides Nationally", "161", "142", "274", "263", "Over 280 (National peak)"],
+          ["Arab Community Homicides", "126", "116", "244", "230", "252 (Historic peak)"],
+          ["Arab Sector Clearance Rate", "~25%", "~21%", "14.9%", "14.8% (31 of 209)", "Under 15%"],
+          ["Annual Vehicle Thefts", "~12,500 (COVID low)", "~15,000", "+17% to +22%", "Over 18,500", "~15,200 (-19%)"],
+          ["Public Trust in Police", "~58%", "~56%", "56%", "49%", "Under 48%"],
+          ["Public Order Arrests (Protests)", "~45% of arrests", "~48% of arrests", "Sharp rise", "75.6% of all arrests", "Persistently elevated"]
         ]
       },
       "comparison_prev_gov": "The 36th Government executed the 'Safe Route' inter-agency desk, reducing Arab sector homicides from 126 to 116. The 37th Government dismantled the integrated task force, entered open conflict with police leadership, and shifted priorities to protest policing.",
@@ -157,28 +220,38 @@
     },
     {
       "id": "corruption_governance",
-      "title": "Public Corruption, Good Governance, and Rule of Law",
+      "title": "Public Corruption, Good Governance, and Integrity",
       "status_category": "negative",
       "status_label": "Negative",
       "bottom_line": "Administrative norms and the independence of institutional gatekeepers experienced sustained pressure, reflected in Israel's drop to 35th on the global Corruption Perceptions Index and the institutionalization of direct political control over senior civil service appointments.",
       "headlines": [
-        "Israel dropped to 35th place globally on the 2025 CPI index",
+        "Israel fell to 35th place globally on the 2025 CPI index",
         "Clean governance score declined to 62 out of 100",
-        "Search committees eliminated for Civil Service Commissioner selection"
+        "Search committees eliminated for Civil Service Commissioner selection",
+        "State Comptroller findings of fiscal favoritism in wartime aid"
       ],
-      "overview": "Transparency International's 2025 report downgraded Israel to 35th place globally with a score of 62, warning of democratic erosion and attacks on institutional gatekeepers. Cabinet ministers pursued continuous conflict with the Attorney General, state prosecutors, and ministry legal advisers. The government enacted direct appointment of the Civil Service Commissioner by the Prime Minister without competitive tenders, upheld by an expanded High Court bench in 2026 citing ideological compatibility as a valid metric.",
+      "infographic": {
+        "type": "rank",
+        "title": "Global Corruption Perception Rank (CPI)",
+        "labels": ["'22", "'23", "'24", "'25"],
+        "values": [31, 33, 30, 35],
+        "unit": "#",
+        "highlight": "35th Place (Decline)",
+        "color": "#ea580c"
+      },
+      "overview": "Transparency International's 2025 report downgraded Israel to 35th place globally with a score of 62, warning of democratic erosion and attacks on institutional gatekeepers. Cabinet ministers pursued continuous conflict with the Attorney General, state prosecutors, and departmental legal advisors. The government enacted direct appointment of the Civil Service Commissioner by the Prime Minister without competitive tenders, upheld by an expanded High Court bench in 2026 citing ideological compatibility as a valid metric.",
       "table": {
-        "headers": ["Metric", "2021 (36th Gov)", "2022 (36th Gov)", "2023 (37th Gov)", "2024 (37th Gov)", "2025 (37th Gov)"],
+        "headers": ["Governance Indicator", "2021 (36th Gov)", "2022 (36th Gov)", "2023 (37th Gov)", "2024 (37th Gov)", "2025 (37th Gov)"],
         "rows": [
-          ["CPI Corruption Score", "59", "63", "62", "64", "62"],
-          ["Global Rank", "36th", "31st", "33rd", "30th", "35th"],
-          ["Gatekeeper Independence", "Preserved binding status", "Preserved binding status", "Moves to curb authority", "Daily public conflict", "Direct court challenges"],
-          ["Civil Service Commissioner", "Search committee", "Search committee", "Direct appointment planned", "Cabinet decision", "High Court clearance"]
+          ["CPI Score (Clean Governance)", "59", "63", "62", "64", "62"],
+          ["Global Ranking (Place)", "36th", "31st", "33rd", "30th", "35th (Deterioration)"],
+          ["Gatekeeper Independence", "Preserved binding status", "Preserved binding status", "Moves to curb authority", "Daily friction", "Direct High Court interventions"],
+          ["Civil Service Commissioner Selection", "Search committee", "Search committee", "Direct appointment planned", "Cabinet decision", "High Court clearance"]
         ]
       },
-      "comparison_prev_gov": "The 36th Government respected administrative norms, fortified search committees, and minimized discretionary coalition budgets, raising Israel's CPI score to 64. The 37th Government sought to transform legal advisers into political appointees and bypassed tenders.",
+      "comparison_prev_gov": "The 36th Government preserved standard administrative procedures, maintained the independence of legal advisors, and curtailed non-supervised coalition funding (CPI score improved to 64). The 37th Government sought to transform legal advisors into political appointees and bypassed competitive tenders.",
       "arguments_supporters": "Democratic governance demands that elected officials appoint personnel committed to executing their voter mandate, an approach affirmed by the High Court.",
-      "arguments_critics": "Dismantling civil service gatekeepers, tender exemptions, and allocating resources along party lines deepens public corruption and undermines institutional trust."
+      "arguments_critics": "Bypassing competitive tenders, challenging institutional legal counsel, and distributing public resources along partisan lines weakens clean governance and damages public trust."
     },
     {
       "id": "arab_society",
@@ -189,20 +262,30 @@
       "headlines": [
         "Cumulative ~NIS 2.5 billion cut from Five-Year Plan 550 ('Taqaddum')",
         "Hundreds of millions diverted from welfare and education to law enforcement",
-        "38% of young Arab men classified as NEET (not in education or work)"
+        "38% of young Arab men classified as NEET (not in education or work)",
+        "Freezing of municipal balancing grants causing local cash-flow crises"
       ],
+      "infographic": {
+        "type": "gauge",
+        "title": "Young Arab Men NEET Rate (%)",
+        "percentage": 38,
+        "label": "38% Disconnected",
+        "sublabel": "Men ages 18–24",
+        "color": "#dc2626"
+      },
       "overview": "Beyond the violent crime wave, civic and economic relations deteriorated. The NIS 30B five-year plan for Arab development (Resolution 550) was reduced by NIS 2.5B via war budget adjustments. Hundreds of millions earmarked for day-care centers, youth employment, and infrastructure were diverted to the police and Shin Bet. Finance Ministry freezes on municipal balancing grants caused local liquidity crises, while Druze community demands regarding the Kaminitz and Nation-State laws went unanswered.",
       "table": {
-        "headers": ["Metric", "36th Government (2021–2022)", "37th Government (2023–2024)", "37th Government (2025–2026)"],
+        "headers": ["Minority Development Metric", "36th Government (2021–2022)", "37th Government (2023–2024)", "37th Government (2025–2026)"],
         "rows": [
-          ["Plan 550 Framework", "NIS 30B approved", "15% war reduction", "Cumulative ~NIS 2.5B cut"],
-          ["Funds Diverted to Security", "NIS 0", "NIS 220M (Dec 2025)", "~NIS 500M diverted to Shin Bet"],
+          ["Five-Year Plan 550 Framework", "~NIS 30B approved", "15% across-the-board cut", "Cumulative ~NIS 2.5B cut"],
+          ["Disbursed Under Plan 550", "Regular timeline", "NIS 13.1B (53.5%)", "Targeted freezes and cuts"],
+          ["Civic Funds Reallocated to Security", "NIS 0", "NIS 220M (Dec 2025)", "~NIS 500M diverted to Shin Bet"],
           ["Young Arab Men NEET Rate", "~31%", "~36%", "~38% (Ages 18–24)"],
-          ["Druze Municipal Planning", "Electricity Law, frozen fines", "Wind turbine friction", "Proposed fine freezes without law change"]
+          ["Druze Town Planning & Kaminitz", "Electricity Law, frozen fines", "Wind turbine friction", "Penalty freezes without law change"]
         ]
       },
       "comparison_prev_gov": "The 36th Government included the Ra'am party, framed minority development as a vital national economic interest, and initiated Plan 550. The 37th Government adopted an adversarial approach, treating development budgets as political concessions and freezing funds.",
-      "arguments_supporters": "Unsupervised cash transfers to Arab municipalities were captured by organized crime cartels winning public tenders; shifting resources to security restores essential order.",
+      "arguments_supporters": "Disbursing large funds to Arab municipalities lacking robust oversight inadvertently funded organized crime families; shifting resources to police and Shin Bet restores order.",
       "arguments_critics": "Freezing civic, educational, and welfare budgets generates an economic vacuum that pushes youth into crime syndicates, representing ideological collective punishment."
     },
     {
@@ -214,19 +297,31 @@
       "headlines": [
         "Female ministers dropped from 9 in the previous government to 5 (~16%)",
         "Female ministry director-generals plummeted from 9 to just 2",
-        "Zero female ministers in the inner War Cabinet"
+        "Zero female ministers in the inner War Cabinet throughout the war",
+        "Over 30 women murdered annually in 2024; electronic monitoring diluted"
       ],
-      "overview": "The 37th Government launched with only 5 women among 30+ ministers, while Haredi coalition partners completely excluded women from party lists. Ministry director-generals fell to a single woman initially, rising to two. Throughout the war, the inner War Cabinet was exclusively male. Domestic femicides exceeded 30 victims in 2024 (over 20 in Arab society). The coalition diluted the electronic monitoring bill for domestic abusers with strict evidentiary prerequisites, contrasting with the combat performance of female IDF troops that forced expanded frontline roles.",
+      "infographic": {
+        "type": "compare",
+        "title": "Female Ministers in Cabinet",
+        "leftLabel": "36th Gov",
+        "leftValue": 9,
+        "rightLabel": "37th Gov",
+        "rightValue": 5,
+        "highlight": "44% Decline",
+        "color": "#8b5cf6"
+      },
+      "overview": "The 37th Government launched with only 5 women among 30+ ministers, while Haredi coalition partners completely excluded women from party lists. Ministry director-generals fell to two. Throughout the war, the inner War Cabinet was exclusively male. Domestic femicides exceeded 30 victims in 2024 (over 20 in Arab society). The coalition diluted the electronic monitoring bill for domestic abusers with strict evidentiary prerequisites, contrasting with the combat performance of female IDF troops that forced expanded frontline roles.",
       "table": {
-        "headers": ["Metric", "36th Government (2021–2022)", "37th Government (2023–2024)", "37th Government (2025–2026)"],
+        "headers": ["Gender Representation Metric", "36th Government (2021–2022)", "37th Government (2023–2024)", "37th Government (2025–2026)"],
         "rows": [
-          ["Female Ministers in Cabinet", "9 ministers (~30%)", "5–6 ministers (~16%)", "5 ministers"],
-          ["Female Director-Generals", "9 director-generals", "1–2", "2 director-generals"],
-          ["Domestic Femicides", "2021: 27; 2022: 24", "2023: 29; 2024: 30+", "Near-record levels"],
-          ["War Cabinet Representation", "Not applicable", "0 women", "0 women"]
+          ["Number of Female Ministers", "9 ministers (~30% peak)", "5–6 ministers (~16%)", "5 ministers"],
+          ["Female Director-Generals", "9 director-generals", "1–2 director-generals", "2 director-generals"],
+          ["Annual Domestic Femicides", "2021: 27; 2022: 24", "2023: 29; 2024: 30+", "Near-record levels"],
+          ["War Cabinet Representation", "Not applicable", "0 women (Complete absence)", "0 women"],
+          ["Electronic Monitoring Bill", "Passed 1st reading (professional draft)", "Frozen and softened in 2023", "Limited implementation (strict criteria)"]
         ]
       },
-      "comparison_prev_gov": "The 36th Government achieved record representation (9 ministers, 9 DGs, first female Attorney General) and pursued the Istanbul Convention. The 37th Government dismantled the Authority for the Advancement of the Status of Women into a political body and excluded women from wartime councils.",
+      "comparison_prev_gov": "The 36th Government achieved record representation (9 ministers, 9 DGs, first female Attorney General) and pursued the Istanbul Convention. The 37th Government restructured the Authority for the Advancement of the Status of Women into a political body and excluded women from wartime councils.",
       "arguments_supporters": "Appointments should be based on merit and ideological alignment rather than gender quotas; electronic monitoring modifications prevented potential false complaints during divorce disputes.",
       "arguments_critics": "Excluding women from wartime strategy compromised decision-making and neglected female victims of sexual violence; diluting protection laws endangered battered women."
     },
@@ -239,16 +334,25 @@
       "headlines": [
         "ICC arrest warrants issued against Israel's Prime Minister and former Defense Minister",
         "ICJ genocide proceedings and selective European arms embargoes",
+        "Unilateral recognition of a Palestinian state by Spain, Ireland, and Norway",
         "Unprecedented US operational airlift and CENTCOM intercept coalition"
       ],
+      "infographic": {
+        "type": "status_badge",
+        "title": "Hague International Legal Status",
+        "count": 2,
+        "label": "ICC Arrest Warrants",
+        "sublabel": "Netanyahu & Gallant (Nov 2024)",
+        "color": "#b91c1c"
+      },
       "overview": "In November 2024, the International Criminal Court (ICC) issued arrest warrants for Prime Minister Netanyahu and former Defense Minister Gallant over the Gaza war. Concurrently, South Africa brought genocide allegations before the International Court of Justice (ICJ). Spain, Ireland, and Norway unilaterally recognized a Palestinian state, and several European allies imposed selective arms restrictions. Conversely, US defense assistance was historic, featuring an arms airlift and CENTCOM regional interception coordination.",
       "table": {
-        "headers": ["Dimension", "36th Government (2021–2022)", "37th Government (2023–2026)"],
+        "headers": ["Diplomatic & Legal Arena", "36th Government (2021–2022)", "37th Government (2023–2026)"],
         "rows": [
-          ["US Relations", "Close working ties; public disputes avoided", "Persistent friction, shipment pauses, alongside historic aid"],
-          ["Abraham Accords", "Established Negev Forum; regional deepening", "Preserved amidst war; Saudi normalization paused"],
-          ["International Legal Status", "Quiet diplomacy preventing legal escalation", "ICC arrest warrants (Netanyahu & Gallant); ICJ litigation"],
-          ["Western European Ties", "Rebuilt diplomatic dialogue", "Selective arms embargoes, unilateral Palestinian recognition"]
+          ["Relations with US Administration", "Close working ties; public disputes avoided", "Persistent friction, shipment pauses, alongside historic aid"],
+          ["Abraham Accords & Normalization", "Established Negev Forum; expanded ties", "Preserved amidst war; Saudi normalization paused"],
+          ["International Legal Standing", "Quiet diplomacy preventing legal escalation", "ICC arrest warrants (Netanyahu & Gallant); ICJ litigation"],
+          ["Western European Partners", "Rebuilt diplomatic dialogue", "Selective arms embargoes, unilateral Palestinian recognition"]
         ]
       },
       "comparison_prev_gov": "The 36th Government restored relations with US Democrats and European partners, deepening regional integration through the Negev Forum. The 37th Government experienced constant friction, rhetoric from far-right ministers, and an erosion of international legitimacy.",
@@ -257,23 +361,37 @@
     },
     {
       "id": "education_system",
-      "title": "Education System, PISA Scores, and Teacher Shortages",
+      "title": "The Education System, PISA Scores, and Teacher Shortages",
       "status_category": "negative",
       "status_label": "Negative-Critical",
       "bottom_line": "The education system saw a sharp drop in international PISA scores, alongside teacher shortages and infrastructure gaps, while funding to Haredi schools was expanded without core-curriculum requirements and AI program implementation remained uneven.",
       "headlines": [
         "PISA 2025 crash: 38-point drop in reading (2nd sharpest globally)",
         "46% of 15-year-olds struggle below baseline mathematics proficiency",
-        "NIS 3.5B added to Haredi school networks while non-compliance fines dropped 45%"
+        "26% of schools report vacancies for certified English and STEM teachers",
+        "NIS 3.5B added to Haredi networks while non-compliance fines dropped 45%"
       ],
+      "infographic": {
+        "type": "horizontal_bar",
+        "title": "PISA 2025 Score Drop (Points)",
+        "items": [
+          {"name": "Reading", "val": -38},
+          {"name": "Math", "val": -25},
+          {"name": "Science", "val": -23}
+        ],
+        "highlight": "Historic Academic Drop",
+        "color": "#dc2626"
+      },
       "overview": "The OECD PISA 2025 scores plunged to historic lows for Israeli 15-year-olds: reading fell 38 points to 436, math dropped 25 points to 433 (30 points below the OECD average), and science fell 23 points to 442. Low achievers surged to 46% in math. The system suffered chronic shortages, with 26% of STEM/English teachers lacking certification. Remote learning during the war revealed 27% of schools lacked adequate digital devices. Meanwhile, the cabinet allocated NIS 3.5B to Haredi schools while halving fines for omitting core subjects.",
       "table": {
-        "headers": ["PISA Domain", "36th Government", "37th Government (2025)"],
+        "headers": ["Educational Indicator", "2021–2022 (36th Gov)", "2023–2024 (37th Gov)", "2025–2026 (37th Gov)"],
         "rows": [
-          ["Reading Literacy", "474", "436 (-38 point crash)"],
-          ["Mathematics", "458", "433 (-25 point crash)"],
-          ["Science", "465", "442 (-23 point crash)"],
-          ["Low Math Achievers (%)", "37%", "46% (vs. 34% OECD average)"]
+          ["PISA Reading Literacy", "474", "Testing cycle conducted", "436 (-38 point crash)"],
+          ["PISA Mathematics", "458", "Testing cycle conducted", "433 (-25 point crash)"],
+          ["PISA Science", "465", "Testing cycle conducted", "442 (-23 point crash)"],
+          ["Share of Low Math Achievers", "37%", "—", "46% (vs. 34% OECD average)"],
+          ["Budget Additions to Haredi Networks", "Conditional on core studies", "NIS 3.5B addition", "Maintained without core studies"],
+          ["Core Curriculum Fines", "NIS 10.2M (290k/institution)", "NIS 5.6M (110k/institution)", "Minimal enforcement"]
         ]
       },
       "comparison_prev_gov": "The 36th Government raised teacher starting salaries to NIS 9,000 and created a conditional funding framework with Belz Hasidism requiring core curriculum studies. The 37th Government repealed the conditionality, disbursing funds without academic supervision.",
@@ -282,22 +400,32 @@
     },
     {
       "id": "healthcare",
-      "title": "Healthcare System, Medical Attrition, and Mental Health",
+      "title": "The Healthcare System, Staff Attrition, and Mental Health",
       "status_category": "mixed",
       "status_label": "Mixed-Negative",
       "bottom_line": "Physical trauma care operated with high dedication during emergency operations, but the mental health sector experienced unprecedented strain, alongside an acceleration in the departure of experienced medical professionals abroad.",
       "headlines": [
         "1,369 physicians left Israel between 2023 and 2025 (+94% surge)",
         "Net loss of 328 doctors in 2024 alone (2.5x historical baselines)",
+        "23% of departing doctors were senior specialists and department heads aged 45+",
         "34% of the population reported symptoms of PTSD (national trauma crisis)"
       ],
+      "infographic": {
+        "type": "donut",
+        "title": "Senior Departing Doctors (Age 45+)",
+        "percentage": 23,
+        "label": "23% Senior Specialists",
+        "sublabel": "Department heads & senior surgeons",
+        "color": "#ea580c"
+      },
       "overview": "The war was officially designated a national mental health emergency, with 34% reporting moderate-to-severe PTSD symptoms and over 25,000 recognized as direct psychiatric casualties of hostilities. Concurrently, Tel Aviv University research documented 1,369 doctor departures over three years (+94%). In 2024, Israel lost a net 328 physicians, with 23% being senior department heads and surgeons aged 45+. A public sector psychologist wage deal was signed in 2025 to curb outpatient wait times.",
       "table": {
-        "headers": ["Metric", "Baseline (36th Gov)", "37th Government (2023–2026)"],
+        "headers": ["Healthcare & Medical Metric", "Baseline (36th Gov)", "37th Government (2023–2026)"],
         "rows": [
-          ["Annual Net Doctor Migration", "~130 doctors/year", "328 net loss in 2024 (Record high)"],
-          ["Senior Departures (Age 45+)", "~14% of departures", "~23% of departures"],
-          ["PTSD Symptoms in Population", "Peacetime baseline", "34% PTSD, 32% depression, 21% anxiety"],
+          ["Annual Net Doctor Migration", "~130 doctors/year", "2024: 530 left, 328 net loss (Historic high)"],
+          ["Cumulative Physician Departures", "Stable baseline", "2023–2025: 1,369 departed (+94% surge)"],
+          ["Share of Senior Departing Doctors (45+)", "~14% of departures", "~23% of departures"],
+          ["PTSD Symptoms in Population", "Routine baseline", "34% PTSD, 32% depression, 21% anxiety"],
           ["Recognized Trauma Casualties", "3,474 (Pre-war)", "Over 25,000 newly recognized"]
         ]
       },
@@ -307,21 +435,34 @@
     },
     {
       "id": "welfare_housing",
-      "title": "Welfare, Poverty Rates, and Housing Market",
+      "title": "Welfare, Poverty Rates, and the Housing Market",
       "status_category": "mixed",
       "status_label": "Mixed-Negative",
       "bottom_line": "Social welfare transfers prevented an increase in official poverty rates during the war, but living costs continued to rise, and residential real estate prices resumed an upward trajectory due to construction labor shortages.",
       "headlines": [
-        "~900,000 children living below the poverty line (28.0%)",
+        "~900,000 children living below the poverty line (28.0% - 2nd in OECD)",
         "Home prices surged 7.3%–7.7% in 2024 following a slight 2023 dip",
+        "34.2% of families would live in poverty without social welfare transfers",
         "Severe shortage of tens of thousands of construction workers"
       ],
+      "infographic": {
+        "type": "compare",
+        "title": "Child Poverty Rate (%)",
+        "leftLabel": "Israel",
+        "leftValue": 28,
+        "rightLabel": "OECD Average",
+        "rightValue": 18,
+        "highlight": "2nd in OECD",
+        "color": "#d97706"
+      },
       "overview": "National individual poverty held flat at 20.7%–20.8%, but Israel retained the second-highest child poverty rate in the OECD (28%). Without welfare transfers, family poverty would reach 34.2%. In real estate, after prices jumped 14.7% in 2022 and contracted 0.7% in 2023 due to rate hikes, home prices rebounded by 7.7% in 2024. The rebound occurred despite high interest rates, driven by construction labor shortages after barring Palestinian workers, lengthening build times.",
       "table": {
-        "headers": ["Metric", "2021 (36th Gov)", "2022 (36th Gov)", "2023 (37th Gov)", "2024 (37th Gov)"],
+        "headers": ["Welfare & Housing Indicator", "2021 (36th Gov)", "2022 (36th Gov)", "2023 (37th Gov)", "2024 (37th Gov)"],
         "rows": [
-          ["Individual Poverty Rate", "20.9%", "20.9%", "20.7%", "~20.8%"],
+          ["Standard Poverty Line (NIS)", "2,892", "3,076", "3,318–3,324", "3,547"],
+          ["Individual Poverty Rate", "20.9%", "20.9%", "20.7%", "~20.7%–20.8%"],
           ["Child Poverty Rate", "28.0%", "28.2%", "27.9%", "28.0% (~900k children)"],
+          ["Struggling Households (%)", "~30%", "30.5%", "26.5%", "27.8%"],
           ["Annual Home Price Change", "+10.6%", "+14.7%", "-0.7%", "+7.3% to +7.7%"]
         ]
       },
@@ -331,22 +472,37 @@
     },
     {
       "id": "social_cohesion",
-      "title": "Social Cohesion, Societal Rifts, and Public Trust",
+      "title": "Social Cohesion, Societal Rifts, and Trust in Institutions",
       "status_category": "failed",
       "status_label": "Failed",
       "bottom_line": "Measures of social cohesion fell, with trust in the Knesset and government dropping below 20%, while disagreements over the judicial overhaul, conscription, and hostage negotiations added to domestic political divisions.",
       "headlines": [
         "Public trust in government collapsed to record lows of 18%–23%",
         "Trust in the Knesset stands at just 15%–18%",
-        "Over 80% of citizens report high social and political tension"
+        "Over 80% of citizens report high social and political tension",
+        "Deep trust gap: IDF holds 79%–82% trust vs. under 23% for political leaders"
       ],
-      "overview": "Measures of social cohesion and institutional trust reached historical lows. Polarization over the 2023 judicial overhaul led to mass street protests and reserve duty boycott debates. While October 7 sparked initial volunteer unity, rifts widened as the war lengthened over hostage-release strategy, Haredi draft exemptions, and political attacks on the military and judiciary.",
+      "infographic": {
+        "type": "horizontal_bar",
+        "title": "Public Trust in Governing Institutions (%)",
+        "items": [
+          {"name": "IDF", "val": 81},
+          {"name": "Supreme Court", "val": 39},
+          {"name": "Government", "val": 21},
+          {"name": "Knesset", "val": 16}
+        ],
+        "highlight": "Trough of 16%–21%",
+        "color": "#2563eb"
+      },
+      "overview": "Measures of social cohesion and institutional trust reached historical lows. Polarization over the 2023 judicial overhaul led to mass street protests and reserve duty boycott debates. While October 7 sparked initial volunteer unity, rifts widened as the war lengthened over hostage-release strategy, Haredi draft exemptions, and political attacks on the military and judiciary. Over 80% of survey respondents reported acute internal tension.",
       "table": {
-        "headers": ["Trust Metric (IDI)", "36th Government", "2023 (Reform/Protests)", "37th Government (2024–2025)"],
+        "headers": ["Trust Metric (Democracy Index)", "2021–2022 (36th Gov)", "2023 (Pre-War & Reform)", "2024–2025 (37th Gov)"],
         "rows": [
           ["Trust in Government", "27%–28%", "18% (Historic low)", "19%–23%"],
           ["Trust in Knesset", "21%–23%", "14%", "15%–18%"],
-          ["Trust in IDF", "82%–88%", "77%", "79%–82% (Highest rated)"]
+          ["Trust in Supreme Court", "41%–42%", "38%", "39.5%"],
+          ["Trust in IDF", "82%–88%", "77%", "79%–82% (Highest rated)"],
+          ["Perception of Acute Social Tension", "~65%", "~86% reported rift", "80%+ acute societal rift"]
         ]
       },
       "comparison_prev_gov": "The 36th Government utilized a broad parity coalition model to calm internal political tensions. The 37th Government governed as an ideological right-wing bloc, pursuing unilateral judicial restructuring that triggered massive domestic backlash.",
@@ -361,16 +517,29 @@
       "bottom_line": "Israel experienced a period of elevated net negative migration under the 37th Government, marked by departures of educated, working-age citizens alongside a decline in returning residents and new immigrant arrivals.",
       "headlines": [
         "Over 82,700 Israelis emigrated annually in both 2023 and 2024 (2x historical avg)",
-        "Net negative migration balance of -58,900 citizens in 2024",
-        "52% of 2024 emigrants were native-born Israelis (Sabras)"
+        "Net negative migration balance of -58,900 citizens in 2024 (4x historical)",
+        "Young brain drain: over 80% of departing citizens were under age 40",
+        "52% of 2024 emigrants were native-born Israelis (Sabras)",
+        "58% drop in new immigrants (Aliyah) to 31,100 in 2024"
       ],
+      "infographic": {
+        "type": "bar",
+        "title": "Annual Net Migration (Thousands of Israelis)",
+        "labels": ["'21", "'22", "'23", "'24"],
+        "values": [-14.0, -18.2, -27.5, -58.9],
+        "unit": "K",
+        "highlight": "-58.9K in 2024",
+        "color": "#dc2626"
+      },
       "overview": "Emigration rose from an average of ~40,500/year to over 82,700 annually in 2023 and 2024, driving the net negative balance to -58,900 in 2024. Over 80% of departing citizens were under 40, and PhD holders emigrated at 4.6 times their population proportion. Emigration among tech and healthcare professionals surged, while returning residents fell by 53% and Aliyah dropped from 74,000 in 2022 to 31,100 in 2024.",
       "table": {
-        "headers": ["Migration Metric", "36th Government (2021–2022)", "37th Government (2023–2024)"],
+        "headers": ["Migration & Demographic Metric", "36th Government (2021–2022)", "37th Government (2023–2024)", "Trend in 2025–2026"],
         "rows": [
-          ["New Immigrants (Aliyah)", "74,000 in 2022 (Peak)", "31,100 in 2024 (-58%)"],
-          ["Long-Term Emigrants", "59,400 in 2022", "82,700 in 2024 (Historic high)"],
-          ["Net Balance of Israelis", "-14,000 (historical avg)", "-58,900 (2024)"]
+          ["New Immigrants (Aliyah)", "2021: ~28k; 2022: ~74k (Peak)", "2023: ~46k; 2024: 31.1k", "Stabilizing at moderate levels"],
+          ["Long-Term Departures", "2021: ~40.5k; 2022: 59.4k", "2023: 82.8k; 2024: 82.7k", "Persistently elevated"],
+          ["Net Balance of Israelis", "Historical avg: ~-14k/year", "2023: -27.5k; 2024: -58.9k", "2025: ~-20k"],
+          ["Returning vs. Departing Ratio", "Stable historical baseline", "53% drop in returning residents", "Returning: 22% of departures"],
+          ["Residency Cancellation Requests", "Baseline levels", "Mid-2024: 2.5x vs. 2022", "Elevated"]
         ]
       },
       "comparison_prev_gov": "In 2022, a major Aliyah wave from Ukraine and Russia offset emigration. Under the 37th Government, immigration fell by 58% while departures reached historic peaks among established professionals.",
@@ -384,21 +553,31 @@
       "status_label": "Mixed-Negative",
       "bottom_line": "The government advanced its approach to ministerial discretion and executive appointments (with legal validation from the High Court), while facing delays on major transit projects in the Tel Aviv metropolitan area and unresolved disputes regarding military conscription legislation.",
       "headlines": [
-        "High Court approved direct appointment of Civil Service Commissioner without tenders",
+        "High Court approved direct appointment of Civil Service Commissioner without tenders (2026)",
         "Multi-year delays to the NIS 150B Tel Aviv Metro subway project",
-        "Congestion pricing suspended at Tel Aviv entrances"
+        "Congestion pricing suspended at Tel Aviv metropolitan entrances",
+        "Unanimous High Court ruling freezing yeshiva subsidies without conscription (June 2024)"
       ],
-      "overview": "The cabinet expanded ministerial authority, eliminating competitive search panels for the Civil Service Commissioner, an action upheld by the High Court in 2026. In transportation, Minister Miri Regev shifted priorities away from the Tel Aviv Metro and congestion pricing toward peripheral highways and rail links. In defense law, failure to pass conscription legislation led to unanimous High Court rulings freezing yeshiva subsidies without enlistment.",
+      "infographic": {
+        "type": "gauge",
+        "title": "Tel Aviv Metro Subway Project Status",
+        "percentage": 100,
+        "label": "NIS 150 Billion",
+        "sublabel": "Frozen & delayed for years",
+        "color": "#d97706"
+      },
+      "overview": "The cabinet expanded ministerial authority, eliminating competitive search panels for the Civil Service Commissioner, an action upheld by the High Court in 2026. In transportation, Minister Miri Regev shifted priorities away from the Tel Aviv Metro and congestion pricing toward peripheral highways and Route 90. In defense law, failure to pass conscription legislation led to unanimous High Court rulings freezing yeshiva subsidies without enlistment.",
       "table": {
-        "headers": ["Area", "36th Government (2021–2022)", "37th Government (2023–2026)"],
+        "headers": ["Governance & Transit Dimension", "36th Government (2021–2022)", "37th Government (2023–2026)"],
         "rows": [
-          ["Civil Service Commissioner", "Search committee / professional tenure", "Direct appointment (upheld by High Court)"],
-          ["Tel Aviv Metro Rail", "Enacted Metro Law; top priority", "Timelines delayed; reassessed feasibility"],
-          ["Transit Policy Priorities", "Congestion fees; bus-only lanes", "Cancelled congestion fees; peripheral focus"]
+          ["Civil Service Commissioner Selection", "Professional tenure / search panel", "Direct appointment (upheld by High Court)"],
+          ["Tel Aviv Metro Rail Project", "Passed Metro Law; top priority", "Timelines delayed; reassessed feasibility"],
+          ["Transit Policy Priorities", "High-occupancy lanes; congestion fees", "Cancelled congestion fees; peripheral focus"],
+          ["Conscription Law & Yeshiva Funding", "Graduated quotas with penalties", "Exemption lapsed; court halted funds"]
         ]
       },
       "comparison_prev_gov": "The 36th Government relied on professional ministry civil servants and advanced metropolitan infrastructure. The 37th Government favored political governance, redirecting resources to peripheral and coalition interests.",
-      "arguments_supporters": "Elected ministers bear public accountability and should appoint ideological leaders; investment in peripheral transport rectifies historic under-investment.",
+      "arguments_supporters": "Elected ministers bear public accountability and should appoint ideological leaders; investment in peripheral transport rectifies historic under-investment outside Tel Aviv.",
       "arguments_critics": "Politicization damages civil service merit, while delaying the Metro threatens urban traffic gridlock and tens of billions in lost economic output."
     }
   ]
