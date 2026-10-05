@@ -26,6 +26,184 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupEventListeners();
   renderApp();
 });
+/**
+ * Generates an accessible, responsive inline SVG infographic.
+ */
+function renderInfographicSVG(info) {
+  if (!info) return '';
+
+  const primaryColor = info.color || 'var(--primary-color)';
+
+  // 1. Line / Sparkline / Area Chart
+  if (info.type === 'sparkline') {
+    const minVal = Math.min(...info.values) * 0.95;
+    const maxVal = Math.max(...info.values) * 1.05;
+    const width = 240;
+    const height = 80;
+    const padding = 15;
+
+    const points = info.values.map((v, idx) => {
+      const x = padding + (idx / (info.values.length - 1)) * (width - 2 * padding);
+      const y = height - padding - ((v - minVal) / (maxVal - minVal)) * (height - 2 * padding);
+      return { x, y, val: v };
+    });
+
+    const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+    const areaD = `${pathD} L ${points[points.length - 1].x} ${height} L ${points[0].x} ${height} Z`;
+
+    const circles = points.map(p => 
+      `<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="${primaryColor}" stroke="#ffffff" stroke-width="1.5"/>`
+    ).join('');
+
+    const labels = info.labels.map((lbl, idx) => 
+      `<text x="${points[idx].x}" y="${height - 2}" font-size="9" fill="var(--text-muted)" text-anchor="middle">${lbl}</text>`
+    ).join('');
+
+    return `
+      <div class="infographic-container">
+        <div class="info-header">
+          <span class="info-title">${info.title}</span>
+          <span class="info-highlight" style="color: ${primaryColor}">${info.highlight}</span>
+        </div>
+        <svg viewBox="0 0 ${width} ${height}" class="info-svg">
+          <path d="${areaD}" fill="${primaryColor}" opacity="0.12"/>
+          <path d="${pathD}" fill="none" stroke="${primaryColor}" stroke-width="2.5" stroke-linecap="round"/>
+          ${circles}
+          ${labels}
+        </svg>
+      </div>
+    `;
+  }
+
+  // 2. Vertical Bar Chart
+  if (info.type === 'bar') {
+    const width = 240;
+    const height = 90;
+    const absValues = info.values.map(v => Math.abs(v));
+    const maxVal = Math.max(...absValues, 1);
+    const barWidth = 24;
+    const gap = (width - (info.values.length * barWidth)) / (info.values.length + 1);
+
+    const bars = info.values.map((val, idx) => {
+      const barH = (Math.abs(val) / maxVal) * 50;
+      const x = gap + idx * (barWidth + gap);
+      const y = height - 22 - barH;
+      const isPeak = idx === info.values.length - 1;
+      const fill = isPeak ? primaryColor : 'var(--border-color)';
+      return `
+        <rect x="${x}" y="${y}" width="${barWidth}" height="${barH}" rx="3" fill="${fill}" />
+        <text x="${x + barWidth/2}" y="${y - 4}" font-size="8.5" font-weight="700" fill="var(--text-main)" text-anchor="middle">${val}${info.unit || ''}</text>
+        <text x="${x + barWidth/2}" y="${height - 6}" font-size="9" fill="var(--text-muted)" text-anchor="middle">${info.labels[idx]}</text>
+      `;
+    }).join('');
+
+    return `
+      <div class="infographic-container">
+        <div class="info-header">
+          <span class="info-title">${info.title}</span>
+          <span class="info-highlight" style="color: ${primaryColor}">${info.highlight}</span>
+        </div>
+        <svg viewBox="0 0 ${width} ${height}" class="info-svg">${bars}</svg>
+      </div>
+    `;
+  }
+
+  // 3. Circular Donut / Gauge Chart
+  if (info.type === 'donut' || info.type === 'gauge') {
+    const radius = 34;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (info.percentage / 100) * circumference;
+
+    return `
+      <div class="infographic-container flex-donut">
+        <div class="donut-svg-wrapper">
+          <svg viewBox="0 0 84 84" class="donut-svg">
+            <circle cx="42" cy="42" r="${radius}" stroke="var(--bg-accent)" stroke-width="8" fill="none"/>
+            <circle cx="42" cy="42" r="${radius}" stroke="${primaryColor}" stroke-width="8" fill="none"
+              stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
+              stroke-linecap="round" transform="rotate(-90 42 42)"/>
+            <text x="42" y="47" font-size="16" font-weight="800" fill="var(--text-main)" text-anchor="middle">${info.percentage}%</text>
+          </svg>
+        </div>
+        <div class="donut-details">
+          <span class="info-title">${info.title}</span>
+          <span class="info-main-label" style="color: ${primaryColor}">${info.label}</span>
+          <span class="info-sub-label">${info.sublabel || ''}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  // 4. Horizontal Bars (Rankings & Multi-Items)
+  if (info.type === 'horizontal_bar') {
+    const items = info.items || [];
+    const maxVal = Math.max(...items.map(it => Math.abs(it.val)), 1);
+
+    const bars = items.map(it => {
+      const pct = (Math.abs(it.val) / maxVal) * 100;
+      return `
+        <div class="hbar-row">
+          <span class="hbar-name">${it.name}</span>
+          <div class="hbar-track">
+            <div class="hbar-fill" style="width: ${pct}%; background-color: ${primaryColor}"></div>
+          </div>
+          <span class="hbar-val">${it.val > 0 ? it.val + '%' : it.val}</span>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="infographic-container">
+        <div class="info-header">
+          <span class="info-title">${info.title}</span>
+          <span class="info-highlight" style="color: ${primaryColor}">${info.highlight}</span>
+        </div>
+        <div class="hbar-group">${bars}</div>
+      </div>
+    `;
+  }
+
+  // 5. Direct Comparative Meter
+  if (info.type === 'compare') {
+    return `
+      <div class="infographic-container">
+        <div class="info-header">
+          <span class="info-title">${info.title}</span>
+          <span class="info-highlight" style="color: ${primaryColor}">${info.highlight}</span>
+        </div>
+        <div class="compare-row">
+          <div class="compare-box">
+            <span class="compare-lbl">${info.leftLabel}</span>
+            <span class="compare-val">${info.leftValue}</span>
+          </div>
+          <div class="compare-vs">VS</div>
+          <div class="compare-box active-gov" style="border-color: ${primaryColor}">
+            <span class="compare-lbl">${info.rightLabel}</span>
+            <span class="compare-val" style="color: ${primaryColor}">${info.rightValue}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // 6. Large Ratio & Alert Badges
+  if (info.type === 'ratio' || info.type === 'status_badge') {
+    return `
+      <div class="infographic-container flex-status">
+        <div class="status-num-box" style="background: ${primaryColor}18; color: ${primaryColor}; border: 1.5px solid ${primaryColor}">
+          ${info.value || info.count || '!'}
+        </div>
+        <div class="status-details">
+          <span class="info-title">${info.title}</span>
+          <span class="info-main-label" style="color: ${primaryColor}">${info.label}</span>
+          <span class="info-sub-label">${info.sublabel || ''}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  return '';
+}
 
 function loadStoredPreferences() {
   const savedLang = localStorage.getItem('gov37_lang');
@@ -290,6 +468,9 @@ function renderCards() {
       .map(item => `<li>${item}</li>`)
       .join('');
 
+    // Inside renderCards() loop:
+  const infographicHtml = renderInfographicSVG(chapter.infographic);
+
     card.innerHTML = `
       <div>
         <div class="card-top">
@@ -299,6 +480,7 @@ function renderCards() {
         <ul class="card-headline-stats">
           ${headlinesList}
         </ul>
+        ${infographicHtml}
       </div>
       <div>
         <div class="bottom-line-box">
@@ -309,7 +491,7 @@ function renderCards() {
         </button>
       </div>
     `;
-
+    
     card.querySelector('.btn-open-detail').addEventListener('click', () => {
       openDetailModal(chapter.id);
     });
@@ -349,7 +531,13 @@ function openDetailModal(chapterId) {
   }
 
   const modalBody = document.getElementById('modal-body-content');
+  const modalInfographicHtml = renderInfographicSVG(chapter.infographic);
+
   modalBody.innerHTML = `
+    <div class="detail-infographic-banner">
+      ${modalInfographicHtml}
+    </div>
+  
     <div class="detail-section">
       <h3>${strings.sec_overview || 'סקירה והתפתחות'}</h3>
       <p>${chapter.overview || ''}</p>
