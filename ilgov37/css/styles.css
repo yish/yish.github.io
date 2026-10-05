@@ -645,3 +645,163 @@ body {
   padding: 0.35rem;
   border-radius: 0.5rem;
 }
+/* Mini-Infographic Component */
+.infographic-container {
+  background: var(--bg-accent);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.85rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.info-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.info-highlight {
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.info-svg {
+  width: 100%;
+  height: 80px;
+  display: block;
+}
+
+/* Donut & Status layouts */
+.flex-donut, .flex-status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.donut-svg-wrapper {
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
+}
+
+.donut-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.donut-details, .status-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-main-label {
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.info-sub-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* Horizontal Bars */
+.hbar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.hbar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.hbar-name {
+  width: 60px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.hbar-track {
+  flex: 1;
+  height: 7px;
+  background-color: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.hbar-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.hbar-val {
+  width: 35px;
+  text-align: end;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* Compare Row */
+.compare-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 0.25rem;
+}
+
+.compare-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.35rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  min-width: 80px;
+}
+
+.compare-lbl {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.compare-val {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.compare-vs {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+/* Status Number Box */
+.status-num-box {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.35rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+/* Detail Modal Infographic Placement */
+.detail-infographic-banner {
+  margin-bottom: 1.25rem;
+}
