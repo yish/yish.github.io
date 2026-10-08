@@ -1,9 +1,9 @@
 :root {
   --bg-primary: #f8fafc;
-  --bg-surface: #ffffff;
-  --bg-card: #ffffff;
-  --bg-accent: #f1f5f9;
-  --border-color: #e2e8f0;
+  --bg-surface: rgba(255, 255, 255, 0.92);
+  --bg-card: rgba(255, 255, 255, 0.94);
+  --bg-accent: rgba(241, 245, 249, 0.85);
+  --border-color: #cbd5e1;
   --text-main: #0f172a;
   --text-muted: #64748b;
   --primary-color: #2563eb;
@@ -23,9 +23,9 @@
 
 body.theme-dark {
   --bg-primary: #0b1329;
-  --bg-surface: #111e38;
-  --bg-card: #182849;
-  --bg-accent: #1e3158;
+  --bg-surface: rgba(17, 30, 56, 0.92);
+  --bg-card: rgba(24, 40, 73, 0.92);
+  --bg-accent: rgba(30, 49, 88, 0.85);
   --border-color: #2e4370;
   --text-main: #f1f5f9;
   --text-muted: #94a3b8;
@@ -51,7 +51,7 @@ body.density-dense {
   margin: 0;
   padding: 0;
 }
-
+/*
 body {
   font-family: 'Assistant', 'Noto Sans Arabic', 'Inter', sans-serif;
   background-color: var(--bg-primary);
@@ -60,14 +60,84 @@ body {
   font-size: var(--font-size-base);
   transition: background-color 0.2s, color 0.2s;
 }
+*/
+/* Background setup with ilgov37.jpg */
+body {
+  font-family: 'Assistant', 'Noto Sans Arabic', 'Inter', sans-serif;
+  color: var(--text-main);
+  line-height: 1.5;
+  font-size: var(--font-size-base);
+  min-height: 100vh;
+  position: relative;
+  background-color: var(--bg-primary);
+  transition: background-color 0.2s, color 0.2s;
+}
 
-/* Headers */
+/* Pseudo-element holding the background image */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url('../ilgov37.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Theme tints over the background photo to ensure high contrast and readability */
+body.theme-light::before {
+  opacity: 0.18;
+}
+
+body.theme-dark::before {
+  opacity: 0.12;
+}
+
+/* PORTRAIT MODE: Limit the image strictly to the top third */
+@media (orientation: portrait) {
+  body::before {
+    height: 33.333vh;
+    bottom: auto;
+    background-position: center 15%;
+    /* Gradient fade at the bottom edge of the top third */
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+  }
+}
+
+/* LANDSCAPE MODE: Full screen subtle backdrop */
+@media (orientation: landscape) {
+  body::before {
+    height: 100vh;
+    background-position: center 25%;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0.4) 100%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0.4) 100%);
+  }
+}
+
+/* Headers 
 .app-header {
   background-color: var(--bg-surface);
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
   z-index: 100;
+}
+*/
+
+/* Backdrop blur on header, cards, and banners */
+.app-header {
+  background-color: var(--bg-surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.card, .summary-banner {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .header-container {
