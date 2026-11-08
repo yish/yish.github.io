@@ -155,6 +155,11 @@
                     <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-slate-600"></i>
                     <span class="hidden xl:inline">סינון משתמשים</span>
                 </button>
+
+                <button onclick="openModal('aboutModal')" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 transition-all whitespace-nowrap" title="אודות האפליקציה ומדריך שימוש">
+                    <i data-lucide="help-circle" class="w-3.5 h-3.5 text-brand-600"></i>
+                    <span>אודות ועזרה</span>
+                </button>
             </div>
         </div>
     </header>
@@ -538,6 +543,106 @@
             </div>
             <div class="p-3 bg-slate-50 border-t border-slate-200 flex justify-end">
                 <button onclick="closeModal('staffModal')" class="px-4 py-1.5 rounded-lg bg-brand-600 text-white text-xs font-semibold hover:bg-brand-700">סגור</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: ABOUT & HELP (אודות ועזרה) ==================== -->
+    <div id="aboutModal" onclick="if(event.target === this) closeModal('aboutModal')" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden">
+            <!-- Modal Header -->
+            <div class="p-4 bg-gradient-to-l from-brand-50 via-white to-white border-b border-slate-200 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-sm">
+                        <i data-lucide="help-circle" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900">אודות הדשבורד ומדריך למשתמש</h3>
+                        <p class="text-[11px] text-slate-500">כלי לניתוח ויזואלי של השתתפות סטודנטים מתוך יומני מעקב של Moodle</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('aboutModal')" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-5 space-y-4 max-h-[75vh] overflow-y-auto text-xs leading-relaxed text-slate-700">
+                
+                <!-- 1. Who built it -->
+                <div class="bg-brand-50/70 border border-brand-200 rounded-xl p-3.5 flex items-start gap-3">
+                    <div class="p-2 rounded-lg bg-white text-brand-600 shadow-sm shrink-0 mt-0.5">
+                        <i data-lucide="award" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-900 mb-0.5">מי בנה את האפליקציה?</h4>
+                        <p class="text-slate-700">
+                            האפליקציה אופיינה ופותחה על ידי <strong>ד״ר ישי מור</strong> (המכללה האקדמית בית ברל), בסיוע מודל הבינה המלאכותית <strong>Google Gemini</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 2. Why it was built -->
+                <div class="space-y-1.5">
+                    <h4 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                        <i data-lucide="target" class="w-4 h-4 text-brand-600"></i>
+                        <span>למה נבנתה האפליקציה? (הרציונל הפדגוגי)</span>
+                    </h4>
+                    <p class="text-slate-600">
+                        מערכת ה-Moodle אוספת יומני מעקב (Logs) עשירים מאוד, אך מציגה אותם כטבלאות גולמיות של אלפי שורות שקשה לפענח בזמן אמת. הדשבורד נבנה כדי להעניק למרצים תמונת מצב פדגוגית, ויזואלית ומיידית של <strong>מעורבות הסטודנטים בלמידה פעילה</strong>: הגשת מטלות, כתיבה ביומן הלמידה (בלוג), פתיחת דיונים בפורום ואינטראקציית עמיתים בתגובות.
+                    </p>
+                    <p class="text-slate-600">
+                        הכלי מאפשר זיהוי מוקדם של סטודנטים בסיכון או בתת-השתתפות לצד הערכת מעורבות עמיתים. <strong>שמירה מלאה על פרטיות:</strong> כל עיבוד הנתונים מתבצע מקומית בדפדפן שלך בלבד (Client-Side), ואף נתון אינו נשלח או נשמר בשרת חיצוני.
+                    </p>
+                </div>
+
+                <!-- 3. How to use it -->
+                <div class="space-y-2.5 pt-1">
+                    <h4 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                        <i data-lucide="compass" class="w-4 h-4 text-brand-600"></i>
+                        <span>איך משתמשים באפליקציה? (מדריך שלב-אחר-שלב)</span>
+                    </h4>
+
+                    <div class="grid grid-cols-1 gap-2.5">
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-brand-600 text-white font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">1</span>
+                            <div>
+                                <div class="font-bold text-slate-900">הפקת קובץ יומני מעקב מ-Moodle</div>
+                                <p class="text-slate-600 mt-0.5">
+                                    היכנסו לאתר הקורס ב-Moodle &larr; בתפריט הניהול/דוחות בחרו ב-<strong>"יומני מעקב" (Logs)</strong> &larr; השאירו את הסינון על "כל המשתתפים", "כל הימים" ו"כל הפעילויות" ולחצו על <strong>"קבלת יומני מעקב אלו"</strong> &larr; גללו לתחתית העמוד ובחרו בייצוא הנתונים כקובץ <strong>CSV</strong> (Comma separated values).
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-brand-600 text-white font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">2</span>
+                            <div>
+                                <div class="font-bold text-slate-900">טעינת הקובץ לדשבורד</div>
+                                <p class="text-slate-600 mt-0.5">
+                                    לחצו על כפתור <strong>"העלאת קובץ CSV"</strong> שבסרגל העליון (או פשוט גררו ושחררו את קובץ ה-CSV אל תוך חלון הדפדפן). המערכת תזהה אוטומטית את שם הקורס, תסנן מרצים ואנשי מערכת, ותעדכן את כל הגרפים והטבלאות.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-brand-600 text-white font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">3</span>
+                            <div>
+                                <div class="font-bold text-slate-900">חקירת הנתונים וניווט בין התצוגות</div>
+                                <p class="text-slate-600 mt-0.5">
+                                    עברו בין 5 הלשוניות בראש העמוד (<strong>מבט על, לפי מטלה, לפי פורום, לפי בלוג, לפי סטודנט</strong>). ניתן ללחוץ על שם של כל סטודנט בטבלאות כדי לעבור מיד לכרטיס המעקב האישי שלו, לסנן סטודנטים שטרם הגישו מטלה מסוימת, או לעדכן את רשימת הסטודנטים בכפתור "סינון משתמשים".
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
+                <span>פועל באופן מקומי בדפדפן (ללא שמירת נתונים בענן)</span>
+                <button onclick="closeModal('aboutModal')" class="px-4 py-1.5 rounded-lg bg-brand-600 text-white text-xs font-bold hover:bg-brand-700 transition-colors">
+                    הבנתי, תודה!
+                </button>
             </div>
         </div>
     </div>
@@ -2105,6 +2210,13 @@
         function closeModal(id) {
             document.getElementById(id).classList.add('hidden');
         }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal('aboutModal');
+                closeModal('staffModal');
+            }
+        });
 
         function showToast(msg) {
             const toast = document.getElementById('toastNotification');
