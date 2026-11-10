@@ -75,6 +75,23 @@
         .drag-overlay {
             backdrop-filter: blur(4px);
         }
+        .live-card {
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .live-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.12), 0 4px 6px -4px rgba(79, 70, 229, 0.08);
+            border-color: #818cf8;
+        }
+        .live-pill {
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+        .live-pill:hover {
+            filter: brightness(0.94);
+            transform: scale(1.03);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -85,8 +102,8 @@
             <div class="w-16 h-16 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mx-auto mb-4">
                 <i data-lucide="upload-cloud" class="w-9 h-9"></i>
             </div>
-            <h3 class="text-xl font-extrabold text-slate-900">שחרר כאן את קובץ ה-CSV של Moodle</h3>
-            <p class="text-sm text-slate-500 mt-1">הנתונים ינותחו מקומית בדפדפן ויעדכנו את כל הדשבורד</p>
+            <h3 class="text-xl font-extrabold text-slate-900">שחרר כאן קובץ CSV מ-Moodle</h3>
+            <p class="text-sm text-slate-500 mt-1">המערכת תזהה אוטומטית אם מדובר ביומן מעקב (Logs) או בגיליון ציונים (Gradebook)</p>
         </div>
     </div>
 
@@ -94,58 +111,68 @@
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
         <div class="max-w-[1440px] mx-auto px-3 sm:px-5 h-14 flex items-center justify-between gap-2 overflow-x-auto">
             
-            <!-- Right Side: Title + Course Badge + Upload Button right next to Title -->
-            <div class="flex items-center gap-2.5 shrink-0">
-                <div class="bg-amber-400 text-slate-900 p-1.5 rounded-lg shadow-sm flex items-center justify-center" id="courseIconBox">
+            <!-- Right Side: Title + Course Badge + Two Compact Upload Buttons -->
+            <div class="flex items-center gap-2 shrink-0">
+                <div onclick="switchTab('overview')" class="bg-amber-400 text-slate-900 p-1.5 rounded-lg shadow-sm flex items-center justify-center cursor-pointer hover:scale-105 transition-transform" id="courseIconBox" title="חזור למבט על">
                     <i data-lucide="banana" class="w-5 h-5"></i>
                 </div>
                 <div class="leading-tight">
-                    <div class="flex items-center gap-2">
-                        <h1 id="courseMainTitle" class="text-sm sm:text-base font-extrabold text-slate-900 whitespace-nowrap">
+                    <div class="flex items-center gap-1.5">
+                        <h1 onclick="switchTab('overview')" id="courseMainTitle" class="text-sm sm:text-base font-extrabold text-slate-900 whitespace-nowrap cursor-pointer hover:text-brand-600 transition-colors">
                             קורס כיפוף בננות מתקדם (תשפ״ז)
                         </h1>
-                        <span id="dataSourceBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300 whitespace-nowrap">
-                            נתוני דמה להדגמה
+                        <span id="dataSourceBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 whitespace-nowrap">
+                            נתוני דמה
+                        </span>
+                        <span id="gradebookBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 whitespace-nowrap" title="ציונים מספריים משולבים בדשבורד">
+                            + ציונים משולבים
                         </span>
                     </div>
-                    <p id="courseSubtitle" class="text-[11px] text-slate-500 hidden sm:block">
-                        14 סטודנטים רשומים | עדכון אחרון: 08/11/2026 | גרירה או העלאה של קובץ לוגים מ-Moodle
+                    <p id="courseSubtitle" class="text-[11px] text-slate-500 hidden xl:block">
+                        14 סטודנטים | לחץ על כל כרטיס, גרף, מטלה או סטודנט למעבר לניתוח מעמיק
                     </p>
                 </div>
 
-                <!-- Compact Upload Button Next to Title -->
-                <label for="csvFileInput" class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white shadow-sm transition-all whitespace-nowrap mr-1">
-                    <i data-lucide="upload" class="w-3.5 h-3.5"></i>
-                    <span>העלאת קובץ CSV</span>
+                <!-- Upload Button 1: Moodle Logs CSV -->
+                <label for="csvFileInput" class="cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white shadow-sm transition-all whitespace-nowrap mr-1" title="העלה קובץ יומני מעקב (Logs CSV) מ-Moodle">
+                    <i data-lucide="file-Spreadsheet" class="w-3.5 h-3.5"></i>
+                    <span>טעינת לוג (CSV)</span>
                     <input id="csvFileInput" type="file" accept=".csv" class="hidden" />
                 </label>
 
-                <button onclick="resetToDemoData()" id="resetDemoBtn" class="hidden inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all whitespace-nowrap" title="חזור לנתוני דמה (קורס כיפוף בננות)">
+                <!-- Upload Button 2: Moodle Gradebook CSV -->
+                <label for="gradebookFileInput" class="cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-all whitespace-nowrap" title="העלה קובץ ייצוא גיליון ציונים (Gradebook CSV) מ-Moodle לשילוב ציונים מספריים">
+                    <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i>
+                    <span>טעינת ציונים (Gradebook)</span>
+                    <input id="gradebookFileInput" type="file" accept=".csv" class="hidden" />
+                </label>
+
+                <button onclick="resetToDemoData()" id="resetDemoBtn" class="hidden inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all whitespace-nowrap" title="חזור לנתוני דמה (קורס כיפוף בננות)">
                     <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-                    <span class="hidden md:inline">איפוס לדמה</span>
+                    <span class="hidden md:inline">דמה</span>
                 </button>
             </div>
 
-            <!-- Center/Left: Integrated Navigation Tabs + User Filter -->
+            <!-- Center/Left: Integrated Navigation Tabs + User Filter + Help -->
             <div class="flex items-center gap-1 shrink-0 h-full">
                 <nav class="flex items-center h-full gap-0.5">
-                    <button onclick="switchTab('overview')" id="tab-btn-overview" class="tab-btn tab-active h-full px-3 text-xs flex items-center gap-1.5 transition-all whitespace-nowrap">
+                    <button onclick="switchTab('overview')" id="tab-btn-overview" class="tab-btn tab-active h-full px-2.5 text-xs flex items-center gap-1.5 transition-all whitespace-nowrap">
                         <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
                         <span>מבט על</span>
                     </button>
-                    <button onclick="switchTab('assignments')" id="tab-btn-assignments" class="tab-btn text-slate-600 hover:text-slate-900 hover:bg-slate-50 h-full px-3 text-xs font-medium flex items-center gap-1.5 transition-all whitespace-nowrap">
+                    <button onclick="switchTab('assignments')" id="tab-btn-assignments" class="tab-btn text-slate-600 hover:text-slate-900 hover:bg-slate-50 h-full px-2.5 text-xs font-medium flex items-center gap-1.5 transition-all whitespace-nowrap">
                         <i data-lucide="check-square" class="w-3.5 h-3.5"></i>
-                        <span>לפי מטלה</span>
+                        <span>לפי מטלה ובדיקה</span>
                     </button>
-                    <button onclick="switchTab('forums')" id="tab-btn-forums" class="tab-btn text-slate-600 hover:text-slate-900 hover:bg-slate-50 h-full px-3 text-xs font-medium flex items-center gap-1.5 transition-all whitespace-nowrap">
+                    <button onclick="switchTab('forums')" id="tab-btn-forums" class="tab-btn text-slate-600 hover:text-slate-900 hover:bg-slate-50 h-full px-2.5 text-xs font-medium flex items-center gap-1.5 transition-all whitespace-nowrap">
                         <i data-lucide="messages-square" class="w-3.5 h-3.5"></i>
                         <span>לפי פורום</span>
                     </button>
-                    <button onclick="switchTab('blogs')" id="tab-btn-blogs" class="tab-btn text-slate-600 hover:text-slate-900 hover:bg-slate-50 h-full px-3 text-xs font-medium flex items-center gap-1.5 transition-all whitespace-nowrap">
+                    <button onclick="switchTab('blogs')" id="tab-btn-blogs" class="tab-btn text-slate-600 hover:text-slate-900 hover:bg-slate-50 h-full px-2.5 text-xs font-medium flex items-center gap-1.5 transition-all whitespace-nowrap">
                         <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
                         <span>לפי בלוג</span>
                     </button>
-                    <button onclick="switchTab('students')" id="tab-btn-students" class="tab-btn text-slate-600 hover:text-slate-900 hover:bg-slate-50 h-full px-3 text-xs font-medium flex items-center gap-1.5 transition-all whitespace-nowrap">
+                    <button onclick="switchTab('students')" id="tab-btn-students" class="tab-btn text-slate-600 hover:text-slate-900 hover:bg-slate-50 h-full px-2.5 text-xs font-medium flex items-center gap-1.5 transition-all whitespace-nowrap">
                         <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
                         <span>לפי סטודנט</span>
                     </button>
@@ -153,12 +180,12 @@
 
                 <div class="h-5 w-px bg-slate-200 mx-1"></div>
 
-                <button onclick="openModal('staffModal')" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all whitespace-nowrap" title="סינון משתמשים (סטודנטים / סגל)">
+                <button onclick="openModal('staffModal')" class="inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all whitespace-nowrap" title="סינון משתמשים (סטודנטים / סגל)">
                     <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-slate-600"></i>
-                    <span class="hidden xl:inline">סינון משתמשים</span>
+                    <span class="hidden 2xl:inline">משתמשים</span>
                 </button>
 
-                <button onclick="openModal('aboutModal')" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 transition-all whitespace-nowrap" title="אודות האפליקציה ומדריך שימוש">
+                <button onclick="openModal('aboutModal')" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 transition-all whitespace-nowrap" title="אודות האפליקציה ומדריך שימוש">
                     <i data-lucide="help-circle" class="w-3.5 h-3.5 text-brand-600"></i>
                     <span>אודות ועזרה</span>
                 </button>
@@ -178,51 +205,54 @@
         <!-- ==================== TAB 1: OVERVIEW (מבט על) ==================== -->
         <section id="tab-overview" class="tab-content space-y-4">
             
-            <!-- Compact KPI Cards Strip -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3" id="overviewKpiGrid">
-                <!-- Populated by JS -->
+            <!-- Interactive Live KPI Cards Strip (7 cards) -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5" id="overviewKpiGrid">
+                <!-- Populated by JS - Every card is clickable! -->
             </div>
 
-            <!-- Charts Row 1: Timeline & Activity Rate -->
+            <!-- Charts Row 1: Timeline & Activity Rate (Interactive Clicks) -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <!-- Timeline Chart -->
                 <div class="lg:col-span-2 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                     <div class="flex items-center justify-between mb-2">
                         <div>
-                            <h3 class="text-sm font-bold text-slate-900">ציר זמן פעילות אקטיבית בקורס</h3>
-                            <p class="text-[11px] text-slate-500">התפלגות יומית של פרסומי בלוג, פוסטים ותגובות בפורום והגשות מטלות</p>
+                            <h3 class="text-sm font-bold text-slate-900">ציר זמן פעילות אקטיבית בקורס (לחיץ)</h3>
+                            <p class="text-[11px] text-slate-500">לחץ על כל סדרה בגרף (בלוג, פורום או מטלות) כדי לעבור לניתוח המלא שלה</p>
                         </div>
                         <span class="text-[11px] font-medium px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md" id="timelineDateRange">מעקב יומי</span>
                     </div>
                     <div class="h-56 relative">
-                        <canvas id="timelineChart"></canvas>
+                        <canvas id="timelineChart" class="cursor-pointer"></canvas>
                     </div>
                 </div>
 
                 <!-- Participation Rate by Category -->
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                     <div class="mb-2">
-                        <h3 class="text-sm font-bold text-slate-900">שיעור סטודנטים פעילים לפי קטגוריה</h3>
-                        <p class="text-[11px] text-slate-500">אחוז הסטודנטים שביצעו לפחות פעולה אחת בכל רכיב</p>
+                        <h3 class="text-sm font-bold text-slate-900">שיעור השתתפות ובדיקה לפי קטגוריה (לחיץ)</h3>
+                        <p class="text-[11px] text-slate-500">לחץ על כל עמודה למעבר ישיר ללשונית הניתוח שלה</p>
                     </div>
                     <div class="h-56 relative">
-                        <canvas id="categoryRateChart"></canvas>
+                        <canvas id="categoryRateChart" class="cursor-pointer"></canvas>
                     </div>
                 </div>
             </div>
 
-            <!-- Master Student Participation Table -->
+            <!-- Master Student Participation & Grading Table -->
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                 <div class="p-3.5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div class="flex items-center gap-3 flex-wrap">
                         <div>
-                            <h3 class="text-sm font-bold text-slate-900">טבלת השתתפות מרכזית לפי סטודנט ופירוט מטלות</h3>
-                            <p class="text-[11px] text-slate-500">לחץ על שם סטודנט למעבר לכרטיס האישי, או על כותרות העמודות למיון</p>
+                            <h3 class="text-sm font-bold text-slate-900">טבלת השתתפות, הגשות חוזרות, בדיקת מטלות וציונים</h3>
+                            <p class="text-[11px] text-slate-500">
+                                <span class="font-semibold text-brand-700">הכל חי:</span> לחץ על <strong>שם סטודנט</strong> לפרופיל אישי, על <strong>כותרת מטלה</strong> לניתוח המטלה, או על <strong>תא הגשה</strong> לפירוט הבדיקה
+                            </p>
                         </div>
                         <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-lg text-xs">
                             <button onclick="setOverviewStatusFilter('all')" id="ov-filter-all" class="px-2.5 py-1 rounded-md font-bold bg-white text-slate-900 shadow-sm">הכל</button>
-                            <button onclick="setOverviewStatusFilter('leading')" id="ov-filter-leading" class="px-2.5 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900">מובילים ★</button>
-                            <button onclick="setOverviewStatusFilter('atrisk')" id="ov-filter-atrisk" class="px-2.5 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900">תת-השתתפות !</button>
+                            <button onclick="setOverviewStatusFilter('pending_grade')" id="ov-filter-pending_grade" class="px-2.5 py-1 rounded-md font-medium text-amber-800 hover:bg-white/60">ממתינים לבדיקה ⏳</button>
+                            <button onclick="setOverviewStatusFilter('resubmitted')" id="ov-filter-resubmitted" class="px-2.5 py-1 rounded-md font-medium text-purple-800 hover:bg-white/60">הגשות חוזרות ↻</button>
+                            <button onclick="setOverviewStatusFilter('atrisk')" id="ov-filter-atrisk" class="px-2.5 py-1 rounded-md font-medium text-rose-700 hover:bg-white/60">תת-השתתפות !</button>
                         </div>
                     </div>
                     <div class="flex flex-wrap items-center gap-2.5">
@@ -236,6 +266,17 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Legend Bar for Assignment Cells -->
+                <div class="px-4 py-2 bg-slate-50/80 border-b border-slate-200 flex flex-wrap items-center gap-4 text-[11px] text-slate-600">
+                    <span class="font-bold text-slate-700">מקרא תאי מטלות:</span>
+                    <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> <strong>נבדק / ציון</strong> (המרצה בדק)</span>
+                    <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> <strong>ממתין לבדיקה</strong> (הוגש וטרם נבדק)</span>
+                    <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span> <strong>הוגש מחדש לאחר בדיקה!</strong> (דורש בדיקה חוזרת)</span>
+                    <span class="inline-flex items-center gap-1"><span class="px-1.5 py-0.2 rounded bg-purple-100 text-purple-800 font-bold text-[10px]">↻ 2+</span> מספר הגשות/עדכונים</span>
+                    <span class="inline-flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3 text-blue-600"></i> הסטודנט צפה במשוב</span>
+                </div>
+
                 <div class="overflow-x-auto">
                     <table class="w-full text-right border-collapse">
                         <thead id="masterTableHead" class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-600">
@@ -252,58 +293,71 @@
             </div>
         </section>
 
-        <!-- ==================== TAB 2: ASSIGNMENTS (ניתוח לפי מטלה) ==================== -->
+        <!-- ==================== TAB 2: ASSIGNMENTS (ניתוח לפי מטלה, בדיקה וציונים) ==================== -->
         <section id="tab-assignments" class="tab-content hidden space-y-4">
             
             <!-- Assignment Controls & Summary -->
             <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <h2 class="text-sm font-bold text-slate-900">ניתוח הגשת מטלות ומשפך המרה (צפייה במטלה ← פתיחת טופס ← הגשה בפועל)</h2>
-                    <p class="text-[11px] text-slate-500">מעקב אחר שיעורי ההגשה בכל מטלה, ניסיונות הגשה חוזרים וסטודנטים שטרם הגישו</p>
+                    <h2 class="text-sm font-bold text-slate-900">ניתוח מטלות: מצב בדיקת המרצה, הגשות חוזרות, צפייה במשוב וציונים</h2>
+                    <p class="text-[11px] text-slate-500">לחץ על כל כרטיס מטלה או עמודה בגרף כדי למקד את טבלת הבדיקה והציונים של אותה מטלה</p>
                 </div>
-                <label class="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
-                    <input type="checkbox" id="toggleDeletedAssignTab" onchange="toggleDeletedAssignments(this.checked)" class="rounded text-brand-600 focus:ring-brand-500">
-                    <span>הצג מטלות שנמחקו (Deleted assign)</span>
-                </label>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <label for="gradebookFileInputTab" class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 transition-all">
+                        <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                        <span>העלאת גיליון ציונים (CSV)</span>
+                        <input id="gradebookFileInputTab" type="file" accept=".csv" class="hidden" onchange="if(this.files[0]) parseUploadedGradebook(this.files[0])" />
+                    </label>
+                    <label class="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
+                        <input type="checkbox" id="toggleDeletedAssignTab" onchange="toggleDeletedAssignments(this.checked)" class="rounded text-brand-600 focus:ring-brand-500">
+                        <span>הצג מטלות שנמחקו</span>
+                    </label>
+                </div>
             </div>
 
-            <!-- Assignment Cards Grid -->
+            <!-- Assignment Cards Grid (Clickable Live Selectors) -->
             <div id="assignmentCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 <!-- Populated by JS -->
             </div>
 
-            <!-- Assignment Charts Row -->
+            <!-- Assignment Charts Row: Grading Status Stacked Bar & Resubmissions/Grades Chart -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-900 mb-0.5">השוואת מגישים ייחודיים מול סך אירועי הגשה</h3>
-                    <p class="text-[11px] text-slate-500 mb-3">פער בין העמודות מעיד על סטודנטים שעדכנו או הגישו את המטלה מספר פעמים</p>
+                    <h3 class="text-sm font-bold text-slate-900 mb-0.5">מצב בדיקת מטלות (נבדקו מול ממתינים לבדיקה והגשות חוזרות)</h3>
+                    <p class="text-[11px] text-slate-500 mb-3">לחץ על כל עמודת מטלה כדי לסנן את רשימת הסטודנטים למטה לפי אותה מטלה</p>
                     <div class="h-60 relative">
-                        <canvas id="assignmentsBarChart"></canvas>
+                        <canvas id="assignmentsGradingChart" class="cursor-pointer"></canvas>
                     </div>
                 </div>
 
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-900 mb-0.5">משפך מעורבות במטלות (צפיות מול הגשות בפועל)</h3>
-                    <p class="text-[11px] text-slate-500 mb-3">השוואה בין מספר הצפיות ברכיב המטלה, צפייה בטופס ההגשה וביצוע הגשה</p>
+                    <h3 class="text-sm font-bold text-slate-900 mb-0.5">הגשות חוזרות, צפייה במשוב וממוצע ציונים לפי מטלה</h3>
+                    <p class="text-[11px] text-slate-500 mb-3">מעקב אחר כמות הסטודנטים שהגישו מספר פעמים, צפו במשוב המרצה וממוצע הציונים</p>
                     <div class="h-60 relative">
-                        <canvas id="assignmentsFunnelChart"></canvas>
+                        <canvas id="assignmentsFunnelChart" class="cursor-pointer"></canvas>
                     </div>
                 </div>
             </div>
 
             <!-- Detailed Assignment Drill-down -->
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="p-3.5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div id="assignmentDrilldownSection" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-3.5 border-b border-slate-200 flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-slate-50/60">
                     <div class="flex flex-col sm:flex-row sm:items-center gap-2.5">
-                        <label class="text-xs font-bold text-slate-800">בחר מטלה לפירוט שמי:</label>
-                        <select id="assignmentSelectDropdown" onchange="renderAssignmentDrilldown()" class="bg-slate-50 border border-slate-300 text-slate-900 text-xs rounded-lg px-3 py-1.5 font-semibold focus:ring-2 focus:ring-brand-500">
+                        <label class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
+                            <i data-lucide="filter" class="w-4 h-4 text-brand-600"></i>
+                            <span>מטלה מוצגת בפירוט:</span>
+                        </label>
+                        <select id="assignmentSelectDropdown" onchange="renderAssignmentDrilldown()" class="bg-white border border-brand-300 text-slate-900 text-xs rounded-lg px-3 py-1.5 font-bold focus:ring-2 focus:ring-brand-500 shadow-sm">
                             <!-- Populated by JS -->
                         </select>
+                        <span id="selectedAssignmentSummaryPills" class="flex items-center gap-1.5 flex-wrap"></span>
                     </div>
-                    <div class="flex items-center gap-1.5">
+                    <div class="flex flex-wrap items-center gap-1.5">
                         <button onclick="setAssignmentStatusFilter('all')" id="assign-filter-all" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-600 text-white">הכל</button>
-                        <button onclick="setAssignmentStatusFilter('submitted')" id="assign-filter-submitted" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">הגישו ✓</button>
-                        <button onclick="setAssignmentStatusFilter('missing')" id="assign-filter-missing" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">טרם הגישו ✗</button>
+                        <button onclick="setAssignmentStatusFilter('pending')" id="assign-filter-pending" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-amber-800 hover:bg-amber-100">ממתינים לבדיקה ⏳</button>
+                        <button onclick="setAssignmentStatusFilter('graded')" id="assign-filter-graded" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-emerald-800 hover:bg-emerald-100">נבדקו ✓</button>
+                        <button onclick="setAssignmentStatusFilter('resubmitted')" id="assign-filter-resubmitted" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-purple-800 hover:bg-purple-100">הגשות חוזרות ↻</button>
+                        <button onclick="setAssignmentStatusFilter('missing')" id="assign-filter-missing" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-rose-800 hover:bg-rose-100">טרם הגישו ✗</button>
                     </div>
                 </div>
                 <div class="overflow-x-auto">
@@ -311,10 +365,13 @@
                         <thead class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-600">
                             <tr>
                                 <th class="py-2.5 px-4">שם הסטודנט/ית</th>
-                                <th class="py-2.5 px-4">סטטוס הגשה</th>
-                                <th class="py-2.5 px-4">אירועי הגשה</th>
+                                <th class="py-2.5 px-4">מצב הגשה ובדיקה</th>
+                                <th class="py-2.5 px-4 text-center">הגשות / עדכונים</th>
+                                <th class="py-2.5 px-4 text-center">ציון (Gradebook)</th>
                                 <th class="py-2.5 px-4">מועד הגשה אחרון</th>
-                                <th class="py-2.5 px-4">צפיות במטלה</th>
+                                <th class="py-2.5 px-4">מועד בדיקת מרצה</th>
+                                <th class="py-2.5 px-4 text-center">צפייה במשוב</th>
+                                <th class="py-2.5 px-4 text-center">צפיות במטלה</th>
                             </tr>
                         </thead>
                         <tbody id="assignmentDrilldownBody" class="divide-y divide-slate-200 text-xs">
@@ -333,20 +390,23 @@
                 <!-- Populated by JS -->
             </div>
 
-            <!-- Forum Charts & Summary Table -->
+            <!-- Forum Charts & Interactive Summary Table -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-900 mb-0.5">פתיחת דיונים מול תגובות לעמיתים לפי פורום</h3>
-                    <p class="text-[11px] text-slate-500 mb-3">השוואה בין פרסום פוסט חדש (`הוספת דיון`) לבין תגובה (`הוספת תגובה`)</p>
+                    <h3 class="text-sm font-bold text-slate-900 mb-0.5">פתיחת דיונים מול תגובות לעמיתים לפי פורום (לחיץ)</h3>
+                    <p class="text-[11px] text-slate-500 mb-3">לחץ על כל עמודת פורום בגרף כדי למקד את הפירוט השמי של אותו פורום</p>
                     <div class="h-64 relative">
-                        <canvas id="forumsBarChart"></canvas>
+                        <canvas id="forumsBarChart" class="cursor-pointer"></canvas>
                     </div>
                 </div>
 
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
-                        <h3 class="text-sm font-bold text-slate-900 mb-0.5">ריכוז קבוצות דיון (פורום NG) ופורומים בקורס</h3>
-                        <p class="text-[11px] text-slate-500 mb-3">פירוט מלא של היקף הפעילות בכל קבוצת דיון</p>
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-sm font-bold text-slate-900">ריכוז קבוצות דיון (לחץ על פורום לסינון)</h3>
+                            <button onclick="selectForumDrilldown('all')" id="forumResetBtn" class="text-[11px] font-bold text-brand-600 hover:underline hidden">הצג את כל הפורומים</button>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mb-3">לחץ על שורת פורום בטבלה כדי להדגיש ולסנן את המשתתפים בו</p>
                         <div class="overflow-x-auto">
                             <table class="w-full text-right border-collapse text-xs">
                                 <thead class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-600">
@@ -368,10 +428,18 @@
             </div>
 
             <!-- Student x Forum Matrix -->
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="p-3.5 border-b border-slate-200">
-                    <h3 class="text-sm font-bold text-slate-900">מטריצת השתתפות: סטודנטים × קבוצות דיון</h3>
-                    <p class="text-[11px] text-slate-500">בכל תא מוצג: מספר פתיחת דיונים חדשים (כחול) ומספר תגובות לעמיתים (סגול)</p>
+            <div id="forumMatrixSection" class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-3.5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900" id="forumMatrixTitle">מטריצת השתתפות: סטודנטים × קבוצות דיון</h3>
+                        <p class="text-[11px] text-slate-500">לחץ על שם סטודנט למעבר לכרטיס האישי, או על כותרת פורום למיקוד</p>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-xs font-bold text-slate-700">מיקוד פורום:</span>
+                        <select id="forumSelectDropdown" onchange="selectForumDrilldown(this.value)" class="bg-slate-50 border border-slate-300 text-slate-900 text-xs rounded-lg px-2.5 py-1 font-bold">
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-right border-collapse text-xs">
@@ -389,7 +457,7 @@
         <!-- ==================== TAB 4: BLOGS (ניתוח לפי בלוג) ==================== -->
         <section id="tab-blogs" class="tab-content hidden space-y-4">
             
-            <!-- Blog KPIs -->
+            <!-- Blog KPIs (Interactive Filters) -->
             <div id="blogKpiGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 <!-- Populated by JS -->
             </div>
@@ -397,27 +465,36 @@
             <!-- Blog Charts -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-900 mb-0.5">התפלגות סטודנטים לפי כמות פוסטים</h3>
-                    <p class="text-[11px] text-slate-500 mb-3">כמה סטודנטים פרסמו 3+, 2, 1 או 0 פוסטים ביומן הלמידה</p>
+                    <h3 class="text-sm font-bold text-slate-900 mb-0.5">התפלגות סטודנטים לפי כמות פוסטים (לחיץ)</h3>
+                    <p class="text-[11px] text-slate-500 mb-3">לחץ על פלח בגרף כדי לסנן את טבלת הסטודנטים למטה</p>
                     <div class="h-56 relative">
-                        <canvas id="blogDistributionChart"></canvas>
+                        <canvas id="blogDistributionChart" class="cursor-pointer"></canvas>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-900 mb-0.5">השוואת פרסום פוסטים ותגובות בבלוג לפי סטודנט</h3>
-                    <p class="text-[11px] text-slate-500 mb-3">מעקב אחר פרסום פוסטים (`Post created`) ותגובות לעמיתים (`Comment created`)</p>
+                    <h3 class="text-sm font-bold text-slate-900 mb-0.5">השוואת פרסום פוסטים ותגובות בבלוג לפי סטודנט (לחיץ)</h3>
+                    <p class="text-[11px] text-slate-500 mb-3">לחץ על עמודת סטודנט בגרף למעבר ישיר לכרטיס הסטודנט</p>
                     <div class="h-56 relative">
-                        <canvas id="blogStudentChart"></canvas>
+                        <canvas id="blogStudentChart" class="cursor-pointer"></canvas>
                     </div>
                 </div>
             </div>
 
             <!-- Blog Detailed Table -->
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="p-3.5 border-b border-slate-200">
-                    <h3 class="text-sm font-bold text-slate-900">פירוט פעילות בבלוג הקורס לפי סטודנט</h3>
-                    <p class="text-[11px] text-slate-500">מועדי פרסום הפוסטים בבלוג, תגובות לעמיתים ומספר צפיות</p>
+                <div class="p-3.5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900">פירוט פעילות בבלוג הקורס לפי סטודנט</h3>
+                        <p class="text-[11px] text-slate-500">לחץ על שם סטודנט למעבר לכרטיס האישי שלו</p>
+                    </div>
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <button onclick="setBlogFilter('all')" id="blog-filter-all" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-600 text-white">הכל</button>
+                        <button onclick="setBlogFilter('3plus')" id="blog-filter-3plus" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-emerald-800 hover:bg-emerald-100">3+ פוסטים</button>
+                        <button onclick="setBlogFilter('1to2')" id="blog-filter-1to2" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-indigo-800 hover:bg-indigo-100">1–2 פוסטים</button>
+                        <button onclick="setBlogFilter('commenters')" id="blog-filter-commenters" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-purple-800 hover:bg-purple-100">הגיבו לבלוג</button>
+                        <button onclick="setBlogFilter('zero')" id="blog-filter-zero" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-rose-800 hover:bg-rose-100">0 פוסטים</button>
+                    </div>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-right border-collapse text-xs">
@@ -568,7 +645,7 @@
                 </button>
             </div>
 
-            <!-- Modal Body -->
+                    <!-- Modal Body -->
             <div class="p-5 space-y-4 max-h-[75vh] overflow-y-auto text-xs leading-relaxed text-slate-700">
                 
                 <!-- 1. Who built it & Contact Info -->
@@ -604,7 +681,7 @@
                         מעבר למעקב הפדגוגי השוטף אחר מעורבות הסטודנטים בקורס, <strong>מטרת האפליקציה היא להדגים למרצים ואנשי חינוך כמה קל, מהיר ונגיש לייצר כיום דשבורד אינטראקטיבי מותאם אישית</strong> מתוך נתוני הקורס שלהם בעזרת כלי בינה מלאכותית יוצרת (GenAI), ללא צורך בידע מוקדם בתכנות.
                     </p>
                     <p class="text-slate-600">
-                        מערכת ה-Moodle אוספת יומני מעקב (Logs) עשירים מאוד, אך מציגה אותם כטבלאות גולמיות של אלפי שורות. באמצעות שיחה קצרה עם מודל שפה, כל מרצה יכול להפוך את הקובץ הגולמי לכלי ויזואלי המנתח למידה פעילה (בלוגים, פורומים והגשת מטלות) ומזהה סטודנטים בסיכון. <strong>שמירה מלאה על פרטיות:</strong> כל עיבוד הנתונים מתבצע מקומית בדפדפן שלך בלבד (Client-Side), ואף נתון אינו נשלח או נשמר בשרת חיצוני.
+                        האפליקציה משלבת בין שני מקורות משלימים מ-Moodle: <strong>יומן המעקב (Logs)</strong> שמציג למידה פעילה, הגשות חוזרות, מועדי בדיקת תרגילים והאם הסטודנט צפה במשוב, ו<strong>גיליון הציונים (Gradebook)</strong> שמוסיף את הציונים המספריים עצמם. <strong>שמירה מלאה על פרטיות:</strong> כל עיבוד הנתונים מתבצע מקומית בדפדפן שלך בלבד (Client-Side), ואף נתון אינו נשלח או נשמר בשרת חיצוני.
                     </p>
                 </div>
 
@@ -626,30 +703,30 @@
                     <blockquote id="creatorPromptBlock" class="p-3 rounded-lg bg-white border border-amber-200/80 text-slate-800 font-medium text-xs leading-relaxed select-all shadow-inner">הקובץ המצורף הוא לוג השתתפות בקורס מודל. צור אפליקציית ווב שאני יכול להעלות לגיטהב, המציגה דשבורד של השתתפות סטודנטים בפעילויות הקורס: פרסום בלוג, פרסום פוסט בפורום, תגובה לבלוג, תגובה לפוסט בפורום, הגשת מטלה (פירוט לפי מטלה). האפליקציה תציג נתוני דמה ותאפשר להעלות את נתוני האמת בקובץ csv</blockquote>
                 </div>
 
-                <!-- 4. How to use it -->
+                <!-- 4. How to use it (Logs + Gradebook) -->
                 <div class="space-y-2.5 pt-1">
                     <h4 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
                         <i data-lucide="compass" class="w-4 h-4 text-brand-600"></i>
-                        <span>איך משתמשים באפליקציה? (מדריך שלב-אחר-שלב)</span>
+                        <span>איך משתמשים באפליקציה? (יומן מעקב + גיליון ציונים)</span>
                     </h4>
 
                     <div class="grid grid-cols-1 gap-2.5">
                         <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
                             <span class="w-6 h-6 rounded-full bg-brand-600 text-white font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">1</span>
                             <div>
-                                <div class="font-bold text-slate-900">הפקת קובץ יומני מעקב מ-Moodle</div>
+                                <div class="font-bold text-slate-900">טעינת יומן מעקב (Logs CSV) – להשתתפות, הגשות חוזרות ומצב בדיקה</div>
                                 <p class="text-slate-600 mt-0.5">
-                                    היכנסו לאתר הקורס ב-Moodle &larr; בתפריט הניהול/דוחות בחרו ב-<strong>"יומני מעקב" (Logs)</strong> &larr; השאירו את הסינון על "כל המשתתפים", "כל הימים" ו"כל הפעילויות" ולחצו על <strong>"קבלת יומני מעקב אלו"</strong> &larr; גללו לתחתית העמוד ובחרו בייצוא הנתונים כקובץ <strong>CSV</strong> (Comma separated values).
+                                    באתר הקורס ב-Moodle היכנסו אל <strong>דוחות &larr; יומני מעקב (Logs)</strong> &larr; לחצו על <strong>"קבלת יומני מעקב אלו"</strong> &larr; בתחתית העמוד ייצאו כקובץ <strong>CSV</strong> והעלו אותו בלחיצה על הכפתור הכחול <strong>"טעינת לוג (CSV)"</strong>. הקובץ מנתח פרסומי בלוג, פורומים, הגשות, הגשות חוזרות, האם המרצה בדק והאם הסטודנט צפה במשוב.
                                 </p>
                             </div>
                         </div>
 
-                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
-                            <span class="w-6 h-6 rounded-full bg-brand-600 text-white font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">2</span>
+                        <div class="p-3 rounded-xl bg-emerald-50/60 border border-emerald-200 flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-full bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">2</span>
                             <div>
-                                <div class="font-bold text-slate-900">טעינת הקובץ לדשבורד</div>
+                                <div class="font-bold text-slate-900">טעינת גיליון ציונים (Gradebook CSV) – לשילוב הציונים המספריים</div>
                                 <p class="text-slate-600 mt-0.5">
-                                    לחצו על כפתור <strong>"העלאת קובץ CSV"</strong> שבסרגל העליון (או פשוט גררו ושחררו את קובץ ה-CSV אל תוך חלון הדפדפן). המערכת תזהה אוטומטית את שם הקורס, תסנן מרצים ואנשי מערכת, ותעדכן את כל הגרפים והטבלאות.
+                                    יומני המעקב של Moodle אינם שומרים את הציון המספרי עצמו. כדי לראות גם את הציונים בדשבורד: היכנסו ב-Moodle אל <strong>ציונים (Grades) &larr; ייצוא (Export) &larr; קובץ טקסט מופרד בפסיקים (CSV)</strong> &larr; הורידו את הקובץ והעלו אותו בלחיצה על הכפתור הירוק <strong>"טעינת ציונים (Gradebook)"</strong> (או גררו אותו למסך). המערכת תצליב אוטומטית את שמות הסטודנטים והמטלות ותציג את הציונים והממוצעים בכל המסכים!
                                 </p>
                             </div>
                         </div>
@@ -657,9 +734,9 @@
                         <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
                             <span class="w-6 h-6 rounded-full bg-brand-600 text-white font-extrabold text-xs flex items-center justify-center shrink-0 mt-0.5">3</span>
                             <div>
-                                <div class="font-bold text-slate-900">חקירת הנתונים וניווט בין התצוגות</div>
+                                <div class="font-bold text-slate-900">דשבורד "חי" ואינטראקטיבי לחלוטין</div>
                                 <p class="text-slate-600 mt-0.5">
-                                    עברו בין 5 הלשוניות בראש העמוד (<strong>מבט על, לפי מטלה, לפי פורום, לפי בלוג, לפי סטודנט</strong>). ניתן ללחוץ על שם של כל סטודנט בטבלאות כדי לעבור מיד לכרטיס המעקב האישי שלו, לסנן סטודנטים שטרם הגישו מטלה מסוימת, או לעדכן את רשימת הסטודנטים בכפתור "סינון משתמשים".
+                                    כל אלמנט בדשבורד לחיץ: לחיצה על כרטיס <strong>"פרסום בלוג"</strong> תעביר למסך הבלוגים, לחיצה על <strong>שם מטלה</strong> (בטבלה או בגרף) תפתח את מסך הניתוח הממוקד של אותה מטלה, ולחיצה על <strong>שם סטודנט</strong> בכל מקום תעביר לכרטיס הסטודנט האישי.
                                 </p>
                             </div>
                         </div>
@@ -681,9 +758,11 @@
     <script>
         // =========================================================================
         // 1. DUMMY INITIALIZATION DATASET ("קורס כיפוף בננות מתקדם")
+        //    Includes Submissions, Resubmissions, Grading Status, Feedback Views & Gradebook Scores
         // =========================================================================
         const DEMO_COURSE_STATE = {
             isDemo: true,
+            hasGradebook: true,
             courseName: 'קורס כיפוף בננות מתקדם (תשפ״ז)',
             lastLogDate: '08/11/2026 09:30',
             assignmentsMeta: [
@@ -714,6 +793,7 @@
                     name: 'דניאל בנני',
                     role: 'student',
                     totalEvents: 210,
+                    courseTotalGrade: 96,
                     lastSeen: '08/11/2026 09:15',
                     blogPosts: 3,
                     blogComments: 2,
@@ -729,16 +809,17 @@
                         'forum_4': { discussions: 1, replies: 0, dates: ['08/11/2026 09:00'] }
                     },
                     assignmentsDetail: {
-                        'assign_1': { count: 1, lastDate: '20/10/2026 20:10', views: 8 },
-                        'assign_2': { count: 2, lastDate: '25/10/2026 21:00', views: 11 },
-                        'assign_3': { count: 1, lastDate: '02/11/2026 19:40', views: 6 },
-                        'assign_4': { count: 1, lastDate: '08/11/2026 09:12', views: 5 }
+                        'assign_1': { count: 1, updates: 1, lastDate: '20/10/2026 20:10', graded: true, gradedDate: '31/10/2026 22:33', grade: 98, feedbackViewed: 2, views: 8 },
+                        'assign_2': { count: 2, updates: 2, lastDate: '02/11/2026 21:00', graded: true, gradedDate: '01/11/2026 18:00', grade: 92, feedbackViewed: 1, views: 11 },
+                        'assign_3': { count: 1, updates: 1, lastDate: '02/11/2026 19:40', graded: true, gradedDate: '04/11/2026 10:15', grade: 97, feedbackViewed: 1, views: 6 },
+                        'assign_4': { count: 1, updates: 1, lastDate: '08/11/2026 09:12', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 5 }
                     }
                 },
                 {
                     name: 'מיכל קליפה',
                     role: 'student',
                     totalEvents: 184,
+                    courseTotalGrade: 94,
                     lastSeen: '08/11/2026 08:50',
                     blogPosts: 3,
                     blogComments: 1,
@@ -754,16 +835,17 @@
                         'forum_4': { discussions: 1, replies: 0, dates: ['05/11/2026 18:30'] }
                     },
                     assignmentsDetail: {
-                        'assign_1': { count: 1, lastDate: '20/10/2026 21:00', views: 7 },
-                        'assign_2': { count: 1, lastDate: '25/10/2026 22:10', views: 6 },
-                        'assign_3': { count: 1, lastDate: '02/11/2026 18:00', views: 5 },
-                        'assign_4': { count: 1, lastDate: '08/11/2026 08:45', views: 4 }
+                        'assign_1': { count: 1, updates: 1, lastDate: '20/10/2026 21:00', graded: true, gradedDate: '31/10/2026 22:35', grade: 95, feedbackViewed: 3, views: 7 },
+                        'assign_2': { count: 1, updates: 1, lastDate: '25/10/2026 22:10', graded: true, gradedDate: '01/11/2026 18:10', grade: 94, feedbackViewed: 1, views: 6 },
+                        'assign_3': { count: 1, updates: 1, lastDate: '02/11/2026 18:00', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 5 },
+                        'assign_4': { count: 1, updates: 1, lastDate: '08/11/2026 08:45', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 4 }
                     }
                 },
                 {
                     name: 'יונתן אשכול',
                     role: 'student',
                     totalEvents: 152,
+                    courseTotalGrade: 89,
                     lastSeen: '07/11/2026 21:30',
                     blogPosts: 3,
                     blogComments: 1,
@@ -778,16 +860,17 @@
                         'forum_3': { discussions: 1, replies: 0, dates: ['02/11/2026 15:30'] }
                     },
                     assignmentsDetail: {
-                        'assign_1': { count: 1, lastDate: '22/10/2026 16:40', views: 6 },
-                        'assign_2': { count: 2, lastDate: '31/10/2026 19:20', views: 9 },
-                        'assign_3': { count: 1, lastDate: '05/11/2026 20:10', views: 5 },
-                        'assign_del': { count: 1, lastDate: '28/10/2026 13:15', views: 4 }
+                        'assign_1': { count: 1, updates: 1, lastDate: '22/10/2026 16:40', graded: true, gradedDate: '31/10/2026 22:37', grade: 90, feedbackViewed: 1, views: 6 },
+                        'assign_2': { count: 2, updates: 3, lastDate: '31/10/2026 19:20', graded: true, gradedDate: '01/11/2026 18:20', grade: 88, feedbackViewed: 0, views: 9 },
+                        'assign_3': { count: 1, updates: 1, lastDate: '05/11/2026 20:10', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 5 },
+                        'assign_del': { count: 1, updates: 1, lastDate: '28/10/2026 13:15', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 4 }
                     }
                 },
                 {
                     name: 'נועה קוונדיש',
                     role: 'student',
                     totalEvents: 146,
+                    courseTotalGrade: 91,
                     lastSeen: '07/11/2026 19:10',
                     blogPosts: 3,
                     blogComments: 0,
@@ -802,15 +885,16 @@
                         'forum_4': { discussions: 1, replies: 0, dates: ['05/11/2026 19:45'] }
                     },
                     assignmentsDetail: {
-                        'assign_1': { count: 1, lastDate: '20/10/2026 21:30', views: 5 },
-                        'assign_2': { count: 1, lastDate: '25/10/2026 22:00', views: 6 },
-                        'assign_4': { count: 1, lastDate: '07/11/2026 19:00', views: 4 }
+                        'assign_1': { count: 1, updates: 1, lastDate: '20/10/2026 21:30', graded: true, gradedDate: '31/10/2026 22:38', grade: 92, feedbackViewed: 1, views: 5 },
+                        'assign_2': { count: 1, updates: 1, lastDate: '25/10/2026 22:00', graded: true, gradedDate: '01/11/2026 18:25', grade: 90, feedbackViewed: 0, views: 6 },
+                        'assign_4': { count: 1, updates: 1, lastDate: '07/11/2026 19:00', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 4 }
                     }
                 },
                 {
                     name: 'רוני צהוב',
                     role: 'student',
                     totalEvents: 130,
+                    courseTotalGrade: 87,
                     lastSeen: '06/11/2026 14:20',
                     blogPosts: 2,
                     blogComments: 1,
@@ -825,15 +909,16 @@
                         'forum_3': { discussions: 1, replies: 0, dates: ['02/11/2026 16:00'] }
                     },
                     assignmentsDetail: {
-                        'assign_1': { count: 2, lastDate: '22/10/2026 18:00', views: 8 },
-                        'assign_2': { count: 1, lastDate: '31/10/2026 20:15', views: 5 },
-                        'assign_3': { count: 1, lastDate: '05/11/2026 11:30', views: 4 }
+                        'assign_1': { count: 3, updates: 3, lastDate: '24/10/2026 20:25', graded: true, gradedDate: '31/10/2026 22:33', grade: 88, feedbackViewed: 3, views: 8 },
+                        'assign_2': { count: 1, updates: 1, lastDate: '31/10/2026 20:15', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 5 },
+                        'assign_3': { count: 1, updates: 1, lastDate: '05/11/2026 11:30', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 4 }
                     }
                 },
                 {
                     name: 'אלון טרופי',
                     role: 'student',
                     totalEvents: 118,
+                    courseTotalGrade: 85,
                     lastSeen: '05/11/2026 22:00',
                     blogPosts: 2,
                     blogComments: 0,
@@ -847,15 +932,16 @@
                         'forum_3': { discussions: 1, replies: 2, dates: ['25/10/2026 13:00', '25/10/2026 13:40 (תגובה)', '02/11/2026 19:20 (תגובה)'] }
                     },
                     assignmentsDetail: {
-                        'assign_1': { count: 1, lastDate: '22/10/2026 19:10', views: 5 },
-                        'assign_2': { count: 1, lastDate: '02/11/2026 20:40', views: 6 },
-                        'assign_del': { count: 2, lastDate: '28/10/2026 17:00', views: 6 }
+                        'assign_1': { count: 1, updates: 1, lastDate: '22/10/2026 19:10', graded: true, gradedDate: '31/10/2026 22:40', grade: 85, feedbackViewed: 0, views: 5 },
+                        'assign_2': { count: 2, updates: 2, lastDate: '02/11/2026 20:40', graded: true, gradedDate: '01/11/2026 19:00', grade: 82, feedbackViewed: 1, views: 6 },
+                        'assign_del': { count: 2, updates: 2, lastDate: '28/10/2026 17:00', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 6 }
                     }
                 },
                 {
                     name: 'שירה שייק',
                     role: 'student',
                     totalEvents: 112,
+                    courseTotalGrade: 84,
                     lastSeen: '06/11/2026 16:05',
                     blogPosts: 3,
                     blogComments: 0,
@@ -869,14 +955,15 @@
                         'forum_2': { discussions: 1, replies: 1, dates: ['31/10/2026 10:20', '05/11/2026 14:15 (תגובה)'] }
                     },
                     assignmentsDetail: {
-                        'assign_1': { count: 1, lastDate: '25/10/2026 18:20', views: 5 },
-                        'assign_2': { count: 1, lastDate: '02/11/2026 17:30', views: 5 }
+                        'assign_1': { count: 1, updates: 1, lastDate: '01/11/2026 18:20', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 5 },
+                        'assign_2': { count: 1, updates: 1, lastDate: '02/11/2026 17:30', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 5 }
                     }
                 },
                 {
                     name: 'גיא פלנטיין',
                     role: 'student',
                     totalEvents: 96,
+                    courseTotalGrade: 80,
                     lastSeen: '04/11/2026 20:15',
                     blogPosts: 2,
                     blogComments: 1,
@@ -890,14 +977,15 @@
                         'forum_3': { discussions: 1, replies: 0, dates: ['02/11/2026 17:50'] }
                     },
                     assignmentsDetail: {
-                        'assign_1': { count: 1, lastDate: '25/10/2026 20:30', views: 4 },
-                        'assign_2': { count: 1, lastDate: '02/11/2026 19:10', views: 4 }
+                        'assign_1': { count: 1, updates: 1, lastDate: '06/11/2026 20:30', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 4 },
+                        'assign_2': { count: 1, updates: 1, lastDate: '02/11/2026 19:10', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 4 }
                     }
                 },
                 {
                     name: 'עמית מוזה',
                     role: 'student',
                     totalEvents: 89,
+                    courseTotalGrade: 88,
                     lastSeen: '05/11/2026 12:40',
                     blogPosts: 2,
                     blogComments: 0,
@@ -911,14 +999,15 @@
                         'forum_4': { discussions: 1, replies: 0, dates: ['05/11/2026 12:15'] }
                     },
                     assignmentsDetail: {
-                        'assign_2': { count: 1, lastDate: '31/10/2026 16:50', views: 5 },
-                        'assign_3': { count: 1, lastDate: '05/11/2026 12:35', views: 4 }
+                        'assign_2': { count: 1, updates: 1, lastDate: '31/10/2026 16:50', graded: true, gradedDate: '01/11/2026 18:40', grade: 88, feedbackViewed: 1, views: 5 },
+                        'assign_3': { count: 1, updates: 1, lastDate: '05/11/2026 12:35', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 4 }
                     }
                 },
                 {
                     name: 'תמר דקל',
                     role: 'student',
                     totalEvents: 74,
+                    courseTotalGrade: 82,
                     lastSeen: '02/11/2026 21:00',
                     blogPosts: 1,
                     blogComments: 0,
@@ -932,14 +1021,15 @@
                         'forum_3': { discussions: 1, replies: 1, dates: ['28/10/2026 19:00', '02/11/2026 20:50 (תגובה)'] }
                     },
                     assignmentsDetail: {
-                        'assign_1': { count: 1, lastDate: '25/10/2026 21:40', views: 4 },
-                        'assign_2': { count: 1, lastDate: '02/11/2026 20:55', views: 3 }
+                        'assign_1': { count: 1, updates: 1, lastDate: '06/11/2026 21:40', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 4 },
+                        'assign_2': { count: 1, updates: 1, lastDate: '02/11/2026 20:55', graded: false, gradedDate: '', grade: null, feedbackViewed: 0, views: 3 }
                     }
                 },
                 {
                     name: 'עידו פרי',
                     role: 'student',
                     totalEvents: 58,
+                    courseTotalGrade: 78,
                     lastSeen: '01/11/2026 17:20',
                     blogPosts: 1,
                     blogComments: 0,
@@ -953,13 +1043,14 @@
                         'forum_2': { discussions: 1, replies: 0, dates: ['28/10/2026 18:10'] }
                     },
                     assignmentsDetail: {
-                        'assign_1': { count: 1, lastDate: '28/10/2026 18:45', views: 3 }
+                        'assign_1': { count: 1, updates: 1, lastDate: '28/10/2026 18:45', graded: true, gradedDate: '31/10/2026 22:42', grade: 78, feedbackViewed: 0, views: 3 }
                     }
                 },
                 {
                     name: 'מאיה סמודי',
                     role: 'student',
                     totalEvents: 42,
+                    courseTotalGrade: null,
                     lastSeen: '31/10/2026 14:10',
                     blogPosts: 1,
                     blogComments: 0,
@@ -977,6 +1068,7 @@
                     name: 'אורי קופיקו',
                     role: 'student',
                     totalEvents: 25,
+                    courseTotalGrade: null,
                     lastSeen: '25/10/2026 16:00',
                     blogPosts: 0,
                     blogComments: 0,
@@ -994,6 +1086,7 @@
                     name: 'ליבי ג׳ונגל',
                     role: 'student',
                     totalEvents: 0,
+                    courseTotalGrade: null,
                     lastSeen: 'לא נכנס/ה לקורס',
                     blogPosts: 0,
                     blogComments: 0,
@@ -1010,7 +1103,7 @@
         };
 
         // =========================================================================
-        // 2. GLOBAL APPLICATION STATE
+        // 2. GLOBAL APPLICATION STATE & HELPERS
         // =========================================================================
         let appState = JSON.parse(JSON.stringify(DEMO_COURSE_STATE));
         let showDeletedAssignments = false;
@@ -1018,12 +1111,72 @@
         let masterSortAsc = false;
         let overviewStatusFilter = 'all';
         let assignmentStatusFilter = 'all';
+        let selectedForumFilter = 'all';
+        let selectedBlogFilter = 'all';
         let excludedUsersSet = new Set(appState.excludedStaff);
 
         let charts = {};
 
+        // Helper to parse DD/MM/YYYY HH:mm(:ss) into comparable timestamp
+        function parseMoodleDate(dateStr) {
+            if (!dateStr || typeof dateStr !== 'string') return 0;
+            const clean = dateStr.replace(',', '').trim();
+            const parts = clean.split(/\s+/);
+            const dParts = (parts[0] || '').split('/');
+            if (dParts.length !== 3) return 0;
+            const day = parseInt(dParts[0], 10);
+            const month = parseInt(dParts[1], 10) - 1;
+            let year = parseInt(dParts[2], 10);
+            if (year < 100) year += 2000;
+            const tParts = (parts[1] || '00:00:00').split(':');
+            const hour = parseInt(tParts[0] || 0, 10);
+            const min = parseInt(tParts[1] || 0, 10);
+            const sec = parseInt(tParts[2] || 0, 10);
+            return new Date(year, month, day, hour, min, sec).getTime();
+        }
+
+        // Determine detailed submission & grading status for a student's assignment cell
+        function getSubmissionStatusInfo(sub) {
+            if (!sub || (!sub.count && !sub.graded && sub.grade == null)) {
+                return { status: 'missing', label: 'טרם הוגש', badgeClass: 'bg-rose-50 text-rose-700 border border-rose-200' };
+            }
+            const isResubmitted = (sub.count || 0) > 1 || (sub.updates || 0) > 1;
+            const subTime = parseMoodleDate(sub.lastDate);
+            const gradeTime = parseMoodleDate(sub.gradedDate);
+
+            if (sub.graded && subTime > gradeTime && gradeTime > 0) {
+                return {
+                    status: 'resubmitted_pending',
+                    label: 'הוגש מחדש – ממתין לבדיקה!',
+                    shortLabel: 'הוגש מחדש ⏳',
+                    isResubmitted: true,
+                    badgeClass: 'bg-purple-100 text-purple-900 border border-purple-300'
+                };
+            }
+            if (sub.graded || sub.grade != null) {
+                return {
+                    status: 'graded',
+                    label: 'נבדק וניתן ציון ✓',
+                    shortLabel: 'נבדק ✓',
+                    isResubmitted,
+                    badgeClass: 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                };
+            }
+            return {
+                status: 'pending',
+                label: 'ממתין לבדיקה ⏳',
+                shortLabel: 'ממתין לבדיקה',
+                isResubmitted,
+                badgeClass: 'bg-amber-100 text-amber-800 border border-amber-300'
+            };
+        }
+
+        function normalizeName(str) {
+            return (str || '').replace(/\s+/g, ' ').trim();
+        }
+
         // =========================================================================
-        // 3. INITIALIZATION & TAB NAVIGATION
+        // 3. INITIALIZATION & LIVE NAVIGATION HELPERS
         // =========================================================================
         window.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
@@ -1050,6 +1203,30 @@
             }, 40);
         }
 
+        // Live Drill-down Navigators
+        function navigateToAssignment(assignId, statusFilter = 'all') {
+            switchTab('assignments');
+            const selectEl = document.getElementById('assignmentSelectDropdown');
+            if (selectEl && assignId) {
+                selectEl.value = assignId;
+            }
+            setAssignmentStatusFilter(statusFilter);
+            document.getElementById('assignmentDrilldownSection')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function navigateToForum(forumId = 'all') {
+            switchTab('forums');
+            selectForumDrilldown(forumId);
+            if (forumId !== 'all') {
+                document.getElementById('forumMatrixSection')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function navigateToBlogs(filter = 'all') {
+            switchTab('blogs');
+            setBlogFilter(filter);
+        }
+
         function toggleDeletedAssignments(checked) {
             showDeletedAssignments = checked;
             document.getElementById('toggleDeletedAssignOverview').checked = checked;
@@ -1065,19 +1242,45 @@
             const activeAssigns = getActiveAssignmentsMeta();
             let uniqueAssignSubmitted = 0;
             let totalAssignEvents = 0;
+            let gradedCount = 0;
+            let pendingGradeCount = 0;
+            let resubmittedCount = 0;
+            let feedbackViewedCount = 0;
+            let gradeSum = 0;
+            let numericGradesCount = 0;
 
             activeAssigns.forEach(a => {
                 const sub = student.assignmentsDetail[a.id];
-                if (sub && sub.count > 0) {
-                    uniqueAssignSubmitted++;
-                    totalAssignEvents += sub.count;
+                if (sub) {
+                    const info = getSubmissionStatusInfo(sub);
+                    if (sub.count > 0 || sub.graded || sub.grade != null) {
+                        uniqueAssignSubmitted++;
+                        totalAssignEvents += (sub.count || 1);
+                    }
+                    if (info.status === 'graded') gradedCount++;
+                    if (info.status === 'pending' || info.status === 'resubmitted_pending') pendingGradeCount++;
+                    if (info.isResubmitted) resubmittedCount++;
+                    if ((sub.feedbackViewed || 0) > 0) feedbackViewedCount++;
+                    if (sub.grade != null && !isNaN(sub.grade)) {
+                        gradeSum += Number(sub.grade);
+                        numericGradesCount++;
+                    }
                 }
             });
+
+            const avgGrade = student.courseTotalGrade != null
+                ? student.courseTotalGrade
+                : (numericGradesCount > 0 ? Math.round(gradeSum / numericGradesCount) : null);
 
             const totalActive = student.blogPosts + student.blogComments + student.forumDiscussions + student.forumReplies + totalAssignEvents;
             return {
                 uniqueAssignSubmitted,
                 totalAssignEvents,
+                gradedCount,
+                pendingGradeCount,
+                resubmittedCount,
+                feedbackViewedCount,
+                avgGrade,
                 totalActive
             };
         }
@@ -1090,6 +1293,11 @@
         // 4. MASTER RENDERING ENGINE
         // =========================================================================
         function refreshAllViews() {
+            const gbBadge = document.getElementById('gradebookBadge');
+            if (gbBadge) {
+                if (appState.hasGradebook) gbBadge.classList.remove('hidden');
+                else gbBadge.classList.add('hidden');
+            }
             renderOverviewTab();
             renderAssignmentsTab();
             renderForumsTab();
@@ -1109,6 +1317,8 @@
             let sumForumDisc = 0, activeForumPosters = 0;
             let sumForumReplies = 0, activeForumRepliers = 0;
             let sumUniqueAssigns = 0, sumAssignEvents = 0, activeAssignSubmitters = 0;
+            let sumGraded = 0, sumPendingGrade = 0, sumResubmissions = 0, sumFeedbackViewed = 0;
+            let gradesList = [];
 
             students.forEach(s => {
                 const m = computeStudentMetrics(s);
@@ -1126,22 +1336,33 @@
 
                 sumUniqueAssigns += m.uniqueAssignSubmitted;
                 sumAssignEvents += m.totalAssignEvents;
+                sumGraded += m.gradedCount;
+                sumPendingGrade += m.pendingGradeCount;
+                sumResubmissions += m.resubmittedCount;
+                sumFeedbackViewed += m.feedbackViewedCount;
                 if (m.uniqueAssignSubmitted > 0) activeAssignSubmitters++;
+                if (m.avgGrade != null) gradesList.push(m.avgGrade);
             });
 
             const pct = (n) => Math.round((n / totalStudents) * 1000) / 10;
+            const courseAvgGrade = gradesList.length > 0
+                ? Math.round(gradesList.reduce((a, b) => a + b, 0) / gradesList.length)
+                : null;
 
             document.getElementById('overviewKpiGrid').innerHTML = `
-                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                <div onclick="switchTab('students')" class="live-card bg-white p-3 rounded-xl border border-slate-200 shadow-sm" title="לחץ למעבר לכרטיסי הסטודנטים">
                     <div class="flex items-center justify-between text-slate-500 text-[11px] font-bold">
-                        <span>סטודנטים רשומים</span>
+                        <span>סטודנטים בקורס</span>
                         <i data-lucide="users" class="w-3.5 h-3.5 text-brand-600"></i>
                     </div>
                     <div class="text-xl font-extrabold text-slate-900 mt-0.5">${students.length}</div>
-                    <div class="text-[11px] text-slate-500">${students.filter(s => s.totalEvents > 0).length} פעילים באתר</div>
+                    <div class="text-[11px] text-brand-600 font-semibold flex items-center justify-between">
+                        <span>${students.filter(s => s.totalEvents > 0).length} פעילים</span>
+                        <span>לפרופילים &larr;</span>
+                    </div>
                 </div>
 
-                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                <div onclick="navigateToBlogs('all')" class="live-card bg-white p-3 rounded-xl border border-slate-200 shadow-sm" title="לחץ למעבר לניתוח הבלוגים">
                     <div class="flex items-center justify-between text-slate-500 text-[11px] font-bold">
                         <span>פרסום בלוג</span>
                         <i data-lucide="book-open" class="w-3.5 h-3.5 text-indigo-600"></i>
@@ -1150,7 +1371,7 @@
                     <div class="text-[11px] text-emerald-700 font-semibold">${activeBloggers}/${students.length} סטודנטים (${pct(activeBloggers)}%)</div>
                 </div>
 
-                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                <div onclick="navigateToBlogs('commenters')" class="live-card bg-white p-3 rounded-xl border border-slate-200 shadow-sm" title="לחץ להצגת המגיבים בבלוג">
                     <div class="flex items-center justify-between text-slate-500 text-[11px] font-bold">
                         <span>תגובה לבלוג</span>
                         <i data-lucide="message-circle" class="w-3.5 h-3.5 text-purple-600"></i>
@@ -1159,7 +1380,7 @@
                     <div class="text-[11px] text-purple-700 font-semibold">${activeBlogCommenters}/${students.length} סטודנטים (${pct(activeBlogCommenters)}%)</div>
                 </div>
 
-                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                <div onclick="navigateToForum('all')" class="live-card bg-white p-3 rounded-xl border border-slate-200 shadow-sm" title="לחץ למעבר לניתוח הפורומים">
                     <div class="flex items-center justify-between text-slate-500 text-[11px] font-bold">
                         <span>פוסט בפורום (דיון)</span>
                         <i data-lucide="messages-square" class="w-3.5 h-3.5 text-blue-600"></i>
@@ -1168,7 +1389,7 @@
                     <div class="text-[11px] text-emerald-700 font-semibold">${activeForumPosters}/${students.length} סטודנטים (${pct(activeForumPosters)}%)</div>
                 </div>
 
-                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                <div onclick="navigateToForum('all')" class="live-card bg-white p-3 rounded-xl border border-slate-200 shadow-sm" title="לחץ למעבר לניתוח תגובות בפורומים">
                     <div class="flex items-center justify-between text-slate-500 text-[11px] font-bold">
                         <span>תגובה בפורום</span>
                         <i data-lucide="reply" class="w-3.5 h-3.5 text-cyan-600"></i>
@@ -1177,21 +1398,36 @@
                     <div class="text-[11px] text-slate-600 font-semibold">${activeForumRepliers}/${students.length} סטודנטים (${pct(activeForumRepliers)}%)</div>
                 </div>
 
-                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                <div onclick="navigateToAssignment(null, 'resubmitted')" class="live-card bg-white p-3 rounded-xl border border-slate-200 shadow-sm" title="לחץ לצפייה בהגשות ובריבוי הגשות חוזרות">
                     <div class="flex items-center justify-between text-slate-500 text-[11px] font-bold">
-                        <span>הגשת מטלות</span>
-                        <i data-lucide="check-square" class="w-3.5 h-3.5 text-emerald-600"></i>
+                        <span>הגשות והגשות חוזרות</span>
+                        <i data-lucide="repeat" class="w-3.5 h-3.5 text-emerald-600"></i>
                     </div>
-                    <div class="text-xl font-extrabold text-slate-900 mt-0.5">${sumUniqueAssigns} <span class="text-[11px] font-normal text-slate-500">(${sumAssignEvents} אירועים)</span></div>
-                    <div class="text-[11px] text-emerald-700 font-semibold">${activeAssignSubmitters}/${students.length} הגישו (${pct(activeAssignSubmitters)}%)</div>
+                    <div class="text-xl font-extrabold text-slate-900 mt-0.5">${sumUniqueAssigns} <span class="text-[11px] font-bold text-purple-700">(${sumResubmissions} חוזרות ↻)</span></div>
+                    <div class="text-[11px] text-emerald-700 font-semibold">${activeAssignSubmitters}/${students.length} הגישו | ${sumAssignEvents} אירועים</div>
+                </div>
+
+                <div onclick="navigateToAssignment(null, 'pending')" class="live-card bg-gradient-to-br from-emerald-50/80 to-white p-3 rounded-xl border border-emerald-200 shadow-sm" title="לחץ למעבר למצב בדיקת המטלות והציונים">
+                    <div class="flex items-center justify-between text-emerald-900 text-[11px] font-bold">
+                        <span>מצב בדיקה וציונים</span>
+                        <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-emerald-600"></i>
+                    </div>
+                    <div class="text-xl font-extrabold text-slate-900 mt-0.5">
+                        ${sumGraded}/${sumUniqueAssigns} <span class="text-xs font-bold text-emerald-700">נבדקו</span>
+                        ${courseAvgGrade != null ? `<span class="text-xs font-extrabold text-brand-700 mr-1">| ממוצע ${courseAvgGrade}</span>` : ''}
+                    </div>
+                    <div class="text-[11px] ${sumPendingGrade > 0 ? 'text-amber-700 font-bold' : 'text-slate-500'}">
+                        ${sumPendingGrade > 0 ? `${sumPendingGrade} ממתינות לבדיקה ⏳` : 'כל ההגשות נבדקו ✓'} | ${sumFeedbackViewed} צפו במשוב
+                    </div>
                 </div>
             `;
 
-            renderOverviewCharts(students, pct(activeBloggers), pct(activeBlogCommenters), pct(activeForumPosters), pct(activeForumRepliers), pct(activeAssignSubmitters));
+            const pctGraded = sumUniqueAssigns > 0 ? Math.round((sumGraded / sumUniqueAssigns) * 1000) / 10 : 0;
+            renderOverviewCharts(students, pct(activeBloggers), pct(activeBlogCommenters), pct(activeForumPosters), pct(activeForumRepliers), pct(activeAssignSubmitters), pctGraded);
             renderMasterTable();
         }
 
-        function renderOverviewCharts(students, pctBlog, pctBlogCom, pctForumDisc, pctForumRep, pctAssign) {
+        function renderOverviewCharts(students, pctBlog, pctBlogCom, pctForumDisc, pctForumRep, pctAssign, pctGraded) {
             const ctxTimeline = document.getElementById('timelineChart').getContext('2d');
             if (charts.timeline) charts.timeline.destroy();
 
@@ -1224,6 +1460,14 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const dsIndex = elements[0].datasetIndex;
+                            if (dsIndex === 0) navigateToBlogs('all');
+                            else if (dsIndex === 1) navigateToForum('all');
+                            else if (dsIndex === 2) navigateToAssignment(null, 'all');
+                        }
+                    },
                     plugins: {
                         legend: { position: 'top', labels: { font: { family: 'Heebo', size: 11 }, boxWidth: 12 } }
                     },
@@ -1240,11 +1484,11 @@
             charts.categoryRate = new Chart(ctxRate, {
                 type: 'bar',
                 data: {
-                    labels: ['פוסט בפורום', 'פרסום בלוג', 'הגשת מטלות', 'תגובה בפורום', 'תגובה לבלוג'],
+                    labels: ['פוסט בפורום', 'פרסום בלוג', 'הגשת מטלות', 'הגשות שנבדקו', 'תגובה בפורום', 'תגובה לבלוג'],
                     datasets: [{
-                        label: '% סטודנטים פעילים',
-                        data: [pctForumDisc, pctBlog, pctAssign, pctForumRep, pctBlogCom],
-                        backgroundColor: ['#2563eb', '#4f46e5', '#10b981', '#06b6d4', '#a855f7'],
+                        label: '% שיעור ביצוע',
+                        data: [pctForumDisc, pctBlog, pctAssign, pctGraded, pctForumRep, pctBlogCom],
+                        backgroundColor: ['#2563eb', '#4f46e5', '#10b981', '#059669', '#06b6d4', '#a855f7'],
                         borderRadius: 5
                     }]
                 },
@@ -1252,9 +1496,19 @@
                     indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const idx = elements[0].index;
+                            if (idx === 0 || idx === 4) navigateToForum('all');
+                            else if (idx === 1) navigateToBlogs('all');
+                            else if (idx === 2) navigateToAssignment(null, 'all');
+                            else if (idx === 3) navigateToAssignment(null, 'graded');
+                            else if (idx === 5) navigateToBlogs('commenters');
+                        }
+                    },
                     plugins: {
                         legend: { display: false },
-                        tooltip: { callbacks: { label: (ctx) => `${ctx.raw}% מהסטודנטים` } }
+                        tooltip: { callbacks: { label: (ctx) => `${ctx.raw}% (לחץ למעבר לפירוט)` } }
                     },
                     scales: {
                         x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%', font: { family: 'Heebo', size: 11 } } },
@@ -1266,12 +1520,13 @@
 
         function setOverviewStatusFilter(filter) {
             overviewStatusFilter = filter;
-            ['all', 'leading', 'atrisk'].forEach(k => {
+            ['all', 'pending_grade', 'resubmitted', 'atrisk'].forEach(k => {
                 const btn = document.getElementById(`ov-filter-${k}`);
+                if (!btn) return;
                 if (k === filter) {
                     btn.className = 'px-2.5 py-1 rounded-md font-bold bg-white text-slate-900 shadow-sm';
                 } else {
-                    btn.className = 'px-2.5 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900';
+                    btn.className = 'px-2.5 py-1 rounded-md font-medium text-slate-600 hover:bg-white/60';
                 }
             });
             renderMasterTable();
@@ -1292,8 +1547,10 @@
             const activeAssigns = getActiveAssignmentsMeta();
             let students = getFilteredStudents().filter(s => s.name.toLowerCase().includes(searchQuery));
 
-            if (overviewStatusFilter === 'leading') {
-                students = students.filter(s => computeStudentMetrics(s).uniqueAssignSubmitted >= Math.max(2, activeAssigns.length - 1));
+            if (overviewStatusFilter === 'pending_grade') {
+                students = students.filter(s => computeStudentMetrics(s).pendingGradeCount > 0);
+            } else if (overviewStatusFilter === 'resubmitted') {
+                students = students.filter(s => computeStudentMetrics(s).resubmittedCount > 0);
             } else if (overviewStatusFilter === 'atrisk') {
                 students = students.filter(s => computeStudentMetrics(s).uniqueAssignSubmitted <= 1);
             }
@@ -1310,6 +1567,7 @@
                     case 'forumDiscussions': valA = a.forumDiscussions; valB = b.forumDiscussions; break;
                     case 'forumReplies': valA = a.forumReplies; valB = b.forumReplies; break;
                     case 'uniqueAssign': valA = ma.uniqueAssignSubmitted; valB = mb.uniqueAssignSubmitted; break;
+                    case 'avgGrade': valA = ma.avgGrade ?? -1; valB = mb.avgGrade ?? -1; break;
                     case 'totalActive': valA = ma.totalActive; valB = mb.totalActive; break;
                     default: valA = ma.totalActive; valB = mb.totalActive;
                 }
@@ -1317,22 +1575,25 @@
             });
 
             const assignHeaders = activeAssigns.map(a => `
-                <th class="py-2.5 px-2.5 text-center whitespace-nowrap bg-emerald-50/60 border-x border-slate-200/60" title="${a.rawName}">
-                    ${a.shortName}
+                <th onclick="navigateToAssignment('${a.id}', 'all')" class="py-2.5 px-2.5 text-center whitespace-nowrap bg-emerald-50/70 hover:bg-emerald-100/80 cursor-pointer border-x border-slate-200/60 transition-colors group" title="לחץ לניתוח מעמיק של ${a.rawName}">
+                    <div class="inline-flex items-center gap-1 text-emerald-950 group-hover:text-brand-700">
+                        <span>${a.shortName}</span>
+                        <i data-lucide="arrow-up-left" class="w-3 h-3 text-slate-400 group-hover:text-brand-600"></i>
+                    </div>
                 </th>
             `).join('');
 
             document.getElementById('masterTableHead').innerHTML = `
                 <tr>
                     <th onclick="sortMasterTable('name')" class="py-2.5 px-3.5 cursor-pointer hover:bg-slate-100">שם הסטודנט/ית ↕</th>
-                    <th onclick="sortMasterTable('blogPosts')" class="py-2.5 px-2.5 text-center cursor-pointer hover:bg-slate-100">פרסום בלוג ↕</th>
-                    <th onclick="sortMasterTable('blogComments')" class="py-2.5 px-2.5 text-center cursor-pointer hover:bg-slate-100">תגובה לבלוג ↕</th>
-                    <th onclick="sortMasterTable('forumDiscussions')" class="py-2.5 px-2.5 text-center cursor-pointer hover:bg-slate-100">פוסט בפורום ↕</th>
-                    <th onclick="sortMasterTable('forumReplies')" class="py-2.5 px-2.5 text-center cursor-pointer hover:bg-slate-100">תגובה בפורום ↕</th>
+                    <th onclick="sortMasterTable('blogPosts')" class="py-2.5 px-2 text-center cursor-pointer hover:bg-slate-100">בלוג ↕</th>
+                    <th onclick="sortMasterTable('blogComments')" class="py-2.5 px-2 text-center cursor-pointer hover:bg-slate-100">תג' בלוג ↕</th>
+                    <th onclick="sortMasterTable('forumDiscussions')" class="py-2.5 px-2 text-center cursor-pointer hover:bg-slate-100">פוסט פורום ↕</th>
+                    <th onclick="sortMasterTable('forumReplies')" class="py-2.5 px-2 text-center cursor-pointer hover:bg-slate-100">תג' פורום ↕</th>
                     ${assignHeaders}
-                    <th onclick="sortMasterTable('uniqueAssign')" class="py-2.5 px-2.5 text-center cursor-pointer hover:bg-slate-100">סה"כ מטלות ↕</th>
+                    <th onclick="sortMasterTable('uniqueAssign')" class="py-2.5 px-2.5 text-center cursor-pointer hover:bg-slate-100">הגשות / בדיקה ↕</th>
+                    <th onclick="sortMasterTable('avgGrade')" class="py-2.5 px-2.5 text-center cursor-pointer hover:bg-slate-100 bg-emerald-50/40">ממוצע ציון ↕</th>
                     <th onclick="sortMasterTable('totalActive')" class="py-2.5 px-2.5 text-center cursor-pointer hover:bg-slate-100 bg-brand-50/50 text-brand-900">סה"כ פעילויות ↕</th>
-                    <th class="py-2.5 px-2.5 text-center">כניסה אחרונה</th>
                 </tr>
             `;
 
@@ -1342,11 +1603,18 @@
                 forumDiscussions: 0,
                 forumReplies: 0,
                 assignSubmitters: {},
-                assignEvents: {},
+                assignGraded: {},
+                assignResub: {},
                 uniqueAssignSum: 0,
-                totalActiveSum: 0
+                gradedSum: 0,
+                totalActiveSum: 0,
+                gradesArr: []
             };
-            activeAssigns.forEach(a => { totals.assignSubmitters[a.id] = 0; totals.assignEvents[a.id] = 0; });
+            activeAssigns.forEach(a => {
+                totals.assignSubmitters[a.id] = 0;
+                totals.assignGraded[a.id] = 0;
+                totals.assignResub[a.id] = 0;
+            });
 
             document.getElementById('masterTableBody').innerHTML = students.map(s => {
                 const m = computeStudentMetrics(s);
@@ -1355,138 +1623,200 @@
                 totals.forumDiscussions += s.forumDiscussions;
                 totals.forumReplies += s.forumReplies;
                 totals.uniqueAssignSum += m.uniqueAssignSubmitted;
+                totals.gradedSum += m.gradedCount;
                 totals.totalActiveSum += m.totalActive;
+                if (m.avgGrade != null) totals.gradesArr.push(m.avgGrade);
 
                 const assignCells = activeAssigns.map(a => {
                     const sub = s.assignmentsDetail[a.id];
-                    if (sub && sub.count > 0) {
+                    const info = getSubmissionStatusInfo(sub);
+                    if (info.status !== 'missing') {
                         totals.assignSubmitters[a.id]++;
-                        totals.assignEvents[a.id] += sub.count;
+                        if (info.status === 'graded') totals.assignGraded[a.id]++;
+                        if (info.isResubmitted) totals.assignResub[a.id]++;
+
+                        const gradeText = sub.grade != null ? `<span class="font-extrabold">${sub.grade}</span>` : '';
+                        const statusSymbol = info.status === 'graded' ? '✓' : (info.status === 'resubmitted_pending' ? '↻⏳' : '⏳');
+                        const resubBadge = info.isResubmitted ? `<span class="px-1 rounded bg-purple-200/80 text-purple-900 text-[10px] font-extrabold" title="${sub.count} הגשות / ${sub.updates || sub.count} עדכונים">↻${Math.max(sub.count || 1, sub.updates || 1)}</span>` : '';
+                        const fbIcon = (sub.feedbackViewed || 0) > 0 ? `<span class="text-blue-700 text-[10px] font-bold" title="צפה במשוב (${sub.feedbackViewed} פעמים)">👁</span>` : '';
+
                         return `
-                            <td class="py-2 px-2.5 text-center bg-emerald-50/20 border-x border-slate-100">
-                                <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800" title="הוגש: ${sub.lastDate}">
-                                    ✓ <span class="text-[10px] font-normal">(${sub.count})</span>
-                                </span>
+                            <td onclick="navigateToAssignment('${a.id}', 'all')" class="py-2 px-2 text-center border-x border-slate-100 cursor-pointer hover:bg-slate-100/80 transition-colors" title="${info.label} | הוגש: ${sub.lastDate || '—'}${sub.gradedDate ? ' | נבדק: ' + sub.gradedDate : ''}">
+                                <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold ${info.badgeClass} live-pill">
+                                    <span>${statusSymbol}</span>
+                                    ${gradeText}
+                                    ${resubBadge}
+                                    ${fbIcon}
+                                </div>
                             </td>
                         `;
                     }
-                    return `<td class="py-2 px-2.5 text-center text-slate-300 border-x border-slate-100">—</td>`;
+                    return `<td onclick="navigateToAssignment('${a.id}', 'missing')" class="py-2 px-2 text-center text-slate-300 border-x border-slate-100 cursor-pointer hover:bg-rose-50/40" title="טרם הוגש - לחץ למעבר למטלה">—</td>`;
                 }).join('');
 
                 return `
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="py-2 px-3.5 font-bold text-slate-900 whitespace-nowrap">
-                            <button onclick="openStudentProfile('${s.name}')" class="hover:text-brand-600 hover:underline flex items-center gap-1">
+                            <button onclick="openStudentProfile('${s.name}')" class="hover:text-brand-600 hover:underline flex items-center gap-1 text-right">
                                 <span>${s.name}</span>
                                 <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
                             </button>
                         </td>
-                        <td class="py-2 px-2.5 text-center font-medium ${s.blogPosts > 0 ? 'text-slate-900' : 'text-slate-300'}">${s.blogPosts}</td>
-                        <td class="py-2 px-2.5 text-center font-medium ${s.blogComments > 0 ? 'text-purple-700 font-bold' : 'text-slate-300'}">${s.blogComments}</td>
-                        <td class="py-2 px-2.5 text-center font-medium ${s.forumDiscussions > 0 ? 'text-slate-900' : 'text-slate-300'}">${s.forumDiscussions}</td>
-                        <td class="py-2 px-2.5 text-center font-medium ${s.forumReplies > 0 ? 'text-cyan-700 font-bold' : 'text-slate-300'}">${s.forumReplies}</td>
+                        <td onclick="navigateToBlogs('all')" class="py-2 px-2 text-center cursor-pointer hover:bg-indigo-50/50 font-medium ${s.blogPosts > 0 ? 'text-slate-900' : 'text-slate-300'}">${s.blogPosts}</td>
+                        <td onclick="navigateToBlogs('commenters')" class="py-2 px-2 text-center cursor-pointer hover:bg-purple-50/50 font-medium ${s.blogComments > 0 ? 'text-purple-700 font-bold' : 'text-slate-300'}">${s.blogComments}</td>
+                        <td onclick="navigateToForum('all')" class="py-2 px-2 text-center cursor-pointer hover:bg-blue-50/50 font-medium ${s.forumDiscussions > 0 ? 'text-slate-900' : 'text-slate-300'}">${s.forumDiscussions}</td>
+                        <td onclick="navigateToForum('all')" class="py-2 px-2 text-center cursor-pointer hover:bg-cyan-50/50 font-medium ${s.forumReplies > 0 ? 'text-cyan-700 font-bold' : 'text-slate-300'}">${s.forumReplies}</td>
                         ${assignCells}
-                        <td class="py-2 px-2.5 text-center font-bold text-slate-800">${m.uniqueAssignSubmitted} / ${activeAssigns.length}</td>
-                        <td class="py-2 px-2.5 text-center font-extrabold text-brand-700 bg-brand-50/30">${m.totalActive}</td>
-                        <td class="py-2 px-2.5 text-center text-[11px] text-slate-500 whitespace-nowrap">${s.lastSeen.split(' ')[0]}</td>
+                        <td onclick="openStudentProfile('${s.name}')" class="py-2 px-2.5 text-center cursor-pointer">
+                            <span class="font-bold text-slate-800">${m.uniqueAssignSubmitted}/${activeAssigns.length}</span>
+                            <span class="text-[10px] text-emerald-700 block">(${m.gradedCount} נבדקו)</span>
+                        </td>
+                        <td onclick="openStudentProfile('${s.name}')" class="py-2 px-2.5 text-center font-extrabold ${m.avgGrade != null ? 'text-emerald-800 bg-emerald-50/30' : 'text-slate-300'} cursor-pointer">
+                            ${m.avgGrade != null ? m.avgGrade : '—'}
+                        </td>
+                        <td onclick="openStudentProfile('${s.name}')" class="py-2 px-2.5 text-center font-extrabold text-brand-700 bg-brand-50/30 cursor-pointer">${m.totalActive}</td>
                     </tr>
                 `;
             }).join('');
 
             const assignFootCells = activeAssigns.map(a => `
-                <td class="py-2 px-2.5 text-center text-[11px]">
-                    <div>${totals.assignSubmitters[a.id]} מגישים</div>
-                    <div class="text-[10px] font-normal text-slate-500">(${totals.assignEvents[a.id]} אירועים)</div>
+                <td onclick="navigateToAssignment('${a.id}', 'all')" class="py-2 px-2 text-center text-[11px] cursor-pointer hover:bg-slate-200/60">
+                    <div>${totals.assignSubmitters[a.id]} הגישו | <span class="text-emerald-700">${totals.assignGraded[a.id]} נבדקו</span></div>
+                    <div class="text-[10px] font-normal text-purple-700">${totals.assignResub[a.id]} הגשות חוזרות ↻</div>
                 </td>
             `).join('');
+
+            const overallAvg = totals.gradesArr.length > 0
+                ? Math.round(totals.gradesArr.reduce((a, b) => a + b, 0) / totals.gradesArr.length)
+                : '—';
 
             document.getElementById('masterTableFoot').innerHTML = `
                 <tr>
                     <td class="py-2 px-3.5">סה"כ (${students.length} סטודנטים מוצגים)</td>
-                    <td class="py-2 px-2.5 text-center">${totals.blogPosts}</td>
-                    <td class="py-2 px-2.5 text-center">${totals.blogComments}</td>
-                    <td class="py-2 px-2.5 text-center">${totals.forumDiscussions}</td>
-                    <td class="py-2 px-2.5 text-center">${totals.forumReplies}</td>
+                    <td class="py-2 px-2 text-center">${totals.blogPosts}</td>
+                    <td class="py-2 px-2 text-center">${totals.blogComments}</td>
+                    <td class="py-2 px-2 text-center">${totals.forumDiscussions}</td>
+                    <td class="py-2 px-2 text-center">${totals.forumReplies}</td>
                     ${assignFootCells}
-                    <td class="py-2 px-2.5 text-center">${totals.uniqueAssignSum} הגשות</td>
+                    <td class="py-2 px-2.5 text-center">${totals.uniqueAssignSum} הגשות (${totals.gradedSum} נבדקו)</td>
+                    <td class="py-2 px-2.5 text-center text-emerald-800">${overallAvg}</td>
                     <td class="py-2 px-2.5 text-center text-brand-700">${totals.totalActiveSum} אירועים</td>
-                    <td class="py-2 px-2.5 text-center">—</td>
                 </tr>
             `;
         }
 
-        // -------------------- VIEW 2: ASSIGNMENTS --------------------
+        // -------------------- VIEW 2: ASSIGNMENTS & GRADING --------------------
         function renderAssignmentsTab() {
             const students = getFilteredStudents();
             const totalStudents = students.length || 1;
             const activeAssigns = getActiveAssignmentsMeta();
 
+            const selectEl = document.getElementById('assignmentSelectDropdown');
+            const prevVal = selectEl.value;
+            selectEl.innerHTML = activeAssigns.map(a => `<option value="${a.id}">${a.rawName}</option>`).join('');
+            if (activeAssigns.some(a => a.id === prevVal)) selectEl.value = prevVal;
+            const currentSelectedId = selectEl.value;
+
             document.getElementById('assignmentCardsGrid').innerHTML = activeAssigns.map(a => {
-                let uniqueSub = 0, totalEvents = 0;
+                let uniqueSub = 0, graded = 0, pending = 0, resub = 0, fbViewed = 0;
+                let grades = [];
                 students.forEach(s => {
                     const sub = s.assignmentsDetail[a.id];
-                    if (sub && sub.count > 0) {
+                    const info = getSubmissionStatusInfo(sub);
+                    if (info.status !== 'missing') {
                         uniqueSub++;
-                        totalEvents += sub.count;
+                        if (info.status === 'graded') graded++;
+                        else pending++;
+                        if (info.isResubmitted) resub++;
+                        if ((sub.feedbackViewed || 0) > 0) fbViewed++;
+                        if (sub.grade != null && !isNaN(sub.grade)) grades.push(Number(sub.grade));
                     }
                 });
                 const rate = Math.round((uniqueSub / totalStudents) * 1000) / 10;
+                const avgScore = grades.length > 0 ? Math.round(grades.reduce((x, y) => x + y, 0) / grades.length) : null;
+                const isSelected = a.id === currentSelectedId;
+
                 return `
-                    <div onclick="selectAssignmentCard('${a.id}')" class="cursor-pointer bg-white p-3.5 rounded-xl border border-slate-200 hover:border-brand-500 shadow-sm transition-all">
+                    <div onclick="selectAssignmentCard('${a.id}')" class="live-card bg-white p-3.5 rounded-xl border-2 ${isSelected ? 'border-brand-600 ring-2 ring-brand-100' : 'border-slate-200'} shadow-sm transition-all">
                         <div class="flex items-center justify-between mb-1.5">
                             <span class="text-[11px] font-bold px-2 py-0.5 rounded-md ${a.isDeleted ? 'bg-rose-100 text-rose-700' : 'bg-brand-50 text-brand-700'}">
                                 ${a.shortName}
                             </span>
-                            <span class="text-xs font-bold text-slate-600">${rate}% הגשה</span>
+                            <div class="flex items-center gap-1.5">
+                                ${avgScore != null ? `<span class="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">ממוצע: ${avgScore}</span>` : ''}
+                                <span class="text-xs font-bold text-slate-600">${rate}%</span>
+                            </div>
                         </div>
                         <h4 class="text-xs font-bold text-slate-900 line-clamp-1 mb-2" title="${a.rawName}">${a.rawName}</h4>
-                        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden mb-2">
-                            <div class="bg-emerald-500 h-full rounded-full" style="width: ${rate}%"></div>
+                        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden mb-2 flex">
+                            <div class="bg-emerald-500 h-full" style="width: ${(graded / totalStudents) * 100}%" title="נבדקו: ${graded}"></div>
+                            <div class="bg-amber-400 h-full" style="width: ${(pending / totalStudents) * 100}%" title="ממתינים לבדיקה: ${pending}"></div>
                         </div>
-                        <div class="flex items-center justify-between text-[11px] text-slate-600">
-                            <span><strong>${uniqueSub}/${students.length}</strong> הגישו</span>
-                            <span><strong>${totalEvents}</strong> אירועי הגשה</span>
+                        <div class="grid grid-cols-3 gap-1 text-[11px] text-slate-600 pt-1 border-t border-slate-100">
+                            <span>נבדקו: <strong class="text-emerald-700">${graded}/${uniqueSub}</strong></span>
+                            <span>ממתינים: <strong class="text-amber-700">${pending}</strong></span>
+                            <span>חוזרות: <strong class="text-purple-700">${resub} ↻</strong></span>
                         </div>
                     </div>
                 `;
             }).join('');
 
-            const selectEl = document.getElementById('assignmentSelectDropdown');
-            const prevVal = selectEl.value;
-            selectEl.innerHTML = activeAssigns.map(a => `<option value="${a.id}">${a.rawName}</option>`).join('');
-            if (activeAssigns.some(a => a.id === prevVal)) selectEl.value = prevVal;
-
             const labels = activeAssigns.map(a => a.shortName);
-            const uniqueData = [], eventsData = [], viewsData = [], formViewsData = [];
+            const gradedData = [], pendingData = [], resubPendingData = [], missingData = [];
+            const resubTotalData = [], fbViewedData = [], avgGradeData = [];
 
             activeAssigns.forEach(a => {
-                let u = 0, ev = 0;
+                let g = 0, p = 0, rp = 0, m = 0, resub = 0, fb = 0;
+                let gArr = [];
                 students.forEach(s => {
                     const sub = s.assignmentsDetail[a.id];
-                    if (sub && sub.count > 0) { u++; ev += sub.count; }
+                    const info = getSubmissionStatusInfo(sub);
+                    if (info.status === 'graded') g++;
+                    else if (info.status === 'resubmitted_pending') rp++;
+                    else if (info.status === 'pending') p++;
+                    else m++;
+
+                    if (info.isResubmitted) resub++;
+                    if (sub && (sub.feedbackViewed || 0) > 0) fb++;
+                    if (sub && sub.grade != null && !isNaN(sub.grade)) gArr.push(Number(sub.grade));
                 });
-                uniqueData.push(u);
-                eventsData.push(ev);
-                viewsData.push(a.courseModuleViews || u * 4);
-                formViewsData.push(a.formViews || ev * 2);
+                gradedData.push(g);
+                pendingData.push(p);
+                resubPendingData.push(rp);
+                missingData.push(m);
+                resubTotalData.push(resub);
+                fbViewedData.push(fb);
+                avgGradeData.push(gArr.length > 0 ? Math.round(gArr.reduce((x, y) => x + y, 0) / gArr.length) : 0);
             });
 
-            const ctxBar = document.getElementById('assignmentsBarChart').getContext('2d');
+            const ctxGrading = document.getElementById('assignmentsGradingChart').getContext('2d');
             if (charts.assignBar) charts.assignBar.destroy();
-            charts.assignBar = new Chart(ctxBar, {
+            charts.assignBar = new Chart(ctxGrading, {
                 type: 'bar',
                 data: {
                     labels,
                     datasets: [
-                        { label: 'סטודנטים מגישים (ייחודי)', data: uniqueData, backgroundColor: '#10b981', borderRadius: 5 },
-                        { label: 'סה"כ אירועי הגשה בלוג', data: eventsData, backgroundColor: '#6366f1', borderRadius: 5 }
+                        { label: 'נבדק וניתן ציון ✓', data: gradedData, backgroundColor: '#10b981', borderRadius: 4 },
+                        { label: 'ממתין לבדיקה ⏳', data: pendingData, backgroundColor: '#f59e0b', borderRadius: 4 },
+                        { label: 'הוגש מחדש לאחר בדיקה ↻', data: resubPendingData, backgroundColor: '#9333ea', borderRadius: 4 },
+                        { label: 'טרם הוגש ✗', data: missingData, backgroundColor: '#e2e8f0', borderRadius: 4 }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'top', labels: { font: { family: 'Heebo', size: 11 } } } },
-                    scales: { y: { beginAtZero: true, ticks: { stepSize: 2 } } }
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const idx = elements[0].index;
+                            const targetAssign = activeAssigns[idx];
+                            if (targetAssign) selectAssignmentCard(targetAssign.id);
+                        }
+                    },
+                    plugins: { legend: { position: 'top', labels: { font: { family: 'Heebo', size: 11 }, boxWidth: 12 } } },
+                    scales: {
+                        x: { stacked: true, ticks: { font: { family: 'Heebo', size: 11 } } },
+                        y: { stacked: true, beginAtZero: true, ticks: { stepSize: 2 } }
+                    }
                 }
             });
 
@@ -1497,16 +1827,26 @@
                 data: {
                     labels,
                     datasets: [
-                        { label: 'צפייה במטלה', data: viewsData, backgroundColor: '#94a3b8', borderRadius: 4 },
-                        { label: 'צפייה בטופס הגשה', data: formViewsData, backgroundColor: '#38bdf8', borderRadius: 4 },
-                        { label: 'ההגשה הוגשה בפועל', data: eventsData, backgroundColor: '#10b981', borderRadius: 4 }
+                        { label: 'הגשות חוזרות (2+ הגשות)', data: resubTotalData, backgroundColor: '#8b5cf6', borderRadius: 4, yAxisID: 'y' },
+                        { label: 'סטודנטים שצפו במשוב 👁', data: fbViewedData, backgroundColor: '#0ea5e9', borderRadius: 4, yAxisID: 'y' },
+                        { label: 'ממוצע ציון במטלה', data: avgGradeData, type: 'line', borderColor: '#059669', backgroundColor: '#059669', borderWidth: 2.5, pointRadius: 4, yAxisID: 'y1' }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'top', labels: { font: { family: 'Heebo', size: 11 } } } },
-                    scales: { y: { beginAtZero: true } }
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const idx = elements[0].index;
+                            const targetAssign = activeAssigns[idx];
+                            if (targetAssign) selectAssignmentCard(targetAssign.id);
+                        }
+                    },
+                    plugins: { legend: { position: 'top', labels: { font: { family: 'Heebo', size: 11 }, boxWidth: 12 } } },
+                    scales: {
+                        y: { beginAtZero: true, position: 'right', title: { display: true, text: 'מספר סטודנטים', font: { family: 'Heebo', size: 10 } } },
+                        y1: { beginAtZero: true, max: 100, position: 'left', grid: { drawOnChartArea: false }, title: { display: true, text: 'ציון ממוצע', font: { family: 'Heebo', size: 10 } } }
+                    }
                 }
             });
 
@@ -1515,15 +1855,16 @@
 
         function selectAssignmentCard(assignId) {
             document.getElementById('assignmentSelectDropdown').value = assignId;
-            renderAssignmentDrilldown();
+            renderAssignmentsTab();
         }
 
         function setAssignmentStatusFilter(status) {
             assignmentStatusFilter = status;
-            ['all', 'submitted', 'missing'].forEach(k => {
+            ['all', 'pending', 'graded', 'resubmitted', 'missing'].forEach(k => {
                 const btn = document.getElementById(`assign-filter-${k}`);
+                if (!btn) return;
                 btn.className = k === status
-                    ? 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-600 text-white'
+                    ? 'px-2.5 py-1 rounded-lg text-xs font-bold bg-brand-600 text-white shadow-sm'
                     : 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200';
             });
             renderAssignmentDrilldown();
@@ -1533,39 +1874,100 @@
             const assignId = document.getElementById('assignmentSelectDropdown').value;
             const students = getFilteredStudents();
 
+            let countSub = 0, countGraded = 0, countPending = 0, countResub = 0;
+            students.forEach(s => {
+                const sub = s.assignmentsDetail[assignId];
+                const info = getSubmissionStatusInfo(sub);
+                if (info.status !== 'missing') countSub++;
+                if (info.status === 'graded') countGraded++;
+                if (info.status === 'pending' || info.status === 'resubmitted_pending') countPending++;
+                if (info.isResubmitted) countResub++;
+            });
+
+            const summaryEl = document.getElementById('selectedAssignmentSummaryPills');
+            if (summaryEl) {
+                summaryEl.innerHTML = `
+                    <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-200 text-slate-800">${countSub}/${students.length} הגישו</span>
+                    <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">${countGraded} נבדקו ✓</span>
+                    <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">${countPending} ממתינים לבדיקה ⏳</span>
+                    <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-purple-800">${countResub} הגשות חוזרות ↻</span>
+                `;
+            }
+
             const filtered = students.filter(s => {
                 const sub = s.assignmentsDetail[assignId];
-                const hasSub = sub && sub.count > 0;
-                if (assignmentStatusFilter === 'submitted') return hasSub;
-                if (assignmentStatusFilter === 'missing') return !hasSub;
+                const info = getSubmissionStatusInfo(sub);
+                if (assignmentStatusFilter === 'graded') return info.status === 'graded';
+                if (assignmentStatusFilter === 'pending') return info.status === 'pending' || info.status === 'resubmitted_pending';
+                if (assignmentStatusFilter === 'resubmitted') return info.isResubmitted;
+                if (assignmentStatusFilter === 'missing') return info.status === 'missing';
                 return true;
             });
 
             document.getElementById('assignmentDrilldownBody').innerHTML = filtered.map(s => {
                 const sub = s.assignmentsDetail[assignId];
-                const hasSub = sub && sub.count > 0;
+                const info = getSubmissionStatusInfo(sub);
+                const subCount = sub ? Math.max(sub.count || 0, sub.updates || 0) : 0;
+
                 return `
-                    <tr class="hover:bg-slate-50">
-                        <td class="py-2 px-4 font-bold text-slate-900">
-                            <button onclick="openStudentProfile('${s.name}')" class="hover:text-brand-600 hover:underline">${s.name}</button>
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-2.5 px-4 font-bold text-slate-900">
+                            <button onclick="openStudentProfile('${s.name}')" class="hover:text-brand-600 hover:underline flex items-center gap-1">
+                                <span>${s.name}</span>
+                                <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
+                            </button>
                         </td>
-                        <td class="py-2 px-4">
-                            ${hasSub 
-                                ? '<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">הוגש ✓</span>'
-                                : '<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800">טרם הוגש ✗</span>'}
+                        <td class="py-2.5 px-4">
+                            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${info.badgeClass}">
+                                ${info.label}
+                            </span>
                         </td>
-                        <td class="py-2 px-4 font-semibold">${hasSub ? sub.count : 0}</td>
-                        <td class="py-2 px-4 text-slate-600">${hasSub ? sub.lastDate : '—'}</td>
-                        <td class="py-2 px-4 text-slate-500">${sub?.views || 0} צפיות</td>
+                        <td class="py-2.5 px-4 text-center">
+                            ${subCount > 1
+                                ? `<span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-extrabold text-[11px]">↻ ${subCount} הגשות (חוזרת)</span>`
+                                : (subCount === 1 ? '<span class="font-semibold text-slate-700">1 (רגילה)</span>' : '<span class="text-slate-300">—</span>')}
+                        </td>
+                        <td class="py-2.5 px-4 text-center">
+                            ${sub && sub.grade != null
+                                ? `<span class="px-2.5 py-0.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-900 font-extrabold text-xs">${sub.grade}</span>`
+                                : '<span class="text-slate-400 text-[11px]">—</span>'}
+                        </td>
+                        <td class="py-2.5 px-4 text-slate-600 font-mono text-[11px]">${sub?.lastDate || '—'}</td>
+                        <td class="py-2.5 px-4 text-slate-600 font-mono text-[11px]">${sub?.gradedDate || '—'}</td>
+                        <td class="py-2.5 px-4 text-center">
+                            ${sub && (sub.feedbackViewed || 0) > 0
+                                ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[11px] font-bold">👁 צפה (${sub.feedbackViewed})</span>`
+                                : '<span class="text-slate-300 text-[11px]">לא צפה</span>'}
+                        </td>
+                        <td class="py-2.5 px-4 text-center text-slate-500">${sub?.views || 0}</td>
                     </tr>
                 `;
             }).join('');
         }
 
         // -------------------- VIEW 3: FORUMS --------------------
+        function selectForumDrilldown(forumId) {
+            selectedForumFilter = forumId || 'all';
+            const dropdown = document.getElementById('forumSelectDropdown');
+            if (dropdown) dropdown.value = selectedForumFilter;
+            const resetBtn = document.getElementById('forumResetBtn');
+            if (resetBtn) {
+                if (selectedForumFilter === 'all') resetBtn.classList.add('hidden');
+                else resetBtn.classList.remove('hidden');
+            }
+            renderForumsTab();
+        }
+
         function renderForumsTab() {
             const students = getFilteredStudents();
             const forums = appState.forumsMeta;
+
+            const dropdown = document.getElementById('forumSelectDropdown');
+            if (dropdown) {
+                dropdown.innerHTML = `<option value="all">כל קבוצות הדיון (${forums.length})</option>` +
+                    forums.map(f => `<option value="${f.id}">${f.shortName}</option>`).join('');
+                dropdown.value = selectedForumFilter;
+            }
 
             let totalDisc = 0, totalRep = 0, activePosters = 0, activeRepliers = 0;
             students.forEach(s => {
@@ -1576,17 +1978,17 @@
             });
 
             document.getElementById('forumKpiGrid').innerHTML = `
-                <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                <div onclick="selectForumDrilldown('all')" class="live-card bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <div class="text-[11px] font-semibold text-slate-500">סה"כ פתיחת דיונים (פוסטים)</div>
                     <div class="text-xl font-extrabold text-slate-900 mt-0.5">${totalDisc}</div>
                     <div class="text-[11px] text-emerald-700 font-medium">${activePosters}/${students.length} סטודנטים פתחו דיון</div>
                 </div>
-                <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                <div onclick="selectForumDrilldown('all')" class="live-card bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <div class="text-[11px] font-semibold text-slate-500">סה"כ תגובות לעמיתים בפורום</div>
                     <div class="text-xl font-extrabold text-slate-900 mt-0.5">${totalRep}</div>
                     <div class="text-[11px] text-cyan-700 font-medium">${activeRepliers}/${students.length} סטודנטים הגיבו</div>
                 </div>
-                <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                <div onclick="selectForumDrilldown('all')" class="live-card bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <div class="text-[11px] font-semibold text-slate-500">סה"כ פרסומים בפורומים</div>
                     <div class="text-xl font-extrabold text-brand-600 mt-0.5">${totalDisc + totalRep}</div>
                     <div class="text-[11px] text-slate-500">ב-${forums.length} קבוצות דיון פעילות</div>
@@ -1612,8 +2014,11 @@
             });
 
             document.getElementById('forumSummaryTableBody').innerHTML = forumStats.map(f => `
-                <tr class="hover:bg-slate-50">
-                    <td class="py-2 px-3 font-bold text-slate-900">${f.shortName}</td>
+                <tr onclick="selectForumDrilldown('${f.id}')" class="cursor-pointer transition-colors ${selectedForumFilter === f.id ? 'bg-brand-50 font-bold' : 'hover:bg-slate-50'}">
+                    <td class="py-2 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                        <span>${f.shortName}</span>
+                        <i data-lucide="filter" class="w-3 h-3 text-brand-500"></i>
+                    </td>
                     <td class="py-2 px-3 text-center font-semibold text-blue-700">${f.disc}</td>
                     <td class="py-2 px-3 text-center font-semibold text-purple-700">${f.rep}</td>
                     <td class="py-2 px-3 text-center font-extrabold text-slate-900">${f.total}</td>
@@ -1635,27 +2040,43 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const idx = elements[0].index;
+                            const targetForum = forumStats[idx];
+                            if (targetForum) selectForumDrilldown(targetForum.id);
+                        }
+                    },
                     plugins: { legend: { position: 'top', labels: { font: { family: 'Heebo', size: 11 } } } },
                     scales: { y: { beginAtZero: true, ticks: { stepSize: 2 } } }
                 }
             });
 
+            const displayedForums = selectedForumFilter === 'all'
+                ? forums
+                : forums.filter(f => f.id === selectedForumFilter);
+
             document.getElementById('studentForumMatrixHead').innerHTML = `
                 <tr>
                     <th class="py-2.5 px-4">שם הסטודנט/ית</th>
-                    ${forums.map(f => `<th class="py-2.5 px-3 text-center">${f.shortName}</th>`).join('')}
+                    ${displayedForums.map(f => `
+                        <th onclick="selectForumDrilldown('${selectedForumFilter === f.id ? 'all' : f.id}')" class="py-2.5 px-3 text-center cursor-pointer hover:bg-brand-50">
+                            ${f.shortName} ${selectedForumFilter === f.id ? '(ממוקד ✕)' : ''}
+                        </th>
+                    `).join('')}
                     <th class="py-2.5 px-3 text-center bg-slate-100">סה"כ בפורומים</th>
                 </tr>
             `;
 
             document.getElementById('studentForumMatrixBody').innerHTML = students.map(s => {
-                const cells = forums.map(f => {
+                const cells = displayedForums.map(f => {
                     const fd = s.forumsDetail[f.id];
                     if (!fd || (fd.discussions === 0 && fd.replies === 0)) {
                         return `<td class="py-2 px-3 text-center text-slate-300">—</td>`;
                     }
+                    const datesTip = (fd.dates || []).join(' | ');
                     return `
-                        <td class="py-2 px-3 text-center">
+                        <td class="py-2 px-3 text-center" title="${datesTip}">
                             <div class="inline-flex items-center gap-1">
                                 ${fd.discussions > 0 ? `<span class="px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 text-[11px] font-bold">${fd.discussions} דיון</span>` : ''}
                                 ${fd.replies > 0 ? `<span class="px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[11px] font-bold">${fd.replies} תג'</span>` : ''}
@@ -1666,7 +2087,12 @@
 
                 return `
                     <tr class="hover:bg-slate-50">
-                        <td class="py-2 px-4 font-bold text-slate-900">${s.name}</td>
+                        <td class="py-2 px-4 font-bold text-slate-900">
+                            <button onclick="openStudentProfile('${s.name}')" class="hover:text-brand-600 hover:underline flex items-center gap-1">
+                                <span>${s.name}</span>
+                                <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
+                            </button>
+                        </td>
                         ${cells}
                         <td class="py-2 px-3 text-center font-bold bg-slate-50">${s.forumDiscussions} דיונים | ${s.forumReplies} תגובות</td>
                     </tr>
@@ -1675,6 +2101,18 @@
         }
 
         // -------------------- VIEW 4: BLOGS --------------------
+        function setBlogFilter(filter) {
+            selectedBlogFilter = filter;
+            ['all', '3plus', '1to2', 'commenters', 'zero'].forEach(k => {
+                const btn = document.getElementById(`blog-filter-${k}`);
+                if (!btn) return;
+                btn.className = k === filter
+                    ? 'px-2.5 py-1 rounded-lg text-xs font-bold bg-brand-600 text-white shadow-sm'
+                    : 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200';
+            });
+            renderBlogsTab();
+        }
+
         function renderBlogsTab() {
             const students = getFilteredStudents();
             let totalPosts = 0, totalComments = 0, totalViews = 0, activeBloggers = 0;
@@ -1690,25 +2128,25 @@
             });
 
             document.getElementById('blogKpiGrid').innerHTML = `
-                <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                <div onclick="setBlogFilter('all')" class="live-card bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <div class="text-[11px] font-semibold text-slate-500">סה"כ פוסטים בבלוג (Post created)</div>
                     <div class="text-xl font-extrabold text-indigo-600 mt-0.5">${totalPosts}</div>
                     <div class="text-[11px] text-emerald-700 font-medium">${activeBloggers}/${students.length} סטודנטים פרסמו</div>
                 </div>
-                <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                <div onclick="setBlogFilter('commenters')" class="live-card bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <div class="text-[11px] font-semibold text-slate-500">תגובות לבלוג (Comment created)</div>
                     <div class="text-xl font-extrabold text-purple-600 mt-0.5">${totalComments}</div>
-                    <div class="text-[11px] text-slate-500">תגובות עמיתים ביומן הלמידה</div>
+                    <div class="text-[11px] text-purple-700 font-medium">לחץ לסינון המגיבים בבלוג &larr;</div>
                 </div>
-                <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                <div onclick="setBlogFilter('3plus')" class="live-card bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
                     <div class="text-[11px] font-semibold text-slate-500">השלימו 3+ פוסטים בבלוג</div>
                     <div class="text-xl font-extrabold text-emerald-600 mt-0.5">${dist[3]} סטודנטים</div>
-                    <div class="text-[11px] text-slate-500">${Math.round((dist[3] / (students.length || 1)) * 100)}% מהקורס</div>
+                    <div class="text-[11px] text-slate-500">${Math.round((dist[3] / (students.length || 1)) * 100)}% מהקורס (לחץ לסינון)</div>
                 </div>
-                <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="text-[11px] font-semibold text-slate-500">סה"כ צפיות ביומן הלמידה</div>
-                    <div class="text-xl font-extrabold text-slate-900 mt-0.5">${totalViews}</div>
-                    <div class="text-[11px] text-slate-500">צפיות של סטודנטים ברכיב הבלוג</div>
+                <div onclick="setBlogFilter('zero')" class="live-card bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-[11px] font-semibold text-slate-500">טרם פרסמו בבלוג (0 פוסטים)</div>
+                    <div class="text-xl font-extrabold text-rose-600 mt-0.5">${dist[0]} סטודנטים</div>
+                    <div class="text-[11px] text-slate-500">סה"כ ${totalViews} צפיות ביומן הלמידה</div>
                 </div>
             `;
 
@@ -1726,6 +2164,14 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const idx = elements[0].index;
+                            if (idx === 0) setBlogFilter('3plus');
+                            else if (idx === 1 || idx === 2) setBlogFilter('1to2');
+                            else if (idx === 3) setBlogFilter('zero');
+                        }
+                    },
                     plugins: { legend: { position: 'bottom', labels: { font: { family: 'Heebo', size: 11 } } } }
                 }
             });
@@ -1744,12 +2190,26 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const st = students[elements[0].index];
+                            if (st) openStudentProfile(st.name);
+                        }
+                    },
                     plugins: { legend: { position: 'top', labels: { font: { family: 'Heebo', size: 11 } } } },
                     scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
                 }
             });
 
-            document.getElementById('blogTableBody').innerHTML = students.map(s => {
+            const filteredBlogStudents = students.filter(s => {
+                if (selectedBlogFilter === '3plus') return s.blogPosts >= 3;
+                if (selectedBlogFilter === '1to2') return s.blogPosts >= 1 && s.blogPosts <= 2;
+                if (selectedBlogFilter === 'commenters') return s.blogComments > 0;
+                if (selectedBlogFilter === 'zero') return s.blogPosts === 0;
+                return true;
+            });
+
+            document.getElementById('blogTableBody').innerHTML = filteredBlogStudents.map(s => {
                 const allDates = [
                     ...(s.blogPostDates || []).map(d => `<span class="inline-block px-2 py-0.5 rounded bg-indigo-50 text-indigo-800 text-[11px] border border-indigo-200 ml-1 mb-1">פוסט: ${d}</span>`),
                     ...(s.blogCommentDates || []).map(d => `<span class="inline-block px-2 py-0.5 rounded bg-purple-50 text-purple-800 text-[11px] border border-purple-200 ml-1 mb-1">${d}</span>`)
@@ -1757,7 +2217,12 @@
 
                 return `
                     <tr class="hover:bg-slate-50">
-                        <td class="py-2 px-4 font-bold text-slate-900">${s.name}</td>
+                        <td class="py-2 px-4 font-bold text-slate-900">
+                            <button onclick="openStudentProfile('${s.name}')" class="hover:text-brand-600 hover:underline flex items-center gap-1">
+                                <span>${s.name}</span>
+                                <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
+                            </button>
+                        </td>
                         <td class="py-2 px-4 text-center font-bold ${s.blogPosts > 0 ? 'text-indigo-700' : 'text-slate-300'}">${s.blogPosts}</td>
                         <td class="py-2 px-4 text-center font-bold ${s.blogComments > 0 ? 'text-purple-700' : 'text-slate-300'}">${s.blogComments}</td>
                         <td class="py-2 px-4 text-center text-slate-600">${s.blogViews || 0}</td>
@@ -1811,6 +2276,9 @@
             } else {
                 badgeHTML = `<span class="px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800 text-xs font-bold">תת-השתתפות / דורש מעקב !</span>`;
             }
+            if (m.avgGrade != null) {
+                badgeHTML = `<span class="px-2.5 py-1 rounded-lg bg-brand-100 text-brand-900 text-xs font-extrabold">ממוצע ציונים: ${m.avgGrade}</span>` + badgeHTML;
+            }
             document.getElementById('studentQuickStatusBadge').innerHTML = badgeHTML;
 
             document.getElementById('studentKpiGrid').innerHTML = `
@@ -1818,25 +2286,25 @@
                     <div class="text-[11px] text-slate-500">סה"כ פעילויות אקטיביות</div>
                     <div class="text-xl font-extrabold text-brand-600 mt-0.5">${m.totalActive}</div>
                 </div>
-                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="text-[11px] text-slate-500">מטלות שהוגשו</div>
-                    <div class="text-xl font-extrabold text-emerald-600 mt-0.5">${m.uniqueAssignSubmitted} / ${activeAssigns.length}</div>
+                <div onclick="navigateToAssignment(null, 'all')" class="live-card bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-[11px] text-slate-500">מטלות שהוגשו ונבדקו</div>
+                    <div class="text-xl font-extrabold text-emerald-600 mt-0.5">${m.uniqueAssignSubmitted}/${activeAssigns.length} <span class="text-xs text-slate-600">(${m.gradedCount} נבדקו)</span></div>
                 </div>
-                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                <div onclick="navigateToAssignment(null, 'resubmitted')" class="live-card bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-[11px] text-slate-500">הגשות חוזרות / צפייה במשוב</div>
+                    <div class="text-xl font-extrabold text-purple-700 mt-0.5">${m.resubmittedCount} ↻ <span class="text-xs text-blue-700">| ${m.feedbackViewedCount} 👁</span></div>
+                </div>
+                <div onclick="navigateToBlogs('all')" class="live-card bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
                     <div class="text-[11px] text-slate-500">פוסטים בבלוג</div>
                     <div class="text-xl font-extrabold text-indigo-600 mt-0.5">${student.blogPosts}</div>
                 </div>
-                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="text-[11px] text-slate-500">פוסטים בפורום</div>
-                    <div class="text-xl font-extrabold text-blue-600 mt-0.5">${student.forumDiscussions}</div>
+                <div onclick="navigateToForum('all')" class="live-card bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-[11px] text-slate-500">פוסטים ותגובות בפורום</div>
+                    <div class="text-xl font-extrabold text-blue-600 mt-0.5">${student.forumDiscussions} <span class="text-xs text-purple-600">(+${student.forumReplies} תג')</span></div>
                 </div>
                 <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="text-[11px] text-slate-500">תגובות (פורום + בלוג)</div>
-                    <div class="text-xl font-extrabold text-purple-600 mt-0.5">${student.forumReplies + student.blogComments}</div>
-                </div>
-                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="text-[11px] text-slate-500">סה"כ אירועים בלוג</div>
-                    <div class="text-lg font-extrabold text-slate-800 mt-0.5">${student.totalEvents}</div>
+                    <div class="text-[11px] text-slate-500">ממוצע ציונים / אירועים</div>
+                    <div class="text-lg font-extrabold text-slate-800 mt-0.5">${m.avgGrade != null ? `ציון ${m.avgGrade}` : `${student.totalEvents} אירועים`}</div>
                     <div class="text-[10px] text-slate-500">אחרון: ${student.lastSeen.split(' ')[0]}</div>
                 </div>
             `;
@@ -1868,14 +2336,25 @@
 
             document.getElementById('studentAssignmentsChecklist').innerHTML = activeAssigns.map(a => {
                 const sub = student.assignmentsDetail[a.id];
-                const done = sub && sub.count > 0;
+                const info = getSubmissionStatusInfo(sub);
+                const subCount = sub ? Math.max(sub.count || 0, sub.updates || 0) : 0;
+
                 return `
-                    <div class="p-2.5 rounded-lg border ${done ? 'bg-emerald-50/60 border-emerald-200' : 'bg-slate-50 border-slate-200'} flex items-center justify-between">
+                    <div onclick="navigateToAssignment('${a.id}', 'all')" class="live-card p-2.5 rounded-lg border ${info.status !== 'missing' ? 'bg-emerald-50/50 border-emerald-200' : 'bg-slate-50 border-slate-200'} flex items-center justify-between" title="לחץ למעבר לניתוח המטלה">
                         <div>
-                            <div class="text-xs font-bold text-slate-900">${a.shortName}</div>
-                            <div class="text-[11px] text-slate-500">${done ? `הוגש ב-${sub.lastDate} (${sub.count} הגשות)` : 'טרם הוגש'}</div>
+                            <div class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                                <span>${a.shortName}</span>
+                                ${subCount > 1 ? `<span class="px-1.5 py-0.2 rounded bg-purple-100 text-purple-800 text-[10px] font-extrabold">↻ ${subCount} הגשות</span>` : ''}
+                                ${sub && (sub.feedbackViewed || 0) > 0 ? `<span class="text-[10px] text-blue-700 font-bold">👁 צפה במשוב</span>` : ''}
+                            </div>
+                            <div class="text-[11px] text-slate-500 mt-0.5">
+                                ${info.status !== 'missing' ? `הוגש: ${sub.lastDate || '—'}${sub.gradedDate ? ' | נבדק: ' + sub.gradedDate : ''}` : 'טרם הוגש'}
+                            </div>
                         </div>
-                        <span class="text-xs font-bold ${done ? 'text-emerald-700' : 'text-rose-500'}">${done ? '✓' : '✗'}</span>
+                        <div class="flex items-center gap-1.5">
+                            ${sub && sub.grade != null ? `<span class="px-2 py-0.5 rounded bg-white border border-emerald-300 text-emerald-900 font-extrabold text-xs">${sub.grade}</span>` : ''}
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${info.badgeClass}">${info.shortLabel || info.label}</span>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -1884,7 +2363,7 @@
                 const fd = student.forumsDetail[f.id];
                 const done = fd && (fd.discussions > 0 || fd.replies > 0);
                 return `
-                    <div class="p-2.5 rounded-lg border ${done ? 'bg-blue-50/60 border-blue-200' : 'bg-slate-50 border-slate-200'} flex items-center justify-between">
+                    <div onclick="navigateToForum('${f.id}')" class="live-card p-2.5 rounded-lg border ${done ? 'bg-blue-50/60 border-blue-200' : 'bg-slate-50 border-slate-200'} flex items-center justify-between" title="לחץ למעבר לפורום זה">
                         <div>
                             <div class="text-xs font-bold text-slate-900">${f.shortName}</div>
                             <div class="text-[11px] text-slate-500">${done ? `${fd.discussions} דיונים, ${fd.replies} תגובות` : 'ללא פרסומים'}</div>
@@ -1915,13 +2394,23 @@
 
             activeAssigns.forEach(a => {
                 const sub = student.assignmentsDetail[a.id];
-                if (sub && sub.count > 0) {
-                    events.push({
-                        date: sub.lastDate,
-                        type: `הגשת מטלה (${sub.count})`,
-                        context: a.rawName,
-                        raw: 'ההגשה הוגשה.'
-                    });
+                if (sub) {
+                    if (sub.count > 0) {
+                        events.push({
+                            date: sub.lastDate,
+                            type: `הגשת מטלה (${sub.count} הגשות)`,
+                            context: a.rawName,
+                            raw: 'ההגשה הוגשה.'
+                        });
+                    }
+                    if (sub.graded && sub.gradedDate) {
+                        events.push({
+                            date: sub.gradedDate,
+                            type: `נבדק וניתן ציון${sub.grade != null ? ' (' + sub.grade + ')' : ''}`,
+                            context: a.rawName,
+                            raw: 'ניתן ציון להגשה.'
+                        });
+                    }
                 }
             });
 
@@ -1936,16 +2425,24 @@
         }
 
         // =========================================================================
-        // 5. DYNAMIC MOODLE CSV PARSER (HANDLES ANY UPLOADED MOODLE LOG CSV)
+        // 5. DYNAMIC MOODLE CSV PARSER (LOGS CSV + GRADEBOOK CSV)
         // =========================================================================
         function setupDragAndDrop() {
-            const fileInput = document.getElementById('csvFileInput');
+            const logsInput = document.getElementById('csvFileInput');
+            const gradesInput = document.getElementById('gradebookFileInput');
             const overlay = document.getElementById('dragOverlay');
             let dragCounter = 0;
 
-            fileInput.addEventListener('change', (e) => {
+            logsInput.addEventListener('change', (e) => {
                 if (e.target.files && e.target.files[0]) {
                     parseUploadedCSV(e.target.files[0]);
+                    e.target.value = '';
+                }
+            });
+
+            gradesInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    parseUploadedGradebook(e.target.files[0]);
                     e.target.value = '';
                 }
             });
@@ -1974,7 +2471,21 @@
                 dragCounter = 0;
                 overlay.classList.add('hidden');
                 if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                    parseUploadedCSV(e.dataTransfer.files[0]);
+                    const file = e.dataTransfer.files[0];
+                    // Auto-detect whether dropped CSV is Logs or Gradebook
+                    Papa.parse(file, {
+                        header: true,
+                        preview: 3,
+                        skipEmptyLines: true,
+                        complete: function(res) {
+                            const fields = res.meta?.fields || [];
+                            if (fields.includes('שם האירוע') || fields.includes('הארוע מתייחס ל:') || fields.includes('Event name')) {
+                                parseUploadedCSV(file);
+                            } else {
+                                parseUploadedGradebook(file);
+                            }
+                        }
+                    });
                 }
             });
         }
@@ -1986,13 +2497,138 @@
                 complete: function(results) {
                     try {
                         processMoodleLogs(results.data, file.name);
-                        showToast(`הקובץ "${file.name}" נטען ונותח בהצלחה!`);
+                        showToast(`יומן המעקב "${file.name}" נטען ונותח בהצלחה!`);
                     } catch (err) {
                         console.error(err);
-                        showToast('שגיאה בפענוח הקובץ. ודא שזהו קובץ CSV תקין מ-Moodle.');
+                        showToast('שגיאה בפענוח קובץ הלוג. ודא שזהו קובץ CSV תקין מ-Moodle.');
                     }
                 }
             });
+        }
+
+        function parseUploadedGradebook(file) {
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    try {
+                        const matchedCount = processMoodleGradebook(results.data, results.meta?.fields || []);
+                        showToast(`גיליון הציונים נטען! שולבו ציונים עבור ${matchedCount} סטודנטים.`);
+                    } catch (err) {
+                        console.error(err);
+                        showToast('שגיאה בפענוח גיליון הציונים.');
+                    }
+                }
+            });
+        }
+
+        function processMoodleGradebook(rows, fields) {
+            if (!rows || !rows.length) return 0;
+
+            // Identify name columns
+            const firstNameCol = fields.find(f => ['שם פרטי', 'First name', 'פרטי'].includes(f.trim()));
+            const lastNameCol = fields.find(f => ['שם משפחה', 'Last name', 'Surname', 'משפחה'].includes(f.trim()));
+            const fullNameCol = fields.find(f => ['שם מלא', 'Full name', 'סטודנט', 'Student'].includes(f.trim()));
+
+            // Identify assignment grade columns and map them to appState.assignmentsMeta
+            const gradeColsMap = new Map(); // colName -> assignMeta.id
+            let courseTotalCol = fields.find(f => f.includes('סה"כ בקורס') || f.includes('Course total'));
+
+            fields.forEach(col => {
+                const cTrim = col.trim();
+                if (cTrim.includes('(אחוזים)') || cTrim.includes('(אותיות)') || cTrim.includes('הורדה אחרונה')) return;
+
+                const cleanCol = cTrim
+                    .replace('(ציון אמיתי)', '')
+                    .replace('(Real)', '')
+                    .replace(/^מטלה:\s*/, '')
+                    .replace(/^Assignment:\s*/, '')
+                    .trim();
+
+                // Match against existing assignmentsMeta
+                let matchedAssign = appState.assignmentsMeta.find(a => {
+                    const rawClean = a.rawName.replace(/^מטלה:\s*/, '').trim();
+                    return rawClean === cleanCol || a.rawName.includes(cleanCol) || cleanCol.includes(rawClean);
+                });
+
+                // If gradebook is uploaded and assignment wasn't in logs yet, create it if it starts with מטלה:
+                if (!matchedAssign && (cTrim.startsWith('מטלה:') || cTrim.startsWith('Assignment:'))) {
+                    const newId = 'assign_gb_' + (appState.assignmentsMeta.length + 1);
+                    matchedAssign = {
+                        id: newId,
+                        rawName: cTrim.replace('(ציון אמיתי)', '').trim(),
+                        shortName: cleanCol.slice(0, 26),
+                        isDeleted: false,
+                        courseModuleViews: 0,
+                        formViews: 0
+                    };
+                    appState.assignmentsMeta.push(matchedAssign);
+                }
+
+                if (matchedAssign) {
+                    gradeColsMap.set(col, matchedAssign.id);
+                }
+            });
+
+            let matchedStudentsCount = 0;
+
+            rows.forEach(r => {
+                let rawName = '';
+                if (fullNameCol && r[fullNameCol]) {
+                    rawName = r[fullNameCol];
+                } else if (firstNameCol || lastNameCol) {
+                    rawName = `${r[firstNameCol] || ''} ${r[lastNameCol] || ''}`;
+                }
+                const normName = normalizeName(rawName);
+                if (!normName) return;
+
+                let student = appState.students.find(s => normalizeName(s.name) === normName);
+                if (!student && !appState.isDemo) {
+                    // Add student if present in gradebook
+                    student = {
+                        name: normName,
+                        role: 'student',
+                        totalEvents: 0,
+                        courseTotalGrade: null,
+                        lastSeen: 'מתוך גיליון ציונים',
+                        blogPosts: 0,
+                        blogComments: 0,
+                        blogViews: 0,
+                        blogPostDates: [],
+                        blogCommentDates: [],
+                        forumDiscussions: 0,
+                        forumReplies: 0,
+                        forumsDetail: {},
+                        assignmentsDetail: {}
+                    };
+                    appState.students.push(student);
+                }
+
+                if (!student) return;
+                matchedStudentsCount++;
+
+                if (courseTotalCol && r[courseTotalCol] != null) {
+                    const val = parseFloat(String(r[courseTotalCol]).replace(/[^\d.-]/g, ''));
+                    if (!isNaN(val)) student.courseTotalGrade = Math.round(val * 10) / 10;
+                }
+
+                gradeColsMap.forEach((assignId, colName) => {
+                    const rawVal = r[colName];
+                    if (rawVal === undefined || rawVal === null || String(rawVal).trim() === '-' || String(rawVal).trim() === '') return;
+                    const numGrade = parseFloat(String(rawVal).replace(/[^\d.-]/g, ''));
+                    if (!isNaN(numGrade)) {
+                        if (!student.assignmentsDetail[assignId]) {
+                            student.assignmentsDetail[assignId] = { count: 1, updates: 1, lastDate: '', graded: true, gradedDate: '', grade: null, feedbackViewed: 0, views: 0 };
+                        }
+                        student.assignmentsDetail[assignId].grade = Math.round(numGrade * 10) / 10;
+                        student.assignmentsDetail[assignId].graded = true;
+                    }
+                });
+            });
+
+            appState.hasGradebook = true;
+            refreshAllViews();
+            return matchedStudentsCount;
         }
 
         function processMoodleLogs(rows, filename) {
@@ -2003,8 +2639,8 @@
 
             // 1. Identify course name, student role assignments (role id 5), and staff/admin actions
             rows.forEach(r => {
-                const actor = (r['שם מלא'] || '').trim();
-                const affected = (r['משתמש מושפע'] || '').trim();
+                const actor = normalizeName(r['שם מלא'] || '');
+                const affected = normalizeName(r['משתמש מושפע'] || '');
                 const context = (r['הארוע מתייחס ל:'] || '').trim();
                 const eventName = (r['שם האירוע'] || '').trim();
                 const desc = (r['תיאור'] || '').trim();
@@ -2015,8 +2651,7 @@
                     detectedCourseName = context.replace('קורס:', '').trim();
                 }
 
-                // Admin/Instructor actions heuristic
-                if (['נמחקה פעילות בקורס', 'נוצרה פעילות בקורס', 'קורס גיבוי נוצר', 'עדכון הגדרות קורס'].includes(eventName) && actor) {
+                if (['נמחקה פעילות בקורס', 'נוצרה פעילות בקורס', 'קורס גיבוי נוצר', 'עדכון הגדרות קורס', 'ניתן ציון להגשה.'].includes(eventName) && actor) {
                     staffUsers.add(actor);
                 }
 
@@ -2045,6 +2680,7 @@
                     name,
                     role: 'student',
                     totalEvents: 0,
+                    courseTotalGrade: null,
                     lastSeen: 'לא נכנס/ה לקורס',
                     blogPosts: 0,
                     blogComments: 0,
@@ -2061,14 +2697,57 @@
             let latestTimestamp = '';
             const chronologicalRows = [...rows].reverse();
 
+            function ensureAssignmentMeta(context) {
+                if (!assignmentsMap.has(context)) {
+                    const aId = 'assign_' + (assignmentsMap.size + 1);
+                    const isDel = context.toLowerCase().includes('deleted assign');
+                    assignmentsMap.set(context, {
+                        id: aId,
+                        rawName: context,
+                        shortName: isDel ? `מטלה שנמחקה` : context.replace('מטלה:', '').trim().slice(0, 26),
+                        isDeleted: isDel,
+                        courseModuleViews: 0,
+                        formViews: 0
+                    });
+                }
+                return assignmentsMap.get(context);
+            }
+
+            function ensureStudentAssignSlot(st, assignId) {
+                if (!st.assignmentsDetail[assignId]) {
+                    st.assignmentsDetail[assignId] = {
+                        count: 0,
+                        updates: 0,
+                        lastDate: '',
+                        graded: false,
+                        gradedDate: '',
+                        grade: null,
+                        feedbackViewed: 0,
+                        views: 0
+                    };
+                }
+                return st.assignmentsDetail[assignId];
+            }
+
             chronologicalRows.forEach(r => {
                 const time = (r['זמן'] || '').trim();
-                const actor = (r['שם מלא'] || '').trim();
+                const actor = normalizeName(r['שם מלא'] || '');
+                const affected = normalizeName(r['משתמש מושפע'] || '');
                 const context = (r['הארוע מתייחס ל:'] || '').trim();
                 const component = (r['רכיב'] || '').trim();
                 const eventName = (r['שם האירוע'] || '').trim();
 
                 if (time) latestTimestamp = time;
+
+                // Handle instructor grading events where affected user is the student
+                if (component === 'מטלה' && eventName === 'ניתן ציון להגשה.' && studentsMap.has(affected)) {
+                    const aMeta = ensureAssignmentMeta(context);
+                    const st = studentsMap.get(affected);
+                    const slot = ensureStudentAssignSlot(st, aMeta.id);
+                    slot.graded = true;
+                    slot.gradedDate = time;
+                }
+
                 if (!studentsMap.has(actor)) return;
 
                 const st = studentsMap.get(actor);
@@ -2129,33 +2808,24 @@
                     }
                 }
 
-                // 5. Assignment events
+                // 5. Assignment events (Submissions, Resubmissions, Feedback Views, Module Views)
                 if (component === 'מטלה') {
-                    if (eventName === 'ההגשה הוגשה.' || eventName === 'רכיב קורס נצפה' || eventName === 'טופס הגשה נצפה.') {
-                        if (!assignmentsMap.has(context)) {
-                            const aId = 'assign_' + (assignmentsMap.size + 1);
-                            const isDel = context.toLowerCase().includes('deleted assign');
-                            assignmentsMap.set(context, {
-                                id: aId,
-                                rawName: context,
-                                shortName: isDel ? `מטלה שנמחקה` : context.replace('מטלה:', '').trim().slice(0, 26),
-                                isDeleted: isDel,
-                                courseModuleViews: 0,
-                                formViews: 0
-                            });
-                        }
-                        const aMeta = assignmentsMap.get(context);
-                        if (!st.assignmentsDetail[aMeta.id]) {
-                            st.assignmentsDetail[aMeta.id] = { count: 0, lastDate: '', views: 0 };
-                        }
+                    if (['ההגשה הוגשה.', 'ההגשה עודכנה.', 'משוב ניצפה', 'רכיב קורס נצפה', 'טופס הגשה נצפה.'].includes(eventName)) {
+                        const aMeta = ensureAssignmentMeta(context);
+                        const slot = ensureStudentAssignSlot(st, aMeta.id);
 
                         if (eventName === 'ההגשה הוגשה.') {
-                            st.assignmentsDetail[aMeta.id].count++;
-                            st.assignmentsDetail[aMeta.id].lastDate = time;
+                            slot.count++;
+                            slot.lastDate = time;
                             if (dayRec) dayRec.submissions++;
+                        } else if (eventName === 'ההגשה עודכנה.') {
+                            slot.updates++;
+                            if (!slot.lastDate) slot.lastDate = time;
+                        } else if (eventName === 'משוב ניצפה') {
+                            slot.feedbackViewed++;
                         } else if (eventName === 'רכיב קורס נצפה') {
                             aMeta.courseModuleViews++;
-                            st.assignmentsDetail[aMeta.id].views++;
+                            slot.views++;
                         } else if (eventName === 'טופס הגשה נצפה.') {
                             aMeta.formViews++;
                         }
@@ -2165,25 +2835,27 @@
 
             const activeTimeline = Array.from(dailyMap.values()).filter(d => (d.blogPosts + d.blogComments + d.forumDiscussions + d.forumReplies + d.submissions) > 0);
             const finalTitle = detectedCourseName || filename.replace('logs_', '').replace('.csv', '');
+            const allStudentsArr = Array.from(studentsMap.values());
 
             appState = {
                 isDemo: false,
+                hasGradebook: false,
                 courseName: finalTitle,
                 lastLogDate: latestTimestamp,
-                assignmentsMeta: Array.from(assignmentsMap.values()).filter(a => a.courseModuleViews > 0 || a.formViews > 0 || Object.values(studentsMap).some(s => s.assignmentsDetail?.[a.id]?.count > 0)),
+                assignmentsMeta: Array.from(assignmentsMap.values()).filter(a => a.courseModuleViews > 0 || a.formViews > 0 || allStudentsArr.some(s => s.assignmentsDetail?.[a.id]?.count > 0 || s.assignmentsDetail?.[a.id]?.graded)),
                 forumsMeta: Array.from(forumsMap.values()),
                 timelineDaily: activeTimeline,
-                students: Array.from(studentsMap.values()),
+                students: allStudentsArr,
                 excludedStaff: Array.from(staffUsers)
             };
 
             // Update Top Compact Header UI
             document.getElementById('courseMainTitle').textContent = appState.courseName;
             document.getElementById('courseSubtitle').textContent = `${appState.students.length} סטודנטים רשומים | עדכון אחרון בלוג: ${appState.lastLogDate}`;
-            document.getElementById('courseIconBox').className = 'bg-brand-600 text-white p-1.5 rounded-lg shadow-sm flex items-center justify-center';
+            document.getElementById('courseIconBox').className = 'bg-brand-600 text-white p-1.5 rounded-lg shadow-sm flex items-center justify-center cursor-pointer';
             document.getElementById('courseIconBox').innerHTML = `<i data-lucide="bar-chart-3" class="w-5 h-5"></i>`;
-            document.getElementById('dataSourceBadge').className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 whitespace-nowrap';
-            document.getElementById('dataSourceBadge').textContent = 'נתוני קובץ אמיתי';
+            document.getElementById('dataSourceBadge').className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 whitespace-nowrap';
+            document.getElementById('dataSourceBadge').textContent = 'נתוני אמת (לוג)';
             document.getElementById('resetDemoBtn').classList.remove('hidden');
 
             refreshAllViews();
@@ -2194,11 +2866,11 @@
             excludedUsersSet = new Set(appState.excludedStaff);
 
             document.getElementById('courseMainTitle').textContent = appState.courseName;
-            document.getElementById('courseSubtitle').textContent = '14 סטודנטים רשומים | עדכון אחרון: 08/11/2026 | גרירה או העלאה של קובץ לוגים מ-Moodle';
-            document.getElementById('courseIconBox').className = 'bg-amber-400 text-slate-900 p-1.5 rounded-lg shadow-sm flex items-center justify-center';
+            document.getElementById('courseSubtitle').textContent = '14 סטודנטים | לחץ על כל כרטיס, גרף, מטלה או סטודנט למעבר לניתוח מעמיק';
+            document.getElementById('courseIconBox').className = 'bg-amber-400 text-slate-900 p-1.5 rounded-lg shadow-sm flex items-center justify-center cursor-pointer';
             document.getElementById('courseIconBox').innerHTML = `<i data-lucide="banana" class="w-5 h-5"></i>`;
-            document.getElementById('dataSourceBadge').className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300 whitespace-nowrap';
-            document.getElementById('dataSourceBadge').textContent = 'נתוני דמה להדגמה';
+            document.getElementById('dataSourceBadge').className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 whitespace-nowrap';
+            document.getElementById('dataSourceBadge').textContent = 'נתוני דמה';
             document.getElementById('resetDemoBtn').classList.add('hidden');
 
             refreshAllViews();
